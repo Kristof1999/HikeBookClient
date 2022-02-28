@@ -18,7 +18,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <variable
+            name="viewModel"
+            type="hu.kristof.nagy.hikebookclient.viewModel.LoginViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         tools:context="hu.kristof.nagy.hikebookclient.view.StartFragment"

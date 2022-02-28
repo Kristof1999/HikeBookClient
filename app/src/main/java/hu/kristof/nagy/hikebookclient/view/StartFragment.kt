@@ -17,6 +17,9 @@
 // parts of this code have been copied from:
 // https://github.com/googlecodelabs/android-navigation
 // I have not made any significant changes (only renaming).
+// Also based on the following:
+// https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/GuessTheWordViewModel
+// https://developer.android.com/topic/libraries/architecture/viewmodel
 
 package hu.kristof.nagy.hikebookclient.view
 
@@ -25,12 +28,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentStartBinding
+import com.google.android.material.snackbar.Snackbar
+import hu.kristof.nagy.hikebookclient.viewModel.LoginViewModel
+import kotlin.math.log10
 
 class StartFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +50,17 @@ class StartFragment : Fragment() {
             it.findNavController()
                 .navigate(R.id.action_startFragment_to_registrationFragment)
         }
+
+        val loginViewModel: LoginViewModel by viewModels()
+        binding.viewModel = loginViewModel
+
+        // testing viewModel, can remove
+        binding.loginButton.setOnClickListener {
+            loginViewModel.name = binding.nameEditText.text.toString()
+            loginViewModel.pswd = binding.passwordEditText.text.toString()
+            Toast.makeText(activity, loginViewModel.onLogin(), Toast.LENGTH_LONG).show()
+        }
+
         return binding.root
     }
 }
