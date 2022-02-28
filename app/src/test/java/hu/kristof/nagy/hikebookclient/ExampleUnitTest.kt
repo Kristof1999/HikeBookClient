@@ -1,4 +1,4 @@
-package com.example.hikebookclient
+package hu.kristof.nagy.hikebookclient
 
 import org.junit.Test
 

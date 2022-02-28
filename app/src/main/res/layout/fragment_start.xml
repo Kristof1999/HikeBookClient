@@ -21,7 +21,7 @@
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        tools:context=".view.StartFragment"
+        tools:context="hu.kristof.nagy.hikebookclient.view.StartFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

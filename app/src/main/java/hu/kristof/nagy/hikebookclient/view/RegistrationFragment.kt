@@ -1,4 +1,4 @@
-package com.example.hikebookclient.view
+package hu.kristof.nagy.hikebookclient.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

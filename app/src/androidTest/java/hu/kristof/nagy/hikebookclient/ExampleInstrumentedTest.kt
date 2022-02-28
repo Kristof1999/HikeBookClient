@@ -1,4 +1,4 @@
-package com.example.hikebookclient
+package hu.kristof.nagy.hikebookclient
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.hikebookclient", appContext.packageName)
+        assertEquals("com.example.hu.kristof.nagy.hu.kristof.nagy.hikebookclient", appContext.packageName)
     }
 }

@@ -16,29 +16,31 @@
 
 // parts of this code have been copied from:
 // https://github.com/googlecodelabs/android-navigation
-// I have not made any significant changes.
+// I have not made any significant changes (only renaming).
 
-package com.example.hikebookclient.view
+package hu.kristof.nagy.hikebookclient.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.ActivityLoginBinding
+import com.example.hikebookclient.databinding.FragmentStartBinding
 
-class LoginActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        val navController = findNavController(R.id.authNavHostFragment)
-        NavigationUI.setupActionBarWithNavController(this, navController)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.authNavHostFragment)
-        return navController.navigateUp()
+class StartFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = DataBindingUtil.inflate<FragmentStartBinding>(inflater,
+            R.layout.fragment_start, container, false)
+        binding.startRegistrationButton.setOnClickListener {
+            it.findNavController()
+                .navigate(R.id.action_startFragment_to_registrationFragment)
+        }
+        return binding.root
     }
 }
