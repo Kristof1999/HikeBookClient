@@ -16,6 +16,7 @@
 
 // parts of this code have been copied from:
 // https://github.com/googlecodelabs/android-navigation
+// I have not made any significant changes (only renaming).
 
 package com.example.hikebookclient.view
 

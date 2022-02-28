@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/startFragment"
         android:name="com.example.hikebookclient.view.StartFragment"
-        android:label="fragment_start"
+        android:label="@string/start_screen_title"
         tools:layout="@layout/fragment_start" >
         <action
             android:id="@+id/action_startFragment_to_registrationFragment"
@@ -17,6 +17,6 @@
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.hikebookclient.view.RegistrationFragment"
-        android:label="fragment_registration"
+        android:label="@string/registration_screen_title"
         tools:layout="@layout/fragment_registration" />
 </navigation>
