@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+// parts of this code have been copied from:
+// https://github.com/googlecodelabs/android-navigation
+// I have not made any significant changes.
+
 package com.example.hikebookclient.view
 
 import androidx.appcompat.app.AppCompatActivity
