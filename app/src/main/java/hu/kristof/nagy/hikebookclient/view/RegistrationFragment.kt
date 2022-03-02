@@ -33,6 +33,7 @@ import androidx.fragment.app.viewModels
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRegistrationBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.viewModel.RegistrationViewModel
 
 @AndroidEntryPoint
@@ -49,9 +50,9 @@ class RegistrationFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.registerButton.setOnClickListener {
-            registrationViewModel.name = binding.registerNameEditText.text.toString()
-            registrationViewModel.pswd = binding.registerPasswordEditText.text.toString()
-            registrationViewModel.onRegister()
+            val name = binding.registerNameEditText.text.toString()
+            val pswd = binding.registerPasswordEditText.text.toString()
+            registrationViewModel.onRegister(UserAuth(name, pswd))
         }
 
         registrationViewModel.registrationRes.observe(viewLifecycleOwner) { registrationRes ->

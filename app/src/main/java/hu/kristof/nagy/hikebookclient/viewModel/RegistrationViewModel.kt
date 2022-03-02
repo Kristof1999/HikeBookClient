@@ -12,16 +12,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(private val service: Service) : ViewModel() {
-    var name: String = ""
-    var pswd: String = ""
-
     private var _registrationRes = MutableLiveData<Boolean>()
     val registrationRes : LiveData<Boolean>
         get() = _registrationRes
 
-    fun onRegister() {
+    fun onRegister(user: UserAuth) {
         viewModelScope.launch{
-            _registrationRes.value = service.register(UserAuth(name, pswd))
+            _registrationRes.value = service.register(user)
         }
     }
 }

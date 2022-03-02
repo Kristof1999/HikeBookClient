@@ -35,6 +35,7 @@ import androidx.navigation.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentStartBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.viewModel.LoginViewModel
 
 @AndroidEntryPoint
@@ -56,9 +57,9 @@ class StartFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.loginButton.setOnClickListener {
-            loginViewModel.name = binding.nameEditText.text.toString()
-            loginViewModel.pswd = binding.passwordEditText.text.toString()
-            loginViewModel.onLogin()
+            val name = binding.nameEditText.text.toString()
+            val pswd = binding.passwordEditText.text.toString()
+            loginViewModel.onLogin(UserAuth(name, pswd))
         }
         loginViewModel.loginRes.observe(viewLifecycleOwner) { loginRes ->
             if (loginRes == false) {

@@ -31,16 +31,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val service: Service) : ViewModel() {
-    var name: String = ""
-    var pswd: String = ""
-
     private var _loginRes = MutableLiveData<Boolean>()
     val loginRes : LiveData<Boolean>
         get() = _loginRes
 
-    fun onLogin() {
+    fun onLogin(user: UserAuth) {
         viewModelScope.launch{
-             _loginRes.value = service.login(UserAuth(name, pswd))
+             _loginRes.value = service.login(user)
         }
     }
 }
