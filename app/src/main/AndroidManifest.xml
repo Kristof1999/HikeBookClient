@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HikeBookClient"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:name="hu.kristof.nagy.hikebookclient.HikeBookApp">
 
         <activity
             android:name="hu.kristof.nagy.hikebookclient.view.LoginActivity"

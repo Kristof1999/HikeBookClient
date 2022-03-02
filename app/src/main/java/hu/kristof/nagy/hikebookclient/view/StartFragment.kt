@@ -34,10 +34,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentStartBinding
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.viewModel.LoginViewModel
 
+@AndroidEntryPoint
 class StartFragment : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -4,19 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.network.Api
+import hu.kristof.nagy.hikebookclient.network.Service
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegistrationViewModel : ViewModel() {
+@HiltViewModel
+class RegistrationViewModel @Inject constructor(private val service: Service) : ViewModel() {
     var name: String = ""
     var pswd: String = ""
 
     private var _registrationRes = MutableLiveData<Boolean>()
     val registrationRes : LiveData<Boolean>
         get() = _registrationRes
-
-    private val service = Api.retrofitService
 
     fun onRegister() {
         viewModelScope.launch{

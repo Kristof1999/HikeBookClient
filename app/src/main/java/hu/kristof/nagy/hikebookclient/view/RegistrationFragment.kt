@@ -32,8 +32,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRegistrationBinding
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.viewModel.RegistrationViewModel
 
+@AndroidEntryPoint
 class RegistrationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

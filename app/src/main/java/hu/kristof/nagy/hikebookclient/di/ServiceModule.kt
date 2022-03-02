@@ -32,28 +32,36 @@ limitations under the License.
 
 // based on:
 // https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/MarsRealEstateNetwork
+// https://developer.android.com/training/dependency-injection/hilt-android
 
-package hu.kristof.nagy.hikebookclient.network
+package hu.kristof.nagy.hikebookclient.di
 
 import com.example.hikebookclient.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import hu.kristof.nagy.hikebookclient.network.Service
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
 
-private const val BASE_URL: String = BuildConfig.BASE_URL
-
-private val moshi = Moshi.Builder()
-    .add(KotlinJsonAdapterFactory())
-    .build()
-
-private val retrofit = Retrofit.Builder()
-    .addConverterFactory(MoshiConverterFactory.create(moshi))
-    .baseUrl(BASE_URL)
-    .build()
-
-object Api {
-    val retrofitService : Service by lazy {
-        retrofit.create(Service::class.java)
+@Module
+@InstallIn(SingletonComponent::class)
+object ServiceModule {
+    @Singleton
+    @Provides
+    fun provideService(): Service {
+        val baseUrl: String = BuildConfig.BASE_URL
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+        return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(baseUrl)
+            .build()
+            .create(Service::class.java)
     }
 }

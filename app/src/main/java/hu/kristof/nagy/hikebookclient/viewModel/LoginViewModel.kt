@@ -23,19 +23,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.network.Api
+import hu.kristof.nagy.hikebookclient.network.Service
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor(private val service: Service) : ViewModel() {
     var name: String = ""
     var pswd: String = ""
 
     private var _loginRes = MutableLiveData<Boolean>()
     val loginRes : LiveData<Boolean>
         get() = _loginRes
-
-    private val service = Api.retrofitService
 
     fun onLogin() {
         viewModelScope.launch{
