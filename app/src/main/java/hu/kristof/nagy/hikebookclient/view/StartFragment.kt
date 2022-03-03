@@ -41,11 +41,14 @@ import hu.kristof.nagy.hikebookclient.viewModel.LoginViewModel
 
 @AndroidEntryPoint
 class StartFragment : Fragment() {
+    private lateinit var binding: FragmentStartBinding
+    private val loginViewModel: LoginViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentStartBinding>(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_start, container, false
         )
 
@@ -54,24 +57,31 @@ class StartFragment : Fragment() {
                 .navigate(R.id.action_startFragment_to_registrationFragment)
         }
 
-        val loginViewModel: LoginViewModel by viewModels()
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.loginButton.setOnClickListener {
-            val name = binding.nameEditText.text.toString()
-            val pswd = binding.passwordEditText.text.toString()
-            loginViewModel.onLogin(UserAuth(name, pswd))
+            onLogin(it)
         }
         loginViewModel.loginRes.observe(viewLifecycleOwner) { loginRes ->
-            if (loginRes == false) {
-                Toast.makeText(activity, "Sikertelen bejelentkezés", Toast.LENGTH_LONG).show()
-            } else {
-                this.findNavController().navigate(
-                    R.id.action_startFragment_to_mainActivity
-                )
-            }
+            onLoginRes(loginRes)
         }
 
         return binding.root
+    }
+
+    private fun onLogin(view: View) {
+        val name = binding.nameEditText.text.toString()
+        val pswd = binding.passwordEditText.text.toString()
+        loginViewModel.onLogin(UserAuth(name, pswd))
+    }
+
+    private fun onLoginRes(loginRes: Boolean) {
+        if (loginRes) {
+            this.findNavController().navigate(
+                R.id.action_startFragment_to_mainActivity
+            )
+        } else {
+            Toast.makeText(activity, "Sikertelen bejelentkezés", Toast.LENGTH_LONG).show()
+        }
     }
 }

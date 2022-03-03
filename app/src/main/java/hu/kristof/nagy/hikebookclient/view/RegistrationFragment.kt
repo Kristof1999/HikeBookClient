@@ -39,33 +39,43 @@ import hu.kristof.nagy.hikebookclient.viewModel.RegistrationViewModel
 
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
+    private lateinit var binding: FragmentRegistrationBinding
+    private val registrationViewModel : RegistrationViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentRegistrationBinding>(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_registration, container, false
         )
 
-        val registrationViewModel : RegistrationViewModel by viewModels()
         binding.lifecycleOwner = viewLifecycleOwner
 
         binding.registerButton.setOnClickListener {
-            val name = binding.registerNameEditText.text.toString()
-            val pswd = binding.registerPasswordEditText.text.toString()
-            registrationViewModel.onRegister(UserAuth(name, pswd))
+            onRegister(it)
         }
 
         registrationViewModel.registrationRes.observe(viewLifecycleOwner) { registrationRes ->
-            if (registrationRes == false) {
-                Toast.makeText(activity, "Sikertelen regisztráció", Toast.LENGTH_LONG).show()
-            } else {
-                this.findNavController().navigate(
-                    R.id.action_registrationFragment_to_mainActivity
-                )
-            }
+            onRegistrationRes(registrationRes)
         }
 
         return binding.root
+    }
+
+    private fun onRegister(view: View) {
+        val name = binding.registerNameEditText.text.toString()
+        val pswd = binding.registerPasswordEditText.text.toString()
+        registrationViewModel.onRegister(UserAuth(name, pswd))
+    }
+
+    private fun onRegistrationRes(registrationRes: Boolean) {
+        if (registrationRes) {
+            this.findNavController().navigate(
+                R.id.action_registrationFragment_to_mainActivity
+            )
+        } else {
+            Toast.makeText(activity, "Sikertelen regisztráció", Toast.LENGTH_LONG).show()
+        }
     }
 }
