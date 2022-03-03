@@ -16,6 +16,7 @@
 
 // based on:
 // https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/GuessTheWordLiveData
+// https://developer.android.com/training/dependency-injection/hilt-android
 
 package hu.kristof.nagy.hikebookclient.viewModel
 

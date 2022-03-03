@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/myMapMenuItem"
+        android:title="@string/my_map_menu" />
+    <item
+        android:id="@+id/groupHikeMenuItem"
+        android:title="@string/group_hike_menu" />
+    <item
+        android:id="@+id/groupsMenuItem"
+        android:title="@string/groups_menu" />
+    <item
+        android:id="@+id/browseMenuItem"
+        android:title="@string/browse_menu" />
+    <item
+        android:id="@+id/helpMenuItem"
+        android:title="@string/help_menu" />
+    <item
+        android:id="@+id/logoutMenuItem"
+        android:title="@string/logout_menu" />
+</menu>

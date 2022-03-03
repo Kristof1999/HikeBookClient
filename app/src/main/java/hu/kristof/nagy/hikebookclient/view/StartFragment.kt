@@ -32,6 +32,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentStartBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,8 +66,9 @@ class StartFragment : Fragment() {
             if (loginRes == false) {
                 Toast.makeText(activity, "Sikertelen bejelentkezés", Toast.LENGTH_LONG).show()
             } else {
-                //TODO: navigate to my map activity
-                Toast.makeText(activity, "Sikeres bejelentkezés", Toast.LENGTH_LONG).show()
+                this.findNavController().navigate(
+                    R.id.action_startFragment_to_mainActivity
+                )
             }
         }
 

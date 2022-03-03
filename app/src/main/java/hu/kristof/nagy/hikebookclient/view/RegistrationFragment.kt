@@ -30,6 +30,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRegistrationBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,8 +60,9 @@ class RegistrationFragment : Fragment() {
             if (registrationRes == false) {
                 Toast.makeText(activity, "Sikertelen regisztráció", Toast.LENGTH_LONG).show()
             } else {
-                //TODO: navigate to my map activity
-                Toast.makeText(activity, "Sikeres regisztráció", Toast.LENGTH_LONG).show()
+                this.findNavController().navigate(
+                    R.id.action_registrationFragment_to_mainActivity
+                )
             }
         }
 
