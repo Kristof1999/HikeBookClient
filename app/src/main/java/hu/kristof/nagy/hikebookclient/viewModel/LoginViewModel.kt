@@ -38,6 +38,8 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
         get() = _loginRes
 
     fun onLogin(user: UserAuth) {
+        AuthChecker.check(user)
+
         val password = MessageDigest.getInstance("MD5").digest(
             user.password.toByteArray()
         ).joinToString(separator = "")

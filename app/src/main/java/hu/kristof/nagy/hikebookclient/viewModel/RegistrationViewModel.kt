@@ -38,6 +38,8 @@ class RegistrationViewModel @Inject constructor(private val service: Service) : 
         get() = _registrationRes
 
     fun onRegister(user: UserAuth) {
+        AuthChecker.check(user)
+
         val password = MessageDigest.getInstance("MD5").digest(
             user.password.toByteArray()
         ).joinToString(separator = "")

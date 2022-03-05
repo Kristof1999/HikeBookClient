@@ -68,7 +68,11 @@ class RegistrationFragment : Fragment() {
     ) {
         val name = binding.registerNameEditText.text.toString()
         val pswd = binding.registerPasswordEditText.text.toString()
-        registrationViewModel.onRegister(UserAuth(name, pswd))
+        try {
+            registrationViewModel.onRegister(UserAuth(name, pswd))
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun onRegistrationRes(registrationRes: Boolean) {
@@ -77,7 +81,7 @@ class RegistrationFragment : Fragment() {
                 R.id.action_registrationFragment_to_mainActivity
             )
         } else {
-            Toast.makeText(activity, "Sikertelen regisztráció", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "Ez a név már foglalt.", Toast.LENGTH_LONG).show()
         }
     }
 }

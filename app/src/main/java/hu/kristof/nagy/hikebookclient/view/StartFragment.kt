@@ -74,7 +74,11 @@ class StartFragment : Fragment() {
     ) {
         val name = binding.nameEditText.text.toString()
         val pswd = binding.passwordEditText.text.toString()
-        loginViewModel.onLogin(UserAuth(name, pswd))
+        try {
+            loginViewModel.onLogin(UserAuth(name, pswd))
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun onLoginRes(loginRes: Boolean) {
@@ -83,7 +87,7 @@ class StartFragment : Fragment() {
                 R.id.action_startFragment_to_mainActivity
             )
         } else {
-            Toast.makeText(activity, "Sikertelen bejelentkezés", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, "Vagy a név, vagy a jelszó hibás.", Toast.LENGTH_LONG).show()
         }
     }
 }
