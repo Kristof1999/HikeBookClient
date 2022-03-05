@@ -8,7 +8,10 @@ object AuthChecker {
             throw IllegalArgumentException("A név és a jelszó mezők nem lehetnek üresek.")
         }
         if (user.password.length < 6) {
-            throw java.lang.IllegalArgumentException("A jelszónak legalább 6 karakterből kell állnia.")
+            throw IllegalArgumentException("A jelszónak legalább 6 karakterből kell állnia.")
+        }
+        if (user.name.contains("/")) {
+            throw IllegalArgumentException("A név nem tartalmazhat / jelet.")
         }
     }
 }
