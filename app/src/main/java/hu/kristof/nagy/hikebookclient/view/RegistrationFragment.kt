@@ -36,6 +36,7 @@ import com.example.hikebookclient.databinding.FragmentRegistrationBinding
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.viewModel.RegistrationViewModel
+import java.security.MessageDigest
 
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
@@ -67,7 +68,9 @@ class RegistrationFragment : Fragment() {
         registrationViewModel: RegistrationViewModel
     ) {
         val name = binding.registerNameEditText.text.toString()
-        val pswd = binding.registerPasswordEditText.text.toString()
+        val pswd = MessageDigest.getInstance("MD5").digest(
+            binding.registerPasswordEditText.text.toString().toByteArray()
+        ).joinToString(separator = "")
         registrationViewModel.onRegister(UserAuth(name, pswd))
     }
 

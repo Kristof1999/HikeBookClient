@@ -38,6 +38,7 @@ import com.example.hikebookclient.databinding.FragmentStartBinding
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.viewModel.LoginViewModel
+import java.security.MessageDigest
 
 @AndroidEntryPoint
 class StartFragment : Fragment() {
@@ -73,7 +74,9 @@ class StartFragment : Fragment() {
         loginViewModel: LoginViewModel
     ) {
         val name = binding.nameEditText.text.toString()
-        val pswd = binding.passwordEditText.text.toString()
+        val pswd = MessageDigest.getInstance("MD5").digest(
+            binding.passwordEditText.text.toString().toByteArray()
+        ).joinToString(separator = "")
         loginViewModel.onLogin(UserAuth(name, pswd))
     }
 
