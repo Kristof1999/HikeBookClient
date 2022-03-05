@@ -28,6 +28,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.network.Service
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,8 +38,12 @@ class RegistrationViewModel @Inject constructor(private val service: Service) : 
         get() = _registrationRes
 
     fun onRegister(user: UserAuth) {
+        val password = MessageDigest.getInstance("MD5").digest(
+            user.password.toByteArray()
+        ).joinToString(separator = "")
+
         viewModelScope.launch{
-            _registrationRes.value = service.register(user)
+            _registrationRes.value = service.register(UserAuth(user.name, password))
         }
     }
 }

@@ -28,6 +28,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.network.Service
 import kotlinx.coroutines.launch
+import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,8 +38,12 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
         get() = _loginRes
 
     fun onLogin(user: UserAuth) {
+        val password = MessageDigest.getInstance("MD5").digest(
+            user.password.toByteArray()
+        ).joinToString(separator = "")
+
         viewModelScope.launch{
-             _loginRes.value = service.login(user)
+            _loginRes.value = service.login(UserAuth(user.name, password))
         }
     }
 }
