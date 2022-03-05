@@ -22,7 +22,7 @@
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        tools:context="hu.kristof.nagy.hikebookclient.view.RegistrationFragment"
+        tools:context="hu.kristof.nagy.hikebookclient.view.authentication.RegistrationFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

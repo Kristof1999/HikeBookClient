@@ -20,7 +20,7 @@
 // https://developer.android.com/topic/libraries/architecture/viewmodel
 // https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/GuessTheWordLiveData
 
-package hu.kristof.nagy.hikebookclient.view
+package hu.kristof.nagy.hikebookclient.view.authentication
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/startFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.StartFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.authentication.StartFragment"
         android:label="@string/start_screen_title"
         tools:layout="@layout/fragment_start" >
         <action
@@ -38,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.RegistrationFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.authentication.RegistrationFragment"
         android:label="@string/registration_screen_title"
         tools:layout="@layout/fragment_registration" >
         <action

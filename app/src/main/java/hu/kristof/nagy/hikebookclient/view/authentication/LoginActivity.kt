@@ -18,7 +18,7 @@
 // https://github.com/googlecodelabs/android-navigation
 // I have not made any significant changes.
 
-package hu.kristof.nagy.hikebookclient.view
+package hu.kristof.nagy.hikebookclient.view.authentication
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
