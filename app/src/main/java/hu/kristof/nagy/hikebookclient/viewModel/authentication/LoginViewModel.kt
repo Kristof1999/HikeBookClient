@@ -31,12 +31,20 @@ import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import javax.inject.Inject
 
+/**
+ * Encapsulates the login flow, and provides a way for the ui/view layer
+ * to get notified of the result of the login attempt.
+ */
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val service: Service) : ViewModel() {
     private var _loginRes = MutableLiveData<Boolean>()
     val loginRes : LiveData<Boolean>
         get() = _loginRes
 
+    /**
+     * Performs check on the given user, encodes its password,
+     * and attempts to log in the user.
+     */
     fun onLogin(user: UserAuth) {
         AuthChecker.check(user)
 

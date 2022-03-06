@@ -6,8 +6,8 @@ object AuthChecker {
     /**
      * Performs checks on the given user: checks if
      * both the name and password is not empty, etc.
-     * @param user: the user to be checked
-     * @throws IllegalArgumentException: if the user fails the checks
+     * @param user the user to be checked
+     * @throws IllegalArgumentException if the user fails the checks
      */
     fun check(user: UserAuth) {
         if (user.name.isEmpty() || user.password.isEmpty()) {

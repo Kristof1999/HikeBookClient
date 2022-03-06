@@ -31,12 +31,20 @@ import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import javax.inject.Inject
 
+/**
+ * Encapsulates the registration flow, and provides a way for the ui/view layer
+ * to get notified of the result of the registration attempt.
+ */
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(private val service: Service) : ViewModel() {
     private var _registrationRes = MutableLiveData<Boolean>()
     val registrationRes : LiveData<Boolean>
         get() = _registrationRes
 
+    /**
+     * Performs checks on the given user, encodes its password,
+     * and attempts to register the user.
+     */
     fun onRegister(user: UserAuth) {
         AuthChecker.check(user)
 
