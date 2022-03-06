@@ -18,7 +18,7 @@
 // https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/GuessTheWordLiveData
 // https://developer.android.com/training/dependency-injection/hilt-android
 
-package hu.kristof.nagy.hikebookclient.viewModel
+package hu.kristof.nagy.hikebookclient.viewModel.authentication
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,12 +32,12 @@ import java.security.MessageDigest
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val service: Service) : ViewModel() {
-    private var _loginRes = MutableLiveData<Boolean>()
-    val loginRes : LiveData<Boolean>
-        get() = _loginRes
+class RegistrationViewModel @Inject constructor(private val service: Service) : ViewModel() {
+    private var _registrationRes = MutableLiveData<Boolean>()
+    val registrationRes : LiveData<Boolean>
+        get() = _registrationRes
 
-    fun onLogin(user: UserAuth) {
+    fun onRegister(user: UserAuth) {
         AuthChecker.check(user)
 
         val password = MessageDigest.getInstance("MD5").digest(
@@ -45,7 +45,7 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
         ).joinToString(separator = "")
 
         viewModelScope.launch{
-            _loginRes.value = service.login(UserAuth(user.name, password))
+            _registrationRes.value = service.register(UserAuth(user.name, password))
         }
     }
 }

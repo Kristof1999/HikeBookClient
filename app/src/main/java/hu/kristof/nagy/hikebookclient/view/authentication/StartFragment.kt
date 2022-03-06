@@ -37,7 +37,7 @@ import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentStartBinding
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.viewModel.LoginViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
 
 @AndroidEntryPoint
 class StartFragment : Fragment() {
