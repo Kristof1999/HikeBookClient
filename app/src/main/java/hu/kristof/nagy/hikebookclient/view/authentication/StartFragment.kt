@@ -84,7 +84,7 @@ class StartFragment : Fragment() {
     private fun onLoginRes(loginRes: Boolean) {
         if (loginRes) {
             this.findNavController().navigate(
-                R.id.action_startFragment_to_mainActivity
+                R.id.action_startFragment_to_myMapActivity
             )
         } else {
             Toast.makeText(activity, "Vagy a név, vagy a jelszó hibás.", Toast.LENGTH_LONG).show()

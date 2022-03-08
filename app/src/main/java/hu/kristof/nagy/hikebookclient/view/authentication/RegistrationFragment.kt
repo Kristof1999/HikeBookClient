@@ -78,7 +78,7 @@ class RegistrationFragment : Fragment() {
     private fun onRegistrationRes(registrationRes: Boolean) {
         if (registrationRes) {
             findNavController().navigate(
-                R.id.action_registrationFragment_to_mainActivity
+                R.id.action_registrationFragment_to_myMapActivity
             )
         } else {
             Toast.makeText(activity, "Ez a név már foglalt.", Toast.LENGTH_LONG).show()

@@ -23,12 +23,9 @@ package hu.kristof.nagy.hikebookclient.viewModel.authentication
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.network.Service
-import kotlinx.coroutines.launch
-import java.security.MessageDigest
 import javax.inject.Inject
 
 /**
@@ -46,7 +43,8 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
      * and attempts to log in the user.
      */
     fun onLogin(user: UserAuth) {
-        AuthChecker.check(user)
+        _loginRes.value = true
+    /*AuthChecker.check(user)
 
         val password = MessageDigest.getInstance("MD5").digest(
             user.password.toByteArray()
@@ -54,6 +52,6 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
 
         viewModelScope.launch{
             _loginRes.value = service.login(UserAuth(user.name, password))
-        }
+        }*/
     }
 }

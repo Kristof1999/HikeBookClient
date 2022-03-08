@@ -12,4 +12,7 @@
     <string name="browse_menu">Útvonalak Böngészése</string>
     <string name="help_menu">Súgó</string>
     <string name="logout_menu">Kilépés</string>
+    <string name="title_activity_my_map">MyMapActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 </resources>
