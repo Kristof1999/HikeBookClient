@@ -1,18 +1,22 @@
 <resources>
     <string name="app_name">HikeBookClient</string>
+
     <string name="user_name_hint">Felhasználói név</string>
     <string name="password_hint">Jelszó</string>
     <string name="login_btn_text">Bejelentkezés</string>
     <string name="registration_btn_text">Regisztráció</string>
     <string name="start_screen_title">Kezdőlap</string>
     <string name="registration_screen_title">Regisztráció</string>
+
     <string name="my_map_menu">Saját Térkép</string>
     <string name="group_hike_menu">Csoportos Túrák</string>
     <string name="groups_menu">Csoportok</string>
     <string name="browse_menu">Útvonalak Böngészése</string>
     <string name="help_menu">Súgó</string>
     <string name="logout_menu">Kilépés</string>
+
     <string name="title_activity_my_map">MyMapActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="my_map_tab_text_map">Térkép nézet</string>
+    <string name="my_map_tab_text_list">Lista nézet</string>
+    <string name="my_map_title_text">Saját térkép</string>
 </resources>
