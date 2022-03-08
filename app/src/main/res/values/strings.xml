@@ -19,4 +19,8 @@
     <string name="my_map_tab_text_map">Térkép nézet</string>
     <string name="my_map_tab_text_list">Lista nézet</string>
     <string name="my_map_title_text">Saját térkép</string>
+    <string name="delete_text">Törlés</string>
+    <string name="edit_text">Szerkesztés</string>
+    <string name="print_text">Nyomtatás</string>
+    <string name="group_hike_create_text">Csoportos túra létrehozás</string>
 </resources>
