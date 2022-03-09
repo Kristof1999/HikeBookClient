@@ -22,9 +22,6 @@
             android:id="@+id/action_myMapListFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
     </fragment>
-    <action
-        android:id="@+id/action_global_loginActivity"
-        app:destination="@id/loginActivity" />
     <activity
         android:id="@+id/loginActivity"
         android:name="hu.kristof.nagy.hikebookclient.view.authentication.LoginActivity"

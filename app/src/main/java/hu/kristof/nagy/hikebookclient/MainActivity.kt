@@ -23,6 +23,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
 import com.example.hikebookclient.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,15 +46,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.logoutMenuItem -> findNavController(R.id.navHostFragment).navigate(
-                R.id.action_global_loginActivity
-            )
-        }
-        return super.onOptionsItemSelected(item)
+        val navController = findNavController(R.id.navHostFragment)
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
+    // source: https://developer.android.com/guide/navigation/navigation-ui
     override fun onSupportNavigateUp(): Boolean {
+        // TODO: implement the other options
+        // ids must match: in navigation fragment/activity id == menuItem id
+        // for the help option, we should give back a custom message/page
         val navController = findNavController(R.id.navHostFragment)
         return navController.navigateUp()
     }

@@ -18,6 +18,6 @@
         android:id="@+id/helpMenuItem"
         android:title="@string/help_menu" />
     <item
-        android:id="@+id/logoutMenuItem"
+        android:id="@+id/loginActivity"
         android:title="@string/logout_menu" />
 </menu>
