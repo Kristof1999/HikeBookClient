@@ -24,4 +24,6 @@
     <string name="switch_to_my_map_button_text">Átváltás Térkép Nézetre</string>
     <string name="my_map_title">Saját Térkép: Térkép Nézet</string>
     <string name="my_map_list_title">Saját Térkép: Lista Nézet</string>
+    <string name="create_route_image_description">Plus sign</string>
+    <string name="hike_image_description">Walking man</string>
 </resources>
