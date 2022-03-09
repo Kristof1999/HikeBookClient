@@ -33,8 +33,8 @@
             android:id="@+id/action_startFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
         <action
-            android:id="@+id/action_startFragment_to_myMapActivity"
-            app:destination="@id/myMapActivity" />
+            android:id="@+id/action_startFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -42,12 +42,11 @@
         android:label="@string/registration_screen_title"
         tools:layout="@layout/fragment_registration" >
         <action
-            android:id="@+id/action_registrationFragment_to_myMapActivity"
-            app:destination="@id/myMapActivity" />
+            android:id="@+id/action_registrationFragment_to_mainActivity"
+            app:destination="@id/mainActivity" />
     </fragment>
     <activity
-        android:id="@+id/myMapActivity"
-        android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapActivity"
-        android:label="activity_my_map"
-        tools:layout="@layout/activity_my_map" />
+        android:id="@+id/mainActivity"
+        android:name="hu.kristof.nagy.hikebookclient.MainActivity"
+        android:label="MainActivity" />
 </navigation>

@@ -19,11 +19,6 @@
         android:theme="@style/Theme.HikeBookClient"
         android:usesCleartextTraffic="true">
         <activity
-            android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapActivity"
-            android:exported="false"
-            android:label="@string/title_activity_my_map"
-            android:theme="@style/Theme.HikeBookClient.NoActionBar" />
-        <activity
             android:name="hu.kristof.nagy.hikebookclient.view.authentication.LoginActivity"
             android:exported="true">
             <intent-filter>

@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <org.osmdroid.views.MapView android:id="@+id/myMap"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+
+    </data>
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        tilesource="Mapnik" />
-</LinearLayout>
+        android:layout_height="fill_parent">
+
+        <Button
+            android:id="@+id/switchToMyMapListButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/swtich_to_my_map_list_button_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <org.osmdroid.views.MapView android:id="@+id/myMap"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            tilesource="Mapnik" />
+    </LinearLayout>
+</layout>

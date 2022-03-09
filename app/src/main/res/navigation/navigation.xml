@@ -4,10 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
     app:startDestination="@id/myMapFragment">
-
     <fragment
         android:id="@+id/myMapFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapFragment"
-        android:label="fragment_my_map"
-        tools:layout="@layout/fragment_my_map" />
+        android:label="MyMapFragment" >
+        <action
+            android:id="@+id/action_myMapFragment_to_myMapListFragment"
+            app:destination="@id/myMapListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myMapListFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapListFragment"
+        android:label="MyMapListFragment" >
+        <action
+            android:id="@+id/action_myMapListFragment_to_myMapFragment"
+            app:destination="@id/myMapFragment" />
+    </fragment>
 </navigation>

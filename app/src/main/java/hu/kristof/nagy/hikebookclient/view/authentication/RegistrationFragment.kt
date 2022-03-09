@@ -39,14 +39,20 @@ import hu.kristof.nagy.hikebookclient.viewModel.authentication.RegistrationViewM
 
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
+    private lateinit var binding: FragmentRegistrationBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentRegistrationBinding>(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_registration, container, false
         )
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
         val registrationViewModel : RegistrationViewModel by viewModels()
@@ -57,8 +63,6 @@ class RegistrationFragment : Fragment() {
         registrationViewModel.registrationRes.observe(viewLifecycleOwner) { registrationRes ->
             onRegistrationRes(registrationRes)
         }
-
-        return binding.root
     }
 
     private fun onRegister(
@@ -78,7 +82,7 @@ class RegistrationFragment : Fragment() {
     private fun onRegistrationRes(registrationRes: Boolean) {
         if (registrationRes) {
             findNavController().navigate(
-                R.id.action_registrationFragment_to_myMapActivity
+                R.id.action_registrationFragment_to_mainActivity
             )
         } else {
             Toast.makeText(activity, "Ez a név már foglalt.", Toast.LENGTH_LONG).show()

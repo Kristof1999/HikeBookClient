@@ -9,8 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
+import com.example.hikebookclient.databinding.FragmentMyMapBinding
 import org.osmdroid.config.Configuration.getInstance
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -18,18 +21,28 @@ import org.osmdroid.views.MapView
 class MyMapFragment : Fragment() {
     private val REQUEST_PERMISSIONS_REQUEST_CODE = 1
     private lateinit var map: MapView
+    private lateinit var binding: FragmentMyMapBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_my_map, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_my_map, container, false
+        )
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.switchToMyMapListButton.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_myMapFragment_to_myMapListFragment
+            )
+        }
+
         getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = requireActivity().findViewById(R.id.myMap)
+        map = binding.myMap
 
         val mapController = map.controller
         mapController.setZoom(9.5)

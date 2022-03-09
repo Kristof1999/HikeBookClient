@@ -20,6 +20,8 @@ package hu.kristof.nagy.hikebookclient
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.example.hikebookclient.R
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +30,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val navController = findNavController(R.id.navHostFragment)
+        NavigationUI.setupActionBarWithNavController(this, navController)
     }
 
     // This method's code was taken from here:
@@ -36,5 +41,10 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
         return true
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.authNavHostFragment)
+        return navController.navigateUp()
     }
 }

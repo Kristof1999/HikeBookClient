@@ -15,12 +15,11 @@
     <string name="help_menu">Súgó</string>
     <string name="logout_menu">Kilépés</string>
 
-    <string name="title_activity_my_map">MyMapActivity</string>
-    <string name="my_map_tab_text_map">Térkép nézet</string>
-    <string name="my_map_tab_text_list">Lista nézet</string>
     <string name="my_map_title_text">Saját térkép</string>
     <string name="delete_text">Törlés</string>
     <string name="edit_text">Szerkesztés</string>
     <string name="print_text">Nyomtatás</string>
-    <string name="group_hike_create_text">Csoportos túra létrehozás</string>
+    <string name="group_hike_create_text">Csoportos Túra Létrehozás</string>
+    <string name="swtich_to_my_map_list_button_text">Átváltás Lista Nézetre</string>
+    <string name="switch_to_my_map_button_text">Átváltás Térkép Nézetre</string>
 </resources>

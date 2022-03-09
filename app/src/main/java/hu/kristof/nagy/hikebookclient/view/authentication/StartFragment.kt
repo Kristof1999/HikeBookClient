@@ -41,14 +41,19 @@ import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
 
 @AndroidEntryPoint
 class StartFragment : Fragment() {
+    private lateinit var binding: FragmentStartBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = DataBindingUtil.inflate<FragmentStartBinding>(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_start, container, false
         )
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.startRegistrationButton.setOnClickListener {
             it.findNavController()
                 .navigate(R.id.action_startFragment_to_registrationFragment)
@@ -63,8 +68,6 @@ class StartFragment : Fragment() {
         loginViewModel.loginRes.observe(viewLifecycleOwner) { loginRes ->
             onLoginRes(loginRes)
         }
-
-        return binding.root
     }
 
     private fun onLogin(
@@ -84,7 +87,7 @@ class StartFragment : Fragment() {
     private fun onLoginRes(loginRes: Boolean) {
         if (loginRes) {
             this.findNavController().navigate(
-                R.id.action_startFragment_to_myMapActivity
+                R.id.action_startFragment_to_mainActivity
             )
         } else {
             Toast.makeText(activity, "Vagy a név, vagy a jelszó hibás.", Toast.LENGTH_LONG).show()
