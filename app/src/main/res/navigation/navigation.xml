@@ -7,7 +7,8 @@
     <fragment
         android:id="@+id/myMapFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapFragment"
-        android:label="MyMapFragment" >
+        android:label="@string/my_map_title"
+        tools:layout="@layout/fragment_my_map">
         <action
             android:id="@+id/action_myMapFragment_to_myMapListFragment"
             app:destination="@id/myMapListFragment" />
@@ -15,9 +16,17 @@
     <fragment
         android:id="@+id/myMapListFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapListFragment"
-        android:label="MyMapListFragment" >
+        android:label="@string/my_map_list_title"
+        tools:layout="@layout/fragment_my_map_list">
         <action
             android:id="@+id/action_myMapListFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
     </fragment>
+    <action
+        android:id="@+id/action_global_loginActivity"
+        app:destination="@id/loginActivity" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="hu.kristof.nagy.hikebookclient.view.authentication.LoginActivity"
+        android:label="LoginActivity" />
 </navigation>

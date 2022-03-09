@@ -22,4 +22,6 @@
     <string name="group_hike_create_text">Csoportos Túra Létrehozás</string>
     <string name="swtich_to_my_map_list_button_text">Átváltás Lista Nézetre</string>
     <string name="switch_to_my_map_button_text">Átváltás Térkép Nézetre</string>
+    <string name="my_map_title">Saját Térkép: Térkép Nézet</string>
+    <string name="my_map_list_title">Saját Térkép: Lista Nézet</string>
 </resources>
