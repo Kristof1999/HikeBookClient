@@ -48,7 +48,7 @@ class MyMapListAdapter : RecyclerView.Adapter<MyMapListAdapter.ViewHolder>() {
 
     class ViewHolder private constructor(val binding: MyMapListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val tv: TextView = binding.myMapListItemTextView
+        val tv: TextView = binding.myMapListItemRouteName
 
         fun bind(str: String) {
             tv.text = str
