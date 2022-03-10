@@ -44,8 +44,10 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
      */
     fun onLogin(user: UserAuth) {
         _loginRes.value = true
-    /*AuthChecker.check(user)
+    /*
+        AuthChecker.check(user)
 
+        // TODO: check if internet is available -> ACCESS_NETWORK_STATE
         val password = MessageDigest.getInstance("MD5").digest(
             user.password.toByteArray()
         ).joinToString(separator = "")

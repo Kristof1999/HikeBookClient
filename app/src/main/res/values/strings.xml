@@ -26,4 +26,6 @@
     <string name="my_map_list_title">Saját Térkép: Lista Nézet</string>
     <string name="create_route_image_description">Plus sign</string>
     <string name="hike_image_description">Walking man</string>
+    <string name="route_create_button_text">Létrehozás</string>
+    <string name="edit_route_edit_finalize_button_text">Szerkesztés befejezése</string>
 </resources>

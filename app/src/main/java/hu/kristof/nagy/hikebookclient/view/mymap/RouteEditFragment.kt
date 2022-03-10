@@ -1,6 +1,3 @@
-// based on the osmdroid tutorial:
-// https://github.com/osmdroid/osmdroid/wiki
-
 package hu.kristof.nagy.hikebookclient.view.mymap
 
 import android.os.Bundle
@@ -10,43 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.FragmentMyMapBinding
+import com.example.hikebookclient.databinding.FragmentRouteEditBinding
 import hu.kristof.nagy.hikebookclient.MapHelper
 import hu.kristof.nagy.hikebookclient.model.Constants
-import org.osmdroid.config.Configuration.getInstance
+import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
 
-class MyMapFragment : Fragment() {
+class RouteEditFragment : Fragment() {
     private lateinit var map: MapView
-    private lateinit var binding: FragmentMyMapBinding
+    private lateinit var binding: FragmentRouteEditBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_my_map, container, false
+            inflater, R.layout.fragment_route_edit, container, false
         )
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.switchToMyMapListButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_myMapFragment_to_myMapListFragment
-            )
-        }
-        binding.routeCreateFab.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_myMapFragment_to_routeCreateFragment
-            )
-        }
-
-        getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.myMap
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.routeEditMap
 
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)

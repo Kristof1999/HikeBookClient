@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_myMapFragment_to_myMapListFragment"
             app:destination="@id/myMapListFragment" />
+        <action
+            android:id="@+id/action_myMapFragment_to_routeCreateFragment"
+            app:destination="@id/routeCreateFragment" />
     </fragment>
     <fragment
         android:id="@+id/myMapListFragment"
@@ -21,9 +24,21 @@
         <action
             android:id="@+id/action_myMapListFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
+        <action
+            android:id="@+id/action_myMapListFragment_to_routeEditFragment"
+            app:destination="@id/routeEditFragment" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"
         android:name="hu.kristof.nagy.hikebookclient.view.authentication.LoginActivity"
         android:label="LoginActivity" />
+    <fragment
+        android:id="@+id/routeCreateFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteCreateFragment"
+        android:label="fragment_route_create"
+        tools:layout="@layout/fragment_route_create" />
+    <fragment
+        android:id="@+id/routeEditFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteEditFragment"
+        android:label="RouteEditFragment" />
 </navigation>
