@@ -54,30 +54,80 @@ class RouteCreateFragment : Fragment() {
         val polylines = ArrayList<Polyline>()
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                if (isDeleteOn) {
-                    //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
+                //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
+                if (isDeleteOn)
                     return true
-                }
+
                 // add new marker
                 val newMarker = Marker(map)
+                newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+                newMarker.isDraggable = true
                 newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
                     if (isDeleteOn) {
-                        if (markers.last() == marker) {
-                            marker.remove(mapView)
-                            markers.removeLast()
-                            if (markers.isNotEmpty()) {
-                                markers.last().icon = requireActivity().getDrawable(R.drawable.marker_image)
-                                polylines.last().isVisible = false
-                                polylines.removeLast()
-                            }
-                            mapView.invalidate()
-                        } else {
-                            Toast.makeText(
-                                context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        onDelete(marker, mapView, markers, polylines)
                     }
                     return@OnMarkerClickListener true
+                })
+
+                newMarker.setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
+                    override fun onMarkerDrag(marker: Marker?) {
+
+                    }
+
+                    override fun onMarkerDragEnd(marker: Marker?) {
+                        if (markers.size == 1)
+                            return
+
+                        if (marker == null)
+                            return
+
+                        val idx = markers.indexOf(marker)
+                        if (idx == 0) {
+                            val points = ArrayList<GeoPoint>()
+                            points.add(marker.position)
+                            points.add(markers[idx + 1].position)
+                            polylines[idx].setPoints(points)
+                            polylines[idx].isVisible = true
+                        } else if (idx == markers.size - 1) {
+                            val points = ArrayList<GeoPoint>()
+                            points.add(markers[idx - 1].position)
+                            points.add(marker.position)
+                            polylines[idx - 1].setPoints(points)
+                            polylines[idx - 1].isVisible = true
+                        } else {
+                            val prevPoints = ArrayList<GeoPoint>()
+                            prevPoints.add(markers[idx - 1].position)
+                            prevPoints.add(marker.position)
+                            polylines[idx - 1].setPoints(prevPoints)
+                            polylines[idx - 1].isVisible = true
+
+                            val nextPoints = ArrayList<GeoPoint>()
+                            nextPoints.add(marker.position)
+                            nextPoints.add(markers[idx + 1].position)
+                            polylines[idx].setPoints(nextPoints)
+                            polylines[idx].isVisible = true
+                        }
+                        map.invalidate()
+                    }
+
+                    override fun onMarkerDragStart(marker: Marker?) {
+                        if (markers.size == 1)
+                            return
+
+                        if (marker == null)
+                            return
+
+                        val idx = markers.indexOf(marker)
+                        if (idx == 0) {
+                            polylines[idx].isVisible = false
+                        } else if (idx == markers.size - 1) {
+                            polylines[idx - 1].isVisible = false
+                        } else {
+                            polylines[idx - 1].isVisible = false
+                            polylines[idx].isVisible = false
+                        }
+                        map.invalidate()
+                    }
                 })
                 newMarker.position = p
                 newMarker.icon = requireActivity().getDrawable(R.drawable.marker_image)
@@ -104,11 +154,34 @@ class RouteCreateFragment : Fragment() {
             }
 
             override fun longPressHelper(p: GeoPoint?): Boolean {
-                TODO("Not yet implemented")
+                // itt (is) lehetne kiemelt pontok közül választani
+                return true
             }
         })
         map.overlays.add(mapEventsOverlay)
         map.invalidate()
+    }
+
+    private fun onDelete(
+        marker: Marker,
+        mapView: MapView,
+        markers: ArrayList<Marker>,
+        polylines: ArrayList<Polyline>
+    ) {
+        if (markers.last() == marker) {
+            marker.remove(mapView)
+            markers.removeLast()
+            if (markers.isNotEmpty()) {
+                markers.last().icon = requireActivity().getDrawable(R.drawable.marker_image)
+                polylines.last().isVisible = false
+                polylines.removeLast()
+            }
+            mapView.invalidate()
+        } else {
+            Toast.makeText(
+                context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
