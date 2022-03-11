@@ -3,6 +3,7 @@
 
 package hu.kristof.nagy.hikebookclient.view.mymap
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -11,22 +12,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
 import hu.kristof.nagy.hikebookclient.MapHelper
 import hu.kristof.nagy.hikebookclient.model.Constants
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.Polyline
 
 class RouteCreateFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteCreateBinding
-    private var isDeleteOn = false // TODO: store in viewModel, handle interruptions
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,18 +44,20 @@ class RouteCreateFragment : Fragment() {
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.routeCreateMap
 
-        binding.routeCreateDeleteSwitch.setOnClickListener {
-            isDeleteOn = !isDeleteOn
-        }
-
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
-        val markers = ArrayList<Marker>()
-        val polylines = ArrayList<Polyline>()
+        val viewModel: RouteCreateViewModel by viewModels()
+        binding.routeCreateDeleteSwitch.setOnClickListener {
+            viewModel.isDeleteOn = !viewModel.isDeleteOn
+        }
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.invalidateMap.observe(viewLifecycleOwner) {
+            map.invalidate()
+        }
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                return onSingleTap(markers, polylines, p)
+                return onSingleTap(p, viewModel)
             }
 
             override fun longPressHelper(p: GeoPoint?): Boolean {
@@ -67,51 +70,27 @@ class RouteCreateFragment : Fragment() {
     }
 
     private fun onSingleTap(
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>,
-        p: GeoPoint?
+        p: GeoPoint?,
+        viewModel: RouteCreateViewModel
     ): Boolean {
         //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
-        if (isDeleteOn)
-            return true
-
-        // add new marker
         val newMarker = Marker(map)
-        newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        newMarker.isDraggable = true
-        newMarker.position = p
-        newMarker.icon = requireActivity().getDrawable(R.drawable.marker_image)
-        markers.add(newMarker)
-        setListeners(newMarker, markers, polylines)
-        map.overlays.add(newMarker)
-
-        if (markers.size > 1) {
-            // change previous marker's icon
-            val prevMarker = markers[markers.size - 2]
-            prevMarker.icon = requireActivity().getDrawable(R.drawable.set_marker_image)
-
-            // connect the new point with the previous one
-            val points = ArrayList<GeoPoint>()
-            points.add(prevMarker.position)
-            points.add(newMarker.position)
-            val polyline = Polyline()
-            polyline.setPoints(points)
-            polylines.add(polyline)
-            map.overlays.add(polyline)
-        }
-
+        val markerIcon = requireActivity().getDrawable(R.drawable.marker_image)!!
+        val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
+        viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
+        setListeners(newMarker, viewModel, markerIcon)
         map.invalidate()
         return true
     }
 
     private fun setListeners(
         newMarker: Marker,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
+        viewModel: RouteCreateViewModel,
+        markerIcon: Drawable
     ) {
         newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
-            if (isDeleteOn) {
-                onDelete(marker, mapView, markers, polylines)
+            if (viewModel.isDeleteOn) {
+                onDelete(marker, mapView, viewModel, markerIcon)
             }
             return@OnMarkerClickListener true
         })
@@ -125,90 +104,26 @@ class RouteCreateFragment : Fragment() {
                 if (marker == null)
                     return
 
-                onMarkerDragEnd(marker, markers, polylines)
+                viewModel.onMarkerDragEnd(marker)
             }
 
             override fun onMarkerDragStart(marker: Marker?) {
                 if (marker == null)
                     return
 
-                onMarkerDragStart(marker, markers, polylines)
+                viewModel.onMarkerDragStart(marker)
             }
         })
-    }
-
-    private fun onMarkerDragEnd(
-        marker: Marker,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
-    ) {
-        if (markers.size == 1)
-            return
-
-        val idx = markers.indexOf(marker)
-        if (idx == 0) {
-            val points = ArrayList<GeoPoint>()
-            points.add(marker.position)
-            points.add(markers[idx + 1].position)
-            polylines[idx].setPoints(points)
-            polylines[idx].isVisible = true
-        } else if (idx == markers.size - 1) {
-            val points = ArrayList<GeoPoint>()
-            points.add(markers[idx - 1].position)
-            points.add(marker.position)
-            polylines[idx - 1].setPoints(points)
-            polylines[idx - 1].isVisible = true
-        } else {
-            val prevPoints = ArrayList<GeoPoint>()
-            prevPoints.add(markers[idx - 1].position)
-            prevPoints.add(marker.position)
-            polylines[idx - 1].setPoints(prevPoints)
-            polylines[idx - 1].isVisible = true
-
-            val nextPoints = ArrayList<GeoPoint>()
-            nextPoints.add(marker.position)
-            nextPoints.add(markers[idx + 1].position)
-            polylines[idx].setPoints(nextPoints)
-            polylines[idx].isVisible = true
-        }
-        map.invalidate()
-    }
-
-    private fun onMarkerDragStart(
-        marker: Marker,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
-    ) {
-        if (markers.size == 1)
-            return
-
-        val idx = markers.indexOf(marker)
-        if (idx == 0) {
-            polylines[idx].isVisible = false
-        } else if (idx == markers.size - 1) {
-            polylines[idx - 1].isVisible = false
-        } else {
-            polylines[idx - 1].isVisible = false
-            polylines[idx].isVisible = false
-        }
-        map.invalidate()
     }
 
     private fun onDelete(
         marker: Marker,
         mapView: MapView,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
+        viewModel: RouteCreateViewModel,
+        markerIcon: Drawable
     ) {
-        if (markers.last() == marker) {
+        if (viewModel.onDelete(marker, markerIcon)) {
             marker.remove(mapView)
-            markers.removeLast()
-            if (markers.isNotEmpty()) {
-                markers.last().icon = requireActivity().getDrawable(R.drawable.marker_image)
-                polylines.last().isVisible = false
-                polylines.removeLast()
-            }
-            mapView.invalidate()
         } else {
             Toast.makeText(
                 context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT
