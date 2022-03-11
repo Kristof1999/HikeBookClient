@@ -17,6 +17,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 
 class RouteCreateFragment : Fragment() {
     private lateinit var map: MapView
@@ -40,12 +41,30 @@ class RouteCreateFragment : Fragment() {
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
+        val markers = ArrayList<Marker>()
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                val marker = Marker(map)
-                marker.position = p
-                marker.icon = requireActivity().getDrawable(R.drawable.marker_image)
-                map.overlays.add(marker)
+                // add new marker
+                val newMarker = Marker(map)
+                newMarker.position = p
+                newMarker.icon = requireActivity().getDrawable(R.drawable.marker_image)
+                markers.add(newMarker)
+                map.overlays.add(newMarker)
+
+                if (markers.size > 1) {
+                    // change previous marker's icon
+                    val prevMarker = markers[markers.size - 2]
+                    prevMarker.icon = requireActivity().getDrawable(R.drawable.set_marker_image)
+
+                    // connect the new point with the previous one
+                    val points = ArrayList<GeoPoint>()
+                    points.add(prevMarker.position)
+                    points.add(newMarker.position)
+                    val polyline = Polyline()
+                    polyline.setPoints(points)
+                    map.overlays.add(polyline)
+                }
+
                 map.invalidate()
                 return true
             }
