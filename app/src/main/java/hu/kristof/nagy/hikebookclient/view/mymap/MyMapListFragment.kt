@@ -32,12 +32,5 @@ class MyMapListFragment : Fragment() {
                 R.id.action_myMapListFragment_to_myMapFragment
             )
         }
-        binding.editButton.setOnClickListener {
-            // TODO: before navigation, check if the user
-            // has chosen a route from the list below
-            findNavController().navigate(
-                R.id.action_myMapListFragment_to_routeEditFragment
-            )
-        }
     }
 }

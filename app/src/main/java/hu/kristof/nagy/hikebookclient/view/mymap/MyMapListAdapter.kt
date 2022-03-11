@@ -22,7 +22,9 @@ package hu.kristof.nagy.hikebookclient.view.mymap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.MyMapListItemBinding
 
 class MyMapListAdapter : RecyclerView.Adapter<MyMapListAdapter.ViewHolder>() {
@@ -42,6 +44,12 @@ class MyMapListAdapter : RecyclerView.Adapter<MyMapListAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = dummyData[position]
         holder.bind(item)
+
+        holder.binding.myMapListItemEditImageButton.setOnClickListener {
+            it.findNavController().navigate(
+                R.id.action_myMapListFragment_to_routeEditFragment
+            )
+        }
     }
 
     override fun getItemCount(): Int = dummyData.size

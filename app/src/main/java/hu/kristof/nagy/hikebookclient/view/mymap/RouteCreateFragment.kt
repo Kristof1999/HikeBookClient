@@ -12,7 +12,11 @@ import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
 import hu.kristof.nagy.hikebookclient.MapHelper
 import hu.kristof.nagy.hikebookclient.model.Constants
 import org.osmdroid.config.Configuration
+import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.MapEventsOverlay
+import org.osmdroid.views.overlay.Marker
 
 class RouteCreateFragment : Fragment() {
     private lateinit var map: MapView
@@ -36,6 +40,22 @@ class RouteCreateFragment : Fragment() {
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
+        val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                val marker = Marker(map)
+                marker.position = p
+                marker.icon = requireActivity().getDrawable(R.drawable.marker_image)
+                map.overlays.add(marker)
+                map.invalidate()
+                return true
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                TODO("Not yet implemented")
+            }
+        })
+        map.overlays.add(mapEventsOverlay)
+        map.invalidate()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
