@@ -54,103 +54,7 @@ class RouteCreateFragment : Fragment() {
         val polylines = ArrayList<Polyline>()
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
-                if (isDeleteOn)
-                    return true
-
-                // add new marker
-                val newMarker = Marker(map)
-                newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-                newMarker.isDraggable = true
-                newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
-                    if (isDeleteOn) {
-                        onDelete(marker, mapView, markers, polylines)
-                    }
-                    return@OnMarkerClickListener true
-                })
-
-                newMarker.setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
-                    override fun onMarkerDrag(marker: Marker?) {
-
-                    }
-
-                    override fun onMarkerDragEnd(marker: Marker?) {
-                        if (markers.size == 1)
-                            return
-
-                        if (marker == null)
-                            return
-
-                        val idx = markers.indexOf(marker)
-                        if (idx == 0) {
-                            val points = ArrayList<GeoPoint>()
-                            points.add(marker.position)
-                            points.add(markers[idx + 1].position)
-                            polylines[idx].setPoints(points)
-                            polylines[idx].isVisible = true
-                        } else if (idx == markers.size - 1) {
-                            val points = ArrayList<GeoPoint>()
-                            points.add(markers[idx - 1].position)
-                            points.add(marker.position)
-                            polylines[idx - 1].setPoints(points)
-                            polylines[idx - 1].isVisible = true
-                        } else {
-                            val prevPoints = ArrayList<GeoPoint>()
-                            prevPoints.add(markers[idx - 1].position)
-                            prevPoints.add(marker.position)
-                            polylines[idx - 1].setPoints(prevPoints)
-                            polylines[idx - 1].isVisible = true
-
-                            val nextPoints = ArrayList<GeoPoint>()
-                            nextPoints.add(marker.position)
-                            nextPoints.add(markers[idx + 1].position)
-                            polylines[idx].setPoints(nextPoints)
-                            polylines[idx].isVisible = true
-                        }
-                        map.invalidate()
-                    }
-
-                    override fun onMarkerDragStart(marker: Marker?) {
-                        if (markers.size == 1)
-                            return
-
-                        if (marker == null)
-                            return
-
-                        val idx = markers.indexOf(marker)
-                        if (idx == 0) {
-                            polylines[idx].isVisible = false
-                        } else if (idx == markers.size - 1) {
-                            polylines[idx - 1].isVisible = false
-                        } else {
-                            polylines[idx - 1].isVisible = false
-                            polylines[idx].isVisible = false
-                        }
-                        map.invalidate()
-                    }
-                })
-                newMarker.position = p
-                newMarker.icon = requireActivity().getDrawable(R.drawable.marker_image)
-                markers.add(newMarker)
-                map.overlays.add(newMarker)
-
-                if (markers.size > 1) {
-                    // change previous marker's icon
-                    val prevMarker = markers[markers.size - 2]
-                    prevMarker.icon = requireActivity().getDrawable(R.drawable.set_marker_image)
-
-                    // connect the new point with the previous one
-                    val points = ArrayList<GeoPoint>()
-                    points.add(prevMarker.position)
-                    points.add(newMarker.position)
-                    val polyline = Polyline()
-                    polyline.setPoints(points)
-                    polylines.add(polyline)
-                    map.overlays.add(polyline)
-                }
-
-                map.invalidate()
-                return true
+                return onSingleTap(markers, polylines, p)
             }
 
             override fun longPressHelper(p: GeoPoint?): Boolean {
@@ -159,6 +63,134 @@ class RouteCreateFragment : Fragment() {
             }
         })
         map.overlays.add(mapEventsOverlay)
+        map.invalidate()
+    }
+
+    private fun onSingleTap(
+        markers: ArrayList<Marker>,
+        polylines: ArrayList<Polyline>,
+        p: GeoPoint?
+    ): Boolean {
+        //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
+        if (isDeleteOn)
+            return true
+
+        // add new marker
+        val newMarker = Marker(map)
+        newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+        newMarker.isDraggable = true
+        newMarker.position = p
+        newMarker.icon = requireActivity().getDrawable(R.drawable.marker_image)
+        markers.add(newMarker)
+        setListeners(newMarker, markers, polylines)
+        map.overlays.add(newMarker)
+
+        if (markers.size > 1) {
+            // change previous marker's icon
+            val prevMarker = markers[markers.size - 2]
+            prevMarker.icon = requireActivity().getDrawable(R.drawable.set_marker_image)
+
+            // connect the new point with the previous one
+            val points = ArrayList<GeoPoint>()
+            points.add(prevMarker.position)
+            points.add(newMarker.position)
+            val polyline = Polyline()
+            polyline.setPoints(points)
+            polylines.add(polyline)
+            map.overlays.add(polyline)
+        }
+
+        map.invalidate()
+        return true
+    }
+
+    private fun setListeners(
+        newMarker: Marker,
+        markers: ArrayList<Marker>,
+        polylines: ArrayList<Polyline>
+    ) {
+        newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
+            if (isDeleteOn) {
+                onDelete(marker, mapView, markers, polylines)
+            }
+            return@OnMarkerClickListener true
+        })
+
+        newMarker.setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
+            override fun onMarkerDrag(marker: Marker?) {
+
+            }
+
+            override fun onMarkerDragEnd(marker: Marker?) {
+                if (marker == null)
+                    return
+
+                onMarkerDragEnd(marker, markers, polylines)
+            }
+
+            override fun onMarkerDragStart(marker: Marker?) {
+                if (marker == null)
+                    return
+
+                onMarkerDragStart(marker, markers, polylines)
+            }
+        })
+    }
+
+    private fun onMarkerDragEnd(
+        marker: Marker,
+        markers: ArrayList<Marker>,
+        polylines: ArrayList<Polyline>
+    ) {
+        if (markers.size == 1)
+            return
+
+        val idx = markers.indexOf(marker)
+        if (idx == 0) {
+            val points = ArrayList<GeoPoint>()
+            points.add(marker.position)
+            points.add(markers[idx + 1].position)
+            polylines[idx].setPoints(points)
+            polylines[idx].isVisible = true
+        } else if (idx == markers.size - 1) {
+            val points = ArrayList<GeoPoint>()
+            points.add(markers[idx - 1].position)
+            points.add(marker.position)
+            polylines[idx - 1].setPoints(points)
+            polylines[idx - 1].isVisible = true
+        } else {
+            val prevPoints = ArrayList<GeoPoint>()
+            prevPoints.add(markers[idx - 1].position)
+            prevPoints.add(marker.position)
+            polylines[idx - 1].setPoints(prevPoints)
+            polylines[idx - 1].isVisible = true
+
+            val nextPoints = ArrayList<GeoPoint>()
+            nextPoints.add(marker.position)
+            nextPoints.add(markers[idx + 1].position)
+            polylines[idx].setPoints(nextPoints)
+            polylines[idx].isVisible = true
+        }
+        map.invalidate()
+    }
+
+    private fun onMarkerDragStart(
+        marker: Marker,
+        markers: ArrayList<Marker>,
+        polylines: ArrayList<Polyline>
+    ) {
+        if (markers.size == 1)
+            return
+
+        val idx = markers.indexOf(marker)
+        if (idx == 0) {
+            polylines[idx].isVisible = false
+        } else if (idx == markers.size - 1) {
+            polylines[idx - 1].isVisible = false
+        } else {
+            polylines[idx - 1].isVisible = false
+            polylines[idx].isVisible = false
+        }
         map.invalidate()
     }
 
