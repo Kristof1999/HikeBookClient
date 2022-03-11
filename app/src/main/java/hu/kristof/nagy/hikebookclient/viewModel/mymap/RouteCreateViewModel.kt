@@ -12,9 +12,8 @@ import org.osmdroid.views.overlay.Polyline
 class RouteCreateViewModel : ViewModel(){
     private val markers = ArrayList<Marker>()
     private val polylines = ArrayList<Polyline>()
-    var isDeleteOn = false // TODO: handle interruptions: device rotation, ...
 
-    private var _invalidateMap = MutableLiveData<Boolean>(false)
+    private var _invalidateMap = MutableLiveData(false)
     val invalidateMap: LiveData<Boolean>
         get() = _invalidateMap
 
@@ -25,11 +24,12 @@ class RouteCreateViewModel : ViewModel(){
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
     ) {
-        if (isDeleteOn)
-            return
-
         // add new marker
-        handleNewMarker(newMarker, p, markerIcon)
+        newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+        newMarker.isDraggable = true
+        newMarker.position = p
+        newMarker.icon = markerIcon
+        markers.add(newMarker)
         overlays.add(newMarker)
 
         if (markers.size > 1) {
@@ -48,52 +48,38 @@ class RouteCreateViewModel : ViewModel(){
         }
     }
 
-    fun handleNewMarker(
-        newMarker: Marker,
-        p: GeoPoint?,
-        icon: Drawable
-    ) {
-        newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        newMarker.isDraggable = true
-        newMarker.position = p
-        newMarker.icon = icon
-        markers.add(newMarker)
-
-    }
-
     fun onMarkerDragEnd(
         marker: Marker
     ) {
         if (markers.size == 1)
             return
 
-        val idx = markers.indexOf(marker)
-        if (idx == 0) {
-            val points = ArrayList<GeoPoint>()
-            points.add(marker.position)
-            points.add(markers[idx + 1].position)
-            polylines[idx].setPoints(points)
-            polylines[idx].isVisible = true
-        } else if (idx == markers.size - 1) {
-            val points = ArrayList<GeoPoint>()
-            points.add(markers[idx - 1].position)
-            points.add(marker.position)
-            polylines[idx - 1].setPoints(points)
-            polylines[idx - 1].isVisible = true
+        if (markers.first() == marker) {
+            refreshNextPolyline(0)
+        } else if (markers.last() == marker) {
+            refreshPrevPolyline(markers.size - 1)
         } else {
-            val prevPoints = ArrayList<GeoPoint>()
-            prevPoints.add(markers[idx - 1].position)
-            prevPoints.add(marker.position)
-            polylines[idx - 1].setPoints(prevPoints)
-            polylines[idx - 1].isVisible = true
-
-            val nextPoints = ArrayList<GeoPoint>()
-            nextPoints.add(marker.position)
-            nextPoints.add(markers[idx + 1].position)
-            polylines[idx].setPoints(nextPoints)
-            polylines[idx].isVisible = true
+            val idx = markers.indexOf(marker)
+            refreshPrevPolyline(idx)
+            refreshNextPolyline(idx)
         }
         _invalidateMap.value = !_invalidateMap.value!!
+    }
+
+    private fun refreshPrevPolyline(idx: Int) {
+        val prevPoints = ArrayList<GeoPoint>()
+        prevPoints.add(markers[idx - 1].position)
+        prevPoints.add(markers[idx].position)
+        polylines[idx - 1].setPoints(prevPoints)
+        polylines[idx - 1].isVisible = true
+    }
+
+    private fun refreshNextPolyline(idx: Int) {
+        val nextPoints = ArrayList<GeoPoint>()
+        nextPoints.add(markers[idx].position)
+        nextPoints.add(markers[idx + 1].position)
+        polylines[idx].setPoints(nextPoints)
+        polylines[idx].isVisible = true
     }
 
     fun onMarkerDragStart(
@@ -102,12 +88,12 @@ class RouteCreateViewModel : ViewModel(){
         if (markers.size == 1)
             return
 
-        val idx = markers.indexOf(marker)
-        if (idx == 0) {
-            polylines[idx].isVisible = false
-        } else if (idx == markers.size - 1) {
-            polylines[idx - 1].isVisible = false
+        if (markers.first() == marker) {
+            polylines.first().isVisible = false
+        } else if (markers.last() == marker) {
+            polylines.last().isVisible = false
         } else {
+            val idx = markers.indexOf(marker)
             polylines[idx - 1].isVisible = false
             polylines[idx].isVisible = false
         }

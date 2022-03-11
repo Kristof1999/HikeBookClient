@@ -28,6 +28,7 @@ import org.osmdroid.views.overlay.Marker
 class RouteCreateFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteCreateBinding
+    private var isDeleteOn = false // TODO: handle interruptions: device rotation, ...
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,14 +48,16 @@ class RouteCreateFragment : Fragment() {
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
+
         val viewModel: RouteCreateViewModel by viewModels()
-        binding.routeCreateDeleteSwitch.setOnClickListener {
-            viewModel.isDeleteOn = !viewModel.isDeleteOn
+        binding.routeCreateDeleteSwitch.setOnCheckedChangeListener { _, isChecked ->
+            isDeleteOn = isChecked
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.invalidateMap.observe(viewLifecycleOwner) {
             map.invalidate()
         }
+
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                 return onSingleTap(p, viewModel)
@@ -74,6 +77,9 @@ class RouteCreateFragment : Fragment() {
         viewModel: RouteCreateViewModel
     ): Boolean {
         //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
+        if (isDeleteOn)
+            return true
+
         val newMarker = Marker(map)
         val markerIcon = requireActivity().getDrawable(R.drawable.marker_image)!!
         val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
@@ -89,7 +95,7 @@ class RouteCreateFragment : Fragment() {
         markerIcon: Drawable
     ) {
         newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
-            if (viewModel.isDeleteOn) {
+            if (isDeleteOn) {
                 onDelete(marker, mapView, viewModel, markerIcon)
             }
             return@OnMarkerClickListener true
