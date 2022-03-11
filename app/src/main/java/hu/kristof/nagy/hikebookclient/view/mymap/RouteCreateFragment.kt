@@ -1,3 +1,6 @@
+// based on the osmdroid tutorial:
+// https://github.com/osmdroid/osmdroid/wiki
+
 package hu.kristof.nagy.hikebookclient.view.mymap
 
 import android.os.Bundle
@@ -5,6 +8,7 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.hikebookclient.R
@@ -22,6 +26,7 @@ import org.osmdroid.views.overlay.Polyline
 class RouteCreateFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteCreateBinding
+    private var isDeleteOn = false // TODO: store in viewModel, handle interruptions
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,14 +43,42 @@ class RouteCreateFragment : Fragment() {
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.routeCreateMap
 
+        binding.routeCreateDeleteSwitch.setOnClickListener {
+            isDeleteOn = !isDeleteOn
+        }
+
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
         val markers = ArrayList<Marker>()
+        val polylines = ArrayList<Polyline>()
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                if (isDeleteOn) {
+                    //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
+                    return true
+                }
                 // add new marker
                 val newMarker = Marker(map)
+                newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
+                    if (isDeleteOn) {
+                        if (markers.last() == marker) {
+                            marker.remove(mapView)
+                            markers.removeLast()
+                            if (markers.isNotEmpty()) {
+                                markers.last().icon = requireActivity().getDrawable(R.drawable.marker_image)
+                                polylines.last().isVisible = false
+                                polylines.removeLast()
+                            }
+                            mapView.invalidate()
+                        } else {
+                            Toast.makeText(
+                                context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                    return@OnMarkerClickListener true
+                })
                 newMarker.position = p
                 newMarker.icon = requireActivity().getDrawable(R.drawable.marker_image)
                 markers.add(newMarker)
@@ -62,6 +95,7 @@ class RouteCreateFragment : Fragment() {
                     points.add(newMarker.position)
                     val polyline = Polyline()
                     polyline.setPoints(points)
+                    polylines.add(polyline)
                     map.overlays.add(polyline)
                 }
 

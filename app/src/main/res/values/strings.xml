@@ -30,4 +30,6 @@
     <string name="edit_route_edit_finalize_button_text">Szerkesztés befejezése</string>
     <string name="printer_image_description">Printer</string>
     <string name="edit_image_description">Pen</string>
+    <string name="route_create_title">Útvonal Létrehozás</string>
+    <string name="route_edit_title">Útvonal Szerkesztés</string>
 </resources>

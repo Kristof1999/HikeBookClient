@@ -35,10 +35,10 @@
     <fragment
         android:id="@+id/routeCreateFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteCreateFragment"
-        android:label="fragment_route_create"
+        android:label="@string/route_create_title"
         tools:layout="@layout/fragment_route_create" />
     <fragment
         android:id="@+id/routeEditFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteEditFragment"
-        android:label="RouteEditFragment" />
+        android:label="@string/route_edit_title" />
 </navigation>
