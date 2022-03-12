@@ -13,9 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
+ * Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 // based on:
 // https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/RecyclerViewFundamentals
+// https://github.com/android/sunflower
 
 package hu.kristof.nagy.hikebookclient.view.mymap
 
@@ -44,12 +60,6 @@ class MyMapListAdapter : RecyclerView.Adapter<MyMapListAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = dummyData[position]
         holder.bind(item)
-
-        holder.binding.myMapListItemEditImageButton.setOnClickListener {
-            it.findNavController().navigate(
-                R.id.action_myMapListFragment_to_routeEditFragment
-            )
-        }
     }
 
     override fun getItemCount(): Int = dummyData.size
@@ -57,6 +67,14 @@ class MyMapListAdapter : RecyclerView.Adapter<MyMapListAdapter.ViewHolder>() {
     class ViewHolder private constructor(val binding: MyMapListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val tv: TextView = binding.myMapListItemRouteName
+
+        init {
+            tv.setOnClickListener {
+                it.findNavController().navigate(
+                    R.id.action_myMapListFragment_to_routeEditFragment
+                )
+            }
+        }
 
         fun bind(str: String) {
             tv.text = str
