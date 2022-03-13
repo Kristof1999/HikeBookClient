@@ -62,11 +62,13 @@ class MyMapListFragment : Fragment() {
         }
         viewModel.deleteRes.observe(viewLifecycleOwner) {
             if (!viewModel.deleteFinished) {
-                if (it)
+                if (it) {
                     Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
+                    viewModel.loadRoutes() // this refreshes the list and also the routes on the map
+                }
                 else
                     Toast.makeText(
-                        context, "Valami probléma lépett fel a törlés közben.", Toast.LENGTH_SHORT
+                        context, "Valamilyen hiba lépett fel.", Toast.LENGTH_SHORT
                     ).show()
                 viewModel.deleteFinished = true
             }

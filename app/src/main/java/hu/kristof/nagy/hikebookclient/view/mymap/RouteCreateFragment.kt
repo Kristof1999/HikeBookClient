@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +64,14 @@ class RouteCreateFragment : Fragment() {
             viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
         }
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
-            Toast.makeText(context, "res: $it", Toast.LENGTH_LONG).show()
+            if (it)
+                findNavController().navigate(
+                    R.id.action_routeCreateFragment_to_myMapFragment
+                )
+            else
+                Toast.makeText(
+                    context, "Valamilyen hiba lépett fel.", Toast.LENGTH_SHORT
+                ).show()
         }
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
