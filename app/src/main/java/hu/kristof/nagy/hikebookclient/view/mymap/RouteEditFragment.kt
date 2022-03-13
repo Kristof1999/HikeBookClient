@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteEditBinding
-import hu.kristof.nagy.hikebookclient.MapHelper
-import hu.kristof.nagy.hikebookclient.model.Constants
+import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.util.Constants
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
 

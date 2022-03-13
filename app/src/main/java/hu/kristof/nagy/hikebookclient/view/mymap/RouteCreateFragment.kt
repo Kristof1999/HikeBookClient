@@ -15,8 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
-import hu.kristof.nagy.hikebookclient.MapHelper
-import hu.kristof.nagy.hikebookclient.model.Constants
+import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.util.Constants
+import hu.kristof.nagy.hikebookclient.util.MapHelper
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -25,6 +26,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 
+@AndroidEntryPoint
 class RouteCreateFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteCreateBinding
@@ -56,6 +58,12 @@ class RouteCreateFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.invalidateMap.observe(viewLifecycleOwner) {
             map.invalidate()
+        }
+        binding.routeCreateCreateButton.setOnClickListener {
+            viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
+        }
+        viewModel.routeCreateRes.observe(viewLifecycleOwner) {
+            Toast.makeText(context, "res: $it", Toast.LENGTH_LONG).show()
         }
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {

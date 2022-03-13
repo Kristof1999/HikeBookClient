@@ -13,8 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapBinding
-import hu.kristof.nagy.hikebookclient.MapHelper
-import hu.kristof.nagy.hikebookclient.model.Constants
+import hu.kristof.nagy.hikebookclient.util.Constants
+import hu.kristof.nagy.hikebookclient.util.MapHelper
 import org.osmdroid.config.Configuration.getInstance
 import org.osmdroid.views.MapView
 

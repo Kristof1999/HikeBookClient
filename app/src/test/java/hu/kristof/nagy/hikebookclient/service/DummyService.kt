@@ -1,7 +1,7 @@
 package hu.kristof.nagy.hikebookclient.service
 
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.network.Service
+import hu.kristof.nagy.hikebookclient.data.network.Service
 
 class DummyService : Service {
     override suspend fun login(user: UserAuth): Boolean {

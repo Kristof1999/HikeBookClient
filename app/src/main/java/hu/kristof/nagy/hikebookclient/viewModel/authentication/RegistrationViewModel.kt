@@ -25,8 +25,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.kristof.nagy.hikebookclient.data.AuthRepository
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.network.Service
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
 import javax.inject.Inject
@@ -36,7 +36,7 @@ import javax.inject.Inject
  * to get notified of the result of the registration attempt.
  */
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(private val service: Service) : ViewModel() {
+class RegistrationViewModel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
     private var _registrationRes = MutableLiveData<Boolean>()
     val registrationRes : LiveData<Boolean>
         get() = _registrationRes
@@ -53,7 +53,7 @@ class RegistrationViewModel @Inject constructor(private val service: Service) : 
         ).joinToString(separator = "")
 
         viewModelScope.launch{
-            _registrationRes.value = service.register(UserAuth(user.name, password))
+            _registrationRes.value = repository.register(UserAuth(user.name, password))
         }
     }
 }

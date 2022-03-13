@@ -1,8 +1,11 @@
-package hu.kristof.nagy.hikebookclient.network
+package hu.kristof.nagy.hikebookclient.data.network
 
+import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface Service {
     /**
@@ -20,4 +23,11 @@ interface Service {
      */
     @POST("register")
     suspend fun register(@Body user: UserAuth): Boolean
+
+    @PUT("routes/create/{userName}/{routeName}")
+    suspend fun createRoute(
+        @Path("userName") userName: String,
+        @Path("routeName") routeName: String,
+        @Body points: List<Point>
+    ) : Boolean
 }

@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient
+package hu.kristof.nagy.hikebookclient.util
 
 import android.app.Activity
 import androidx.core.app.ActivityCompat
@@ -22,7 +22,8 @@ object MapHelper {
             ActivityCompat.requestPermissions(
                 activity,
                 permissionsToRequest.toTypedArray(),
-                REQUEST_PERMISSIONS_REQUEST_CODE);
+                REQUEST_PERMISSIONS_REQUEST_CODE
+            );
         }
     }
 }

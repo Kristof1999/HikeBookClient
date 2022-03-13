@@ -17,15 +17,19 @@
 // based on:
 // https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/GuessTheWordLiveData
 // https://developer.android.com/training/dependency-injection/hilt-android
+// https://developer.android.com/topic/libraries/architecture/datastore
 
 package hu.kristof.nagy.hikebookclient.viewModel.authentication
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.kristof.nagy.hikebookclient.data.AuthRepository
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.network.Service
+import kotlinx.coroutines.launch
+import java.security.MessageDigest
 import javax.inject.Inject
 
 /**
@@ -33,7 +37,7 @@ import javax.inject.Inject
  * to get notified of the result of the login attempt.
  */
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val service: Service) : ViewModel() {
+class LoginViewModel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
     private var _loginRes = MutableLiveData<Boolean>()
     val loginRes : LiveData<Boolean>
         get() = _loginRes
@@ -43,8 +47,8 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
      * and attempts to log in the user.
      */
     fun onLogin(user: UserAuth) {
-        _loginRes.value = true
-    /*
+        //_loginRes.value = true
+
         AuthChecker.check(user)
 
         // TODO: check if internet is available -> ACCESS_NETWORK_STATE
@@ -52,8 +56,8 @@ class LoginViewModel @Inject constructor(private val service: Service) : ViewMod
             user.password.toByteArray()
         ).joinToString(separator = "")
 
-        viewModelScope.launch{
-            _loginRes.value = service.login(UserAuth(user.name, password))
-        }*/
+        viewModelScope.launch {
+            _loginRes.value = repository.login(UserAuth(user.name, password))
+        }
     }
 }
