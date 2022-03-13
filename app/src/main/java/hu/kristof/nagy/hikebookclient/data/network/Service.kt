@@ -33,4 +33,10 @@ interface Service {
     suspend fun loadRoutesForUser(
         @Path("userName") userName: String
     ): List<Route>
+
+    @GET("routes/delete/{userName}/{routeName}")
+    suspend fun deleteRoute(
+        @Path("userName") userName: String,
+        @Path("routeName") routeName: String
+    ): Boolean
 }

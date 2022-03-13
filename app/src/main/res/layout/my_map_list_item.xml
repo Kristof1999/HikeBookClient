@@ -65,14 +65,14 @@
             android:contentDescription="@string/printer_image_description"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintEnd_toStartOf="@+id/myMapListItemDeleteImageButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/myMapListItemEditImageButton"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/print_image" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/myMapListItemDeleteImageButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

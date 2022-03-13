@@ -52,7 +52,7 @@ class MyMapFragment : Fragment() {
         }
 
         getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map= binding.myMap
+        map = binding.myMap
 
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->

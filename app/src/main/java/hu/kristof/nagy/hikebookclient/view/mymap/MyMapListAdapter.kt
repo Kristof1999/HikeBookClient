@@ -45,10 +45,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.MyMapListItemBinding
 import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
-class MyMapListAdapter : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapListDiffCallback()) {
+class MyMapListAdapter(private val viewModel: MyMapViewModel)
+    : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+        return ViewHolder.from(parent, viewModel)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -56,7 +58,10 @@ class MyMapListAdapter : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapLi
         holder.bind(item)
     }
 
-    class ViewHolder private constructor(val binding: MyMapListItemBinding) :
+    class ViewHolder private constructor(
+        val binding: MyMapListItemBinding,
+        val viewModel: MyMapViewModel
+        ) :
         RecyclerView.ViewHolder(binding.root) {
         val tv: TextView = binding.myMapListItemRouteName
 
@@ -66,6 +71,9 @@ class MyMapListAdapter : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapLi
                     R.id.action_myMapListFragment_to_routeEditFragment
                 )
             }
+            binding.myMapListItemDeleteImageButton.setOnClickListener {
+                viewModel.deleteRoute(tv.text.toString())
+            }
         }
 
         fun bind(route: Route) {
@@ -73,10 +81,10 @@ class MyMapListAdapter : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapLi
         }
 
         companion object {
-            fun from(parent: ViewGroup) : ViewHolder {
+            fun from(parent: ViewGroup, viewModel: MyMapViewModel) : ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = MyMapListItemBinding.inflate(layoutInflater, parent, false)
-                return ViewHolder(binding)
+                return ViewHolder(binding, viewModel)
             }
         }
     }

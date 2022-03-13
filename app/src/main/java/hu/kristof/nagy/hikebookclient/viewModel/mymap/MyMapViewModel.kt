@@ -25,12 +25,29 @@ class MyMapViewModel @Inject constructor(
     val routes: LiveData<List<Route>>
         get() = _routes
 
+    var deleteFinished = true
+
+    private var _deleteRes = MutableLiveData<Boolean>()
+    val deleteRes: LiveData<Boolean>
+        get() = _deleteRes
+
     fun loadRoutes() {
         viewModelScope.launch {
             dataStore.data.map {
                 it[Constants.DATA_STORE_USER_NAME]
             }.collect { userName ->
                 _routes.value = service.loadRoutesForUser(userName!!)
+            }
+        }
+    }
+
+    fun deleteRoute(routeName: String) {
+        deleteFinished = false
+        viewModelScope.launch {
+            dataStore.data.map {
+                it[Constants.DATA_STORE_USER_NAME]
+            }.collect { userName ->
+                _deleteRes.value = service.deleteRoute(userName!!, routeName)
             }
         }
     }

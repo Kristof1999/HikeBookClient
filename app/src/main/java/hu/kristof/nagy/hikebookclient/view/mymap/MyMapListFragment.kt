@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -47,19 +48,28 @@ class MyMapListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.myMapRecyclerView.adapter = MyMapListAdapter()
-
         binding.switchToMyMapButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_myMapListFragment_to_myMapFragment
             )
         }
 
-        val adapter = MyMapListAdapter()
+        val adapter = MyMapListAdapter(viewModel)
         binding.myMapRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) {
             adapter.submitList(it.toMutableList())
+        }
+        viewModel.deleteRes.observe(viewLifecycleOwner) {
+            if (!viewModel.deleteFinished) {
+                if (it)
+                    Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(
+                        context, "Valami probléma lépett fel a törlés közben.", Toast.LENGTH_SHORT
+                    ).show()
+                viewModel.deleteFinished = true
+            }
         }
     }
 }
