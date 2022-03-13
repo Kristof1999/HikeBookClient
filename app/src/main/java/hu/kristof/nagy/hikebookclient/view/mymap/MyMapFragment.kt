@@ -10,17 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapBinding
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.config.Configuration.getInstance
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.FolderOverlay
 
+@AndroidEntryPoint
 class MyMapFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentMyMapBinding
+    private val viewModel: MyMapViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +52,17 @@ class MyMapFragment : Fragment() {
         }
 
         getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.myMap
+        map= binding.myMap
+
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.routes.observe(viewLifecycleOwner) { routes ->
+            val folderOverlay = FolderOverlay()
+            routes.map{ route ->
+                folderOverlay.add(route.toPolyline())
+            }
+            map.overlays.add(folderOverlay)
+            map.invalidate()
+        }
 
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
@@ -62,6 +78,7 @@ class MyMapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        viewModel.loadRoutes()
         map.onResume()
     }
 

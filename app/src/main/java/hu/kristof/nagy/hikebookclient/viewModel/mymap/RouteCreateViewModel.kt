@@ -59,7 +59,7 @@ class RouteCreateViewModel @Inject constructor(
         if (routeName.isEmpty() || routeName.contains("/") || markers.size < 2)
             return // TODO: throw exception
         val points: List<Point> = markers.map {
-            Point.from(it.position)
+            Point.from(it)
         }
         viewModelScope.launch {
             dataStore.data.map { preferences ->

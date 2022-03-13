@@ -1,11 +1,9 @@
 package hu.kristof.nagy.hikebookclient.data.network
 
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface Service {
     /**
@@ -29,5 +27,10 @@ interface Service {
         @Path("userName") userName: String,
         @Path("routeName") routeName: String,
         @Body points: List<Point>
-    ) : Boolean
+    ): Boolean
+
+    @GET("routes/load/{userName}")
+    suspend fun loadRoutesForUser(
+        @Path("userName") userName: String
+    ): List<Route>
 }
