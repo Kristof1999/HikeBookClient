@@ -39,45 +39,37 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.MyMapListItemBinding
+import hu.kristof.nagy.hikebookclient.model.Route
 
-class MyMapListAdapter : RecyclerView.Adapter<MyMapListAdapter.ViewHolder>() {
-
-    private val dummyData = listOf(
-        "Útvonal név 1",
-        "Útvonal név 2",
-        "Útvonal név 3",
-        "Útvonal név 4",
-        "Útvonal név 5"
-    )
-
+class MyMapListAdapter : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = dummyData[position]
+        val item = getItem(position)
         holder.bind(item)
     }
-
-    override fun getItemCount(): Int = dummyData.size
 
     class ViewHolder private constructor(val binding: MyMapListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val tv: TextView = binding.myMapListItemRouteName
 
         init {
-            tv.setOnClickListener {
+            binding.myMapListItemEditImageButton.setOnClickListener {
                 it.findNavController().navigate(
                     R.id.action_myMapListFragment_to_routeEditFragment
                 )
             }
         }
 
-        fun bind(str: String) {
-            tv.text = str
+        fun bind(route: Route) {
+            tv.text = route.routeName
         }
 
         companion object {
@@ -88,4 +80,15 @@ class MyMapListAdapter : RecyclerView.Adapter<MyMapListAdapter.ViewHolder>() {
             }
         }
     }
+}
+
+class MyMapListDiffCallback : DiffUtil.ItemCallback<Route>() {
+    override fun areItemsTheSame(oldItem: Route, newItem: Route): Boolean {
+        return oldItem.routeName == newItem.routeName
+    }
+
+    override fun areContentsTheSame(oldItem: Route, newItem: Route): Boolean {
+        return oldItem == newItem
+    }
+
 }

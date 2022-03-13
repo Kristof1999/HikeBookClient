@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapBinding
@@ -26,7 +26,7 @@ import org.osmdroid.views.overlay.FolderOverlay
 class MyMapFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentMyMapBinding
-    private val viewModel: MyMapViewModel by viewModels()
+    private val viewModel: MyMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

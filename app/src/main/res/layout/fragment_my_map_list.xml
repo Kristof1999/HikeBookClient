@@ -22,14 +22,6 @@
             android:text="@string/switch_to_my_map_button_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-        <Button
-            android:id="@+id/deleteButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/delete_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myMapRecyclerView"
             android:layout_width="match_parent"

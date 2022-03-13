@@ -19,6 +19,8 @@
             android:layout_marginTop="8dp"
             android:text="TextView"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toStartOf="@+id/myMapListItemEditImageButton"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,8 +32,9 @@
             android:layout_marginTop="8dp"
             android:text="@string/group_hike_create_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/myMapListItemRouteName" />
+            app:layout_constraintTop_toBottomOf="@+id/myMapListItemEditImageButton" />
 
         <ImageButton
             android:id="@+id/myMapListItemEditImageButton"
@@ -45,7 +48,10 @@
             android:cropToPadding="false"
             android:minWidth="48dp"
             android:minHeight="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/myMapListItemGroupHikeCreateButton"
             app:layout_constraintEnd_toStartOf="@+id/myMapListItemPrintImageButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/myMapListItemRouteName"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/edit_image" />
 
@@ -59,9 +65,27 @@
             android:contentDescription="@string/printer_image_description"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/myMapListItemEditImageButton"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/print_image" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@color/design_default_color_secondary"
+            android:contentDescription="@string/delete_image_description"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/myMapListItemPrintImageButton"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/delete_image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
