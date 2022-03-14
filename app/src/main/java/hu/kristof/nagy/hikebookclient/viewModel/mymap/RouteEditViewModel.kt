@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.network.Service
+import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapHelper
@@ -44,13 +45,17 @@ class RouteEditViewModel @Inject constructor(
         this.polylines = polylines
     }
 
-    fun onRouteEdit(route: Route) {
+    fun onRouteEdit(oldRouteName: String, routeName: String) {
+        val points = markers.map {
+            Point.from(it)
+        }
+        val route = Route(routeName, points)
         RouteUtils.checkRoute(route)
         viewModelScope.launch {
             dataStore.data.map { preferences ->
                 preferences[Constants.DATA_STORE_USER_NAME]
             }.collect { userName ->
-                _routeEditRes.value = service.editRoute(userName!!, route.routeName, route)
+                _routeEditRes.value = service.editRoute(userName!!, oldRouteName, route)
             }
         }
     }

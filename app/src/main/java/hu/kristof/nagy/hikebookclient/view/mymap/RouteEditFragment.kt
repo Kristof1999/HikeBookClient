@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteEditBinding
@@ -66,7 +67,8 @@ class RouteEditFragment : Fragment() {
         setup(viewModel, route.points)
         binding.routeEditEditButton.setOnClickListener {
             try {
-                viewModel.onRouteEdit(route)
+                val routeName = binding.routeEditRouteNameEditText.text.toString()
+                viewModel.onRouteEdit(route.routeName, routeName)
             } catch(e: IllegalArgumentException) {
                 Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
             }
@@ -77,6 +79,16 @@ class RouteEditFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.invalidateMap.observe(viewLifecycleOwner) {
             map.invalidate()
+        }
+        viewModel.routeEditRes.observe(viewLifecycleOwner) {
+            if (it)
+                findNavController().navigate(
+                    R.id.action_routeEditFragment_to_myMapFragment
+                )
+            else
+                Toast.makeText(
+                    context, "Valamilyen hiba lépett fel.", Toast.LENGTH_SHORT
+                ).show()
         }
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
