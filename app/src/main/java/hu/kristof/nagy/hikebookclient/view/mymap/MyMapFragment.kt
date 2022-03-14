@@ -40,6 +40,7 @@ class MyMapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.loadRoutes()
         binding.switchToMyMapListButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_myMapFragment_to_myMapListFragment
@@ -79,7 +80,6 @@ class MyMapFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.loadRoutes()
         map.onResume()
     }
 
