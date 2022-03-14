@@ -50,5 +50,8 @@
         <argument
             android:name="routeName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_routeEditFragment_to_myMapFragment"
+            app:destination="@id/myMapFragment" />
     </fragment>
 </navigation>

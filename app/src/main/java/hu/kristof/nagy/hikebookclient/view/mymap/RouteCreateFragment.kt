@@ -61,7 +61,11 @@ class RouteCreateFragment : Fragment() {
             map.invalidate()
         }
         binding.routeCreateCreateButton.setOnClickListener {
-            viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
+            try {
+                viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
+            } catch(e: IllegalArgumentException) {
+                Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+            }
         }
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
             if (it)
@@ -85,7 +89,7 @@ class RouteCreateFragment : Fragment() {
                 return true
             }
         })
-        map.overlays.add(mapEventsOverlay)
+        map.overlays.add(0, mapEventsOverlay)
         map.invalidate()
     }
 

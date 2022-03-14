@@ -5,11 +5,12 @@
     <data>
 
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="hu.kristof.nagy.hikebookclient.view.mymap.RouteCreateFragment"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        tools:context="hu.kristof.nagy.hikebookclient.view.mymap.RouteCreateFragment">
 
         <Button
             android:id="@+id/routeEditHelpButton"
@@ -42,7 +43,8 @@
             android:layout_marginTop="8dp"
             android:text="@string/edit_route_edit_finalize_button_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/routeEditDeleteSwitch"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/routeEditRouteNameEditText" />
 
@@ -55,5 +57,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/routeEditEditButton" />
+
+        <Switch
+            android:id="@+id/routeEditDeleteSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"
+            android:text="@string/delete_text"
+            app:layout_constraintBottom_toTopOf="@+id/routeEditMap"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/routeEditEditButton" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

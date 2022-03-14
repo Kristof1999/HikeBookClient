@@ -1,22 +1,3 @@
-/*
- * Copyright (C) 2019 Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-// based on:
-// https://developer.android.com/topic/libraries/architecture/datastore
-
 package hu.kristof.nagy.hikebookclient.viewModel.mymap
 
 import android.graphics.drawable.Drawable
@@ -28,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.network.Service
-import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapHelper
@@ -44,31 +24,33 @@ import org.osmdroid.views.overlay.Polyline
 import javax.inject.Inject
 
 @HiltViewModel
-class RouteCreateViewModel @Inject constructor(
+class RouteEditViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val service: Service
     ) : ViewModel() {
-    private val markers = ArrayList<Marker>()
-    private val polylines = ArrayList<Polyline>()
-
-    private var _routeCreateRes = MutableLiveData<Boolean>()
-    val routeCreateRes: LiveData<Boolean>
-        get() = _routeCreateRes
+    private lateinit var markers: ArrayList<Marker>
+    private lateinit var polylines: ArrayList<Polyline>
 
     private var _invalidateMap = MutableLiveData(false)
     val invalidateMap: LiveData<Boolean>
         get() = _invalidateMap
 
-    fun onRouteCreate(routeName: String) {
-        val points: List<Point> = markers.map {
-            Point.from(it)
-        }
-        RouteUtils.checkRoute(Route(routeName, points))
+    private var _routeEditRes = MutableLiveData<Boolean>()
+    val routeEditRes: LiveData<Boolean>
+        get() = _routeEditRes
+
+    fun setup(markers: ArrayList<Marker>, polylines: ArrayList<Polyline>) {
+        this.markers = markers
+        this.polylines = polylines
+    }
+
+    fun onRouteEdit(route: Route) {
+        RouteUtils.checkRoute(route)
         viewModelScope.launch {
             dataStore.data.map { preferences ->
                 preferences[Constants.DATA_STORE_USER_NAME]
             }.collect { userName ->
-                _routeCreateRes.value = service.createRoute(userName!!, routeName, points)
+                _routeEditRes.value = service.editRoute(userName!!, route.routeName, route)
             }
         }
     }
@@ -80,9 +62,9 @@ class RouteCreateViewModel @Inject constructor(
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
     ) {
-        MapHelper.onSingleTap(
-            newMarker, p, markerIcon, setMarkerIcon, overlays, markers, polylines
-        )
+       MapHelper.onSingleTap(
+           newMarker, p, markerIcon, setMarkerIcon, overlays, markers, polylines
+       )
     }
 
     fun onMarkerDragEnd(

@@ -34,9 +34,17 @@ interface Service {
         @Path("userName") userName: String
     ): List<Route>
 
+    // TODO: change to @DELETE
     @GET("routes/delete/{userName}/{routeName}")
     suspend fun deleteRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String
+    ): Boolean
+
+    @PUT("routes/edit/{userName}/{routeName}")
+    suspend fun editRoute(
+        @Path("userName") userName: String,
+        @Path("routeName") routeName: String,
+        @Body route: Route
     ): Boolean
 }
