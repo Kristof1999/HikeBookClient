@@ -22,20 +22,19 @@ interface Service {
     @POST("register")
     suspend fun register(@Body user: UserAuth): Boolean
 
-    @PUT("routes/create/{userName}/{routeName}")
+    @PUT("routes/{userName}/{routeName}")
     suspend fun createRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String,
         @Body points: List<Point>
     ): Boolean
 
-    @GET("routes/load/{userName}")
+    @GET("routes/{userName}")
     suspend fun loadRoutesForUser(
         @Path("userName") userName: String
     ): List<Route>
 
-    // TODO: change to @DELETE
-    @GET("routes/delete/{userName}/{routeName}")
+    @DELETE("routes/{userName}/{routeName}")
     suspend fun deleteRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String
@@ -44,7 +43,7 @@ interface Service {
     @PUT("routes/edit/{userName}/{routeName}")
     suspend fun editRoute(
         @Path("userName") userName: String,
-        @Path("routeName") routeName: String,
+        @Path("routeName") oldRouteName: String,
         @Body route: Route
     ): Boolean
 }
