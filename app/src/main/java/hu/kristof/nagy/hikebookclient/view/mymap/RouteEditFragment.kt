@@ -25,7 +25,6 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
@@ -53,6 +52,7 @@ class RouteEditFragment : Fragment() {
         map = binding.routeEditMap
 
         val mapController = map.controller
+        // TODO: set center on center of route with appropriate zoom
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
 
@@ -77,9 +77,6 @@ class RouteEditFragment : Fragment() {
             isDeleteOn = isChecked
         }
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.invalidateMap.observe(viewLifecycleOwner) {
-            map.invalidate()
-        }
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
             if (it)
                 findNavController().navigate(
@@ -114,14 +111,13 @@ class RouteEditFragment : Fragment() {
         val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
         val markers = ArrayList<Marker>()
         val polylines = ArrayList<Polyline>()
-        val folderOverlay = FolderOverlay()
 
         val firstMarker = Marker(map)
         firstMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
         firstMarker.isDraggable = true
         firstMarker.position = GeoPoint(points.first().latitude, points.first().longitude)
         firstMarker.icon = setMarkerIcon
-        folderOverlay.add(firstMarker)
+        map.overlays.add(firstMarker)
         markers.add(firstMarker)
         setListeners(firstMarker, viewModel, markerIcon)
         for (point in points.subList(1, points.size-1)) {
@@ -130,7 +126,7 @@ class RouteEditFragment : Fragment() {
             marker.isDraggable = true
             marker.position = GeoPoint(point.latitude, point.longitude)
             marker.icon = setMarkerIcon
-            folderOverlay.add(marker)
+            map.overlays.add(marker)
             markers.add(marker)
             setListeners(marker, viewModel, markerIcon)
 
@@ -139,7 +135,7 @@ class RouteEditFragment : Fragment() {
             polylinePoints.add(markers[markers.size - 1].position)
             val polyline = Polyline()
             polyline.setPoints(polylinePoints)
-            folderOverlay.add(polyline)
+            map.overlays.add(polyline)
             polylines.add(polyline)
         }
         val lastMarker = Marker(map)
@@ -147,7 +143,7 @@ class RouteEditFragment : Fragment() {
         lastMarker.isDraggable = true
         lastMarker.position = GeoPoint(points.last().latitude, points.last().longitude)
         lastMarker.icon = markerIcon
-        folderOverlay.add(lastMarker)
+        map.overlays.add(lastMarker)
         markers.add(lastMarker)
         setListeners(lastMarker, viewModel, markerIcon)
         val polylinePoints = ArrayList<GeoPoint>()
@@ -155,9 +151,8 @@ class RouteEditFragment : Fragment() {
         polylinePoints.add(markers[markers.size - 1].position)
         val polyline = Polyline()
         polyline.setPoints(polylinePoints)
-        folderOverlay.add(polyline)
+        map.overlays.add(polyline)
         polylines.add(polyline)
-        map.overlays.add(folderOverlay)
         map.invalidate()
         viewModel.setup(markers, polylines)
     }
@@ -201,6 +196,7 @@ class RouteEditFragment : Fragment() {
                     return
 
                 viewModel.onMarkerDragEnd(marker)
+                map.invalidate()
             }
 
             override fun onMarkerDragStart(marker: Marker?) {
@@ -208,6 +204,7 @@ class RouteEditFragment : Fragment() {
                     return
 
                 viewModel.onMarkerDragStart(marker)
+                map.invalidate()
             }
         })
     }
@@ -220,6 +217,7 @@ class RouteEditFragment : Fragment() {
     ) {
         if (viewModel.onDelete(marker, markerIcon)) {
             marker.remove(mapView)
+            mapView.invalidate()
         } else {
             Toast.makeText(
                 context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT

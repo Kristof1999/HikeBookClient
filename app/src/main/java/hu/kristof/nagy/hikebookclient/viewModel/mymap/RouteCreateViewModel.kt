@@ -55,10 +55,6 @@ class RouteCreateViewModel @Inject constructor(
     val routeCreateRes: LiveData<Boolean>
         get() = _routeCreateRes
 
-    private var _invalidateMap = MutableLiveData(false)
-    val invalidateMap: LiveData<Boolean>
-        get() = _invalidateMap
-
     fun onRouteCreate(routeName: String) {
         val points: List<Point> = markers.map {
             Point.from(it)
@@ -79,35 +75,18 @@ class RouteCreateViewModel @Inject constructor(
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
-    ) {
-        MapHelper.onSingleTap(
-            newMarker, p, markerIcon, setMarkerIcon, overlays, markers, polylines
-        )
-    }
+    ) = MapHelper.onSingleTap(
+        newMarker, p, markerIcon, setMarkerIcon, overlays, markers, polylines
+    )
 
-    fun onMarkerDragEnd(
-        marker: Marker
-    ) {
+    fun onMarkerDragEnd(marker: Marker) =
         MarkerUtils.onMarkerDragEnd(marker, markers, polylines)
-        _invalidateMap.value = !_invalidateMap.value!!
-    }
 
-    fun onMarkerDragStart(
-        marker: Marker
-    ) {
+    fun onMarkerDragStart(marker: Marker) =
         MarkerUtils.onMarkerDragStart(marker, markers, polylines)
-        _invalidateMap.value = !_invalidateMap.value!!
-    }
 
     fun onDelete(
         marker: Marker,
         markerIcon: Drawable
-    ): Boolean {
-        if (MarkerUtils.onDelete(marker, markerIcon, markers, polylines)) {
-            _invalidateMap.value = !_invalidateMap.value!!
-            return true
-        } else {
-            return false
-        }
-    }
+    ): Boolean = MarkerUtils.onDelete(marker, markerIcon, markers, polylines)
 }

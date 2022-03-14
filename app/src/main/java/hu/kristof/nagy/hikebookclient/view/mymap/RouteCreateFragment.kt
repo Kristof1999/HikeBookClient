@@ -57,9 +57,6 @@ class RouteCreateFragment : Fragment() {
             isDeleteOn = isChecked
         }
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.invalidateMap.observe(viewLifecycleOwner) {
-            map.invalidate()
-        }
         binding.routeCreateCreateButton.setOnClickListener {
             try {
                 viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
@@ -132,6 +129,7 @@ class RouteCreateFragment : Fragment() {
                     return
 
                 viewModel.onMarkerDragEnd(marker)
+                map.invalidate()
             }
 
             override fun onMarkerDragStart(marker: Marker?) {
@@ -139,6 +137,7 @@ class RouteCreateFragment : Fragment() {
                     return
 
                 viewModel.onMarkerDragStart(marker)
+                map.invalidate()
             }
         })
     }
@@ -151,6 +150,7 @@ class RouteCreateFragment : Fragment() {
     ) {
         if (viewModel.onDelete(marker, markerIcon)) {
             marker.remove(mapView)
+            mapView.invalidate()
         } else {
             Toast.makeText(
                 context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT

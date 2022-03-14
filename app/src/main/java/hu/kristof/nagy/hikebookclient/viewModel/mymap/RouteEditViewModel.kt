@@ -32,10 +32,6 @@ class RouteEditViewModel @Inject constructor(
     private lateinit var markers: ArrayList<Marker>
     private lateinit var polylines: ArrayList<Polyline>
 
-    private var _invalidateMap = MutableLiveData(false)
-    val invalidateMap: LiveData<Boolean>
-        get() = _invalidateMap
-
     private var _routeEditRes = MutableLiveData<Boolean>()
     val routeEditRes: LiveData<Boolean>
         get() = _routeEditRes
@@ -66,35 +62,18 @@ class RouteEditViewModel @Inject constructor(
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
-    ) {
-       MapHelper.onSingleTap(
+    ) = MapHelper.onSingleTap(
            newMarker, p, markerIcon, setMarkerIcon, overlays, markers, polylines
-       )
-    }
+    )
 
-    fun onMarkerDragEnd(
-        marker: Marker
-    ) {
+    fun onMarkerDragEnd(marker: Marker) =
         MarkerUtils.onMarkerDragEnd(marker, markers, polylines)
-        _invalidateMap.value = !_invalidateMap.value!!
-    }
 
-    fun onMarkerDragStart(
-        marker: Marker
-    ) {
+    fun onMarkerDragStart(marker: Marker) =
         MarkerUtils.onMarkerDragStart(marker, markers, polylines)
-        _invalidateMap.value = !_invalidateMap.value!!
-    }
 
     fun onDelete(
         marker: Marker,
         markerIcon: Drawable
-    ): Boolean {
-        if (MarkerUtils.onDelete(marker, markerIcon, markers, polylines)) {
-            _invalidateMap.value = !_invalidateMap.value!!
-            return true
-        } else {
-            return false
-        }
-    }
+    ): Boolean = MarkerUtils.onDelete(marker, markerIcon, markers, polylines)
 }
