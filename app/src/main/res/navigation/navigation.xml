@@ -39,10 +39,16 @@
         tools:layout="@layout/fragment_route_create" >
         <action
             android:id="@+id/action_routeCreateFragment_to_myMapFragment"
-            app:destination="@id/myMapFragment" />
+            app:destination="@id/myMapFragment"
+            app:popUpTo="@id/routeCreateFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/routeEditFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteEditFragment"
-        android:label="@string/route_edit_title" />
+        android:label="@string/route_edit_title" >
+        <argument
+            android:name="routeName"
+            app:argType="string" />
+    </fragment>
 </navigation>

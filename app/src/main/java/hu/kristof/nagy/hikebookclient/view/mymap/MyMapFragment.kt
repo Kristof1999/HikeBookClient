@@ -59,6 +59,7 @@ class MyMapFragment : Fragment() {
             val folderOverlay = FolderOverlay()
             routes.map{ route ->
                 folderOverlay.add(route.toPolyline())
+                // TODO: add polyLine clickListener to display the route's name
             }
             map.overlays.add(folderOverlay)
             map.invalidate()

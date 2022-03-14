@@ -72,6 +72,7 @@ class RouteCreateFragment : Fragment() {
                 Toast.makeText(
                     context, "Valamilyen hiba lépett fel.", Toast.LENGTH_SHORT
                 ).show()
+            // névnek egyedinek kell lennie
         }
 
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {

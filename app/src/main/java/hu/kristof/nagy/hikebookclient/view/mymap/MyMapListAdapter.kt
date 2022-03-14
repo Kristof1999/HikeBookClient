@@ -42,7 +42,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.MyMapListItemBinding
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
@@ -63,13 +62,14 @@ class MyMapListAdapter(private val viewModel: MyMapViewModel)
         val viewModel: MyMapViewModel
         ) :
         RecyclerView.ViewHolder(binding.root) {
-        val tv: TextView = binding.myMapListItemRouteName
+        private val tv: TextView = binding.myMapListItemRouteName
 
         init {
             binding.myMapListItemEditImageButton.setOnClickListener {
-                it.findNavController().navigate(
-                    R.id.action_myMapListFragment_to_routeEditFragment
-                )
+                val routeName = tv.text.toString()
+                val action = MyMapListFragmentDirections
+                    .actionMyMapListFragmentToRouteEditFragment(routeName)
+                it.findNavController().navigate(action)
             }
             binding.myMapListItemDeleteImageButton.setOnClickListener {
                 viewModel.deleteRoute(tv.text.toString())
