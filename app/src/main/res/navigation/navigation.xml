@@ -57,5 +57,23 @@
     <fragment
         android:id="@+id/browseListFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.browse.BrowseListFragment"
-        android:label="BrowseListFragment" />
+        android:label="BrowseListFragment" >
+        <action
+            android:id="@+id/action_browseListFragment_to_browseDetailFragment"
+            app:destination="@id/browseDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/browseDetailFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.browse.BrowseDetailFragment"
+        android:label="BrowseDetailFragment" >
+        <action
+            android:id="@+id/action_browseDetailFragment_to_browseListFragment"
+            app:destination="@id/browseListFragment" />
+        <argument
+            android:name="userName"
+            app:argType="string" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
+    </fragment>
 </navigation>
