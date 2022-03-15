@@ -54,4 +54,8 @@
             android:id="@+id/action_routeEditFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/browseListFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.browse.BrowseListFragment"
+        android:label="BrowseListFragment" />
 </navigation>

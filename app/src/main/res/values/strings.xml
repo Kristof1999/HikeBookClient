@@ -33,4 +33,7 @@
     <string name="route_create_title">Útvonal Létrehozás</string>
     <string name="route_edit_title">Útvonal Szerkesztés</string>
     <string name="delete_image_description">Trash can</string>
+
+
+    <string name="route_add_image_description">Road with a plus</string>
 </resources>

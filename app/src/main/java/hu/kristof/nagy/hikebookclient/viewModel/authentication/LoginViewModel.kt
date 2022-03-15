@@ -47,8 +47,6 @@ class LoginViewModel @Inject constructor(private val repository: AuthRepository)
      * and attempts to log in the user.
      */
     fun onLogin(user: UserAuth) {
-        //_loginRes.value = true
-
         AuthChecker.check(user)
 
         // TODO: check if internet is available -> ACCESS_NETWORK_STATE

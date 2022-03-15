@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/myMapMenuItem"
+        android:id="@+id/myMapFragment"
         android:title="@string/my_map_menu" />
     <item
         android:id="@+id/groupHikeMenuItem"
@@ -12,7 +12,7 @@
         android:id="@+id/groupsMenuItem"
         android:title="@string/groups_menu" />
     <item
-        android:id="@+id/browseMenuItem"
+        android:id="@+id/browseListFragment"
         android:title="@string/browse_menu" />
     <item
         android:id="@+id/helpMenuItem"
