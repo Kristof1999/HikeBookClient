@@ -31,7 +31,7 @@ class MyMapViewModel @Inject constructor(
     val deleteRes: LiveData<Boolean>
         get() = _deleteRes
 
-    fun loadRoutes() {
+    fun loadRoutesForLoggedInUser() {
         viewModelScope.launch {
             dataStore.data.map {
                 it[Constants.DATA_STORE_USER_NAME]

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.network.Service
-import hu.kristof.nagy.hikebookclient.model.UserRoute
+import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,13 +15,15 @@ class BrowseViewModel @Inject constructor(
     private val service: Service
     ) : ViewModel() {
 
-    private var _routes = MutableLiveData<List<UserRoute>>()
-    val routes: LiveData<List<UserRoute>>
+    private var _routes = MutableLiveData<List<BrowseListItem>>()
+    val routes: LiveData<List<BrowseListItem>>
         get() = _routes
 
-    fun onLoadRoutes() {
+    fun listRoutes() {
         viewModelScope.launch {
-            _routes.value = service.loadRoutes()
+            _routes.value = service.listRoutes()
         }
     }
+
+
 }

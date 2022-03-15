@@ -1,9 +1,9 @@
 package hu.kristof.nagy.hikebookclient.data.network
 
+import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.model.UserRoute
 import retrofit2.http.*
 
 interface Service {
@@ -36,7 +36,7 @@ interface Service {
     ): List<Route>
 
     @GET("routes")
-    suspend fun loadRoutes(): List<UserRoute>
+    suspend fun listRoutes(): List<BrowseListItem>
 
     @DELETE("routes/{userName}/{routeName}")
     suspend fun deleteRoute(

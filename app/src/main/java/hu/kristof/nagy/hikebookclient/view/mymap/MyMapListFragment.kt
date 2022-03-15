@@ -64,7 +64,7 @@ class MyMapListFragment : Fragment() {
             if (!viewModel.deleteFinished) {
                 if (it) {
                     Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
-                    viewModel.loadRoutes() // this refreshes the list and also the routes on the map
+                    viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
                 }
                 else
                     Toast.makeText(

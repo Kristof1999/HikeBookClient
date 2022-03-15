@@ -30,7 +30,7 @@ class BrowseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: BrowseViewModel by viewModels()
-        viewModel.onLoadRoutes()
+        viewModel.listRoutes()
         val adapter = BrowseListAdapter()
         binding.browseRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
