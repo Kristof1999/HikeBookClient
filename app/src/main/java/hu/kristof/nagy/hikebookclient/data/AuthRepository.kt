@@ -3,7 +3,7 @@ package hu.kristof.nagy.hikebookclient.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import hu.kristof.nagy.hikebookclient.data.network.Service
+import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.util.Constants
 import javax.inject.Inject

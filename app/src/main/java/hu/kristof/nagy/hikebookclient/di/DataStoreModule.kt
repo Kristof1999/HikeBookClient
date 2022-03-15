@@ -34,7 +34,6 @@ val Context.datastore: DataStore<Preferences> by preferencesDataStore(name = "us
 @Module
 @InstallIn(SingletonComponent::class)
 object DataStoreModule {
-
     @Singleton
     @Provides
     fun providesDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
