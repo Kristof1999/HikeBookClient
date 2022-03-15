@@ -34,8 +34,7 @@
     <string name="route_edit_title">Útvonal Szerkesztés</string>
     <string name="delete_image_description">Trash can</string>
 
-
     <string name="route_add_image_description">Road with a plus</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="generic_error_msg">Valamilyen hiba lépett fel, további információkért tekintse meg a súgót.</string>
 </resources>

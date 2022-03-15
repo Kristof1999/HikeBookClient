@@ -5,9 +5,11 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentBrowseDetailBinding
@@ -55,6 +57,24 @@ class BrowseDetailFragment : Fragment() {
             })
             map.overlays.add(polyline)
             map.invalidate()
+        }
+        binding.browseDetailAddToMyMapButton.setOnClickListener {
+            try {
+                viewModel.addToMyMap(args.routeName)
+            } catch(e: IllegalStateException) {
+                Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModel.addRes.observe(viewLifecycleOwner) {
+            if (it) {
+                findNavController().navigate(
+                    R.id.action_browseDetailFragment_to_browseListFragment
+                )
+            } else {
+                Toast.makeText(
+                    context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_LONG
+                ).show()
+            }
         }
     }
 }
