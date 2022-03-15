@@ -5,26 +5,26 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.BrowseListItemBinding
+import hu.kristof.nagy.hikebookclient.model.UserRoute
 
-class BrowseListAdapter : RecyclerView.Adapter<BrowseListAdapter.ViewHolder>() {
+class BrowseListAdapter : ListAdapter<UserRoute, BrowseListAdapter.ViewHolder>(BrowseListDiffCallback()) {
 
-    private val userData = listOf("user1", "user2")
-    private val routeData = listOf("route1", "route2")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val userName = userData[position]
-        val routeName = routeData[position]
+        val data = getItem(position)
+        val userName = data.userName
+        val routeName = data.route.routeName
         holder.bind(userName, routeName)
     }
-
-    override fun getItemCount(): Int = userData.size
 
     class ViewHolder(binding: BrowseListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
@@ -56,4 +56,16 @@ class BrowseListAdapter : RecyclerView.Adapter<BrowseListAdapter.ViewHolder>() {
             }
         }
     }
+}
+
+class BrowseListDiffCallback : DiffUtil.ItemCallback<UserRoute>() {
+    override fun areItemsTheSame(oldItem: UserRoute, newItem: UserRoute): Boolean {
+        return oldItem.userName == newItem.userName
+                && oldItem.route.routeName == newItem.route.routeName
+    }
+
+    override fun areContentsTheSame(oldItem: UserRoute, newItem: UserRoute): Boolean {
+        return oldItem == newItem
+    }
+
 }
