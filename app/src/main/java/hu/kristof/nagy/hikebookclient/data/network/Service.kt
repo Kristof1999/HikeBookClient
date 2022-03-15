@@ -35,6 +35,12 @@ interface Service {
         @Path("userName") userName: String
     ): List<Route>
 
+    @GET("routes/{userName}/{routeName}")
+    suspend fun loadPoints(
+        @Path("userName") userName: String,
+        @Path("routeName") routeName: String
+    ): List<Point>
+
     @GET("routes")
     suspend fun listRoutes(): List<BrowseListItem>
 
