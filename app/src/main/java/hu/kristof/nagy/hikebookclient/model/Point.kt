@@ -1,9 +1,12 @@
 package hu.kristof.nagy.hikebookclient.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 
-data class Point(val latitude: Double, val longitude: Double) {
+@Parcelize
+data class Point(val latitude: Double, val longitude: Double) : Parcelable {
 
     fun toGeoPoint(): GeoPoint {
         return GeoPoint(latitude, longitude)

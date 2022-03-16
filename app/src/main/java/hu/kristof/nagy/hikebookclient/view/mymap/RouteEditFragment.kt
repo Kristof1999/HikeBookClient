@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -19,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapHelper
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -56,20 +54,16 @@ class RouteEditFragment : Fragment() {
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
 
-        // TODO: pass route instead of viewModel
-        val sharedViewModel: MyMapViewModel by activityViewModels()
-        val routeName = args.routeName
+        val routeName = args.route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
-        val route = sharedViewModel.routes.value!!.filter { route ->
-            route.routeName == routeName
-        }[0]
+
 
         val viewModel: RouteEditViewModel by viewModels()
-        setup(viewModel, route.points)
+        setup(viewModel, args.route.points)
         binding.routeEditEditButton.setOnClickListener {
             try {
-                val routeName = binding.routeEditRouteNameEditText.text.toString()
-                viewModel.onRouteEdit(route.routeName, routeName)
+                val newRouteName = binding.routeEditRouteNameEditText.text.toString()
+                viewModel.onRouteEdit(routeName, newRouteName)
             } catch(e: IllegalArgumentException) {
                 Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
             }

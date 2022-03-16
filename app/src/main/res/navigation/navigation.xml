@@ -50,12 +50,12 @@
         android:id="@+id/routeEditFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteEditFragment"
         android:label="@string/route_edit_title" >
-        <argument
-            android:name="routeName"
-            app:argType="string" />
         <action
             android:id="@+id/action_routeEditFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
+        <argument
+            android:name="route"
+            app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
     </fragment>
     <fragment
         android:id="@+id/browseListFragment"

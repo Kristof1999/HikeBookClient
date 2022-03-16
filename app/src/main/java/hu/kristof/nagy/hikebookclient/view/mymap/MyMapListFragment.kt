@@ -56,8 +56,11 @@ class MyMapListFragment : Fragment() {
         val viewModel: MyMapViewModel by activityViewModels()
         val adapter = MyMapListAdapter(MyMapClickListener(
             editListener = { routeName ->
+                val route = viewModel.routes.value!!.filter { route ->
+                    route.routeName == routeName
+                }[0]
                 val action = MyMapListFragmentDirections
-                    .actionMyMapListFragmentToRouteEditFragment(routeName)
+                    .actionMyMapListFragmentToRouteEditFragment(route)
                 findNavController().navigate(action)
             },
             deleteListener = { routeName ->
