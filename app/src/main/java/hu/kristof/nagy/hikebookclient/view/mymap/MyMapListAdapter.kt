@@ -62,19 +62,8 @@ class MyMapListAdapter(private val clickListener: MyMapClickListener)
 
         fun bind(routeName: String) {
             binding.myMapListItemRouteName.text = routeName
-            // TODO: listener binding in xml
-            binding.myMapListItemEditImageButton.setOnClickListener {
-                clickListener.editListener(routeName)
-            }
-            binding.myMapListItemDeleteImageButton.setOnClickListener {
-                clickListener.deleteListener(routeName)
-            }
-            binding.myMapListItemPrintImageButton.setOnClickListener {
-                clickListener.printListener(routeName)
-            }
-            itemView.setOnClickListener {
-                clickListener.detailNavListener(routeName)
-            }
+            binding.routeName = routeName
+            binding.clickListener = clickListener
         }
 
         companion object {
