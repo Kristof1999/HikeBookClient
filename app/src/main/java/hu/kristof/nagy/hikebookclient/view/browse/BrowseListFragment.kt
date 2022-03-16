@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentBrowseListBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +32,11 @@ class BrowseListFragment : Fragment() {
 
         val viewModel: BrowseViewModel by viewModels()
         viewModel.listRoutes()
-        val adapter = BrowseListAdapter()
+        val adapter = BrowseListAdapter(BrowseClickListener { userName, routeName ->
+            val action = BrowseListFragmentDirections
+                .actionBrowseListFragmentToBrowseDetailFragment(userName, routeName)
+            findNavController().navigate(action)
+        })
         binding.browseRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) {

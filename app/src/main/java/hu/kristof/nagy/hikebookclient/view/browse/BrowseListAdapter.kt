@@ -2,9 +2,7 @@ package hu.kristof.nagy.hikebookclient.view.browse
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +10,8 @@ import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.BrowseListItemBinding
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 
-class BrowseListAdapter : ListAdapter<BrowseListItem, BrowseListAdapter.ViewHolder>(BrowseListDiffCallback()) {
+class BrowseListAdapter(private val clickListener: BrowseClickListener)
+    : ListAdapter<BrowseListItem, BrowseListAdapter.ViewHolder>(BrowseListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
@@ -21,28 +20,16 @@ class BrowseListAdapter : ListAdapter<BrowseListItem, BrowseListAdapter.ViewHold
         val data = getItem(position)
         val userName = data.userName
         val routeName = data.routeName
-        holder.bind(userName, routeName)
+        holder.bind(userName, routeName, clickListener)
     }
 
-    class ViewHolder(binding: BrowseListItemBinding)
+    class ViewHolder(private val binding: BrowseListItemBinding)
         : RecyclerView.ViewHolder(binding.root) {
-        private val userNameTv: TextView = binding.browseListItemUserName
-        private val routeNameTv: TextView = binding.browseListItemRouteName
 
-        init {
-            // TODO: refactor: move listener logic to fragment
-            itemView.setOnClickListener {
-                val userName = userNameTv.text.toString()
-                val routeName = routeNameTv.text.toString()
-                val action = BrowseListFragmentDirections
-                    .actionBrowseListFragmentToBrowseDetailFragment(userName, routeName)
-                it.findNavController().navigate(action)
-            }
-        }
-
-        fun bind(userName: String, routeName: String) {
-            userNameTv.text = userName
-            routeNameTv.text = routeName
+        fun bind(userName: String, routeName: String, clickListener: BrowseClickListener) {
+            binding.userName = userName
+            binding.routeName = routeName
+            binding.clickListener = clickListener
         }
 
         companion object {
@@ -66,5 +53,10 @@ class BrowseListDiffCallback : DiffUtil.ItemCallback<BrowseListItem>() {
     override fun areContentsTheSame(oldItem: BrowseListItem, newItem: BrowseListItem): Boolean {
         return oldItem == newItem
     }
+}
 
+class BrowseClickListener(
+    private val clickListener: (userName: String, routeName: String) -> Unit
+) {
+   fun onClick(userName: String, routeName: String) = clickListener(userName, routeName)
 }

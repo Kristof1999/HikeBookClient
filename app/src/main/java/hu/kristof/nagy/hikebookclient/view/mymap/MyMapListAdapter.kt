@@ -36,7 +36,6 @@
 
 package hu.kristof.nagy.hikebookclient.view.mymap
 
-import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -44,7 +43,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hikebookclient.databinding.MyMapListItemBinding
 import hu.kristof.nagy.hikebookclient.model.Route
-import kotlinx.parcelize.Parcelize
 
 class MyMapListAdapter(private val clickListener: MyMapClickListener)
     : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapListDiffCallback()) {
@@ -63,7 +61,6 @@ class MyMapListAdapter(private val clickListener: MyMapClickListener)
         ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(routeName: String) {
-            binding.myMapListItemRouteName.text = routeName
             binding.routeName = routeName
             binding.clickListener = clickListener
         }
@@ -88,13 +85,12 @@ class MyMapListDiffCallback : DiffUtil.ItemCallback<Route>() {
     }
 }
 
-@Parcelize
 class MyMapClickListener(
-    val editListener: (routeName: String) -> Unit,
-    val deleteListener: (routeName: String) -> Unit,
-    val printListener: (routeName: String) -> Unit,
-    val detailNavListener: (routeName: String) -> Unit
-) : Parcelable {
+    private val editListener: (routeName: String) -> Unit,
+    private val deleteListener: (routeName: String) -> Unit,
+    private val printListener: (routeName: String) -> Unit,
+    private val detailNavListener: (routeName: String) -> Unit
+) {
     fun onEdit(routeName: String) = editListener(routeName)
     fun onDelete(routeName: String) = deleteListener(routeName)
     fun onPrint(routeName: String) = printListener(routeName)
