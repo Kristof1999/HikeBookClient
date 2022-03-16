@@ -19,8 +19,8 @@
 
 package hu.kristof.nagy.hikebookclient.viewModel.authentication
 
+import hu.kristof.nagy.hikebookclient.data.DummyAuthRepository
 import hu.kristof.nagy.hikebookclient.model.UserAuth
-import hu.kristof.nagy.hikebookclient.service.DummyService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -33,7 +33,7 @@ import org.junit.Before
 import org.junit.Test
 
 class LoginViewModelTest {
-    private val loginViewModel = LoginViewModel(DummyService())
+    private val loginViewModel = LoginViewModel(DummyAuthRepository())
 
     @ExperimentalCoroutinesApi
     val testDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()

@@ -26,7 +26,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.AuthRepository
+import hu.kristof.nagy.hikebookclient.data.IAuthRepository
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import kotlinx.coroutines.launch
 import java.security.MessageDigest
@@ -37,7 +37,7 @@ import javax.inject.Inject
  * to get notified of the result of the login attempt.
  */
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: AuthRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val repository: IAuthRepository) : ViewModel() {
     private var _loginRes = MutableLiveData<Boolean>()
     val loginRes : LiveData<Boolean>
         get() = _loginRes

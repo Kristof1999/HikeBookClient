@@ -11,8 +11,8 @@ import javax.inject.Inject
 class AuthRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
-    ){
-    suspend fun register(user: UserAuth): Boolean {
+    ) : IAuthRepository {
+    override suspend fun register(user: UserAuth): Boolean {
         if (service.register(user)) {
             dataStore.edit { data ->
                 data[Constants.DATA_STORE_USER_NAME] = user.name
@@ -23,7 +23,7 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun login(user: UserAuth): Boolean {
+    override suspend fun login(user: UserAuth): Boolean {
         if (service.login(user)) {
             dataStore.edit { data ->
                 data[Constants.DATA_STORE_USER_NAME] = user.name
