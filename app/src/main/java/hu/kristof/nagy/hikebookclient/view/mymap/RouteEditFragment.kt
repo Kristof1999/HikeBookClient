@@ -84,7 +84,7 @@ class RouteEditFragment : Fragment() {
                 )
             else
                 Toast.makeText(
-                    context, "Valamilyen hiba lépett fel.", Toast.LENGTH_SHORT
+                    context, getString(R.string.generic_error_msg), Toast.LENGTH_SHORT
                 ).show()
         }
 

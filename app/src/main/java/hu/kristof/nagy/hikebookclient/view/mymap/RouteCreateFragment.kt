@@ -71,7 +71,7 @@ class RouteCreateFragment : Fragment() {
                 )
             else
                 Toast.makeText(
-                    context, "Valamilyen hiba lépett fel.", Toast.LENGTH_SHORT
+                    context, getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
                 ).show()
             // névnek egyedinek kell lennie
         }
@@ -153,7 +153,7 @@ class RouteCreateFragment : Fragment() {
             mapView.invalidate()
         } else {
             Toast.makeText(
-                context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT
+                context, getString(R.string.not_last_point_delete_error_msg), Toast.LENGTH_SHORT
             ).show()
         }
     }

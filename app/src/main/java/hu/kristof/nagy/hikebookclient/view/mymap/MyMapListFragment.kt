@@ -68,7 +68,7 @@ class MyMapListFragment : Fragment() {
                 }
                 else
                     Toast.makeText(
-                        context, "Valamilyen hiba lépett fel.", Toast.LENGTH_SHORT
+                        context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
                     ).show()
                 viewModel.deleteFinished = true
             }

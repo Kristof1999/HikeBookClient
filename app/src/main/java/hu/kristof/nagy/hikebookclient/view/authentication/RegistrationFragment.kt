@@ -85,7 +85,7 @@ class RegistrationFragment : Fragment() {
                 R.id.action_registrationFragment_to_mainActivity
             )
         } else {
-            Toast.makeText(activity, "Ez a név már foglalt.", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, getString(R.string.name_exists_error_msg), Toast.LENGTH_LONG).show()
         }
     }
 }

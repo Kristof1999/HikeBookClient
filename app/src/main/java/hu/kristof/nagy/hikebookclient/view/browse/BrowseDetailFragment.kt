@@ -45,7 +45,7 @@ class BrowseDetailFragment : Fragment() {
         mapController.setCenter(Constants.START_POINT)
 
         binding.browseDetailHikeDescriptionTv.text =
-            "Felhasználói név: ${args.userName}\nÚtvonal név: ${args.routeName}"
+            getString(R.string.browse_hike_detail_description, args.userName, args.routeName)
 
         val viewModel: BrowseDetailViewModel by viewModels()
         viewModel.loadPoints(args.userName, args.routeName)
@@ -72,7 +72,7 @@ class BrowseDetailFragment : Fragment() {
                 )
             } else {
                 Toast.makeText(
-                    context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_LONG
+                    context, getText(R.string.generic_error_msg), Toast.LENGTH_LONG
                 ).show()
             }
         }

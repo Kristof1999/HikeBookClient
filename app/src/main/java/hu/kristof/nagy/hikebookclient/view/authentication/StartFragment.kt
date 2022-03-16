@@ -90,7 +90,7 @@ class StartFragment : Fragment() {
                 R.id.action_startFragment_to_mainActivity
             )
         } else {
-            Toast.makeText(activity, "Vagy a név, vagy a jelszó hibás.", Toast.LENGTH_LONG).show()
+            Toast.makeText(activity, getString(R.string.login_fail_msg), Toast.LENGTH_LONG).show()
         }
     }
 }
