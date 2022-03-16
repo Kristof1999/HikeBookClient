@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_myMapListFragment_to_routeEditFragment"
             app:destination="@id/routeEditFragment" />
+        <action
+            android:id="@+id/action_myMapListFragment_to_myMapDetailFragment"
+            app:destination="@id/myMapDetailFragment" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"
@@ -72,6 +75,17 @@
         <argument
             android:name="userName"
             app:argType="string" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/myMapDetailFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapDetailFragment"
+        android:label="MyMapDetailFragment" >
+        <action
+            android:id="@+id/action_myMapDetailFragment_to_myMapListFragment"
+            app:destination="@id/myMapListFragment" />
         <argument
             android:name="routeName"
             app:argType="string" />

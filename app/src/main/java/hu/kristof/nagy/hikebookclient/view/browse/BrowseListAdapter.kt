@@ -30,6 +30,7 @@ class BrowseListAdapter : ListAdapter<BrowseListItem, BrowseListAdapter.ViewHold
         private val routeNameTv: TextView = binding.browseListItemRouteName
 
         init {
+            // TODO: refactor: move listener logic to fragment
             itemView.setOnClickListener {
                 val userName = userNameTv.text.toString()
                 val routeName = routeNameTv.text.toString()

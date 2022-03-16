@@ -56,6 +56,7 @@ class RouteEditFragment : Fragment() {
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
 
+        // TODO: pass route instead of viewModel
         val sharedViewModel: MyMapViewModel by activityViewModels()
         val routeName = args.routeName
         binding.routeEditRouteNameEditText.setText(routeName)

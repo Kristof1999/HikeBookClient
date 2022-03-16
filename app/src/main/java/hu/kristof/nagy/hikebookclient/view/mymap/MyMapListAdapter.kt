@@ -32,59 +32,56 @@
 // based on:
 // https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/RecyclerViewFundamentals
 // https://github.com/android/sunflower
+// https://github.com/google-developer-training/android-kotlin-fundamentals-apps/tree/master/RecyclerViewClickHandler
 
 package hu.kristof.nagy.hikebookclient.view.mymap
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hikebookclient.databinding.MyMapListItemBinding
 import hu.kristof.nagy.hikebookclient.model.Route
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
-class MyMapListAdapter(private val viewModel: MyMapViewModel)
+class MyMapListAdapter(private val clickListener: MyMapClickListener)
     : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent, viewModel)
+        return ViewHolder.from(parent, clickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item)
+        val routeName = getItem(position).routeName
+        holder.bind(routeName)
     }
 
     class ViewHolder private constructor(
-        val binding: MyMapListItemBinding,
-        val viewModel: MyMapViewModel
-        ) :
-        RecyclerView.ViewHolder(binding.root) {
-        private val tv: TextView = binding.myMapListItemRouteName
+        private val binding : MyMapListItemBinding,
+        private val clickListener: MyMapClickListener
+        ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
+        fun bind(routeName: String) {
+            binding.myMapListItemRouteName.text = routeName
+            // TODO: listener binding in xml
             binding.myMapListItemEditImageButton.setOnClickListener {
-                val routeName = tv.text.toString()
-                val action = MyMapListFragmentDirections
-                    .actionMyMapListFragmentToRouteEditFragment(routeName)
-                it.findNavController().navigate(action)
+                clickListener.editListener(routeName)
             }
             binding.myMapListItemDeleteImageButton.setOnClickListener {
-                viewModel.deleteRoute(tv.text.toString())
+                clickListener.deleteListener(routeName)
             }
-        }
-
-        fun bind(route: Route) {
-            tv.text = route.routeName
+            binding.myMapListItemPrintImageButton.setOnClickListener {
+                clickListener.printListener(routeName)
+            }
+            itemView.setOnClickListener {
+                clickListener.detailNavListener(routeName)
+            }
         }
 
         companion object {
-            fun from(parent: ViewGroup, viewModel: MyMapViewModel) : ViewHolder {
+            fun from(parent: ViewGroup, clickListener: MyMapClickListener): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = MyMapListItemBinding.inflate(layoutInflater, parent, false)
-                return ViewHolder(binding, viewModel)
+                return ViewHolder(binding, clickListener)
             }
         }
     }
@@ -98,5 +95,16 @@ class MyMapListDiffCallback : DiffUtil.ItemCallback<Route>() {
     override fun areContentsTheSame(oldItem: Route, newItem: Route): Boolean {
         return oldItem == newItem
     }
+}
 
+class MyMapClickListener(
+    val editListener: (routeName: String) -> Unit,
+    val deleteListener: (routeName: String) -> Unit,
+    val printListener: (routeName: String) -> Unit,
+    val detailNavListener: (routeName: String) -> Unit
+) {
+    fun onEdit(routeName: String) = editListener(routeName)
+    fun onDelete(routeName: String) = deleteListener(routeName)
+    fun onPrint(routeName: String) = printListener(routeName)
+    fun onDetailNav(routeName: String) = detailNavListener(routeName)
 }

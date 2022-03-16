@@ -54,7 +54,26 @@ class MyMapListFragment : Fragment() {
             )
         }
 
-        val adapter = MyMapListAdapter(viewModel)
+        val adapter = MyMapListAdapter(MyMapClickListener(
+            editListener = { routeName ->
+                val action = MyMapListFragmentDirections
+                    .actionMyMapListFragmentToRouteEditFragment(routeName)
+                findNavController().navigate(action)
+            },
+            deleteListener = { routeName ->
+                viewModel.deleteRoute(routeName)
+            },
+            printListener = { routeName ->
+                val action = MyMapListFragmentDirections
+                    .actionMyMapListFragmentToMyMapDetailFragment(routeName)
+                findNavController().navigate(action)
+            },
+            detailNavListener = { routeName ->
+                val action = MyMapListFragmentDirections
+                    .actionMyMapListFragmentToMyMapDetailFragment(routeName)
+                findNavController().navigate(action)
+            })
+        )
         binding.myMapRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) {

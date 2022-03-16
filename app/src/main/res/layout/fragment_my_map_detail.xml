@@ -1,0 +1,103 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="hu.kristof.nagy.hikebookclient.view.mymap.MyMapDetailFragment">
+
+        <TextView
+            android:id="@+id/myMapDetailRouteNameTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/myMapDetailDeleteButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/delete_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:icon="@drawable/delete_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/myMapDetailGroupHikeCreateButton"
+            app:layout_constraintTop_toBottomOf="@+id/myMapDetailPrintButton" />
+
+        <Button
+            android:id="@+id/myMapDetailEditButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/edit_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:icon="@drawable/edit_image"
+            app:layout_constraintBottom_toTopOf="@+id/myMapDetailGroupHikeCreateButton"
+            app:layout_constraintEnd_toStartOf="@+id/myMapDetailPrintButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myMapDetailMap" />
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/myMapDetailMap"
+            tileSource="Mapnik"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/myMapDetailEditButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myMapDetailRouteNameTv"
+            app:layout_constraintVertical_bias="1.0">
+
+        </org.osmdroid.views.MapView>
+
+        <Button
+            android:id="@+id/myMapDetailPrintButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/print_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:icon="@drawable/print_image"
+            app:layout_constraintBottom_toTopOf="@+id/myMapDetailDeleteButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/myMapDetailEditButton"
+            app:layout_constraintTop_toBottomOf="@+id/myMapDetailMap" />
+
+        <Button
+            android:id="@+id/myMapDetailGroupHikeCreateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/group_hike_create_text"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/myMapDetailDeleteButton"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myMapDetailEditButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

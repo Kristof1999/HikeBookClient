@@ -58,6 +58,7 @@ class MyMapFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             val folderOverlay = FolderOverlay()
+            // nem forEach kellene inkább?
             routes.map{ route ->
                 folderOverlay.add(route.toPolyline())
                 // TODO: add polyLine clickListener to display the route's name
