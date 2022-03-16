@@ -51,4 +51,10 @@ class MyMapViewModel @Inject constructor(
             }
         }
     }
+
+    fun getRoute(routeName: String): Route {
+        return _routes.value!!.filter { route ->
+            route.routeName == routeName
+        }[0]
+    }
 }

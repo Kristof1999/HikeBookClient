@@ -87,7 +87,7 @@
             android:id="@+id/action_myMapDetailFragment_to_myMapListFragment"
             app:destination="@id/myMapListFragment" />
         <argument
-            android:name="routeName"
-            app:argType="string" />
+            android:name="route"
+            app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
     </fragment>
 </navigation>

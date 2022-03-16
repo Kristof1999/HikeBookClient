@@ -47,25 +47,22 @@ class MyMapDetailFragment : Fragment() {
 
         val viewModel: MyMapViewModel by activityViewModels()
         val args: MyMapDetailFragmentArgs by navArgs()
-        binding.myMapDetailRouteNameTv.text = args.routeName
-        val route = viewModel.routes.value!!.filter { route ->
-            route.routeName == args.routeName
-        }[0]
-        val polyline = route.toPolyline()
+        binding.myMapDetailRouteNameTv.text = args.route.routeName
+        val polyline = args.route.toPolyline()
         map.overlays.add(polyline)
         map.invalidate()
 
         binding.myMapDetailEditButton.setOnClickListener {
             val action = MyMapListFragmentDirections
-                .actionMyMapListFragmentToRouteEditFragment(route)
+                .actionMyMapListFragmentToRouteEditFragment(args.route)
             findNavController().navigate(action)
         }
         binding.myMapDetailDeleteButton.setOnClickListener {
-            viewModel.deleteRoute(args.routeName)
+            viewModel.deleteRoute(args.route.routeName)
         }
         binding.myMapDetailPrintButton.setOnClickListener {
             val bitmap = map.drawToBitmap()
-            PrintHelper(requireContext()).printBitmap(args.routeName, bitmap)
+            PrintHelper(requireContext()).printBitmap(args.route.routeName, bitmap)
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.deleteRes.observe(viewLifecycleOwner) {
