@@ -26,7 +26,6 @@ import org.osmdroid.views.overlay.FolderOverlay
 class MyMapFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentMyMapBinding
-    private val viewModel: MyMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +39,8 @@ class MyMapFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val viewModel: MyMapViewModel by activityViewModels()
         viewModel.loadRoutesForLoggedInUser()
         binding.switchToMyMapListButton.setOnClickListener {
             findNavController().navigate(

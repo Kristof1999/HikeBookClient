@@ -25,7 +25,6 @@ import org.osmdroid.views.overlay.Polyline
 class BrowseDetailFragment : Fragment() {
     private lateinit var binding: FragmentBrowseDetailBinding
     private lateinit var map: MapView
-    private val args: BrowseDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +44,7 @@ class BrowseDetailFragment : Fragment() {
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
 
+        val args: BrowseDetailFragmentArgs by navArgs()
         binding.browseDetailHikeDescriptionTv.text =
             getString(R.string.browse_hike_detail_description, args.userName, args.routeName)
 

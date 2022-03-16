@@ -24,8 +24,6 @@ import org.osmdroid.views.MapView
 class MyMapDetailFragment : Fragment() {
     private lateinit var binding: FragmentMyMapDetailBinding
     private lateinit var map: MapView
-    private val args: MyMapDetailFragmentArgs by navArgs()
-    private val viewModel: MyMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,10 +45,12 @@ class MyMapDetailFragment : Fragment() {
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
 
+        val viewModel: MyMapViewModel by activityViewModels()
+        val args: MyMapDetailFragmentArgs by navArgs()
         binding.myMapDetailRouteNameTv.text = args.routeName
         val route = viewModel.routes.value!!.filter { route ->
             route.routeName == args.routeName
-        }.get(0)
+        }[0]
         val polyline = route.toPolyline()
         map.overlays.add(polyline)
         map.invalidate()

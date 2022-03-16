@@ -34,7 +34,6 @@ import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
 class MyMapListFragment : Fragment() {
     private lateinit var binding: FragmentMyMapListBinding
-    private val viewModel: MyMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +53,7 @@ class MyMapListFragment : Fragment() {
             )
         }
 
+        val viewModel: MyMapViewModel by activityViewModels()
         val adapter = MyMapListAdapter(MyMapClickListener(
             editListener = { routeName ->
                 val action = MyMapListFragmentDirections
