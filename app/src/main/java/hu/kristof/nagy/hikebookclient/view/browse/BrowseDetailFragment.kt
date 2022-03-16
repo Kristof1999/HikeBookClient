@@ -56,6 +56,8 @@ class BrowseDetailFragment : Fragment() {
             polyline.setPoints(points.map { point ->
                 point.toGeoPoint()
             })
+            mapController.setZoom(Constants.START_ZOOM)
+            mapController.setCenter(polyline.bounds.centerWithDateLine)
             map.overlays.add(polyline)
             map.invalidate()
         }

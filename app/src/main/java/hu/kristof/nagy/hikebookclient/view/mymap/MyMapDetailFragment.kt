@@ -40,15 +40,13 @@ class MyMapDetailFragment : Fragment() {
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.myMapDetailMap
 
-        val mapController = map.controller
-        // TODO: set center on center of route with appropriate zoom
-        mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(Constants.START_POINT)
-
         val viewModel: MyMapViewModel by activityViewModels()
         val args: MyMapDetailFragmentArgs by navArgs()
         binding.myMapDetailRouteNameTv.text = args.route.routeName
         val polyline = args.route.toPolyline()
+        val mapController = map.controller
+        mapController.setCenter(polyline.bounds.centerWithDateLine)
+        mapController.setZoom(Constants.START_ZOOM)
         map.overlays.add(polyline)
         map.invalidate()
 

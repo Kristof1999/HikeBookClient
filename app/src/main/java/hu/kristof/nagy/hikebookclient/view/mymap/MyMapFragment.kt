@@ -63,11 +63,13 @@ class MyMapFragment : Fragment() {
             routes.map{ route ->
                 folderOverlay.add(route.toPolyline())
                 // TODO: add polyLine clickListener to display the route's name
+                // polyline.title = ...
             }
             map.overlays.add(folderOverlay)
             map.invalidate()
         }
 
+        // TODO: add copyright layer for maps
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
         mapController.setCenter(Constants.START_POINT)
