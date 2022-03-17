@@ -16,7 +16,8 @@ import androidx.print.PrintHelper
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapDetailBinding
 import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.util.MapUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
@@ -39,6 +40,7 @@ class MyMapDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.myMapDetailMap
+        map.addCopyRightOverlay()
 
         val viewModel: MyMapViewModel by activityViewModels()
         val args: MyMapDetailFragmentArgs by navArgs()
@@ -77,7 +79,7 @@ class MyMapDetailFragment : Fragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapHelper.onRequestPermissionsResult(
+        MapUtils.onRequestPermissionsResult(
             requestCode, permissions, grantResults, requireActivity()
         )
     }

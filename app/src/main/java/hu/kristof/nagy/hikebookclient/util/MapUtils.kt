@@ -4,11 +4,13 @@ import android.app.Activity
 import android.graphics.drawable.Drawable
 import androidx.core.app.ActivityCompat
 import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.CopyrightOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polyline
 
-object MapHelper {
+object MapUtils {
     private const val REQUEST_PERMISSIONS_REQUEST_CODE = 1
 
     fun onRequestPermissionsResult(
@@ -64,4 +66,16 @@ object MapHelper {
             overlays.add(polyline)
         }
     }
+}
+
+fun MapView.setStartZoomAndCenter() {
+    val mapController = controller
+    mapController.setZoom(Constants.START_ZOOM)
+    mapController.setCenter(Constants.START_POINT)
+}
+
+fun MapView.addCopyRightOverlay() {
+    val copyrightOverlay = CopyrightOverlay(context)
+    overlays.add(copyrightOverlay)
+    invalidate()
 }

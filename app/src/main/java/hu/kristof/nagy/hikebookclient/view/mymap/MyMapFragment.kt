@@ -16,8 +16,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapBinding
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.util.MapUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.config.Configuration.getInstance
 import org.osmdroid.views.MapView
@@ -56,6 +57,8 @@ class MyMapFragment : Fragment() {
 
         getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.myMap
+        map.setStartZoomAndCenter()
+        map.addCopyRightOverlay()
 
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
@@ -71,16 +74,11 @@ class MyMapFragment : Fragment() {
             map.overlays.add(folderOverlay)
             map.invalidate()
         }
-
-        // TODO: add copyright layer for maps
-        val mapController = map.controller
-        mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(Constants.START_POINT)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapHelper.onRequestPermissionsResult(
+        MapUtils.onRequestPermissionsResult(
             requestCode, permissions, grantResults, requireActivity()
         )
     }

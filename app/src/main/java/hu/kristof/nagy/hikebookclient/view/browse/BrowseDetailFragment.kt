@@ -14,8 +14,9 @@ import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentBrowseDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.util.MapUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseDetailViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
@@ -40,9 +41,8 @@ class BrowseDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.browseDetailMap
-        val mapController = map.controller
-        mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(Constants.START_POINT)
+        map.setStartZoomAndCenter()
+        map.addCopyRightOverlay()
 
         val args: BrowseDetailFragmentArgs by navArgs()
         binding.browseDetailHikeDescriptionTv.text =
@@ -56,7 +56,7 @@ class BrowseDetailFragment : Fragment() {
             polyline.setPoints(points.map { point ->
                 point.toGeoPoint()
             })
-            mapController.setCenter(polyline.bounds.centerWithDateLine)
+            map.controller.setCenter(polyline.bounds.centerWithDateLine)
             map.overlays.add(polyline)
             map.invalidate()
         }
@@ -82,7 +82,7 @@ class BrowseDetailFragment : Fragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapHelper.onRequestPermissionsResult(
+        MapUtils.onRequestPermissionsResult(
             requestCode, permissions, grantResults, requireActivity()
         )
     }

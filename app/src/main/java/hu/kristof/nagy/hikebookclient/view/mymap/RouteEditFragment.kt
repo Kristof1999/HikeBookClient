@@ -17,7 +17,8 @@ import com.example.hikebookclient.databinding.FragmentRouteEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.util.MapUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -48,15 +49,14 @@ class RouteEditFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.routeEditMap
+        map.addCopyRightOverlay()
 
         val mapController = map.controller
-        // TODO: set center on center of route with appropriate zoom
         mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(Constants.START_POINT)
+        mapController.setCenter(args.route.toPolyline().bounds.centerWithDateLine)
 
         val routeName = args.route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
-
 
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.route.points)
@@ -222,7 +222,7 @@ class RouteEditFragment : Fragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapHelper.onRequestPermissionsResult(
+        MapUtils.onRequestPermissionsResult(
             requestCode, permissions, grantResults, requireActivity()
         )
     }

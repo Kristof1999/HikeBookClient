@@ -31,7 +31,7 @@ import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import kotlinx.coroutines.flow.collect
@@ -75,7 +75,7 @@ class RouteCreateViewModel @Inject constructor(
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
-    ) = MapHelper.onSingleTap(
+    ) = MapUtils.onSingleTap(
         newMarker, p, markerIcon, setMarkerIcon, overlays, markers, polylines
     )
 

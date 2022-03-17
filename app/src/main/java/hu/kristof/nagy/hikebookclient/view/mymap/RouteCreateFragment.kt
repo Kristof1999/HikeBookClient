@@ -17,8 +17,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapHelper
+import hu.kristof.nagy.hikebookclient.util.MapUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -47,10 +48,8 @@ class RouteCreateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.routeCreateMap
-
-        val mapController = map.controller
-        mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(Constants.START_POINT)
+        map.setStartZoomAndCenter()
+        map.addCopyRightOverlay()
 
         val viewModel: RouteCreateViewModel by viewModels()
         binding.routeCreateDeleteSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -160,7 +159,7 @@ class RouteCreateFragment : Fragment() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapHelper.onRequestPermissionsResult(
+        MapUtils.onRequestPermissionsResult(
             requestCode, permissions, grantResults, requireActivity()
         )
     }
