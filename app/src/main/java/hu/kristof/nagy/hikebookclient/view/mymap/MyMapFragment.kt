@@ -8,6 +8,7 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -59,11 +60,13 @@ class MyMapFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             val folderOverlay = FolderOverlay()
-            // nem forEach kellene inkább?
-            routes.map{ route ->
-                folderOverlay.add(route.toPolyline())
-                // TODO: add polyLine clickListener to display the route's name
-                // polyline.title = ...
+            routes.forEach { route ->
+                val polyline = route.toPolyline()
+                folderOverlay.add(polyline)
+                polyline.setOnClickListener { _, _, _ ->
+                    Toast.makeText(context, route.routeName, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener true
+                }
             }
             map.overlays.add(folderOverlay)
             map.invalidate()
