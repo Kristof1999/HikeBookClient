@@ -57,46 +57,57 @@ class MyMapListFragment : Fragment() {
         }
 
         val viewModel: MyMapViewModel by activityViewModels()
-        val adapter = MyMapListAdapter(MyMapClickListener(
-            editListener = { routeName ->
-                val route = viewModel.getRoute(routeName)
-                val action = MyMapListFragmentDirections
-                    .actionMyMapListFragmentToRouteEditFragment(route)
-                findNavController().navigate(action)
-            },
-            deleteListener = { routeName ->
-                viewModel.deleteRoute(routeName)
-            },
-            printListener = { routeName ->
-                val route = viewModel.getRoute(routeName)
-                val action = MyMapListFragmentDirections
-                    .actionMyMapListFragmentToMyMapDetailFragment(route)
-                findNavController().navigate(action)
-            },
-            detailNavListener = { routeName ->
-                val route = viewModel.getRoute(routeName)
-                val action = MyMapListFragmentDirections
-                    .actionMyMapListFragmentToMyMapDetailFragment(route)
-                findNavController().navigate(action)
-            })
+        setupAdapter(viewModel)
+        viewModel.deleteRes.observe(viewLifecycleOwner) {
+            onDeleteResult(viewModel, it)
+        }
+    }
+
+    private fun onDeleteResult(
+        viewModel: MyMapViewModel,
+        it: Boolean
+    ) {
+        if (!viewModel.deleteFinished) {
+            if (it) {
+                Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
+                viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
+            } else
+                Toast.makeText(
+                    context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
+                ).show()
+            viewModel.deleteFinished = true
+        }
+    }
+
+    private fun setupAdapter(viewModel: MyMapViewModel) {
+        val adapter = MyMapListAdapter(
+            MyMapClickListener(
+                editListener = { routeName ->
+                    val route = viewModel.getRoute(routeName)
+                    val action = MyMapListFragmentDirections
+                        .actionMyMapListFragmentToRouteEditFragment(route)
+                    findNavController().navigate(action)
+                },
+                deleteListener = { routeName ->
+                    viewModel.deleteRoute(routeName)
+                },
+                printListener = { routeName ->
+                    val route = viewModel.getRoute(routeName)
+                    val action = MyMapListFragmentDirections
+                        .actionMyMapListFragmentToMyMapDetailFragment(route)
+                    findNavController().navigate(action)
+                },
+                detailNavListener = { routeName ->
+                    val route = viewModel.getRoute(routeName)
+                    val action = MyMapListFragmentDirections
+                        .actionMyMapListFragmentToMyMapDetailFragment(route)
+                    findNavController().navigate(action)
+                })
         )
         binding.myMapRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) {
             adapter.submitList(it.toMutableList())
-        }
-        viewModel.deleteRes.observe(viewLifecycleOwner) {
-            if (!viewModel.deleteFinished) {
-                if (it) {
-                    Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
-                    viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
-                }
-                else
-                    Toast.makeText(
-                        context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
-                    ).show()
-                viewModel.deleteFinished = true
-            }
         }
     }
 }

@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentBrowseDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
@@ -42,10 +43,7 @@ class BrowseDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.browseDetailMap
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        initMap()
 
         val args: BrowseDetailFragmentArgs by navArgs()
         binding.browseDetailHikeDescriptionTv.text =
@@ -55,32 +53,55 @@ class BrowseDetailFragment : Fragment() {
         viewModel.loadPoints(args.userName, args.routeName)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.points.observe(viewLifecycleOwner) { points ->
-            val polyline = Polyline()
-            polyline.setPoints(points.map { point ->
-                point.toGeoPoint()
-            })
-            map.controller.setCenter(polyline.bounds.centerWithDateLine)
-            map.overlays.add(polyline)
-            map.invalidate()
+            onPointsLoad(points)
         }
         binding.browseDetailAddToMyMapButton.setOnClickListener {
-            try {
-                viewModel.addToMyMap(args.routeName)
-            } catch(e: IllegalStateException) {
-                Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
-            }
+            onAddToMyMap(viewModel, args)
         }
         viewModel.addRes.observe(viewLifecycleOwner) {
-            if (it) {
-                findNavController().navigate(
-                    R.id.action_browseDetailFragment_to_browseListFragment
-                )
-            } else {
-                Toast.makeText(
-                    context, getText(R.string.generic_error_msg), Toast.LENGTH_LONG
-                ).show()
-            }
+            onAddResult(it)
         }
+    }
+
+    private fun onAddResult(it: Boolean) {
+        if (it) {
+            findNavController().navigate(
+                R.id.action_browseDetailFragment_to_browseListFragment
+            )
+        } else {
+            Toast.makeText(
+                context, getText(R.string.generic_error_msg), Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun onAddToMyMap(
+        viewModel: BrowseDetailViewModel,
+        args: BrowseDetailFragmentArgs
+    ) {
+        try {
+            viewModel.addToMyMap(args.routeName)
+        } catch (e: IllegalStateException) {
+            Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun onPointsLoad(points: List<Point>) {
+        val polyline = Polyline()
+        polyline.setPoints(points.map { point ->
+            point.toGeoPoint()
+        })
+        map.controller.setCenter(polyline.bounds.centerWithDateLine)
+        map.overlays.add(polyline)
+        map.invalidate()
+    }
+
+    private fun initMap() {
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.browseDetailMap
+        map.setStartZoomAndCenter()
+        map.addCopyRightOverlay()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

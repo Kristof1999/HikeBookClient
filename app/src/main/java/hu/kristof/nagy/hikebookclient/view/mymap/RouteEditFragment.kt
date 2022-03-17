@@ -35,7 +35,6 @@ import org.osmdroid.views.overlay.Polyline
 class RouteEditFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteEditBinding
-    private val args: RouteEditFragmentArgs by navArgs()
     private var isDeleteOn = false // TODO: handle interruptions: device rotation, ...
 
     override fun onCreateView(
@@ -50,42 +49,49 @@ class RouteEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.routeEditMap
-        map.addCopyRightOverlay()
 
-        val mapController = map.controller
-        mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(args.route.toPolyline().bounds.centerWithDateLine)
+        val args: RouteEditFragmentArgs by navArgs()
+        initMap(args)
 
         val routeName = args.route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
 
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.route.points)
+        setClickListeners(viewModel, routeName)
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.routeEditRes.observe(viewLifecycleOwner) {
+            onRouteEditResult(it)
+        }
+
+        setMapClickListeners(viewModel)
+    }
+
+    private fun setClickListeners(
+        viewModel: RouteEditViewModel,
+        routeName: String
+    ) {
         binding.routeEditEditButton.setOnClickListener {
-            try {
-                val newRouteName = binding.routeEditRouteNameEditText.text.toString()
-                viewModel.onRouteEdit(routeName, newRouteName)
-            } catch(e: IllegalArgumentException) {
-                Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
-            }
+            onEdit(viewModel, routeName)
         }
         binding.routeEditDeleteSwitch.setOnCheckedChangeListener { _, isChecked ->
             isDeleteOn = isChecked
         }
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routeEditRes.observe(viewLifecycleOwner) {
-            if (it)
-                findNavController().navigate(
-                    R.id.action_routeEditFragment_to_myMapFragment
-                )
-            else
-                Toast.makeText(
-                    context, getString(R.string.generic_error_msg), Toast.LENGTH_SHORT
-                ).show()
-        }
+    }
 
+    private fun onEdit(
+        viewModel: RouteEditViewModel,
+        routeName: String
+    ) {
+        try {
+            val newRouteName = binding.routeEditRouteNameEditText.text.toString()
+            viewModel.onRouteEdit(routeName, newRouteName)
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setMapClickListeners(viewModel: RouteEditViewModel) {
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                 return onSingleTap(p, viewModel)
@@ -98,6 +104,28 @@ class RouteEditFragment : Fragment() {
         })
         map.overlays.add(0, mapEventsOverlay)
         map.invalidate()
+    }
+
+    private fun onRouteEditResult(it: Boolean) {
+        if (it)
+            findNavController().navigate(
+                R.id.action_routeEditFragment_to_myMapFragment
+            )
+        else
+            Toast.makeText(
+                context, getString(R.string.generic_error_msg), Toast.LENGTH_SHORT
+            ).show()
+    }
+
+    private fun initMap(args: RouteEditFragmentArgs) {
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.routeEditMap
+        map.addCopyRightOverlay()
+
+        val mapController = map.controller
+        mapController.setZoom(Constants.START_ZOOM)
+        mapController.setCenter(args.route.toPolyline().bounds.centerWithDateLine)
     }
 
     // adapter design pattern/wrapper kellene ehelyett

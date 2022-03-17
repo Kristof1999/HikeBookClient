@@ -41,9 +41,7 @@ class MyMapDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.myMapDetailMap
-        map.addCopyRightOverlay()
+        initMap()
 
         val viewModel: MyMapViewModel by activityViewModels()
         val args: MyMapDetailFragmentArgs by navArgs()
@@ -55,6 +53,17 @@ class MyMapDetailFragment : Fragment() {
         map.overlays.add(polyline)
         map.invalidate()
 
+        setClickListeners(args, viewModel)
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.deleteRes.observe(viewLifecycleOwner) {
+            onDeleteResult(it)
+        }
+    }
+
+    private fun setClickListeners(
+        args: MyMapDetailFragmentArgs,
+        viewModel: MyMapViewModel
+    ) {
         binding.myMapDetailEditButton.setOnClickListener {
             val action = MyMapListFragmentDirections
                 .actionMyMapListFragmentToRouteEditFragment(args.route)
@@ -67,17 +76,24 @@ class MyMapDetailFragment : Fragment() {
             val bitmap = map.drawToBitmap()
             PrintHelper(requireContext()).printBitmap(args.route.routeName, bitmap)
         }
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.deleteRes.observe(viewLifecycleOwner) {
-            if (it)
-                findNavController().navigate(
-                    R.id.action_myMapDetailFragment_to_myMapListFragment
-                )
-            else
-                Toast.makeText(
-                    context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
-                ).show()
-        }
+    }
+
+    private fun onDeleteResult(it: Boolean) {
+        if (it)
+            findNavController().navigate(
+                R.id.action_myMapDetailFragment_to_myMapListFragment
+            )
+        else
+            Toast.makeText(
+                context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
+            ).show()
+    }
+
+    private fun initMap() {
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.myMapDetailMap
+        map.addCopyRightOverlay()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

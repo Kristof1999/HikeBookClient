@@ -49,35 +49,33 @@ class RouteCreateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.routeCreateMap
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        initMap()
 
         val viewModel: RouteCreateViewModel by viewModels()
-        binding.routeCreateDeleteSwitch.setOnCheckedChangeListener { _, isChecked ->
-            isDeleteOn = isChecked
-        }
+        setClickListeners(viewModel)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.routeCreateCreateButton.setOnClickListener {
-            try {
-                viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
-            } catch(e: IllegalArgumentException) {
-                Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
-            }
-        }
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
-            if (it)
-                findNavController().navigate(
-                    R.id.action_routeCreateFragment_to_myMapFragment
-                )
-            else
-                Toast.makeText(
-                    context, getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
-                ).show()
+            onRouteCreateResult(it)
             // névnek egyedinek kell lennie
         }
 
+        setMapClickListeners(viewModel)
+    }
+
+    private fun setClickListeners(viewModel: RouteCreateViewModel) {
+        binding.routeCreateDeleteSwitch.setOnCheckedChangeListener { _, isChecked ->
+            isDeleteOn = isChecked
+        }
+        binding.routeCreateCreateButton.setOnClickListener {
+            try {
+                viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
+            } catch (e: IllegalArgumentException) {
+                Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setMapClickListeners(viewModel: RouteCreateViewModel) {
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                 return onSingleTap(p, viewModel)
@@ -92,6 +90,25 @@ class RouteCreateFragment : Fragment() {
         map.invalidate()
     }
 
+    private fun onRouteCreateResult(it: Boolean) {
+        if (it)
+            findNavController().navigate(
+                R.id.action_routeCreateFragment_to_myMapFragment
+            )
+        else
+            Toast.makeText(
+                context, getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
+            ).show()
+    }
+
+    private fun initMap() {
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.routeCreateMap
+        map.setStartZoomAndCenter()
+        map.addCopyRightOverlay()
+    }
+
     private fun onSingleTap(
         p: GeoPoint?,
         viewModel: RouteCreateViewModel
@@ -104,12 +121,12 @@ class RouteCreateFragment : Fragment() {
         val markerIcon = requireActivity().getDrawable(R.drawable.marker_image)!!
         val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
-        setListeners(newMarker, viewModel, markerIcon)
+        setMarkerListeners(newMarker, viewModel, markerIcon)
         map.invalidate()
         return true
     }
 
-    private fun setListeners(
+    private fun setMarkerListeners(
         newMarker: Marker,
         viewModel: RouteCreateViewModel,
         markerIcon: Drawable

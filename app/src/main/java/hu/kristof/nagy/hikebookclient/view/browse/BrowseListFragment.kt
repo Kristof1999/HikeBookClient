@@ -35,6 +35,10 @@ class BrowseListFragment : Fragment() {
 
         val viewModel: BrowseViewModel by viewModels()
         viewModel.listRoutes()
+        setupAdapter(viewModel)
+    }
+
+    private fun setupAdapter(viewModel: BrowseViewModel) {
         val adapter = BrowseListAdapter(BrowseClickListener { userName, routeName ->
             val action = BrowseListFragmentDirections
                 .actionBrowseListFragmentToBrowseDetailFragment(userName, routeName)
