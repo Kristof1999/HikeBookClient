@@ -39,6 +39,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
 
+/**
+ * A Fragment to log in the user.
+ */
 @AndroidEntryPoint
 class StartFragment : Fragment() {
     private lateinit var binding: FragmentStartBinding

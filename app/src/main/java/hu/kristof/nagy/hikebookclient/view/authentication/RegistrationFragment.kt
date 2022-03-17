@@ -37,6 +37,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.RegistrationViewModel
 
+/**
+ * A Fragment to register the user.
+ */
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
     private lateinit var binding: FragmentRegistrationBinding

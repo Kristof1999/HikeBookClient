@@ -22,6 +22,9 @@ import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polyline
 
+/**
+ * A Fragment to display the details of a route while browsing.
+ */
 @AndroidEntryPoint
 class BrowseDetailFragment : Fragment() {
     private lateinit var binding: FragmentBrowseDetailBinding

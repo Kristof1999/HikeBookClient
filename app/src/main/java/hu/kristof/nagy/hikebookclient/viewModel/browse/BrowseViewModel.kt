@@ -16,6 +16,9 @@ class BrowseViewModel @Inject constructor(
     ) : ViewModel() {
 
     private var _routes = MutableLiveData<List<BrowseListItem>>()
+    /**
+     * List of all the routes.
+     */
     val routes: LiveData<List<BrowseListItem>>
         get() = _routes
 

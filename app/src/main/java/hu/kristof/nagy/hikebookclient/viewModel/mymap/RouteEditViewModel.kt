@@ -33,6 +33,9 @@ class RouteEditViewModel @Inject constructor(
     private lateinit var polylines: ArrayList<Polyline>
 
     private var _routeEditRes = MutableLiveData<Boolean>()
+    /**
+     * Result of route edit attempt.
+     */
     val routeEditRes: LiveData<Boolean>
         get() = _routeEditRes
 
@@ -42,6 +45,7 @@ class RouteEditViewModel @Inject constructor(
     }
 
     fun onRouteEdit(oldRouteName: String, routeName: String) {
+        // TODO: only send to server if route was edited
         val points = markers.map {
             Point.from(it)
         }

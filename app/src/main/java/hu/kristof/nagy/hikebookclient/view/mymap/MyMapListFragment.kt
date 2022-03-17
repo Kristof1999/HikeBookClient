@@ -32,6 +32,9 @@ import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
+/**
+ * A Fragment to list the routes of the logged in user.
+ */
 class MyMapListFragment : Fragment() {
     private lateinit var binding: FragmentMyMapListBinding
 

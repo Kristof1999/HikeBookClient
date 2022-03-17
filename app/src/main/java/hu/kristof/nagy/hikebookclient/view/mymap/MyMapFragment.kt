@@ -24,6 +24,9 @@ import org.osmdroid.config.Configuration.getInstance
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 
+/**
+ * A Fragment to display the routes of the logged in user on a map.
+ */
 @AndroidEntryPoint
 class MyMapFragment : Fragment() {
     private lateinit var map: MapView

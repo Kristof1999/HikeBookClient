@@ -12,6 +12,12 @@ class AuthRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : IAuthRepository {
+    /**
+     * Stores the registered user's name in a datastore
+     * if the registration was successful.
+     * @param user user's credentials to use for registration
+     * @return true if registration was successful
+     */
     override suspend fun register(user: UserAuth): Boolean {
         if (service.register(user)) {
             dataStore.edit { data ->
@@ -23,6 +29,12 @@ class AuthRepository @Inject constructor(
         }
     }
 
+    /**
+     * Stores the logged in user's name in a datastore
+     * if the login was successful.
+     * @param user user's credentials to use for login
+     * @return true if login was successful
+     */
     override suspend fun login(user: UserAuth): Boolean {
         if (service.login(user)) {
             dataStore.edit { data ->

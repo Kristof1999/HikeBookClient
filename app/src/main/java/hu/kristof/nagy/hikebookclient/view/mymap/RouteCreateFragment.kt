@@ -28,6 +28,9 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 
+/**
+ * A Fragment to create a route for the logged in user.
+ */
 @AndroidEntryPoint
 class RouteCreateFragment : Fragment() {
     private lateinit var map: MapView

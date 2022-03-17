@@ -6,6 +6,12 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
 object MarkerUtils {
+    /**
+     * Reconnects the dragged marker with its neighbors.
+     * @param marker the dragged marker
+     * @param markers list of markers in order they were added to the map
+     * @param polylines list of polylines in order they were added to the map
+     */
     fun onMarkerDragEnd(
         marker: Marker,
         markers: ArrayList<Marker>,
@@ -49,6 +55,12 @@ object MarkerUtils {
         polylines[idx].isVisible = true
     }
 
+    /**
+     * Disconnects the to be dragged marker from its neighbors.
+     * @param marker marker to be dragged
+     * @param markers list of markers in order they were added to the map
+     * @param polylines list of polylines in order they were added to the map
+     */
     fun onMarkerDragStart(
         marker: Marker,
         markers: ArrayList<Marker>,
@@ -68,6 +80,15 @@ object MarkerUtils {
         }
     }
 
+    /**
+     * Deletes the last marker, updates it's neighbors icon, and also removes
+     * the polyline connecting the last two markers.
+     * @param marker marker to be deleted
+     * @param markerIcon icon of marker to set for the deleted marker's icon
+     * @param markers list of markers in order they were added to the map
+     * @param polylines list of polylines in order they were added to the map
+     * @return true if marker was the last marker in markers
+     */
     fun onDelete(
         marker: Marker,
         markerIcon: Drawable,

@@ -28,6 +28,9 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
+/**
+ * A Fragment to edit the chosen route.
+ */
 @AndroidEntryPoint
 class RouteEditFragment : Fragment() {
     private lateinit var map: MapView

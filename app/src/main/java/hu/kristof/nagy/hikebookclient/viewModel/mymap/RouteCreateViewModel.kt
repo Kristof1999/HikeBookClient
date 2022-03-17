@@ -52,6 +52,9 @@ class RouteCreateViewModel @Inject constructor(
     private val polylines = ArrayList<Polyline>()
 
     private var _routeCreateRes = MutableLiveData<Boolean>()
+    /**
+     * Result of route creation attempt.
+     */
     val routeCreateRes: LiveData<Boolean>
         get() = _routeCreateRes
 

@@ -34,6 +34,21 @@ object MapUtils {
         }
     }
 
+    /**
+     * Adds markers and polylines to the provided lists. The markers will be draggable.
+     * Polylines are used to connect the new marker with the previous one.
+     * @param newMarker the new marker to customize and add to map
+     * @param p the point where the new marker should be added
+     * @param markerIcon icon of new markers
+     * @param setMarkerIcon icon of set (not new, previously added) markers
+     * @param overlays overlays of the map for which to add the new markers and polylines
+     * @param markers list where the new markers should be added,
+     *        and the markers which have been previously added.
+     *        The list should preserve the order in which markers were added.
+     * @param polylines list where the new polylines should be added,
+     *        and the polylines which have been previously added.
+     *        The list should preserve the order in which polylines were added.
+     */
     fun onSingleTap(
         newMarker: Marker,
         p: GeoPoint?,

@@ -13,6 +13,9 @@ import com.example.hikebookclient.databinding.FragmentBrowseListBinding
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseViewModel
 
+/**
+ * A Fragment to display a list of routes for browsing.
+ */
 @AndroidEntryPoint
 class BrowseListFragment : Fragment() {
     private lateinit var binding: FragmentBrowseListBinding

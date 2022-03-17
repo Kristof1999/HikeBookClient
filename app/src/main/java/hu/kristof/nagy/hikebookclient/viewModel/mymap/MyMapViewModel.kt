@@ -22,12 +22,21 @@ class MyMapViewModel @Inject constructor(
     ) : ViewModel() {
 
     private var _routes = MutableLiveData<List<Route>>()
+    /**
+     * List of the logged in user's routes.
+     */
     val routes: LiveData<List<Route>>
         get() = _routes
 
+    /**
+     * Variable indicating that the deletion has finished.
+     */
     var deleteFinished = true
 
     private var _deleteRes = MutableLiveData<Boolean>()
+    /**
+     * Result of deletion attempt.
+     */
     val deleteRes: LiveData<Boolean>
         get() = _deleteRes
 

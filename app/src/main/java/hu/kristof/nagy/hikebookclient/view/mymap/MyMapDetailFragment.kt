@@ -22,6 +22,9 @@ import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
 
+/**
+ * A Fragment to display the details of the chosen route.
+ */
 class MyMapDetailFragment : Fragment() {
     private lateinit var binding: FragmentMyMapDetailBinding
     private lateinit var map: MapView
