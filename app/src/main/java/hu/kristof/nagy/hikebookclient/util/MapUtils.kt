@@ -55,6 +55,7 @@ object MapUtils {
     fun onSingleTap(
         newMarker: Marker,
         newMarkerType: MarkerType,
+        newMarkerTitle: String,
         p: GeoPoint?,
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
@@ -66,8 +67,9 @@ object MapUtils {
         newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
         newMarker.isDraggable = true
         newMarker.position = p
+        newMarker.title = newMarkerTitle
         newMarker.icon = markerIcon
-        markers.add(MyMarker(newMarker, newMarkerType))
+        markers.add(MyMarker(newMarker, newMarkerType, newMarkerTitle))
         overlays.add(newMarker)
 
         if (markers.size > 1) {
@@ -76,7 +78,7 @@ object MapUtils {
             val prevMarkerType = markers[markers.size - 2].type
             if (prevMarkerType == MarkerType.NEW) {
                 prevMarker.icon = setMarkerIcon
-                markers[markers.size - 2] = MyMarker(prevMarker, MarkerType.SET)
+                markers[markers.size - 2] = MyMarker(prevMarker, MarkerType.SET, "")
             }
 
             // connect the new point with the previous one

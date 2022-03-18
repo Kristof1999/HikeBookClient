@@ -42,6 +42,10 @@ class RouteEditViewModel @Inject constructor(
         get() = _routeEditRes
 
     var markerType: MarkerType = MarkerType.NEW
+    /**
+     * Single use title. After usage for one marker, it will be reset to empty string.
+     */
+    var markerTitle: String = ""
 
     fun setup(markers: ArrayList<MyMarker>, polylines: ArrayList<Polyline>) {
         this.markers = markers
@@ -76,9 +80,12 @@ class RouteEditViewModel @Inject constructor(
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
-    ) = MapUtils.onSingleTap(
-           newMarker, markerType, p, markerIcon, setMarkerIcon, overlays, markers, polylines
-    )
+    ) {
+        MapUtils.onSingleTap(
+            newMarker, markerType, markerTitle, p, markerIcon, setMarkerIcon, overlays, markers, polylines
+        )
+        markerTitle = ""
+    }
 
     fun onMarkerDragEnd(marker: Marker) =
         MarkerUtils.onMarkerDragEnd(marker, markers.map {it.marker} as ArrayList<Marker>, polylines)

@@ -5,7 +5,8 @@ import kotlinx.parcelize.Parcelize
 import org.osmdroid.util.GeoPoint
 
 @Parcelize
-data class Point(val latitude: Double, val longitude: Double, val type: MarkerType) : Parcelable {
+data class Point(val latitude: Double, val longitude: Double, val type: MarkerType, val title: String)
+    : Parcelable {
 
     fun toGeoPoint(): GeoPoint {
         return GeoPoint(latitude, longitude)
@@ -14,7 +15,7 @@ data class Point(val latitude: Double, val longitude: Double, val type: MarkerTy
     companion object {
         fun from(marker: MyMarker): Point {
             val p = marker.marker.position
-            return Point(p.latitude, p.longitude, marker.type)
+            return Point(p.latitude, p.longitude, marker.type, marker.title)
         }
     }
 }

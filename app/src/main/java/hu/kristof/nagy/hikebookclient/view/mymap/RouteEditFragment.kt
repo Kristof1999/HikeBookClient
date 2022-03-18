@@ -29,6 +29,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 /**
  * A Fragment to edit the chosen route.
@@ -142,22 +143,26 @@ class RouteEditFragment : Fragment() {
 
         val firstMarker = Marker(map)
         val firstMarkerType = points.first().type
+        val firstMarkerTitle = points.first().title
         firstMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
         firstMarker.isDraggable = true
         firstMarker.position = GeoPoint(points.first().latitude, points.first().longitude)
+        firstMarker.title = firstMarkerTitle
         firstMarker.icon = MarkerUtils.getMarkerIcon(firstMarkerType, requireActivity())
         map.overlays.add(firstMarker)
-        markers.add(MyMarker(firstMarker, firstMarkerType))
+        markers.add(MyMarker(firstMarker, firstMarkerType, firstMarkerTitle))
         setListeners(firstMarker, viewModel, markerIcon)
         for (point in points.subList(1, points.size-1)) {
             val marker = Marker(map)
             val markerType = point.type
+            val markerTitle = point.title
             marker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
             marker.isDraggable = true
             marker.position = GeoPoint(point.latitude, point.longitude)
+            marker.title = markerTitle
             marker.icon = MarkerUtils.getMarkerIcon(markerType, requireActivity())
             map.overlays.add(marker)
-            markers.add(MyMarker(marker, markerType))
+            markers.add(MyMarker(marker, markerType, markerTitle))
             setListeners(marker, viewModel, markerIcon)
 
             val polylinePoints = ArrayList<GeoPoint>()
@@ -170,12 +175,14 @@ class RouteEditFragment : Fragment() {
         }
         val lastMarker = Marker(map)
         val lastMarkerType = points.last().type
+        val lastMarkerTitle = points.last().title
         lastMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
         lastMarker.isDraggable = true
         lastMarker.position = GeoPoint(points.last().latitude, points.last().longitude)
+        lastMarker.title = lastMarkerTitle
         lastMarker.icon = MarkerUtils.getMarkerIcon(lastMarkerType, requireActivity())
         map.overlays.add(lastMarker)
-        markers.add(MyMarker(lastMarker, lastMarkerType))
+        markers.add(MyMarker(lastMarker, lastMarkerType, lastMarkerTitle))
         setListeners(lastMarker, viewModel, markerIcon)
         val polylinePoints = ArrayList<GeoPoint>()
         polylinePoints.add(markers[markers.size - 2].marker.position)
@@ -192,6 +199,8 @@ class RouteEditFragment : Fragment() {
         p: GeoPoint?,
         viewModel: RouteEditViewModel
     ): Boolean {
+        InfoWindow.closeAllInfoWindowsOn(map)
+
         //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
         if (isDeleteOn)
             return true
@@ -213,6 +222,12 @@ class RouteEditFragment : Fragment() {
         newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
             if (isDeleteOn) {
                 onDelete(marker, mapView, viewModel, markerIcon)
+            } else {
+                if (marker.isInfoWindowShown) {
+                    marker.closeInfoWindow()
+                } else {
+                    marker.showInfoWindow()
+                }
             }
             return@OnMarkerClickListener true
         })

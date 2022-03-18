@@ -61,6 +61,10 @@ class RouteCreateViewModel @Inject constructor(
         get() = _routeCreateRes
 
     var markerType: MarkerType = MarkerType.NEW
+    /**
+     * Single use title. After usage for one marker, it will be reset to empty string.
+     */
+    var markerTitle: String = ""
 
     /**
      * Creates the route for the logged in user.
@@ -87,9 +91,12 @@ class RouteCreateViewModel @Inject constructor(
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
-    ) = MapUtils.onSingleTap(
-        newMarker, markerType, p, markerIcon, setMarkerIcon, overlays, markers, polylines
-    )
+    ) {
+        MapUtils.onSingleTap(
+            newMarker, markerType, markerTitle, p, markerIcon, setMarkerIcon, overlays, markers, polylines
+        )
+        markerTitle = ""
+    }
 
     fun onMarkerDragEnd(marker: Marker) =
         MarkerUtils.onMarkerDragEnd(marker, markers.map {it.marker} as ArrayList<Marker>, polylines)

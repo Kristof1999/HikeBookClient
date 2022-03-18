@@ -31,6 +31,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 /**
  * A Fragment to create a route for the logged in user.
@@ -96,7 +97,7 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 val dialogFragment = TextDialogFragment()
                 dialogFragment.show(parentFragmentManager, "text")
                 dialogFragment.text.observe(viewLifecycleOwner) {
-                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    viewModel.markerTitle = it
                 }
                 viewModel.markerType = MarkerType.TEXT
             }
@@ -158,6 +159,8 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         p: GeoPoint?,
         viewModel: RouteCreateViewModel
     ): Boolean {
+        InfoWindow.closeAllInfoWindowsOn(map)
+
         //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
         if (isDeleteOn)
             return true
@@ -177,8 +180,15 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         markerIcon: Drawable
     ) {
         newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
+            // TODO: move logic to viewModel
             if (isDeleteOn) {
                 onDelete(marker, mapView, viewModel, markerIcon)
+            } else {
+                if (marker.isInfoWindowShown) {
+                    marker.closeInfoWindow()
+                } else {
+                    marker.showInfoWindow()
+                }
             }
             return@OnMarkerClickListener true
         })

@@ -104,7 +104,9 @@ object MarkerUtils {
             if (markers.isNotEmpty()) {
                 if (markers.last().type == MarkerType.SET) {
                     markers.last().marker.icon = markerIcon
-                    markers[markers.size - 1] = MyMarker(markers.last().marker, MarkerType.NEW)
+                    markers[markers.size - 1] = MyMarker(
+                        markers.last().marker, MarkerType.NEW, markers.last().title
+                    )
                 }
                 polylines.last().isVisible = false
                 polylines.removeLast()
