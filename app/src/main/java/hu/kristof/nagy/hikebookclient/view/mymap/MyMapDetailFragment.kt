@@ -65,8 +65,8 @@ class MyMapDetailFragment : Fragment() {
         viewModel: MyMapViewModel
     ) {
         binding.myMapDetailEditButton.setOnClickListener {
-            val action = MyMapListFragmentDirections
-                .actionMyMapListFragmentToRouteEditFragment(args.route)
+            val action = MyMapDetailFragmentDirections
+                .actionMyMapDetailFragmentToRouteEditFragment(args.route)
             findNavController().navigate(action)
         }
         binding.myMapDetailDeleteButton.setOnClickListener {

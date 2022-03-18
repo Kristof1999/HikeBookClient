@@ -9,6 +9,8 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -17,7 +19,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.util.MapUtils
+import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
@@ -32,10 +36,11 @@ import org.osmdroid.views.overlay.Marker
  * A Fragment to create a route for the logged in user.
  */
 @AndroidEntryPoint
-class RouteCreateFragment : Fragment() {
+class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteCreateBinding
-    private var isDeleteOn = false // TODO: handle interruptions: device rotation, ...
+    private var isDeleteOn = false
+    private val viewModel: RouteCreateViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,7 +56,9 @@ class RouteCreateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initMap()
 
-        val viewModel: RouteCreateViewModel by viewModels()
+        binding.routeCreateMarkerSpinner.onItemSelectedListener = this
+        setSpinnerAdapter()
+
         setClickListeners(viewModel)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
@@ -60,6 +67,39 @@ class RouteCreateFragment : Fragment() {
         }
 
         setMapClickListeners(viewModel)
+    }
+
+    private fun setSpinnerAdapter() {
+        ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.markers,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.routeCreateMarkerSpinner.adapter = adapter
+        }
+    }
+
+    // TODO: try to use sg less error-prone/more flexible instead of ordinal and pos
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        when (pos) {
+            MarkerType.NEW.ordinal -> {
+                viewModel.markerType = MarkerType.NEW
+            }
+            MarkerType.CASTLE.ordinal -> {
+                viewModel.markerType = MarkerType.CASTLE
+            }
+            MarkerType.LOOKOUT.ordinal -> {
+                viewModel.markerType = MarkerType.LOOKOUT
+            }
+            MarkerType.TEXT.ordinal -> {
+                viewModel.markerType = MarkerType.TEXT
+            }
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        // keep type as is
     }
 
     private fun setClickListeners(viewModel: RouteCreateViewModel) {
@@ -118,7 +158,7 @@ class RouteCreateFragment : Fragment() {
             return true
 
         val newMarker = Marker(map)
-        val markerIcon = requireActivity().getDrawable(R.drawable.marker_image)!!
+        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, requireActivity())
         val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
         setMarkerListeners(newMarker, viewModel, markerIcon)

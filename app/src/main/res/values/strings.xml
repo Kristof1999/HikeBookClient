@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">HikeBookClient</string>
 
+    <!-- Authentication -->
     <string name="user_name_hint">Felhasználói név</string>
     <string name="password_hint">Jelszó</string>
     <string name="login_btn_text">Bejelentkezés</string>
@@ -8,6 +9,7 @@
     <string name="start_screen_title">Kezdőlap</string>
     <string name="registration_screen_title">Regisztráció</string>
 
+    <!-- Menu items -->
     <string name="my_map_menu">Saját Térkép</string>
     <string name="group_hike_menu">Csoportos Túrák</string>
     <string name="groups_menu">Csoportok</string>
@@ -15,6 +17,7 @@
     <string name="help_menu">Súgó</string>
     <string name="logout_menu">Kilépés</string>
 
+    <!-- MyMap -->
     <string name="my_map_title_text">Saját térkép</string>
     <string name="delete_text">Törlés</string>
     <string name="edit_text">Szerkesztés</string>
@@ -33,12 +36,21 @@
     <string name="route_create_title">Útvonal Létrehozás</string>
     <string name="route_edit_title">Útvonal Szerkesztés</string>
     <string name="delete_image_description">Trash can</string>
+    <string-array name="markers">
+        <item>Új</item>
+        <item>Várrom</item>
+        <item>Kilátóhely</item>
+        <item>Szöveg</item>
+    </string-array>
 
+    <!-- Browse -->
     <string name="route_add_image_description">Road with a plus</string>
 
+    <!-- In code usage -->
     <string name="generic_error_msg">Valamilyen hiba lépett fel, további információkért tekintse meg a súgót.</string>
     <string name="not_last_point_delete_error_msg">Csak a legutóbb felvett pontot lehet törölni.</string>
     <string name="browse_hike_detail_description">Felhasználói név:%1$s\nÚtvonal név: %2$s</string>
     <string name="name_exists_error_msg">Ez a név már foglalt.</string>
     <string name="login_fail_msg">Vagy a név, vagy a jelszó hibás.</string>
+    <string name="marker_spinner_description">marker picker</string>
 </resources>

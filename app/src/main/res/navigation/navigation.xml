@@ -89,5 +89,8 @@
         <argument
             android:name="route"
             app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
+        <action
+            android:id="@+id/action_myMapDetailFragment_to_routeEditFragment"
+            app:destination="@id/routeEditFragment" />
     </fragment>
 </navigation>

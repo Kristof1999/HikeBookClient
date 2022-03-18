@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
@@ -29,7 +31,7 @@ class RouteEditViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val service: Service
     ) : ViewModel() {
-    private lateinit var markers: ArrayList<Marker>
+    private lateinit var markers: ArrayList<MyMarker>
     private lateinit var polylines: ArrayList<Polyline>
 
     private var _routeEditRes = MutableLiveData<Boolean>()
@@ -39,11 +41,19 @@ class RouteEditViewModel @Inject constructor(
     val routeEditRes: LiveData<Boolean>
         get() = _routeEditRes
 
-    fun setup(markers: ArrayList<Marker>, polylines: ArrayList<Polyline>) {
+    var markerType: MarkerType = MarkerType.NEW
+
+    fun setup(markers: ArrayList<MyMarker>, polylines: ArrayList<Polyline>) {
         this.markers = markers
         this.polylines = polylines
     }
 
+    /**
+     * Saves the edited route.
+     * @param oldRouteName name of the route before editing
+     * @param routeName name of the route after editing
+     * @throws IllegalArgumentException if the route has an illegal name, or it has less than 2 points
+     */
     fun onRouteEdit(oldRouteName: String, routeName: String) {
         // TODO: only send to server if route was edited
         val points = markers.map {
@@ -67,14 +77,14 @@ class RouteEditViewModel @Inject constructor(
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
     ) = MapUtils.onSingleTap(
-           newMarker, p, markerIcon, setMarkerIcon, overlays, markers, polylines
+           newMarker, markerType, p, markerIcon, setMarkerIcon, overlays, markers, polylines
     )
 
     fun onMarkerDragEnd(marker: Marker) =
-        MarkerUtils.onMarkerDragEnd(marker, markers, polylines)
+        MarkerUtils.onMarkerDragEnd(marker, markers.map {it.marker} as ArrayList<Marker>, polylines)
 
     fun onMarkerDragStart(marker: Marker) =
-        MarkerUtils.onMarkerDragStart(marker, markers, polylines)
+        MarkerUtils.onMarkerDragStart(marker, markers.map {it.marker} as ArrayList<Marker>, polylines)
 
     fun onDelete(
         marker: Marker,

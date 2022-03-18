@@ -3,6 +3,8 @@ package hu.kristof.nagy.hikebookclient.util
 import android.app.Activity
 import android.graphics.drawable.Drawable
 import androidx.core.app.ActivityCompat
+import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.model.MyMarker
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.CopyrightOverlay
@@ -38,6 +40,7 @@ object MapUtils {
      * Adds markers and polylines to the provided lists. The markers will be draggable.
      * Polylines are used to connect the new marker with the previous one.
      * @param newMarker the new marker to customize and add to map
+     * @param newMarkerType the type of the new marker
      * @param p the point where the new marker should be added
      * @param markerIcon icon of new markers
      * @param setMarkerIcon icon of set (not new, previously added) markers
@@ -51,11 +54,12 @@ object MapUtils {
      */
     fun onSingleTap(
         newMarker: Marker,
+        newMarkerType: MarkerType,
         p: GeoPoint?,
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>,
-        markers: ArrayList<Marker>,
+        markers: ArrayList<MyMarker>,
         polylines: ArrayList<Polyline>
     ) {
         // add new marker
@@ -63,13 +67,17 @@ object MapUtils {
         newMarker.isDraggable = true
         newMarker.position = p
         newMarker.icon = markerIcon
-        markers.add(newMarker)
+        markers.add(MyMarker(newMarker, newMarkerType))
         overlays.add(newMarker)
 
         if (markers.size > 1) {
-            // change previous marker's icon
-            val prevMarker = markers[markers.size - 2]
-            prevMarker.icon = setMarkerIcon
+            // change previous marker's icon and type if it was new
+            val prevMarker = markers[markers.size - 2].marker
+            val prevMarkerType = markers[markers.size - 2].type
+            if (prevMarkerType == MarkerType.NEW) {
+                prevMarker.icon = setMarkerIcon
+                markers[markers.size - 2] = MyMarker(prevMarker, MarkerType.SET)
+            }
 
             // connect the new point with the previous one
             val points = ArrayList<GeoPoint>()

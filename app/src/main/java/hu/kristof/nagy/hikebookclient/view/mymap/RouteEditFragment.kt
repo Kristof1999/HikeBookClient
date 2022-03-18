@@ -15,9 +15,11 @@ import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteEditBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
+import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
@@ -133,48 +135,50 @@ class RouteEditFragment : Fragment() {
         viewModel: RouteEditViewModel,
         points: List<Point>
     ) {
-        val markerIcon = requireActivity().getDrawable(R.drawable.marker_image)!!
-        val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
-        val markers = ArrayList<Marker>()
+        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, requireActivity())
+        val markers = ArrayList<MyMarker>()
         val polylines = ArrayList<Polyline>()
 
         val firstMarker = Marker(map)
+        val firstMarkerType = points.first().type
         firstMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
         firstMarker.isDraggable = true
         firstMarker.position = GeoPoint(points.first().latitude, points.first().longitude)
-        firstMarker.icon = setMarkerIcon
+        firstMarker.icon = MarkerUtils.getMarkerIcon(firstMarkerType, requireActivity())
         map.overlays.add(firstMarker)
-        markers.add(firstMarker)
+        markers.add(MyMarker(firstMarker, firstMarkerType))
         setListeners(firstMarker, viewModel, markerIcon)
         for (point in points.subList(1, points.size-1)) {
             val marker = Marker(map)
+            val markerType = point.type
             marker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
             marker.isDraggable = true
             marker.position = GeoPoint(point.latitude, point.longitude)
-            marker.icon = setMarkerIcon
+            marker.icon = MarkerUtils.getMarkerIcon(markerType, requireActivity())
             map.overlays.add(marker)
-            markers.add(marker)
+            markers.add(MyMarker(marker, markerType))
             setListeners(marker, viewModel, markerIcon)
 
             val polylinePoints = ArrayList<GeoPoint>()
-            polylinePoints.add(markers[markers.size - 2].position)
-            polylinePoints.add(markers[markers.size - 1].position)
+            polylinePoints.add(markers[markers.size - 2].marker.position)
+            polylinePoints.add(markers[markers.size - 1].marker.position)
             val polyline = Polyline()
             polyline.setPoints(polylinePoints)
             map.overlays.add(polyline)
             polylines.add(polyline)
         }
         val lastMarker = Marker(map)
+        val lastMarkerType = points.last().type
         lastMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
         lastMarker.isDraggable = true
         lastMarker.position = GeoPoint(points.last().latitude, points.last().longitude)
-        lastMarker.icon = markerIcon
+        lastMarker.icon = MarkerUtils.getMarkerIcon(lastMarkerType, requireActivity())
         map.overlays.add(lastMarker)
-        markers.add(lastMarker)
+        markers.add(MyMarker(lastMarker, lastMarkerType))
         setListeners(lastMarker, viewModel, markerIcon)
         val polylinePoints = ArrayList<GeoPoint>()
-        polylinePoints.add(markers[markers.size - 2].position)
-        polylinePoints.add(markers[markers.size - 1].position)
+        polylinePoints.add(markers[markers.size - 2].marker.position)
+        polylinePoints.add(markers[markers.size - 1].marker.position)
         val polyline = Polyline()
         polyline.setPoints(polylinePoints)
         map.overlays.add(polyline)
@@ -192,7 +196,7 @@ class RouteEditFragment : Fragment() {
             return true
 
         val newMarker = Marker(map)
-        val markerIcon = requireActivity().getDrawable(R.drawable.marker_image)!!
+        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, requireActivity())
         val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
         setListeners(newMarker, viewModel, markerIcon)

@@ -1,6 +1,10 @@
 package hu.kristof.nagy.hikebookclient.util
 
+import android.app.Activity
 import android.graphics.drawable.Drawable
+import com.example.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.model.MyMarker
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
@@ -81,8 +85,8 @@ object MarkerUtils {
     }
 
     /**
-     * Deletes the last marker, updates it's neighbors icon, and also removes
-     * the polyline connecting the last two markers.
+     * Deletes the last marker, updates it's neighbors icon and type if needed,
+     * and also removes the polyline connecting the last two markers.
      * @param marker marker to be deleted
      * @param markerIcon icon of marker to set for the deleted marker's icon
      * @param markers list of markers in order they were added to the map
@@ -92,13 +96,16 @@ object MarkerUtils {
     fun onDelete(
         marker: Marker,
         markerIcon: Drawable,
-        markers: ArrayList<Marker>,
+        markers: ArrayList<MyMarker>,
         polylines: ArrayList<Polyline>
     ): Boolean {
-        if (markers.last() == marker) {
+        if (markers.last().marker == marker) {
             markers.removeLast()
             if (markers.isNotEmpty()) {
-                markers.last().icon = markerIcon
+                if (markers.last().type == MarkerType.SET) {
+                    markers.last().marker.icon = markerIcon
+                    markers[markers.size - 1] = MyMarker(markers.last().marker, MarkerType.NEW)
+                }
                 polylines.last().isVisible = false
                 polylines.removeLast()
             }
@@ -106,5 +113,15 @@ object MarkerUtils {
         } else {
             return false
         }
+    }
+
+    // TODO: use ResourceCompat or sg. else that would allow
+    // this method to be called in a viewModel instead of a Fragment
+    fun getMarkerIcon(type: MarkerType, activity: Activity): Drawable = when(type) {
+        MarkerType.NEW -> activity.getDrawable(R.drawable.marker_image)!!
+        MarkerType.CASTLE -> activity.getDrawable(R.drawable.castle_image)!!
+        MarkerType.LOOKOUT -> activity.getDrawable(R.drawable.landscape_image)!!
+        MarkerType.TEXT -> activity.getDrawable(R.drawable.text_marker)!!
+        MarkerType.SET -> activity.getDrawable(R.drawable.set_marker_image)!!
     }
 }
