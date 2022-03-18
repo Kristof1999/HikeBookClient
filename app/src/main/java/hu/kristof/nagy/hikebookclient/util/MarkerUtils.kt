@@ -126,4 +126,22 @@ object MarkerUtils {
         MarkerType.TEXT -> activity.getDrawable(R.drawable.text_marker)!!
         MarkerType.SET -> activity.getDrawable(R.drawable.set_marker_image)!!
     }
+
+    fun customizeMarker(myMarker: MyMarker, icon: Drawable, p: GeoPoint) {
+        val marker = myMarker.marker
+        marker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+        marker.isDraggable = true
+        marker.position = p
+        marker.title = myMarker.title
+        marker.icon = icon
+    }
+
+    fun makePolylineFromLastTwo(markers: ArrayList<MyMarker>): Polyline {
+        val polylinePoints = ArrayList<GeoPoint>()
+        polylinePoints.add(markers[markers.size - 2].marker.position)
+        polylinePoints.add(markers[markers.size - 1].marker.position)
+        val polyline = Polyline()
+        polyline.setPoints(polylinePoints)
+        return polyline
+    }
 }

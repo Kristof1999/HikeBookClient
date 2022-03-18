@@ -143,52 +143,41 @@ class RouteEditFragment : Fragment() {
 
         val firstMarker = Marker(map)
         val firstMarkerType = points.first().type
-        val firstMarkerTitle = points.first().title
-        firstMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        firstMarker.isDraggable = true
-        firstMarker.position = GeoPoint(points.first().latitude, points.first().longitude)
-        firstMarker.title = firstMarkerTitle
-        firstMarker.icon = MarkerUtils.getMarkerIcon(firstMarkerType, requireActivity())
+        val myFirstMarker = MyMarker(firstMarker, firstMarkerType, points.first().title)
+        MarkerUtils.customizeMarker(myFirstMarker,
+            MarkerUtils.getMarkerIcon(firstMarkerType, requireActivity()),
+            GeoPoint(points.first().latitude, points.first().longitude)
+        )
         map.overlays.add(firstMarker)
-        markers.add(MyMarker(firstMarker, firstMarkerType, firstMarkerTitle))
+        markers.add(myFirstMarker)
         setListeners(firstMarker, viewModel, markerIcon)
         for (point in points.subList(1, points.size-1)) {
             val marker = Marker(map)
             val markerType = point.type
-            val markerTitle = point.title
-            marker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-            marker.isDraggable = true
-            marker.position = GeoPoint(point.latitude, point.longitude)
-            marker.title = markerTitle
-            marker.icon = MarkerUtils.getMarkerIcon(markerType, requireActivity())
+            val myMarker = MyMarker(marker, markerType, point.title)
+            MarkerUtils.customizeMarker(myMarker,
+                MarkerUtils.getMarkerIcon(markerType, requireActivity()),
+                GeoPoint(point.latitude, point.longitude)
+            )
             map.overlays.add(marker)
-            markers.add(MyMarker(marker, markerType, markerTitle))
+            markers.add(myMarker)
             setListeners(marker, viewModel, markerIcon)
 
-            val polylinePoints = ArrayList<GeoPoint>()
-            polylinePoints.add(markers[markers.size - 2].marker.position)
-            polylinePoints.add(markers[markers.size - 1].marker.position)
-            val polyline = Polyline()
-            polyline.setPoints(polylinePoints)
+            val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
             map.overlays.add(polyline)
             polylines.add(polyline)
         }
         val lastMarker = Marker(map)
         val lastMarkerType = points.last().type
-        val lastMarkerTitle = points.last().title
-        lastMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        lastMarker.isDraggable = true
-        lastMarker.position = GeoPoint(points.last().latitude, points.last().longitude)
-        lastMarker.title = lastMarkerTitle
-        lastMarker.icon = MarkerUtils.getMarkerIcon(lastMarkerType, requireActivity())
+        val myLastMarker = MyMarker(lastMarker, lastMarkerType, points.last().title)
+        MarkerUtils.customizeMarker(myLastMarker,
+            MarkerUtils.getMarkerIcon(lastMarkerType, requireActivity()),
+            GeoPoint(points.last().latitude, points.last().longitude)
+        )
         map.overlays.add(lastMarker)
-        markers.add(MyMarker(lastMarker, lastMarkerType, lastMarkerTitle))
+        markers.add(myLastMarker)
         setListeners(lastMarker, viewModel, markerIcon)
-        val polylinePoints = ArrayList<GeoPoint>()
-        polylinePoints.add(markers[markers.size - 2].marker.position)
-        polylinePoints.add(markers[markers.size - 1].marker.position)
-        val polyline = Polyline()
-        polyline.setPoints(polylinePoints)
+        val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
         map.overlays.add(polyline)
         polylines.add(polyline)
         map.invalidate()

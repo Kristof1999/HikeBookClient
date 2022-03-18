@@ -82,7 +82,7 @@ class RouteEditViewModel @Inject constructor(
         overlays: MutableList<Overlay>
     ) {
         MapUtils.onSingleTap(
-            newMarker, markerType, markerTitle, p, markerIcon, setMarkerIcon, overlays, markers, polylines
+            newMarker, markerType, markerTitle, p!!, markerIcon, setMarkerIcon, overlays, markers, polylines
         )
         markerTitle = ""
     }

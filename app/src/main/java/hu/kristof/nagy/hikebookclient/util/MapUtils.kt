@@ -56,7 +56,7 @@ object MapUtils {
         newMarker: Marker,
         newMarkerType: MarkerType,
         newMarkerTitle: String,
-        p: GeoPoint?,
+        p: GeoPoint,
         markerIcon: Drawable,
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>,
@@ -64,12 +64,9 @@ object MapUtils {
         polylines: ArrayList<Polyline>
     ) {
         // add new marker
-        newMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        newMarker.isDraggable = true
-        newMarker.position = p
-        newMarker.title = newMarkerTitle
-        newMarker.icon = markerIcon
-        markers.add(MyMarker(newMarker, newMarkerType, newMarkerTitle))
+        val myMarker = MyMarker(newMarker, newMarkerType, newMarkerTitle)
+        MarkerUtils.customizeMarker(myMarker, markerIcon, p)
+        markers.add(myMarker)
         overlays.add(newMarker)
 
         if (markers.size > 1) {
