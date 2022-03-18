@@ -93,6 +93,11 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 viewModel.markerType = MarkerType.LOOKOUT
             }
             MarkerType.TEXT.ordinal -> {
+                val dialogFragment = TextDialogFragment()
+                dialogFragment.show(parentFragmentManager, "text")
+                dialogFragment.text.observe(viewLifecycleOwner) {
+                    Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                }
                 viewModel.markerType = MarkerType.TEXT
             }
         }

@@ -54,6 +54,7 @@ class RouteEditFragment : Fragment() {
 
         val args: RouteEditFragmentArgs by navArgs()
         initMap(args)
+        // TODO: place spinner
 
         val routeName = args.route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
