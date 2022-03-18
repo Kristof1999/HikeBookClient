@@ -85,7 +85,9 @@
         android:label="MyMapDetailFragment" >
         <action
             android:id="@+id/action_myMapDetailFragment_to_myMapListFragment"
-            app:destination="@id/myMapListFragment" />
+            app:destination="@id/myMapListFragment"
+            app:popUpTo="@id/myMapDetailFragment"
+            app:popUpToInclusive="true" />
         <argument
             android:name="route"
             app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
