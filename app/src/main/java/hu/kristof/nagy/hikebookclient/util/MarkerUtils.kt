@@ -119,6 +119,7 @@ object MarkerUtils {
 
     // TODO: use ResourceCompat or sg. else that would allow
     // this method to be called in a viewModel instead of a Fragment
+    // ResourcesCompat.getDrawable(...) jó lehet
     fun getMarkerIcon(type: MarkerType, activity: Activity): Drawable = when(type) {
         MarkerType.NEW -> activity.getDrawable(R.drawable.marker_image)!!
         MarkerType.CASTLE -> activity.getDrawable(R.drawable.castle_image)!!
@@ -137,6 +138,7 @@ object MarkerUtils {
     }
 
     fun makePolylineFromLastTwo(markers: ArrayList<MyMarker>): Polyline {
+        // TODO: change to listOf(...) in other places and here too
         val polylinePoints = ArrayList<GeoPoint>()
         polylinePoints.add(markers[markers.size - 2].marker.position)
         polylinePoints.add(markers[markers.size - 1].marker.position)
