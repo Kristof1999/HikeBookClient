@@ -25,7 +25,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.RouteRepository
+import hu.kristof.nagy.hikebookclient.data.IRouteRepository
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
@@ -43,7 +43,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RouteCreateViewModel @Inject constructor(
-    private val repository: RouteRepository
+    private val repository: IRouteRepository
     ) : ViewModel() {
     private val markers = ArrayList<MyMarker>()
     private val polylines = ArrayList<Polyline>()

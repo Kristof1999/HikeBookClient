@@ -12,8 +12,8 @@ import javax.inject.Inject
 class RouteRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
-    ) {
-    suspend fun loadRoutesForLoggedInUser(): Flow<List<Route>> {
+    ) : IRouteRepository {
+    override suspend fun loadRoutesForLoggedInUser(): Flow<List<Route>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -21,7 +21,7 @@ class RouteRepository @Inject constructor(
         }
     }
 
-    suspend fun deleteRoute(routeName: String): Flow<Boolean> {
+    override suspend fun deleteRoute(routeName: String): Flow<Boolean> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -29,7 +29,7 @@ class RouteRepository @Inject constructor(
         }
     }
 
-    suspend fun createRoute(route: Route): Flow<Boolean> {
+    override suspend fun createRoute(route: Route): Flow<Boolean> {
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -37,7 +37,7 @@ class RouteRepository @Inject constructor(
         }
     }
 
-    suspend fun editRoute(oldRouteName: String, route: Route): Flow<Boolean> {
+    override suspend fun editRoute(oldRouteName: String, route: Route): Flow<Boolean> {
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->

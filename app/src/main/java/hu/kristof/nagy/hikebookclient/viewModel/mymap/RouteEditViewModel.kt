@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.RouteRepository
+import hu.kristof.nagy.hikebookclient.data.IRouteRepository
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RouteEditViewModel @Inject constructor(
-    private val repository: RouteRepository
+    private val repository: IRouteRepository
     ) : ViewModel() {
     private lateinit var markers: ArrayList<MyMarker>
     private lateinit var polylines: ArrayList<Polyline>
@@ -51,7 +51,7 @@ class RouteEditViewModel @Inject constructor(
      * Saves the edited route.
      * @param oldRouteName name of the route before editing
      * @param routeName name of the route after editing
-     * @throws IllegalArgumentException if the route has an illegal name, or it has less than 2 points
+     * @throws IllegalArgumentException if the edited route has an illegal name, or it has less than 2 points
      */
     fun onRouteEdit(oldRouteName: String, routeName: String) {
         // TODO: only send to server if route was edited
