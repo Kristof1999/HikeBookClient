@@ -1,24 +1,20 @@
 package hu.kristof.nagy.hikebookclient.viewModel.mymap
 
 import android.graphics.drawable.Drawable
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.data.RouteRepository
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
-import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
@@ -28,8 +24,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RouteEditViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
-    private val service: Service
+    private val repository: RouteRepository
     ) : ViewModel() {
     private lateinit var markers: ArrayList<MyMarker>
     private lateinit var polylines: ArrayList<Polyline>
@@ -66,11 +61,10 @@ class RouteEditViewModel @Inject constructor(
         val route = Route(routeName, points)
         RouteUtils.checkRoute(route)
         viewModelScope.launch {
-            dataStore.data.map { preferences ->
-                preferences[Constants.DATA_STORE_USER_NAME]
-            }.collect { userName ->
-                _routeEditRes.value = service.editRoute(userName!!, oldRouteName, route)
-            }
+            repository.editRoute(oldRouteName, route)
+                .collect { res ->
+                    _routeEditRes.value = res
+                }
         }
     }
 

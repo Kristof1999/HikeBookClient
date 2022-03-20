@@ -20,24 +20,20 @@
 package hu.kristof.nagy.hikebookclient.viewModel.mymap
 
 import android.graphics.drawable.Drawable
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.data.RouteRepository
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
-import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
@@ -47,8 +43,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RouteCreateViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
-    private val service: Service
+    private val repository: RouteRepository
     ) : ViewModel() {
     private val markers = ArrayList<MyMarker>()
     private val polylines = ArrayList<Polyline>()
@@ -75,13 +70,13 @@ class RouteCreateViewModel @Inject constructor(
         val points: List<Point> = markers.map {
             Point.from(it)
         }
-        RouteUtils.checkRoute(Route(routeName, points))
+        val route = Route(routeName, points)
+        RouteUtils.checkRoute(route)
         viewModelScope.launch {
-            dataStore.data.map { preferences ->
-                preferences[Constants.DATA_STORE_USER_NAME]
-            }.collect { userName ->
-                _routeCreateRes.value = service.createRoute(userName!!, routeName, points)
-            }
+            repository.createRoute(route)
+                .collect { res ->
+                    _routeCreateRes.value = res
+                }
         }
     }
 
