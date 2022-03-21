@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -20,10 +19,7 @@ import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.model.MarkerType
-import hu.kristof.nagy.hikebookclient.util.MapUtils
-import hu.kristof.nagy.hikebookclient.util.MarkerUtils
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -58,7 +54,7 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         initMap()
 
         binding.routeCreateMarkerSpinner.onItemSelectedListener = this
-        setSpinnerAdapter()
+        SpinnerUtils.setSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
 
         setClickListeners(viewModel)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -68,17 +64,6 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
 
         setMapClickListeners(viewModel)
-    }
-
-    private fun setSpinnerAdapter() {
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.markers,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            binding.routeCreateMarkerSpinner.adapter = adapter
-        }
     }
 
     // TODO: try to use sg less error-prone/more flexible instead of ordinal and pos

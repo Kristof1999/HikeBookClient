@@ -6,6 +6,7 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,12 +16,10 @@ import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteEditBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapUtils
-import hu.kristof.nagy.hikebookclient.util.MarkerUtils
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -35,10 +34,11 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
  * A Fragment to edit the chosen route.
  */
 @AndroidEntryPoint
-class RouteEditFragment : Fragment() {
+class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteEditBinding
-    private var isDeleteOn = false // TODO: handle interruptions: device rotation, ...
+    private var isDeleteOn = false // TODO: handle interruptions: device rotation, ... -> viewmodel
+    private val viewModel: RouteEditViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,7 +55,9 @@ class RouteEditFragment : Fragment() {
 
         val args: RouteEditFragmentArgs by navArgs()
         initMap(args)
-        // TODO: place spinner
+
+        binding.routeEditSpinner.onItemSelectedListener = this
+        SpinnerUtils.setSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
         val routeName = args.route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
@@ -69,6 +71,32 @@ class RouteEditFragment : Fragment() {
         }
 
         setMapClickListeners(viewModel)
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        when (pos) {
+            MarkerType.NEW.ordinal -> {
+                viewModel.markerType = MarkerType.NEW
+            }
+            MarkerType.CASTLE.ordinal -> {
+                viewModel.markerType = MarkerType.CASTLE
+            }
+            MarkerType.LOOKOUT.ordinal -> {
+                viewModel.markerType = MarkerType.LOOKOUT
+            }
+            MarkerType.TEXT.ordinal -> {
+                val dialogFragment = TextDialogFragment()
+                dialogFragment.show(parentFragmentManager, "text")
+                dialogFragment.text.observe(viewLifecycleOwner) {
+                    viewModel.markerTitle = it
+                }
+                viewModel.markerType = MarkerType.TEXT
+            }
+        }
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        // keep type as is
     }
 
     private fun setClickListeners(
