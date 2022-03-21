@@ -45,7 +45,7 @@ import javax.inject.Inject
 class RouteCreateViewModel @Inject constructor(
     private val repository: IRouteRepository
     ) : ViewModel() {
-    private val markers = ArrayList<MyMarker>()
+    private val markers = ArrayList<MyMarker>() // TODO: use stack instead of ArrayList
     private val polylines = ArrayList<Polyline>()
 
     private var _routeCreateRes = MutableLiveData<Boolean>()

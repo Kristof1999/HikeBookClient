@@ -2,7 +2,6 @@ package hu.kristof.nagy.hikebookclient.data.service
 
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
-import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 
@@ -18,7 +17,7 @@ class DummyService : Service {
     override suspend fun createRoute(
         userName: String,
         routeName: String,
-        points: List<Point>
+        route: Route
     ): Boolean {
         return true
     }
@@ -27,8 +26,8 @@ class DummyService : Service {
         return listOf()
     }
 
-    override suspend fun loadPoints(userName: String, routeName: String): List<Point> {
-        return listOf()
+    override suspend fun loadRoute(userName: String, routeName: String): Route {
+        return Route("", listOf(), "")
     }
 
     override suspend fun listRoutes(): List<BrowseListItem> {

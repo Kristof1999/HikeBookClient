@@ -12,7 +12,7 @@ class RouteUtilsTest {
 
     @Test
     fun testEmptyName() {
-        val route = Route("", listOf(p1, p2))
+        val route = Route("", listOf(p1, p2), "")
         assertThrows(IllegalArgumentException::class.java) {
             RouteUtils.checkRoute(route)
         }
@@ -20,7 +20,7 @@ class RouteUtilsTest {
 
     @Test
     fun testIllegalName() {
-        val route = Route("/", listOf(p1, p2))
+        val route = Route("/", listOf(p1, p2), "")
         assertThrows(IllegalArgumentException::class.java) {
             RouteUtils.checkRoute(route)
         }
@@ -28,12 +28,12 @@ class RouteUtilsTest {
 
     @Test
     fun testRouteLength() {
-        var route = Route("name", listOf())
+        var route = Route("name", listOf(), "")
         assertThrows(IllegalArgumentException::class.java) {
             RouteUtils.checkRoute(route)
         }
 
-        route = Route("name", listOf(p1))
+        route = Route("name", listOf(p1), "")
         assertThrows(IllegalArgumentException::class.java) {
             RouteUtils.checkRoute(route)
         }
