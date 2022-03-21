@@ -46,14 +46,16 @@ class BrowseDetailFragment : Fragment() {
         initMap()
 
         val args: BrowseDetailFragmentArgs by navArgs()
-        binding.browseDetailHikeDescriptionTv.text =
-            getString(R.string.browse_hike_detail_description, args.userName, args.routeName)
 
         val viewModel: BrowseDetailViewModel by viewModels()
-        viewModel.loadPoints(args.userName, args.routeName)
+        viewModel.loadDetails(args.userName, args.routeName)
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.points.observe(viewLifecycleOwner) { points ->
-            onPointsLoad(points)
+        viewModel.route.observe(viewLifecycleOwner) { route ->
+            onPointsLoad(route.points)
+            binding.browseDetailHikeDescriptionTv.text =
+                getString(R.string.browse_hike_detail_description,
+                    args.userName, args.routeName, route.description
+                )
         }
         binding.browseDetailAddToMyMapButton.setOnClickListener {
             onAddToMyMap(viewModel, args)

@@ -1,7 +1,6 @@
 package hu.kristof.nagy.hikebookclient.data.network
 
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
-import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
 import retrofit2.http.*
 
@@ -10,7 +9,7 @@ interface RouteService {
      * Persists the created route if it's unique for the given user.
      * @param userName name of user who created the route
      * @param routeName name of the created route
-     * @param points points of the created route
+     * @param route the created route
      * @return true if the route is unique
      */
     @PUT("routes/{userName}/{routeName}")
@@ -31,21 +30,21 @@ interface RouteService {
     ): List<Route>
 
     /**
-     * Loads the points of the given route and user.
+     * Loads the specified route.
      * @param userName name of the user who requested the load
      * @param routeName name of the route for which to load the points
      * @return list of points of the route
      */
     @GET("routes/{userName}/{routeName}")
-    suspend fun loadPoints(
+    suspend fun loadRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String
-    ): List<Point>
+    ): Route
 
     /**
      * Lists all the routes' name and associated user name.
      */
-    @GET("routes")
+    @GET("routes/")
     suspend fun listRoutes(): List<BrowseListItem>
 
     /**

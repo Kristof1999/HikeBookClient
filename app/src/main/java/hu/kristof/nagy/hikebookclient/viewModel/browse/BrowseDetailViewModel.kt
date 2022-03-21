@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.di.Service
-import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
@@ -20,12 +20,12 @@ class BrowseDetailViewModel @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : ViewModel() {
-    private var _points = MutableLiveData<List<Point>>()
+    private var _route = MutableLiveData<Route>()
     /**
      * Points of the chosen route.
      */
-    val points: LiveData<List<Point>>
-        get() = _points
+    val route: LiveData<Route>
+        get() = _route
 
     private var _addRes = MutableLiveData<Boolean>()
     /**
@@ -34,9 +34,9 @@ class BrowseDetailViewModel @Inject constructor(
     val addRes: LiveData<Boolean>
         get() = _addRes
 
-    fun loadPoints(userName: String, routeName: String) {
+    fun loadDetails(userName: String, routeName: String) {
         viewModelScope.launch {
-            _points.value = service.loadPoints(userName, routeName)
+            _route.value = service.loadRoute(userName, routeName)
         }
     }
 
@@ -46,8 +46,8 @@ class BrowseDetailViewModel @Inject constructor(
             dataStore.data.map {
                 it[Constants.DATA_STORE_USER_NAME]
             }.collect { userName ->
-                if (_points.value != null) {
-                    _addRes.value = service.createRoute(userName!!, routeName, _points.value!!)
+                if (_route.value != null) {
+                    _addRes.value = service.createRoute(userName!!, routeName, _route.value!!)
                 } else {
                     throw IllegalStateException("Az útvonal még nem töltődött be.")
                 }
