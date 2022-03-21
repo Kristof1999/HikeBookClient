@@ -66,11 +66,11 @@ class RouteCreateViewModel @Inject constructor(
      * @param routeName name of the created route
      * @throws IllegalArgumentException if the route has an illegal name, or it has less than 2 points
      */
-    fun onRouteCreate(routeName: String) {
+    fun onRouteCreate(routeName: String, hikeDescription: String) {
         val points: List<Point> = markers.map {
             Point.from(it)
         }
-        val route = Route(routeName, points)
+        val route = Route(routeName, points, hikeDescription)
         RouteUtils.checkRoute(route)
         viewModelScope.launch {
             repository.createRoute(route)

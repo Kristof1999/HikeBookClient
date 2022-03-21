@@ -99,7 +99,10 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         binding.routeCreateCreateButton.setOnClickListener {
             try {
-                viewModel.onRouteCreate(binding.routeCreateRouteNameEditText.text.toString())
+                viewModel.onRouteCreate(
+                    binding.routeCreateRouteNameEditText.text.toString(),
+                    binding.routeCreateHikeDescriptionEditText.text.toString()
+                )
             } catch (e: IllegalArgumentException) {
                 Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
             }

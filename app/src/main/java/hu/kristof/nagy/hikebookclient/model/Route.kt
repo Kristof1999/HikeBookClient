@@ -25,7 +25,7 @@ import kotlinx.parcelize.Parcelize
 import org.osmdroid.views.overlay.Polyline
 
 @Parcelize
-data class Route(val routeName: String, val points: List<Point>) : Parcelable {
+data class Route(val routeName: String, val points: List<Point>, val description: String) : Parcelable {
     fun toPolyline(): Polyline {
         val polyline = Polyline()
         polyline.setPoints(points.map {

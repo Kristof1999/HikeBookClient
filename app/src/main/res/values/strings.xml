@@ -36,6 +36,9 @@
     <string name="route_create_title">Útvonal Létrehozás</string>
     <string name="route_edit_title">Útvonal Szerkesztés</string>
     <string name="delete_image_description">Trash can</string>
+    <string name="marker_spinner_description">marker picker</string>
+    <string name="hike_description_hint">Túra leírás, részletek, megjegyzések</string>
+    <string name="route_name_hint">Útvonal név</string>
     <string-array name="markers">
         <item>Új</item>
         <item>Várrom</item>
@@ -52,5 +55,4 @@
     <string name="browse_hike_detail_description">Felhasználói név:%1$s\nÚtvonal név: %2$s</string>
     <string name="name_exists_error_msg">Ez a név már foglalt.</string>
     <string name="login_fail_msg">Vagy a név, vagy a jelszó hibás.</string>
-    <string name="marker_spinner_description">marker picker</string>
 </resources>

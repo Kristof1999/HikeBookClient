@@ -17,7 +17,7 @@ interface RouteService {
     suspend fun createRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String,
-        @Body points: List<Point>
+        @Body route: Route
     ): Boolean
 
     /**

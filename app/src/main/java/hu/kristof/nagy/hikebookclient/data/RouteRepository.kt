@@ -33,7 +33,8 @@ class RouteRepository @Inject constructor(
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            service.createRoute(userName!!, route.routeName, route.points)
+            val route = Route(route.routeName, route.points, route.description)
+            service.createRoute(userName!!, route.routeName, route)
         }
     }
 

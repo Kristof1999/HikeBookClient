@@ -61,6 +61,8 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         val routeName = args.route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
+        val hikeDescription = args.route.description
+        binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
 
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.route.points)
@@ -117,7 +119,8 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     ) {
         try {
             val newRouteName = binding.routeEditRouteNameEditText.text.toString()
-            viewModel.onRouteEdit(routeName, newRouteName)
+            val hikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
+            viewModel.onRouteEdit(routeName, newRouteName, hikeDescription)
         } catch (e: IllegalArgumentException) {
             Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
         }

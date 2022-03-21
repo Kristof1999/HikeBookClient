@@ -53,12 +53,12 @@ class RouteEditViewModel @Inject constructor(
      * @param routeName name of the route after editing
      * @throws IllegalArgumentException if the edited route has an illegal name, or it has less than 2 points
      */
-    fun onRouteEdit(oldRouteName: String, routeName: String) {
+    fun onRouteEdit(oldRouteName: String, routeName: String, hikeDescription: String) {
         // TODO: only send to server if route was edited
         val points = markers.map {
             Point.from(it)
         }
-        val route = Route(routeName, points)
+        val route = Route(routeName, points, hikeDescription)
         RouteUtils.checkRoute(route)
         viewModelScope.launch {
             repository.editRoute(oldRouteName, route)

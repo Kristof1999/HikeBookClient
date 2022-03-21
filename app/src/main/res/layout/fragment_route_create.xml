@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Útvonal név"
+            android:hint="@string/route_name_hint"
             android:inputType="textPersonName"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,38 +45,40 @@
             android:text="@string/route_create_button_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/routeCreateRouteNameEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/routeCreateHikeDescriptionEditText" />
 
         <org.osmdroid.views.MapView
             android:id="@+id/routeCreateMap"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/routeCreateCreateButton"
-            app:layout_constraintVertical_bias="0.0"/>
+            app:layout_constraintTop_toBottomOf="@+id/routeCreateCreateButton" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/routeCreateDeleteSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"
             android:text="@string/delete_text"
             app:layout_constraintBottom_toTopOf="@+id/routeCreateMap"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/routeCreateCreateButton" />
+            app:layout_constraintStart_toEndOf="@+id/routeCreateCreateButton"
+            app:layout_constraintTop_toBottomOf="@+id/routeCreateHikeDescriptionEditText" />
 
         <Spinner
             android:id="@+id/routeCreateMarkerSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/marker_spinner_description"
             android:minWidth="48dp"
@@ -84,7 +86,22 @@
             android:spinnerMode="dialog"
             app:layout_constraintBottom_toTopOf="@+id/routeCreateMap"
             app:layout_constraintEnd_toStartOf="@+id/routeCreateCreateButton"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/routeCreateHikeDescriptionEditText" />
+
+        <EditText
+            android:id="@+id/routeCreateHikeDescriptionEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/hike_description_hint"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/routeCreateRouteNameEditText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

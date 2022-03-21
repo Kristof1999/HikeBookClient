@@ -44,14 +44,14 @@
             android:text="@string/edit_route_edit_finalize_button_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/routeEditRouteNameEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/routeEditHikeDescriptionEditText" />
 
         <org.osmdroid.views.MapView
             android:id="@+id/routeEditMap"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,24 +61,42 @@
             android:id="@+id/routeEditDeleteSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="59dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"
             android:text="@string/delete_text"
             app:layout_constraintBottom_toTopOf="@+id/routeEditMap"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/routeEditEditButton" />
+            app:layout_constraintStart_toEndOf="@+id/routeEditEditButton"
+            app:layout_constraintTop_toBottomOf="@+id/routeEditHikeDescriptionEditText" />
 
         <Spinner
             android:id="@+id/routeEditSpinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="@string/marker_spinner_description"
+            android:minHeight="48dp"
             app:layout_constraintBottom_toTopOf="@+id/routeEditMap"
             app:layout_constraintEnd_toStartOf="@+id/routeEditEditButton"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/routeEditHikeDescriptionEditText" />
+
+        <EditText
+            android:id="@+id/routeEditHikeDescriptionEditText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="@string/hike_description_hint"
+            android:inputType="textPersonName"
+            android:minHeight="48dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/routeEditRouteNameEditText" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
