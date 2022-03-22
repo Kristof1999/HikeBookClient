@@ -1,7 +1,7 @@
 package hu.kristof.nagy.hikebookclient.data.network
 
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
-import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.model.UserRoute
 import retrofit2.http.*
 
 interface RouteService {
@@ -13,10 +13,10 @@ interface RouteService {
      * @return true if the route is unique
      */
     @PUT("routes/{userName}/{routeName}")
-    suspend fun createRoute(
+    suspend fun createUserRouteForUser(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String,
-        @Body route: Route
+        @Body route: UserRoute
     ): Boolean
 
     /**
@@ -25,9 +25,9 @@ interface RouteService {
      * @return list of routes which belong to the given user
      */
     @GET("routes/{userName}")
-    suspend fun loadRoutesForUser(
+    suspend fun loadUserRoutesForUser(
         @Path("userName") userName: String
-    ): List<Route>
+    ): List<UserRoute>
 
     /**
      * Loads the specified route.
@@ -36,16 +36,16 @@ interface RouteService {
      * @return list of points of the route
      */
     @GET("routes/{userName}/{routeName}")
-    suspend fun loadRoute(
+    suspend fun loadUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String
-    ): Route
+    ): UserRoute
 
     /**
      * Lists all the routes' name and associated user name.
      */
     @GET("routes/")
-    suspend fun listRoutes(): List<BrowseListItem>
+    suspend fun listUserRoutes(): List<BrowseListItem>
 
     /**
      * @param userName name of user who requested deletion
@@ -53,7 +53,7 @@ interface RouteService {
      * @return true if deletion was successful
      */
     @DELETE("routes/{userName}/{routeName}")
-    suspend fun deleteRoute(
+    suspend fun deleteUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String
     ): Boolean
@@ -66,9 +66,9 @@ interface RouteService {
      * @return true if the edited route is unique for the given user
      */
     @PUT("routes/edit/{userName}/{routeName}")
-    suspend fun editRoute(
+    suspend fun editUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") oldRouteName: String,
-        @Body route: Route
+        @Body route: UserRoute
     ): Boolean
 }

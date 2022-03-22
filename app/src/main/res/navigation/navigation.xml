@@ -54,8 +54,8 @@
             android:id="@+id/action_routeEditFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
         <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
     </fragment>
     <fragment
         android:id="@+id/browseListFragment"
@@ -89,8 +89,8 @@
             app:popUpTo="@id/myMapDetailFragment"
             app:popUpToInclusive="true" />
         <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
         <action
             android:id="@+id/action_myMapDetailFragment_to_routeEditFragment"
             app:destination="@id/routeEditFragment" />

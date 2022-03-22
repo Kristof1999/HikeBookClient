@@ -25,11 +25,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.IRouteRepository
+import hu.kristof.nagy.hikebookclient.data.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
@@ -43,7 +42,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RouteCreateViewModel @Inject constructor(
-    private val repository: IRouteRepository
+    private val userRepository: IUserRouteRepository
     ) : ViewModel() {
     private val markers = ArrayList<MyMarker>() // TODO: use stack instead of ArrayList
     private val polylines = ArrayList<Polyline>()
@@ -70,10 +69,9 @@ class RouteCreateViewModel @Inject constructor(
         val points: List<Point> = markers.map {
             Point.from(it)
         }
-        val route = Route(routeName, points, hikeDescription)
-        RouteUtils.checkRoute(route)
+        RouteUtils.checkRoute(routeName, points)
         viewModelScope.launch {
-            repository.createRoute(route)
+            userRepository.createUserRoute(routeName, points, hikeDescription)
                 .collect { res ->
                     _routeCreateRes.value = res
                 }

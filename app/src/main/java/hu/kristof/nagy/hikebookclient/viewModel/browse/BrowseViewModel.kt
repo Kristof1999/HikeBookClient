@@ -24,7 +24,7 @@ class BrowseViewModel @Inject constructor(
 
     fun listRoutes() {
         viewModelScope.launch {
-            _routes.value = service.listRoutes()
+            _routes.value = service.listUserRoutes()
         }
     }
 }

@@ -6,8 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.kristof.nagy.hikebookclient.data.AuthRepository
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
-import hu.kristof.nagy.hikebookclient.data.IRouteRepository
-import hu.kristof.nagy.hikebookclient.data.RouteRepository
+import hu.kristof.nagy.hikebookclient.data.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.UserRouteRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -16,5 +16,5 @@ abstract class RepositoryModules {
     abstract fun bindIAuthRepository(impl: AuthRepository): IAuthRepository
 
     @Binds
-    abstract fun bindIRouteRepository(impl: RouteRepository): IRouteRepository
+    abstract fun bindIRouteRepository(impl: UserRouteRepository): IUserRouteRepository
 }

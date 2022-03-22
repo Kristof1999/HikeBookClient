@@ -14,7 +14,7 @@ class DummyService : Service {
         return true
     }
 
-    override suspend fun createRoute(
+    override suspend fun createUserRouteForUser(
         userName: String,
         routeName: String,
         route: Route
@@ -22,7 +22,7 @@ class DummyService : Service {
         return true
     }
 
-    override suspend fun loadRoutesForUser(userName: String): List<Route> {
+    override suspend fun loadUserRoutesForUser(userName: String): List<Route> {
         return listOf()
     }
 

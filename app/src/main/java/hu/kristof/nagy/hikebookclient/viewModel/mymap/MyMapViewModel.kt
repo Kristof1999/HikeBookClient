@@ -5,22 +5,22 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.IRouteRepository
-import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.data.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.UserRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MyMapViewModel @Inject constructor(
-    private val repository: IRouteRepository
+    private val userRepository: IUserRouteRepository
     ) : ViewModel() {
 
-    private var _routes = MutableLiveData<List<Route>>()
+    private var _routes = MutableLiveData<List<UserRoute>>()
     /**
      * List of the logged in user's routes.
      */
-    val routes: LiveData<List<Route>>
+    val routes: LiveData<List<UserRoute>>
         get() = _routes
 
     /**
@@ -37,7 +37,7 @@ class MyMapViewModel @Inject constructor(
 
     fun loadRoutesForLoggedInUser() {
         viewModelScope.launch {
-            repository.loadRoutesForLoggedInUser()
+            userRepository.loadUserRoutes()
                 .collect{ routes ->
                     _routes.value = routes
             }
@@ -47,14 +47,14 @@ class MyMapViewModel @Inject constructor(
     fun deleteRoute(routeName: String) {
         deleteFinished = false
         viewModelScope.launch {
-            repository.deleteRoute(routeName)
+            userRepository.deleteUserRoute(routeName)
                 .collect { res ->
                     _deleteRes.value = res
                 }
         }
     }
 
-    fun getRoute(routeName: String): Route {
+    fun getRoute(routeName: String): UserRoute {
         return _routes.value!!.filter { route ->
             route.routeName == routeName
         }[0]

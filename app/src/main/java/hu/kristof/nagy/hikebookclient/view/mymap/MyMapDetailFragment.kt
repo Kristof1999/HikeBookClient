@@ -45,8 +45,8 @@ class MyMapDetailFragment : Fragment() {
 
         val viewModel: MyMapViewModel by activityViewModels()
         val args: MyMapDetailFragmentArgs by navArgs()
-        binding.myMapDetailRouteNameTv.text = args.route.routeName
-        val polyline = args.route.toPolyline()
+        binding.myMapDetailRouteNameTv.text = args.userRoute.routeName
+        val polyline = args.userRoute.toPolyline()
         val mapController = map.controller
         mapController.setCenter(polyline.bounds.centerWithDateLine)
         mapController.setZoom(Constants.START_ZOOM)
@@ -66,15 +66,15 @@ class MyMapDetailFragment : Fragment() {
     ) {
         binding.myMapDetailEditButton.setOnClickListener {
             val action = MyMapDetailFragmentDirections
-                .actionMyMapDetailFragmentToRouteEditFragment(args.route)
+                .actionMyMapDetailFragmentToRouteEditFragment(args.userRoute)
             findNavController().navigate(action)
         }
         binding.myMapDetailDeleteButton.setOnClickListener {
-            viewModel.deleteRoute(args.route.routeName)
+            viewModel.deleteRoute(args.userRoute.routeName)
         }
         binding.myMapDetailPrintButton.setOnClickListener {
             val bitmap = map.drawToBitmap()
-            PrintHelper(requireContext()).printBitmap(args.route.routeName, bitmap)
+            PrintHelper(requireContext()).printBitmap(args.userRoute.routeName, bitmap)
         }
     }
 

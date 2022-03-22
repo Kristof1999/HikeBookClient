@@ -59,13 +59,13 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.routeEditSpinner.onItemSelectedListener = this
         SpinnerUtils.setSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
-        val routeName = args.route.routeName
+        val routeName = args.userRoute.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
-        val hikeDescription = args.route.description
+        val hikeDescription = args.userRoute.description
         binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
 
         val viewModel: RouteEditViewModel by viewModels()
-        setup(viewModel, args.route.points)
+        setup(viewModel, args.userRoute.points)
         setClickListeners(viewModel, routeName)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
@@ -160,7 +160,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         val mapController = map.controller
         mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(args.route.toPolyline().bounds.centerWithDateLine)
+        mapController.setCenter(args.userRoute.toPolyline().bounds.centerWithDateLine)
     }
 
     // adapter design pattern/wrapper kellene ehelyett
