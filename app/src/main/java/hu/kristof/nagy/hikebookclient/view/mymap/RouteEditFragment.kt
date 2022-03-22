@@ -141,14 +141,14 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         map.invalidate()
     }
 
-    private fun onRouteEditResult(it: Boolean) {
-        if (it)
+    private fun onRouteEditResult(res: Result<Boolean>) {
+        if (res.isSuccess)
             findNavController().navigate(
                 R.id.action_routeEditFragment_to_myMapFragment
             )
         else
             Toast.makeText(
-                context, getString(R.string.generic_error_msg), Toast.LENGTH_SHORT
+                context, res.exceptionOrNull()?.message, Toast.LENGTH_LONG
             ).show()
     }
 

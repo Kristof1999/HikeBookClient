@@ -4,11 +4,11 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class UserRouteRepository @Inject constructor(
@@ -54,7 +54,12 @@ class UserRouteRepository @Inject constructor(
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
-            service.editUserRoute(userName!!, oldRouteName, userRoute)
+            try {
+                service.editUserRoute(userName!!, oldRouteName, userRoute)
+            } catch (e: HttpException) {
+                // TODO: decide somehow if the exception is worth rethrowing
+                throw IllegalArgumentException(e.response()?.errorBody()?.string())
+            }
         }
     }
 }

@@ -20,7 +20,6 @@
 
 package hu.kristof.nagy.hikebookclient.model
 
-import kotlinx.parcelize.Parcelize
 import org.osmdroid.views.overlay.Polyline
 
 abstract class Route {

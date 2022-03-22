@@ -28,11 +28,11 @@ class RouteEditViewModel @Inject constructor(
     private lateinit var markers: ArrayList<MyMarker>
     private lateinit var polylines: ArrayList<Polyline>
 
-    private var _routeEditRes = MutableLiveData<Boolean>()
+    private var _routeEditRes = MutableLiveData<Result<Boolean>>()
     /**
      * Result of route edit attempt.
      */
-    val routeEditRes: LiveData<Boolean>
+    val routeEditRes: LiveData<Result<Boolean>>
         get() = _routeEditRes
 
     var markerType: MarkerType = MarkerType.NEW
@@ -59,11 +59,15 @@ class RouteEditViewModel @Inject constructor(
         }
         RouteUtils.checkRoute(routeName, points)
         viewModelScope.launch {
-            userRepository.editUserRoute(
-                oldRouteName, routeName, points, hikeDescription
-            ).collect { res ->
-                    _routeEditRes.value = res
+            try {
+                userRepository.editUserRoute(
+                    oldRouteName, routeName, points, hikeDescription
+                ).collect { res ->
+                    _routeEditRes.value = Result.success(res)
                 }
+            } catch (e: IllegalArgumentException) {
+                _routeEditRes.value = Result.failure(e)
+            }
         }
     }
 
