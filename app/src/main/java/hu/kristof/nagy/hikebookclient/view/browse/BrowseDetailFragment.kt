@@ -14,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentBrowseDetailBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
@@ -50,12 +51,14 @@ class BrowseDetailFragment : Fragment() {
         val viewModel: BrowseDetailViewModel by viewModels()
         viewModel.loadDetails(args.userName, args.routeName)
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.route.observe(viewLifecycleOwner) { route ->
-            onPointsLoad(route.points)
-            binding.browseDetailHikeDescriptionTv.text =
-                getString(R.string.browse_hike_detail_description,
-                    args.userName, args.routeName, route.description
-                )
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                onPointsLoad(route.points)
+                binding.browseDetailHikeDescriptionTv.text =
+                    getString(R.string.browse_hike_detail_description,
+                        args.userName, args.routeName, route.description
+                    )
+            }
         }
         binding.browseDetailAddToMyMapButton.setOnClickListener {
             onAddToMyMap(viewModel, args)
@@ -65,15 +68,11 @@ class BrowseDetailFragment : Fragment() {
         }
     }
 
-    private fun onAddResult(it: Boolean) {
-        if (it) {
+    private fun onAddResult(res: Result<Boolean>) {
+        handleResult(context, res) {
             findNavController().navigate(
                 R.id.action_browseDetailFragment_to_browseListFragment
             )
-        } else {
-            Toast.makeText(
-                context, getText(R.string.generic_error_msg), Toast.LENGTH_LONG
-            ).show()
         }
     }
 

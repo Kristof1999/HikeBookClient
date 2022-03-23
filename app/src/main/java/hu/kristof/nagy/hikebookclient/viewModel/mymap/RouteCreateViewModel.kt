@@ -47,11 +47,11 @@ class RouteCreateViewModel @Inject constructor(
     private val markers = ArrayList<MyMarker>() // TODO: use stack instead of ArrayList
     private val polylines = ArrayList<Polyline>()
 
-    private var _routeCreateRes = MutableLiveData<Boolean>()
+    private var _routeCreateRes = MutableLiveData<Result<Boolean>>()
     /**
      * Result of route creation attempt.
      */
-    val routeCreateRes: LiveData<Boolean>
+    val routeCreateRes: LiveData<Result<Boolean>>
         get() = _routeCreateRes
 
     var markerType: MarkerType = MarkerType.NEW

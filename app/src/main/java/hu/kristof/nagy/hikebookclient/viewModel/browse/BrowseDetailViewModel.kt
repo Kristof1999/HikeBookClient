@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
@@ -20,23 +21,25 @@ class BrowseDetailViewModel @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : ViewModel() {
-    private var _route = MutableLiveData<UserRoute>()
+    private var _route = MutableLiveData<Result<UserRoute>>()
     /**
      * Points of the chosen route.
      */
-    val route: LiveData<UserRoute>
+    val route: LiveData<Result<UserRoute>>
         get() = _route
 
-    private var _addRes = MutableLiveData<Boolean>()
+    private var _addRes = MutableLiveData<Result<Boolean>>()
     /**
      * The result of trying to add the route to the map of the logged in user.
      */
-    val addRes: LiveData<Boolean>
+    val addRes: LiveData<Result<Boolean>>
         get() = _addRes
 
     fun loadDetails(userName: String, routeName: String) {
         viewModelScope.launch {
-            _route.value = service.loadUserRoute(userName, routeName)
+            _route.value = handleRequest {
+                service.loadUserRoute(userName, routeName)
+            }
         }
     }
 
@@ -46,8 +49,10 @@ class BrowseDetailViewModel @Inject constructor(
             dataStore.data.map {
                 it[Constants.DATA_STORE_USER_NAME]
             }.collect { userName ->
-                if (_route.value != null) {
-                    _addRes.value = service.createUserRouteForUser(userName!!, routeName, _route.value!!)
+                if (_route.value != null && route.value!!.getOrNull() != null) {
+                    _addRes.value = handleRequest {
+                        service.createUserRouteForUser(userName!!, routeName, _route.value!!.getOrNull()!!)
+                    }
                 } else {
                     throw IllegalStateException("Az útvonal még nem töltődött be.")
                 }

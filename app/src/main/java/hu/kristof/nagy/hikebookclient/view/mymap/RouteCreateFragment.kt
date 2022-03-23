@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteCreateBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
@@ -124,15 +125,12 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         map.invalidate()
     }
 
-    private fun onRouteCreateResult(it: Boolean) {
-        if (it)
+    private fun onRouteCreateResult(res: Result<Boolean>) {
+        handleResult(context, res) {
             findNavController().navigate(
                 R.id.action_routeCreateFragment_to_myMapFragment
             )
-        else
-            Toast.makeText(
-                context, getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
-            ).show()
+        }
     }
 
     private fun initMap() {

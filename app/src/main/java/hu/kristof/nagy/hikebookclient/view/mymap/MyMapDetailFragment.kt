@@ -5,7 +5,6 @@ import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.drawToBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -15,6 +14,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.print.PrintHelper
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapDetailBinding
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
@@ -78,15 +78,12 @@ class MyMapDetailFragment : Fragment() {
         }
     }
 
-    private fun onDeleteResult(it: Boolean) {
-        if (it)
+    private fun onDeleteResult(res: Result<Boolean>) {
+        handleResult(context, res) {
             findNavController().navigate(
                 R.id.action_myMapDetailFragment_to_myMapListFragment
             )
-        else
-            Toast.makeText(
-                context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
-            ).show()
+        }
     }
 
     private fun initMap() {

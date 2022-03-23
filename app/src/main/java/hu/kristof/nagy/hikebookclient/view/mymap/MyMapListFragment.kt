@@ -30,6 +30,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentMyMapListBinding
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
 /**
@@ -65,16 +66,13 @@ class MyMapListFragment : Fragment() {
 
     private fun onDeleteResult(
         viewModel: MyMapViewModel,
-        it: Boolean
+        res: Result<Boolean>
     ) {
         if (!viewModel.deleteFinished) {
-            if (it) {
+            handleResult(context, res) {
                 Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
                 viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
-            } else
-                Toast.makeText(
-                    context, resources.getText(R.string.generic_error_msg), Toast.LENGTH_SHORT
-                ).show()
+            }
             viewModel.deleteFinished = true
         }
     }
@@ -106,8 +104,10 @@ class MyMapListFragment : Fragment() {
         )
         binding.myMapRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routes.observe(viewLifecycleOwner) {
-            adapter.submitList(it.toMutableList())
+        viewModel.routes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) {
+                adapter.submitList(it.toMutableList())
+            }
         }
     }
 }

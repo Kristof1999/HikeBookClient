@@ -16,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.hikebookclient.R
 import com.example.hikebookclient.databinding.FragmentRouteEditBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
@@ -142,14 +143,11 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onRouteEditResult(res: Result<Boolean>) {
-        if (res.isSuccess)
+        handleResult(context, res) {
             findNavController().navigate(
                 R.id.action_routeEditFragment_to_myMapFragment
             )
-        else
-            Toast.makeText(
-                context, res.exceptionOrNull()?.message, Toast.LENGTH_LONG
-            ).show()
+        }
     }
 
     private fun initMap(args: RouteEditFragmentArgs) {

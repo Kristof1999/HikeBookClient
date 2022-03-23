@@ -5,13 +5,13 @@ import hu.kristof.nagy.hikebookclient.model.UserRoute
 import kotlinx.coroutines.flow.Flow
 
 interface IUserRouteRepository {
-    suspend fun loadUserRoutes(): Flow<List<UserRoute>>
-    suspend fun deleteUserRoute(routeName: String): Flow<Boolean>
+    suspend fun loadUserRoutes(): Flow<Result<List<UserRoute>>>
+    suspend fun deleteUserRoute(routeName: String): Flow<Result<Boolean>>
     suspend fun createUserRoute(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
-    ): Flow<Boolean>
+    ): Flow<Result<Boolean>>
     suspend fun editUserRoute(
         oldRouteName: String,
         routeName: String,

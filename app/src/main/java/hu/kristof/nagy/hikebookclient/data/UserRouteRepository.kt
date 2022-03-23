@@ -15,19 +15,23 @@ class UserRouteRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : IUserRouteRepository {
-    override suspend fun loadUserRoutes(): Flow<List<UserRoute>> {
+    override suspend fun loadUserRoutes(): Flow<Result<List<UserRoute>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            service.loadUserRoutesForUser(userName!!)
+            handleRequest {
+                service.loadUserRoutesForUser(userName!!)
+            }
         }
     }
 
-    override suspend fun deleteUserRoute(routeName: String): Flow<Boolean> {
+    override suspend fun deleteUserRoute(routeName: String): Flow<Result<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            service.deleteUserRoute(userName!!, routeName)
+            handleRequest {
+                service.deleteUserRoute(userName!!, routeName)
+            }
         }
     }
 
@@ -35,12 +39,14 @@ class UserRouteRepository @Inject constructor(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
-    ): Flow<Boolean> {
+    ): Flow<Result<Boolean>> {
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
-            service.createUserRouteForUser(userName!!, userRoute.routeName, userRoute)
+            handleRequest {
+                service.createUserRouteForUser(userName!!, userRoute.routeName, userRoute)
+            }
         }
     }
 
@@ -54,7 +60,9 @@ class UserRouteRepository @Inject constructor(
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
-            handleRequest { service.editUserRoute(userName!!, oldRouteName, userRoute) }
+            handleRequest {
+                service.editUserRoute(userName!!, oldRouteName, userRoute)
+            }
         }
     }
 }

@@ -16,11 +16,11 @@ class MyMapViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository
     ) : ViewModel() {
 
-    private var _routes = MutableLiveData<List<UserRoute>>()
+    private var _routes = MutableLiveData<Result<List<UserRoute>>>()
     /**
      * List of the logged in user's routes.
      */
-    val routes: LiveData<List<UserRoute>>
+    val routes: LiveData<Result<List<UserRoute>>>
         get() = _routes
 
     /**
@@ -28,11 +28,11 @@ class MyMapViewModel @Inject constructor(
      */
     var deleteFinished = true
 
-    private var _deleteRes = MutableLiveData<Boolean>()
+    private var _deleteRes = MutableLiveData<Result<Boolean>>()
     /**
      * Result of deletion attempt.
      */
-    val deleteRes: LiveData<Boolean>
+    val deleteRes: LiveData<Result<Boolean>>
         get() = _deleteRes
 
     fun loadRoutesForLoggedInUser() {
@@ -55,7 +55,7 @@ class MyMapViewModel @Inject constructor(
     }
 
     fun getRoute(routeName: String): UserRoute {
-        return _routes.value!!.filter { route ->
+        return _routes.value!!.getOrNull()!!.filter { route ->
             route.routeName == routeName
         }[0]
     }
