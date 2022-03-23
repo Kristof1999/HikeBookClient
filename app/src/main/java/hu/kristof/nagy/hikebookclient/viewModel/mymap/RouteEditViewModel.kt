@@ -59,15 +59,11 @@ class RouteEditViewModel @Inject constructor(
         }
         RouteUtils.checkRoute(routeName, points)
         viewModelScope.launch {
-            try {
                 userRepository.editUserRoute(
                     oldRouteName, routeName, points, hikeDescription
                 ).collect { res ->
-                    _routeEditRes.value = Result.success(res)
+                    _routeEditRes.value = res
                 }
-            } catch (e: IllegalArgumentException) {
-                _routeEditRes.value = Result.failure(e)
-            }
         }
     }
 

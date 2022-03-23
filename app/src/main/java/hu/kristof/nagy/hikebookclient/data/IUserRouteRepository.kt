@@ -1,7 +1,6 @@
 package hu.kristof.nagy.hikebookclient.data
 
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import kotlinx.coroutines.flow.Flow
 
@@ -18,5 +17,5 @@ interface IUserRouteRepository {
         routeName: String,
         points: List<Point>,
         hikeDescription: String
-    ): Flow<Boolean>
+    ): Flow<Result<Boolean>>
 }
