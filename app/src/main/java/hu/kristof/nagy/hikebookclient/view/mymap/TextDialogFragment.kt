@@ -10,8 +10,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.TextDialogBinding
+import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.databinding.TextDialogBinding
 
 class TextDialogFragment : DialogFragment() {
     private var _text = MutableLiveData<String>()

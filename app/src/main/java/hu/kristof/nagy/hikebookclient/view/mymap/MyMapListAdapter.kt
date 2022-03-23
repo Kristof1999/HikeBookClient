@@ -41,7 +41,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hikebookclient.databinding.MyMapListItemBinding
+import hu.kristof.nagy.hikebookclient.databinding.MyMapListItemBinding
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 
 class MyMapListAdapter(private val clickListener: MyMapClickListener)

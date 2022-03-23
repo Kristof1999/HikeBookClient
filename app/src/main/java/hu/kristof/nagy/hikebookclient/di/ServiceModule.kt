@@ -36,13 +36,13 @@ limitations under the License.
 
 package hu.kristof.nagy.hikebookclient.di
 
-import com.example.hikebookclient.BuildConfig
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.data.network.AuthService
 import hu.kristof.nagy.hikebookclient.data.network.RouteService
 import retrofit2.Retrofit

@@ -2,7 +2,7 @@ package hu.kristof.nagy.hikebookclient.util
 
 import android.app.Activity
 import android.graphics.drawable.Drawable
-import com.example.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import org.osmdroid.util.GeoPoint

@@ -6,8 +6,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.BrowseListItemBinding
+import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.databinding.BrowseListItemBinding
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 
 class BrowseListAdapter(private val clickListener: BrowseClickListener)

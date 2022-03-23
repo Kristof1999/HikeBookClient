@@ -12,9 +12,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.print.PrintHelper
-import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.FragmentMyMapDetailBinding
+import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
+import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapDetailBinding
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay

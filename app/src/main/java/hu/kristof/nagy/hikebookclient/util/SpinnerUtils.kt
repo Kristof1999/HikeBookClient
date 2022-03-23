@@ -3,7 +3,7 @@ package hu.kristof.nagy.hikebookclient.util
 import android.content.Context
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.example.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.R
 
 object SpinnerUtils {
     fun setSpinnerAdapter(context: Context, spinner: Spinner) {

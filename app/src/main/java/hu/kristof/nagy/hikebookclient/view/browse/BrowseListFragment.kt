@@ -8,9 +8,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.FragmentBrowseListBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseListBinding
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseViewModel
 
 /**

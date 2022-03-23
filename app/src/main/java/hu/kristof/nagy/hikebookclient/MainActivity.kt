@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package hu.kristof.nagy.hikebookclient
 
 import android.os.Bundle
@@ -24,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
-import com.example.hikebookclient.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

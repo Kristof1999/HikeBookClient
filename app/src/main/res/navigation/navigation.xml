@@ -95,4 +95,16 @@
             android:id="@+id/action_myMapDetailFragment_to_routeEditFragment"
             app:destination="@id/routeEditFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.HelpFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" >
+        <argument
+            android:name="helpRequestType"
+            app:argType="hu.kristof.nagy.hikebookclient.model.HelpRequestType" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_helpFragment"
+        app:destination="@id/helpFragment" />
 </navigation>

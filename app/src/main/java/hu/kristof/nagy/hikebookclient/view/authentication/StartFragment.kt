@@ -33,10 +33,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.FragmentStartBinding
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.databinding.FragmentStartBinding
+import hu.kristof.nagy.hikebookclient.model.HelpRequestType
 import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
 
 /**
@@ -60,6 +62,11 @@ class StartFragment : Fragment() {
         binding.startRegistrationButton.setOnClickListener {
             it.findNavController()
                 .navigate(R.id.action_startFragment_to_registrationFragment)
+        }
+        binding.aboutPageButton.setOnClickListener {
+            val requestType = HelpRequestType.START
+            val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(action)
         }
 
         binding.lifecycleOwner = viewLifecycleOwner

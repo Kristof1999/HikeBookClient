@@ -28,9 +28,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.hikebookclient.R
-import com.example.hikebookclient.databinding.FragmentMyMapListBinding
+import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
+import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
 /**
