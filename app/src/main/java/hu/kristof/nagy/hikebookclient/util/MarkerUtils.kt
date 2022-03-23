@@ -88,14 +88,15 @@ object MarkerUtils {
      * Deletes the last marker, updates it's neighbors icon and type if needed,
      * and also removes the polyline connecting the last two markers.
      * @param marker marker to be deleted
-     * @param markerIcon icon of marker to set for the deleted marker's icon
+     * @param markerIcon icon of marker to set for the deleted marker's neighbour icon,
+     *                   if the neighbour's type was set
      * @param markers list of markers in order they were added to the map
      * @param polylines list of polylines in order they were added to the map
      * @return true if marker was the last marker in markers
      */
     fun onDelete(
         marker: Marker,
-        markerIcon: Drawable,
+        markerIcon: Drawable, // TODO: eliminate this dependency, because this is fixed
         markers: ArrayList<MyMarker>,
         polylines: ArrayList<Polyline>
     ): Boolean {
