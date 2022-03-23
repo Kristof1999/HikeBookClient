@@ -98,7 +98,7 @@
     <fragment
         android:id="@+id/helpFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.HelpFragment"
-        android:label="fragment_help"
+        android:label="@string/help_title"
         tools:layout="@layout/fragment_help" >
         <argument
             android:name="helpRequestType"
