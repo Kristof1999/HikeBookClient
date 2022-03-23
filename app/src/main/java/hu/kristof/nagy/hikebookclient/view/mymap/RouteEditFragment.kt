@@ -1,6 +1,5 @@
 package hu.kristof.nagy.hikebookclient.view.mymap
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -179,7 +178,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
         map.overlays.add(firstMarker)
         markers.add(myFirstMarker)
-        setListeners(firstMarker, viewModel, markerIcon)
+        setMarkerListeners(firstMarker, viewModel)
         for (point in points.subList(1, points.size-1)) {
             val marker = Marker(map)
             val markerType = point.type
@@ -190,7 +189,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
             map.overlays.add(marker)
             markers.add(myMarker)
-            setListeners(marker, viewModel, markerIcon)
+            setMarkerListeners(marker, viewModel)
 
             val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
             map.overlays.add(polyline)
@@ -205,7 +204,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
         map.overlays.add(lastMarker)
         markers.add(myLastMarker)
-        setListeners(lastMarker, viewModel, markerIcon)
+        setMarkerListeners(lastMarker, viewModel)
         val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
         map.overlays.add(polyline)
         polylines.add(polyline)
@@ -219,7 +218,6 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     ): Boolean {
         InfoWindow.closeAllInfoWindowsOn(map)
 
-        //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
         if (isDeleteOn)
             return true
 
@@ -227,19 +225,18 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, requireActivity())
         val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
-        setListeners(newMarker, viewModel, markerIcon)
+        setMarkerListeners(newMarker, viewModel)
         map.invalidate()
         return true
     }
 
-    private fun setListeners(
+    private fun setMarkerListeners(
         newMarker: Marker,
-        viewModel: RouteEditViewModel,
-        markerIcon: Drawable
+        viewModel: RouteEditViewModel
     ) {
         newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
             if (isDeleteOn) {
-                onDelete(marker, mapView, viewModel, markerIcon)
+                onDelete(marker, mapView, viewModel)
             } else {
                 if (marker.isInfoWindowShown) {
                     marker.closeInfoWindow()
@@ -276,10 +273,9 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun onDelete(
         marker: Marker,
         mapView: MapView,
-        viewModel: RouteEditViewModel,
-        markerIcon: Drawable
+        viewModel: RouteEditViewModel
     ) {
-        if (viewModel.onDelete(marker, markerIcon)) {
+        if (viewModel.onDelete(marker, requireActivity().getDrawable(R.drawable.marker_image)!!)) {
             marker.remove(mapView)
             mapView.invalidate()
         } else {

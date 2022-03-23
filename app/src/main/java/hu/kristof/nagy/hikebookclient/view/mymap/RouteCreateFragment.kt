@@ -3,7 +3,6 @@
 
 package hu.kristof.nagy.hikebookclient.view.mymap
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
@@ -147,7 +146,6 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
     ): Boolean {
         InfoWindow.closeAllInfoWindowsOn(map)
 
-        //TODO: súgóba: törlés közben nem vehetünk fel új pontokat
         if (isDeleteOn)
             return true
 
@@ -155,7 +153,7 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, requireActivity())
         val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
-        setMarkerListeners(newMarker, viewModel, markerIcon)
+        setMarkerListeners(newMarker, viewModel)
         map.invalidate()
         return true
     }
@@ -163,12 +161,11 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun setMarkerListeners(
         newMarker: Marker,
         viewModel: RouteCreateViewModel,
-        markerIcon: Drawable
     ) {
         newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
             // TODO: move logic to viewModel
             if (isDeleteOn) {
-                onDelete(marker, mapView, viewModel, markerIcon)
+                onDelete(marker, mapView, viewModel)
             } else {
                 if (marker.isInfoWindowShown) {
                     marker.closeInfoWindow()
@@ -205,10 +202,9 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private fun onDelete(
         marker: Marker,
         mapView: MapView,
-        viewModel: RouteCreateViewModel,
-        markerIcon: Drawable
+        viewModel: RouteCreateViewModel
     ) {
-        if (viewModel.onDelete(marker, markerIcon)) {
+        if (viewModel.onDelete(marker, requireActivity().getDrawable(R.drawable.marker_image)!!)) {
             marker.remove(mapView)
             mapView.invalidate()
         } else {
