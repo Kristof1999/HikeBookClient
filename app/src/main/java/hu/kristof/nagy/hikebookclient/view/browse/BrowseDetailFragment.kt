@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.view.browse
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -15,10 +16,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
+import hu.kristof.nagy.hikebookclient.model.HelpRequestType
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseDetailViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
@@ -39,6 +42,7 @@ class BrowseDetailFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_browse_detail, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -120,5 +124,16 @@ class BrowseDetailFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         map.onPause()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.BROWSE_DETAIL
+            val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(action)
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
     }
 }

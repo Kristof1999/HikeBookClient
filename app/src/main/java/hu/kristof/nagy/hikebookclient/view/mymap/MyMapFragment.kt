@@ -44,6 +44,7 @@ class MyMapFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_my_map, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -120,7 +121,7 @@ class MyMapFragment : Fragment() {
             val requestType = HelpRequestType.MY_MAP
             val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
             findNavController().navigate(action)
-            return true;
+            return true
         } else {
             return super.onOptionsItemSelected(item)
         }

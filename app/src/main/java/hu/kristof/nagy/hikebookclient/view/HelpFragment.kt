@@ -30,6 +30,12 @@ class HelpFragment : Fragment() {
         val args: HelpFragmentArgs by navArgs()
         binding.helpTextView.text = when (args.helpRequestType) {
             HelpRequestType.MY_MAP -> getString(R.string.help_my_map)
+            HelpRequestType.MY_MAP_LIST -> getString(R.string.help_my_map_list)
+            HelpRequestType.MY_MAP_DETAIL -> getString(R.string.help_my_map_detail)
+            HelpRequestType.ROUTE_CREATE -> getString(R.string.help_route_create)
+            HelpRequestType.ROUTE_EDIT -> getString(R.string.help_route_edit)
+            HelpRequestType.BROWSE_LIST -> getString(R.string.help_browse_list)
+            HelpRequestType.BROWSE_DETAIL -> getString(R.string.help_browse_detail)
         }
     }
 }

@@ -44,15 +44,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // TODO: implement the other options
+        // ids must match: in navigation fragment/activity id == menuItem id
         val navController = findNavController(R.id.navHostFragment)
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
     // source: https://developer.android.com/guide/navigation/navigation-ui
     override fun onSupportNavigateUp(): Boolean {
-        // TODO: implement the other options
-        // ids must match: in navigation fragment/activity id == menuItem id
-        // for the help option, we should give back a custom message/page
         val navController = findNavController(R.id.navHostFragment)
         return navController.navigateUp()
     }

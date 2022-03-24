@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.view.browse
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -11,6 +12,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseListBinding
+import hu.kristof.nagy.hikebookclient.model.HelpRequestType
+import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseViewModel
 
 /**
@@ -27,6 +30,7 @@ class BrowseListFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_browse_list, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -48,6 +52,17 @@ class BrowseListFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) {
             adapter.submitList(it)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.BROWSE_LIST
+            val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(action)
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
         }
     }
 }

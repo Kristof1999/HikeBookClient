@@ -21,6 +21,7 @@ package hu.kristof.nagy.hikebookclient.view.mymap
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -31,6 +32,8 @@ import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
+import hu.kristof.nagy.hikebookclient.model.HelpRequestType
+import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
 /**
@@ -46,6 +49,7 @@ class MyMapListFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_my_map_list, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -108,6 +112,17 @@ class MyMapListFragment : Fragment() {
             handleResult(context, res) {
                 adapter.submitList(it.toMutableList())
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.MY_MAP_LIST
+            val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(action)
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
         }
     }
 }

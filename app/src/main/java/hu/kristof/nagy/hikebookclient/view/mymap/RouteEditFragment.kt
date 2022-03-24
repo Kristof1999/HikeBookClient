@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.view.mymap
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -16,10 +17,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
+import hu.kristof.nagy.hikebookclient.model.HelpRequestType
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
@@ -47,6 +50,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_route_edit, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -300,5 +304,16 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onPause() {
         super.onPause()
         map.onPause()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.ROUTE_EDIT
+            val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(action)
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
     }
 }
