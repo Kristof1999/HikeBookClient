@@ -124,7 +124,7 @@
         "Pontok felvételét a térképre való bökéssel teheted meg."
         "Ha a térképre felvett pontok közül valamelyikre ráböksz, akkor "
         "láthatod a hozzá rendelt szöveget. Ezt a szöveget eltüntetheted, ha "
-        "a térképen valahova böksz, vagy ha egy adott pontra böknél."
+        "a térképen valahova böksz, vagy ha az adott pontra böknél."
         "A felvett pontokat mozgathatod is azáltal, hogy az egyiket hosszan nyomva tartod."
         "Ez után mozgathatod, és ha elengeded, akkor a pont ott marad, "
         "és a szomszédaival összekötő vonalak is újracsatlakoznak.\n"
@@ -145,6 +145,10 @@
         "Megkötés, hogy csak a legutolsónak felvett pontot törölheted."
         "Ha új típusú pontot veszel fel, akkor kékesen fog megjelenni, ezzel jelezvén, hogy ez a legutolsó."
         "Amikor egy pont piros színűvé válik, akkor ezzel mutatja, hogy ez már nem a legutolsó pont.\n"
+
+        "Ha szöveg típusú pontot akarsz felvenni, akkor egy felugró ablakban "
+        "meg kell adnod, hogy ott milyen szöveg jelenjen meg."
+        "Ez a szöveg csak egyszer felhasználható.\n"
     </string>
 
     <string name="help_route_edit">
@@ -154,6 +158,47 @@
         "elmentheted a változtatásokat. A mentés gombtól jobbra levő kapcsolóval "
         "állíthatod be, hogy törölni akarsz-e pontokat."
         "A mentés című gombtól balra levő választóval kiválaszthatod a"
-        "következőleg felvevendő gomb "
+        "következőleg felvevendő gomb típusát."
+
+        "Pontok felvételét a térképre való bökéssel teheted meg."
+        "Ha a térképre felvett pontok közül valamelyikre ráböksz, akkor "
+        "láthatod a hozzá rendelt szöveget. Ezt a szöveget eltüntetheted, ha "
+        "a térképen valahova böksz, vagy ha az adott pontra böknél."
+        "A felvett pontokat mozgathatod is azáltal, hogy az egyiket hosszan nyomva tartod."
+        "Ez után mozgathatod, és ha elengeded, akkor a pont ott marad, "
+        "és a szomszédaival összekötő vonalak is újracsatlakoznak.\n"
+
+        "Megkötés, hogy legalább két pontot fel kell venni, mielőtt "
+        "elmentenéd az útvonalat. Továbbá, hogy ne legyen még egy olyan "
+        "útvonal a térképeden, amely teljesen ugyanezekkel a pontokkal rendelkezne.\n"
+
+        "Az útvonal név nem lehet üres, valamint nem tartalmazhat / jelet."
+        "Ezen kívül további megkötés, hogy olyan nevet kell válassz, "
+        "ami jelenleg a térképeden/listádban nem található, azaz "
+        "számodra egyedi kell, hogy legyen.\n"
+
+        "Ha a törlés mód be van kapcsolva, akkor a térképre való bökéssel "
+        "pontfelvétel helyett pontokat törölhetsz, csak az adott pontra kell böknöd."
+        "Továbbá, törlés esetén egy ponthoz rendelt szöveget mutató kisablakot nem lehet bezárni."
+        "Ha egy pontot törölsz, akkor a szomszédjával összekötő vonal is törlődik."
+        "Megkötés, hogy csak a legutolsónak felvett pontot törölheted."
+        "Ha új típusú pontot veszel fel, akkor kékesen fog megjelenni, ezzel jelezvén, hogy ez a legutolsó."
+        "Amikor egy pont piros színűvé válik, akkor ezzel mutatja, hogy ez már nem a legutolsó pont.\n"
+
+        "Ha szöveg típusú pontot akarsz felvenni, akkor egy felugró ablakban "
+        "meg kell adnod, hogy ott milyen szöveg jelenjen meg."
+        "Ez a szöveg csak egyszer felhasználható.\n"
+    </string>
+
+    <string name="help_browse_list">
+        "Ezen a lapon mások útvonalai közt böngészhetsz."
+        "Egy listaelem az útvonal nevéből és az adott felhasználóhoz tartozó névből áll."
+        "Ha egy elemre bökünk, akkor az útvonalat részletesebben is megtekinthejtük egy térképen."
+    </string>
+
+    <string name="help_browse_detail">
+        "Ezen a lapon a kiválasztott útvonalat tekinthetjük meg egy térképen."
+        "Fent egy szöveges mező mutatja az út és a felhasználó nevét, valamint a túra leírását."
+        "A lap alján levő gombbal hozzáadhatjuk a térképünkhöz az útvonalat."
     </string>
 </resources>
