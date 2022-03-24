@@ -33,7 +33,7 @@ class MarkerUtilsTest {
         val marker = mock<Marker>()
         markers.add(MyMarker(marker, MarkerType.NEW, markerTitle))
 
-        MarkerUtils.onDelete(marker, markerIcon, markers, polylines)
+        MarkerUtils.onDeleteLogicHandler(marker, markerIcon, markers, polylines)
 
         assertEquals(0, markers.size)
     }
@@ -49,7 +49,7 @@ class MarkerUtilsTest {
         polyline.setPoints(listOf(GeoPoint(0.0, 0.0,), GeoPoint(1.0, 1.0)))
         polylines.add(polyline)
 
-        MarkerUtils.onDelete(marker2, markerIcon, markers, polylines)
+        MarkerUtils.onDeleteLogicHandler(marker2, markerIcon, markers, polylines)
 
         assertEquals(0, polylines.size)
     }
@@ -72,11 +72,11 @@ class MarkerUtilsTest {
         polyline2.setPoints(listOf(GeoPoint(0.0, 0.0,), GeoPoint(1.0, 1.0)))
         polylines.add(polyline2)
 
-        MarkerUtils.onDelete(marker3, markerIcon, markers, polylines)
+        MarkerUtils.onDeleteLogicHandler(marker3, markerIcon, markers, polylines)
 
         assertEquals(MarkerType.NEW, markers[1].type)
 
-        MarkerUtils.onDelete(marker2, markerIcon, markers, polylines)
+        MarkerUtils.onDeleteLogicHandler(marker2, markerIcon, markers, polylines)
 
         assertEquals(MarkerType.CASTLE, markers[0].type)
     }

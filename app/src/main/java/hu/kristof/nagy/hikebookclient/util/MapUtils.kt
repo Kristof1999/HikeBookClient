@@ -1,16 +1,18 @@
 package hu.kristof.nagy.hikebookclient.util
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.core.app.ActivityCompat
+import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
+import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.CopyrightOverlay
-import org.osmdroid.views.overlay.Marker
-import org.osmdroid.views.overlay.Overlay
-import org.osmdroid.views.overlay.Polyline
+import org.osmdroid.views.overlay.*
+import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 object MapUtils {
     private const val REQUEST_PERMISSIONS_REQUEST_CODE = 1
@@ -36,6 +38,47 @@ object MapUtils {
         }
     }
 
+    fun setMapClickListeners(
+        context: Context,
+        map: MapView,
+        isDeleteOn: Boolean,
+        viewModel: RouteViewModel
+    ) {
+        val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                return onSingleTapViewHandler(context, map, isDeleteOn, p, viewModel)
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                // itt (is) lehetne kiemelt pontok közül választani
+                return true
+            }
+        })
+        map.overlays.add(0, mapEventsOverlay)
+        map.invalidate()
+    }
+
+    fun onSingleTapViewHandler(
+        context: Context,
+        map: MapView,
+        isDeleteOn: Boolean,
+        p: GeoPoint?,
+        viewModel: RouteViewModel
+    ): Boolean {
+        InfoWindow.closeAllInfoWindowsOn(map)
+
+        if (isDeleteOn)
+            return true
+
+        val newMarker = Marker(map)
+        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, context)
+        val setMarkerIcon = context.getDrawable(R.drawable.set_marker_image)!!
+        viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
+        MarkerUtils.setMarkerListeners(context, map, isDeleteOn, newMarker, viewModel)
+        map.invalidate()
+        return true
+    }
+
     /**
      * Adds markers and polylines to the provided lists. The markers will be draggable.
      * Polylines are used to connect the new marker with the previous one.
@@ -52,7 +95,7 @@ object MapUtils {
      *        and the polylines which have been previously added.
      *        The list should preserve the order in which polylines were added.
      */
-    fun onSingleTap(
+    fun onSingleTapLogicHandler(
         newMarker: Marker,
         newMarkerType: MarkerType,
         newMarkerTitle: String,

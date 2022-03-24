@@ -18,20 +18,16 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
 import hu.kristof.nagy.hikebookclient.model.HelpRequestType
-import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
-import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
-import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 /**
  * A Fragment to edit the chosen route.
@@ -76,29 +72,11 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
             onRouteEditResult(it)
         }
 
-        setMapClickListeners(viewModel)
+        MapUtils.setMapClickListeners(requireContext(), map, isDeleteOn, viewModel)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        when (pos) {
-            MarkerType.NEW.ordinal -> {
-                viewModel.markerType = MarkerType.NEW
-            }
-            MarkerType.CASTLE.ordinal -> {
-                viewModel.markerType = MarkerType.CASTLE
-            }
-            MarkerType.LOOKOUT.ordinal -> {
-                viewModel.markerType = MarkerType.LOOKOUT
-            }
-            MarkerType.TEXT.ordinal -> {
-                val dialogFragment = TextDialogFragment()
-                dialogFragment.show(parentFragmentManager, "text")
-                dialogFragment.text.observe(viewLifecycleOwner) {
-                    viewModel.markerTitle = it
-                }
-                viewModel.markerType = MarkerType.TEXT
-            }
-        }
+        SpinnerUtils.onItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -128,21 +106,6 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         } catch (e: IllegalArgumentException) {
             Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
         }
-    }
-
-    private fun setMapClickListeners(viewModel: RouteEditViewModel) {
-        val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
-            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                return onSingleTap(p, viewModel)
-            }
-
-            override fun longPressHelper(p: GeoPoint?): Boolean {
-                // itt (is) lehetne kiemelt pontok közül választani
-                return true
-            }
-        })
-        map.overlays.add(0, mapEventsOverlay)
-        map.invalidate()
     }
 
     private fun onRouteEditResult(res: Result<Boolean>) {
@@ -182,7 +145,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
         map.overlays.add(firstMarker)
         markers.add(myFirstMarker)
-        setMarkerListeners(firstMarker, viewModel)
+        MarkerUtils.setMarkerListeners(requireContext(), map, isDeleteOn, firstMarker, viewModel)
         for (point in points.subList(1, points.size-1)) {
             val marker = Marker(map)
             val markerType = point.type
@@ -193,7 +156,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
             map.overlays.add(marker)
             markers.add(myMarker)
-            setMarkerListeners(marker, viewModel)
+            MarkerUtils.setMarkerListeners(requireContext(), map, isDeleteOn, marker, viewModel)
 
             val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
             map.overlays.add(polyline)
@@ -208,85 +171,12 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
         map.overlays.add(lastMarker)
         markers.add(myLastMarker)
-        setMarkerListeners(lastMarker, viewModel)
+        MarkerUtils.setMarkerListeners(requireContext(), map, isDeleteOn, lastMarker, viewModel)
         val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
         map.overlays.add(polyline)
         polylines.add(polyline)
         map.invalidate()
         viewModel.setup(markers, polylines)
-    }
-
-    private fun onSingleTap(
-        p: GeoPoint?,
-        viewModel: RouteEditViewModel
-    ): Boolean {
-        InfoWindow.closeAllInfoWindowsOn(map)
-
-        if (isDeleteOn)
-            return true
-
-        val newMarker = Marker(map)
-        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, requireActivity())
-        val setMarkerIcon = requireActivity().getDrawable(R.drawable.set_marker_image)!!
-        viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
-        setMarkerListeners(newMarker, viewModel)
-        map.invalidate()
-        return true
-    }
-
-    private fun setMarkerListeners(
-        newMarker: Marker,
-        viewModel: RouteEditViewModel
-    ) {
-        newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
-            if (isDeleteOn) {
-                onDelete(marker, mapView, viewModel)
-            } else {
-                if (marker.isInfoWindowShown) {
-                    marker.closeInfoWindow()
-                } else {
-                    marker.showInfoWindow()
-                }
-            }
-            return@OnMarkerClickListener true
-        })
-
-        newMarker.setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
-            override fun onMarkerDrag(marker: Marker?) {
-
-            }
-
-            override fun onMarkerDragEnd(marker: Marker?) {
-                if (marker == null)
-                    return
-
-                viewModel.onMarkerDragEnd(marker)
-                map.invalidate()
-            }
-
-            override fun onMarkerDragStart(marker: Marker?) {
-                if (marker == null)
-                    return
-
-                viewModel.onMarkerDragStart(marker)
-                map.invalidate()
-            }
-        })
-    }
-
-    private fun onDelete(
-        marker: Marker,
-        mapView: MapView,
-        viewModel: RouteEditViewModel
-    ) {
-        if (viewModel.onDelete(marker, requireActivity().getDrawable(R.drawable.marker_image)!!)) {
-            marker.remove(mapView)
-            mapView.invalidate()
-        } else {
-            Toast.makeText(
-                context, "Csak a legutóbb felvett pontot lehet törölni.", Toast.LENGTH_SHORT
-            ).show()
-        }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

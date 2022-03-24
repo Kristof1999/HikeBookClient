@@ -55,7 +55,7 @@ class MapUtilsTest {
         val newMarkerType = MarkerType.NEW
         val newMarkerTitle = ""
 
-        MapUtils.onSingleTap(
+        MapUtils.onSingleTapViewHandler(
             newMarker, newMarkerType, newMarkerTitle,
             GeoPoint(0.0, 0.0),
             markerIcon, setMarkerIcon,
@@ -88,13 +88,13 @@ class MapUtilsTest {
         val newMarkerType = MarkerType.NEW
         val newMarkerTitle = ""
 
-        MapUtils.onSingleTap(
+        MapUtils.onSingleTapViewHandler(
             marker, markerType, markerTitle,
             markerPoint,
             markerIcon, setMarkerIcon,
             overlays, markers, polylines
         )
-        MapUtils.onSingleTap(
+        MapUtils.onSingleTapViewHandler(
             newMarker, newMarkerType, newMarkerTitle,
             newMarkerPoint,
             markerIcon, setMarkerIcon,
@@ -125,17 +125,17 @@ class MapUtilsTest {
         }
         val marker3Type = MarkerType.NEW
 
-        MapUtils.onSingleTap(
+        MapUtils.onSingleTapViewHandler(
             marker1, marker1Type, "",
             p, markerIcon, setMarkerIcon,
             overlays, markers, polylines
         )
-        MapUtils.onSingleTap(
+        MapUtils.onSingleTapViewHandler(
             marker2, marker2Type, "",
             p, markerIcon, setMarkerIcon,
             overlays, markers, polylines
         )
-        MapUtils.onSingleTap(
+        MapUtils.onSingleTapViewHandler(
             marker3, marker3Type, "",
             p, markerIcon, setMarkerIcon,
             overlays, markers, polylines
