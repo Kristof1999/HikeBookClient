@@ -39,7 +39,6 @@ class RouteEditViewModel @Inject constructor(
      * @throws IllegalArgumentException if the edited route has an illegal name, or it has less than 2 points
      */
     fun onRouteEdit(oldRouteName: String, routeName: String, hikeDescription: String) {
-        // TODO: only send to server if route was edited
         val points = markers.map {
             Point.from(it)
         }
