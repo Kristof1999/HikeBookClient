@@ -203,7 +203,6 @@ object MarkerUtils {
     }
 
     fun makePolylineFromLastTwo(markers: ArrayList<MyMarker>): Polyline {
-        // TODO: change to listOf(...) in other places and here too
         val polylinePoints = ArrayList<GeoPoint>()
         polylinePoints.add(markers[markers.size - 2].marker.position)
         polylinePoints.add(markers[markers.size - 1].marker.position)

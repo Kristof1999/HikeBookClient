@@ -24,19 +24,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/create_image" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/hikeStartFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            android:contentDescription="@string/hike_image_description"
-            android:focusable="true"
-            app:layout_constraintBottom_toTopOf="@+id/routeCreateFab"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/hike_image" />
-
         <Button
             android:id="@+id/switchToMyMapListButton"
             android:layout_width="wrap_content"
