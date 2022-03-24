@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.util
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.model.MarkerType
@@ -41,12 +42,12 @@ object MapUtils {
     fun setMapClickListeners(
         context: Context,
         map: MapView,
-        isDeleteOn: Boolean,
+        deleteSwitch: SwitchCompat,
         viewModel: RouteViewModel
     ) {
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                return onSingleTapViewHandler(context, map, isDeleteOn, p, viewModel)
+                return onSingleTapViewHandler(context, map, deleteSwitch, p, viewModel)
             }
 
             override fun longPressHelper(p: GeoPoint?): Boolean {
@@ -58,23 +59,23 @@ object MapUtils {
         map.invalidate()
     }
 
-    fun onSingleTapViewHandler(
+    private fun onSingleTapViewHandler(
         context: Context,
         map: MapView,
-        isDeleteOn: Boolean,
+        deleteSwitch: SwitchCompat,
         p: GeoPoint?,
         viewModel: RouteViewModel
     ): Boolean {
         InfoWindow.closeAllInfoWindowsOn(map)
 
-        if (isDeleteOn)
+        if (deleteSwitch.isChecked)
             return true
 
         val newMarker = Marker(map)
         val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, context)
         val setMarkerIcon = context.getDrawable(R.drawable.set_marker_image)!!
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
-        MarkerUtils.setMarkerListeners(context, map, isDeleteOn, newMarker, viewModel)
+        MarkerUtils.setMarkerListeners(context, map, deleteSwitch, newMarker, viewModel)
         map.invalidate()
         return true
     }

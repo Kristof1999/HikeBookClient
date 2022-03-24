@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.util
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.Toast
+import androidx.appcompat.widget.SwitchCompat
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
@@ -16,12 +17,12 @@ object MarkerUtils {
     fun setMarkerListeners(
         context: Context,
         map: MapView,
-        isDeleteOn: Boolean,
+        deleteSwitch: SwitchCompat,
         newMarker: Marker,
         viewModel: RouteViewModel,
     ) {
         newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
-            if (isDeleteOn) {
+            if (deleteSwitch.isChecked) {
                 onDeleteViewHandler(context, marker, mapView, viewModel)
             } else {
                 if (marker.isInfoWindowShown) {
@@ -130,7 +131,7 @@ object MarkerUtils {
         }
     }
 
-    fun onDeleteViewHandler(
+    private fun onDeleteViewHandler(
         context: Context,
         marker: Marker,
         mapView: MapView,

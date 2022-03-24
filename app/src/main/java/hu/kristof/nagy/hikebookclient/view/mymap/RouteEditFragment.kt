@@ -36,7 +36,6 @@ import org.osmdroid.views.overlay.Polyline
 class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteEditBinding
-    private var isDeleteOn = false // TODO: handle interruptions: device rotation, ... -> viewmodel
     private val viewModel: RouteEditViewModel by viewModels()
 
     override fun onCreateView(
@@ -66,13 +65,15 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.userRoute.points)
-        setClickListeners(viewModel, routeName)
+        binding.routeEditEditButton.setOnClickListener {
+            onEdit(viewModel, routeName)
+        }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
             onRouteEditResult(it)
         }
 
-        MapUtils.setMapClickListeners(requireContext(), map, isDeleteOn, viewModel)
+        MapUtils.setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -81,18 +82,6 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // keep type as is
-    }
-
-    private fun setClickListeners(
-        viewModel: RouteEditViewModel,
-        routeName: String
-    ) {
-        binding.routeEditEditButton.setOnClickListener {
-            onEdit(viewModel, routeName)
-        }
-        binding.routeEditDeleteSwitch.setOnCheckedChangeListener { _, isChecked ->
-            isDeleteOn = isChecked
-        }
     }
 
     private fun onEdit(
@@ -145,7 +134,9 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
         map.overlays.add(firstMarker)
         markers.add(myFirstMarker)
-        MarkerUtils.setMarkerListeners(requireContext(), map, isDeleteOn, firstMarker, viewModel)
+        MarkerUtils.setMarkerListeners(
+            requireContext(), map, binding.routeEditDeleteSwitch, firstMarker, viewModel
+        )
         for (point in points.subList(1, points.size-1)) {
             val marker = Marker(map)
             val markerType = point.type
@@ -156,7 +147,9 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
             )
             map.overlays.add(marker)
             markers.add(myMarker)
-            MarkerUtils.setMarkerListeners(requireContext(), map, isDeleteOn, marker, viewModel)
+            MarkerUtils.setMarkerListeners(
+                requireContext(), map, binding.routeEditDeleteSwitch, marker, viewModel
+            )
 
             val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
             map.overlays.add(polyline)
@@ -171,7 +164,9 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         )
         map.overlays.add(lastMarker)
         markers.add(myLastMarker)
-        MarkerUtils.setMarkerListeners(requireContext(), map, isDeleteOn, lastMarker, viewModel)
+        MarkerUtils.setMarkerListeners(
+            requireContext(), map, binding.routeEditDeleteSwitch, lastMarker, viewModel
+        )
         val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
         map.overlays.add(polyline)
         polylines.add(polyline)

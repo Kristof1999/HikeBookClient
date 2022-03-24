@@ -36,7 +36,6 @@ import org.osmdroid.views.MapView
 class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var map: MapView
     private lateinit var binding: FragmentRouteCreateBinding
-    private var isDeleteOn = false
     private val viewModel: RouteCreateViewModel by viewModels()
 
     override fun onCreateView(
@@ -57,14 +56,16 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.routeCreateMarkerSpinner.onItemSelectedListener = this
         SpinnerUtils.setSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
 
-        setClickListeners(viewModel)
+        binding.routeCreateCreateButton.setOnClickListener {
+            onCreate(viewModel)
+        }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
             onRouteCreateResult(it)
             // névnek egyedinek kell lennie
         }
 
-        MapUtils.setMapClickListeners(requireContext(), map, isDeleteOn, viewModel)
+        MapUtils.setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
     }
 
 
@@ -76,19 +77,14 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         // keep type as is
     }
 
-    private fun setClickListeners(viewModel: RouteCreateViewModel) {
-        binding.routeCreateDeleteSwitch.setOnCheckedChangeListener { _, isChecked ->
-            isDeleteOn = isChecked
-        }
-        binding.routeCreateCreateButton.setOnClickListener {
-            try {
-                viewModel.onRouteCreate(
-                    binding.routeCreateRouteNameEditText.text.toString(),
-                    binding.routeCreateHikeDescriptionEditText.text.toString()
-                )
-            } catch (e: IllegalArgumentException) {
-                Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
-            }
+    private fun onCreate(viewModel: RouteCreateViewModel) {
+        try {
+            viewModel.onRouteCreate(
+                binding.routeCreateRouteNameEditText.text.toString(),
+                binding.routeCreateHikeDescriptionEditText.text.toString()
+            )
+        } catch (e: IllegalArgumentException) {
+            Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
         }
     }
 
