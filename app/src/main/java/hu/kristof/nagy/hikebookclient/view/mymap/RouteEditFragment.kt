@@ -20,6 +20,7 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
 import hu.kristof.nagy.hikebookclient.model.HelpRequestType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
@@ -66,7 +67,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.userRoute.points)
         binding.routeEditEditButton.setOnClickListener {
-            onEdit(viewModel, routeName)
+            onEdit(viewModel, args.userRoute)
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
@@ -86,12 +87,12 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun onEdit(
         viewModel: RouteEditViewModel,
-        routeName: String
+        oldUserRoute: UserRoute
     ) {
         try {
             val newRouteName = binding.routeEditRouteNameEditText.text.toString()
-            val hikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
-            viewModel.onRouteEdit(routeName, newRouteName, hikeDescription)
+            val newHikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
+            viewModel.onRouteEdit(oldUserRoute, newRouteName, newHikeDescription)
         } catch (e: IllegalArgumentException) {
             Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
         }

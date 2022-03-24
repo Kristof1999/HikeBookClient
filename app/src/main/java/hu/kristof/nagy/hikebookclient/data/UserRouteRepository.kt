@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.model.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
@@ -50,19 +51,13 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
-    override suspend fun editUserRoute(
-        oldRouteName: String,
-        routeName: String,
-        points: List<Point>,
-        hikeDescription: String
-    ): Flow<Result<Boolean>> {
-        return dataStore.data.map { preferences ->
-            preferences[Constants.DATA_STORE_USER_NAME]
-        }.map { userName ->
-            val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
-            handleRequest {
-                service.editUserRoute(userName, oldRouteName, userRoute)
-            }
+    override suspend fun editUserRoute(editedUserRoute: EditedUserRoute): Result<Boolean> {
+        return handleRequest {
+                service.editUserRoute(
+                    editedUserRoute.newUserRoute.userName,
+                    editedUserRoute.oldUserRoute.routeName,
+                    editedUserRoute
+                )
         }
     }
 }

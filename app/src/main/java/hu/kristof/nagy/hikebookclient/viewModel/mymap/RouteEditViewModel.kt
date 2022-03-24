@@ -5,17 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
 import javax.inject.Inject
 
 @HiltViewModel
 class RouteEditViewModel @Inject constructor(
-    private val userRepository: IUserRouteRepository
+    private val userRepository: IUserRouteRepository // TODO: change name
     ) : RouteViewModel() {
     override lateinit var markers: ArrayList<MyMarker>
     override lateinit var polylines: ArrayList<Polyline>
@@ -32,23 +33,25 @@ class RouteEditViewModel @Inject constructor(
         this.polylines = polylines
     }
 
+    // TODO: update javadoc
     /**
      * Saves the edited route.
      * @param oldRouteName name of the route before editing
      * @param routeName name of the route after editing
      * @throws IllegalArgumentException if the edited route has an illegal name, or it has less than 2 points
      */
-    fun onRouteEdit(oldRouteName: String, routeName: String, hikeDescription: String) {
+    fun onRouteEdit(
+        oldUserRoute: UserRoute,
+        routeName: String,
+        hikeDescription: String) {
         val points = markers.map {
             Point.from(it)
         }
         RouteUtils.checkRoute(routeName, points)
+        val newUserRoute = UserRoute(oldUserRoute.userName, routeName, points, hikeDescription)
+        val editedUserRoute = EditedUserRoute(newUserRoute, oldUserRoute)
         viewModelScope.launch {
-                userRepository.editUserRoute(
-                    oldRouteName, routeName, points, hikeDescription
-                ).collect { res ->
-                    _routeEditRes.value = res
-                }
+            _routeEditRes.value = userRepository.editUserRoute(editedUserRoute)
         }
     }
 }
