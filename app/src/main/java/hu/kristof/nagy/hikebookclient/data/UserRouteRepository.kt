@@ -45,7 +45,7 @@ class UserRouteRepository @Inject constructor(
         }.map { userName ->
             val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
             handleRequest {
-                service.createUserRouteForUser(userName!!, userRoute.routeName, userRoute)
+                service.createUserRouteForUser(userName, userRoute.routeName, userRoute)
             }
         }
     }
@@ -61,7 +61,7 @@ class UserRouteRepository @Inject constructor(
         }.map { userName ->
             val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
             handleRequest {
-                service.editUserRoute(userName!!, oldRouteName, userRoute)
+                service.editUserRoute(userName, oldRouteName, userRoute)
             }
         }
     }

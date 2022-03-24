@@ -19,13 +19,13 @@ class AuthRepository @Inject constructor(
      * @return true if registration was successful
      */
     override suspend fun register(user: UserAuth): Boolean {
-        if (service.register(user)) {
+        return if (service.register(user)) {
             dataStore.edit { data ->
                 data[Constants.DATA_STORE_USER_NAME] = user.name
             }
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 
@@ -36,13 +36,13 @@ class AuthRepository @Inject constructor(
      * @return true if login was successful
      */
     override suspend fun login(user: UserAuth): Boolean {
-        if (service.login(user)) {
+        return if (service.login(user)) {
             dataStore.edit { data ->
                 data[Constants.DATA_STORE_USER_NAME] = user.name
             }
-            return true
+            true
         } else {
-            return false
+            false
         }
     }
 }

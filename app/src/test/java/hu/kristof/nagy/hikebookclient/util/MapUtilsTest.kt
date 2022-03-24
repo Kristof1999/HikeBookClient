@@ -76,13 +76,13 @@ class MapUtilsTest {
     @Test
     fun testPolyline() {
         val markerPoint = GeoPoint(0.0, 0.0)
-        val marker = mock<Marker>() {
+        val marker = mock<Marker> {
             on { position } doReturn markerPoint
         }
         val markerType = MarkerType.NEW
         val markerTitle = ""
         val newMarkerPoint = GeoPoint(1.0, 1.0)
-        val newMarker = mock<Marker>() {
+        val newMarker = mock<Marker> {
             on { position } doReturn newMarkerPoint
         }
         val newMarkerType = MarkerType.NEW
@@ -112,15 +112,15 @@ class MapUtilsTest {
     @Test
     fun testChangePrev() {
         val p = GeoPoint(0.0, 0.0)
-        val marker1 = mock<Marker>() {
+        val marker1 = mock<Marker> {
             on { position } doReturn p
         }
         val marker1Type = MarkerType.CASTLE
-        val marker2 = mock<Marker>() {
+        val marker2 = mock<Marker> {
             on { position } doReturn p
         }
         val marker2Type = MarkerType.NEW
-        val marker3 = mock<Marker>() {
+        val marker3 = mock<Marker> {
             on { position } doReturn p
         }
         val marker3Type = MarkerType.NEW

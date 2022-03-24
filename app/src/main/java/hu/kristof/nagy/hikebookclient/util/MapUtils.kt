@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.util
 import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import hu.kristof.nagy.hikebookclient.R
@@ -24,18 +25,18 @@ object MapUtils {
         grantResults: IntArray,
         activity: Activity
     ) {
-        val permissionsToRequest = ArrayList<String>();
-        var i = 0;
+        val permissionsToRequest = ArrayList<String>()
+        var i = 0
         while (i < grantResults.size) {
-            permissionsToRequest.add(permissions[i]);
-            i++;
+            permissionsToRequest.add(permissions[i])
+            i++
         }
         if (permissionsToRequest.size > 0) {
             ActivityCompat.requestPermissions(
                 activity,
                 permissionsToRequest.toTypedArray(),
                 REQUEST_PERMISSIONS_REQUEST_CODE
-            );
+            )
         }
     }
 
@@ -73,7 +74,7 @@ object MapUtils {
 
         val newMarker = Marker(map)
         val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, context)
-        val setMarkerIcon = context.getDrawable(R.drawable.set_marker_image)!!
+        val setMarkerIcon = AppCompatResources.getDrawable(context, R.drawable.set_marker_image)!!
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
         MarkerUtils.setMarkerListeners(context, map, deleteSwitch, newMarker, viewModel)
         map.invalidate()

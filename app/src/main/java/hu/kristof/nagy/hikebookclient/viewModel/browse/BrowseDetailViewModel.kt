@@ -39,7 +39,7 @@ class BrowseDetailViewModel @Inject constructor(
         viewModelScope.launch {
             _route.value = handleRequest {
                 service.loadUserRoute(userName, routeName)
-            }
+            }!!
         }
     }
 
@@ -52,7 +52,7 @@ class BrowseDetailViewModel @Inject constructor(
                 if (_route.value != null && route.value!!.getOrNull() != null) {
                     _addRes.value = handleRequest {
                         service.createUserRouteForUser(userName!!, routeName, _route.value!!.getOrNull()!!)
-                    }
+                    }!!
                 } else {
                     throw IllegalStateException("Az útvonal még nem töltődött be.")
                 }

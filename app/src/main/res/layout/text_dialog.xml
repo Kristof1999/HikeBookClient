@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
 
     </data>
@@ -16,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_weight="1"
-            android:text="Add meg a kiemelt pont szövegét:"
+            android:text="@string/marker_text_dialog_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +27,7 @@
             android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="Szöveg"
+            android:hint="@string/marker_text_dialog_hint"
             android:inputType="textPersonName"
             android:singleLine="false"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"

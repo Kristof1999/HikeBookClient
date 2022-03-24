@@ -46,7 +46,7 @@ class MarkerUtilsTest {
         markers.add(MyMarker(marker1, MarkerType.SET, ""))
         markers.add(MyMarker(marker2, MarkerType.NEW, ""))
         val polyline = Polyline()
-        polyline.setPoints(listOf(GeoPoint(0.0, 0.0,), GeoPoint(1.0, 1.0)))
+        polyline.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         polylines.add(polyline)
 
         MarkerUtils.onDeleteLogicHandler(marker2, markerIcon, markers, polylines)
@@ -66,10 +66,10 @@ class MarkerUtilsTest {
         markers.add(myMarker2)
         markers.add(myMarker3)
         val polyline1 = Polyline()
-        polyline1.setPoints(listOf(GeoPoint(0.0, 0.0,), GeoPoint(1.0, 1.0)))
+        polyline1.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         polylines.add(polyline1)
         val polyline2 = Polyline()
-        polyline2.setPoints(listOf(GeoPoint(0.0, 0.0,), GeoPoint(1.0, 1.0)))
+        polyline2.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         polylines.add(polyline2)
 
         MarkerUtils.onDeleteLogicHandler(marker3, markerIcon, markers, polylines)

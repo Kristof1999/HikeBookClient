@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.util
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.model.MarkerType
@@ -137,7 +138,7 @@ object MarkerUtils {
         mapView: MapView,
         viewModel: RouteViewModel
     ) {
-        if (viewModel.onDelete(marker, context.getDrawable(R.drawable.marker_image)!!)) {
+        if (viewModel.onDelete(marker, AppCompatResources.getDrawable(context, R.drawable.marker_image)!!)) {
             marker.remove(mapView)
             mapView.invalidate()
         } else {
@@ -185,11 +186,11 @@ object MarkerUtils {
     // this method to be called in a viewModel instead of a Fragment
     // ResourcesCompat.getDrawable(...) jó lehet
     fun getMarkerIcon(type: MarkerType, context: Context): Drawable = when(type) {
-        MarkerType.NEW -> context.getDrawable(R.drawable.marker_image)!!
-        MarkerType.CASTLE -> context.getDrawable(R.drawable.castle_image)!!
-        MarkerType.LOOKOUT -> context.getDrawable(R.drawable.landscape_image)!!
-        MarkerType.TEXT -> context.getDrawable(R.drawable.text_marker)!!
-        MarkerType.SET -> context.getDrawable(R.drawable.set_marker_image)!!
+        MarkerType.NEW -> AppCompatResources.getDrawable(context, R.drawable.marker_image)!!
+        MarkerType.CASTLE -> AppCompatResources.getDrawable(context, R.drawable.castle_image)!!
+        MarkerType.LOOKOUT -> AppCompatResources.getDrawable(context, R.drawable.landscape_image)!!
+        MarkerType.TEXT -> AppCompatResources.getDrawable(context, R.drawable.text_marker)!!
+        MarkerType.SET -> AppCompatResources.getDrawable(context, R.drawable.set_marker_image)!!
     }
 
     fun customizeMarker(myMarker: MyMarker, icon: Drawable, p: GeoPoint) {

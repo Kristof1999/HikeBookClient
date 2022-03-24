@@ -45,7 +45,7 @@ class MyMapListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_my_map_list, container, false
         )
@@ -116,13 +116,13 @@ class MyMapListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.helpMenuItem) {
+        return if (item.itemId == R.id.helpMenuItem) {
             val requestType = HelpRequestType.MY_MAP_LIST
             val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
             findNavController().navigate(action)
-            return true
+            true
         } else {
-            return super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
         }
     }
 }

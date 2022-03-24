@@ -41,7 +41,7 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_route_create, container, false
         )
@@ -122,13 +122,13 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.helpMenuItem) {
+        return if (item.itemId == R.id.helpMenuItem) {
             val requestType = HelpRequestType.ROUTE_CREATE
             val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
             findNavController().navigate(action)
-            return true
+            true
         } else {
-            return super.onOptionsItemSelected(item)
+            super.onOptionsItemSelected(item)
         }
     }
 }

@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
-            android:hint="Útvonal név"
+            android:hint="@string/route_name_hint"
             android:inputType="textPersonName"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,6 +50,7 @@
 
         <org.osmdroid.views.MapView
             android:id="@+id/routeEditMap"
+            tileSource="Mapnik"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

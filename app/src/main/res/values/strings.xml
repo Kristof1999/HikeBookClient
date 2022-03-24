@@ -40,6 +40,8 @@
     <string name="marker_spinner_description">marker picker</string>
     <string name="hike_description_hint">Túra leírás, részletek, megjegyzések</string>
     <string name="route_name_hint">Útvonal név</string>
+    <string name="marker_text_dialog_text">Add meg a kiemelt pont szövegét:</string>
+    <string name="marker_text_dialog_hint">Szöveg</string>
     <string-array name="markers">
         <item>Új</item>
         <item>Várrom</item>
@@ -50,6 +52,7 @@
     <!-- Browse -->
     <string name="route_add_image_description">Road with a plus</string>
     <string name="browse_hike_detail_description">Felhasználói név:%1$s\nÚtvonal név: %2$s\n%3$s</string>
+    <string name="add_to_my_map_text">Hozzáadás a saját térképhez</string>
 
     <!-- In code usage -->
     <string name="generic_error_msg">Valamilyen hiba lépett fel, további információkért tekintse meg a súgót.</string>
