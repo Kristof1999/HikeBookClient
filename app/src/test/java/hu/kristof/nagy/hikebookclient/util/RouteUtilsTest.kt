@@ -2,7 +2,7 @@ package hu.kristof.nagy.hikebookclient.util
 
 import hu.kristof.nagy.hikebookclient.model.MarkerType
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.model.UserRoute
 import org.junit.Assert.assertThrows
 import org.junit.Test
 
@@ -12,30 +12,30 @@ class RouteUtilsTest {
 
     @Test
     fun testEmptyName() {
-        val route = Route("", listOf(p1, p2), "")
+        val route = UserRoute("", "", listOf(p1, p2), "")
         assertThrows(IllegalArgumentException::class.java) {
-            RouteUtils.checkRoute(route)
+            RouteUtils.checkRoute(route.routeName, route.points)
         }
     }
 
     @Test
     fun testIllegalName() {
-        val route = Route("/", listOf(p1, p2), "")
+        val route = UserRoute("", "/", listOf(p1, p2), "")
         assertThrows(IllegalArgumentException::class.java) {
-            RouteUtils.checkRoute(route)
+            RouteUtils.checkRoute(route.routeName, route.points)
         }
     }
 
     @Test
     fun testRouteLength() {
-        var route = Route("name", listOf(), "")
+        var route = UserRoute("", "name", listOf(), "")
         assertThrows(IllegalArgumentException::class.java) {
-            RouteUtils.checkRoute(route)
+            RouteUtils.checkRoute(route.routeName, route.points)
         }
 
-        route = Route("name", listOf(p1), "")
+        route = UserRoute("","name", listOf(p1), "")
         assertThrows(IllegalArgumentException::class.java) {
-            RouteUtils.checkRoute(route)
+            RouteUtils.checkRoute(route.routeName, route.points)
         }
     }
 }
