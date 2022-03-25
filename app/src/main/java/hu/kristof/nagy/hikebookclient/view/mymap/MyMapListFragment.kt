@@ -32,8 +32,8 @@ import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
-import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
 /**
@@ -104,7 +104,13 @@ class MyMapListFragment : Fragment() {
                     val action = MyMapListFragmentDirections
                         .actionMyMapListFragmentToMyMapDetailFragment(route)
                     findNavController().navigate(action)
-                })
+                },
+                hikePlanListener = { routeName ->
+                    findNavController().navigate(
+                        R.id.action_myMapListFragment_to_hikePlanFragment
+                    )
+                }
+            )
         )
         binding.myMapRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner

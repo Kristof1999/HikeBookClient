@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_myMapListFragment_to_myMapDetailFragment"
             app:destination="@id/myMapDetailFragment" />
+        <action
+            android:id="@+id/action_myMapListFragment_to_hikePlanFragment"
+            app:destination="@id/hikePlanFragment" />
     </fragment>
     <activity
         android:id="@+id/loginActivity"
@@ -94,6 +97,9 @@
         <action
             android:id="@+id/action_myMapDetailFragment_to_routeEditFragment"
             app:destination="@id/routeEditFragment" />
+        <action
+            android:id="@+id/action_myMapDetailFragment_to_hikePlanFragment"
+            app:destination="@id/hikePlanFragment" />
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
@@ -107,4 +113,8 @@
     <action
         android:id="@+id/action_global_helpFragment"
         app:destination="@id/helpFragment" />
+    <fragment
+        android:id="@+id/hikePlanFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanFragment"
+        android:label="HikePlanFragment" />
 </navigation>

@@ -89,10 +89,12 @@ class MyMapClickListener(
     private val editListener: (routeName: String) -> Unit,
     private val deleteListener: (routeName: String) -> Unit,
     private val printListener: (routeName: String) -> Unit,
-    private val detailNavListener: (routeName: String) -> Unit
+    private val detailNavListener: (routeName: String) -> Unit,
+    private val hikePlanListener: (routeName: String) -> Unit
 ) {
     fun onEdit(routeName: String) = editListener(routeName)
     fun onDelete(routeName: String) = deleteListener(routeName)
     fun onPrint(routeName: String) = printListener(routeName)
     fun onDetailNav(routeName: String) = detailNavListener(routeName)
+    fun onHikePlan(routeName: String) = hikePlanListener(routeName)
 }

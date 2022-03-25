@@ -6,15 +6,25 @@ import android.widget.Spinner
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.view.hike.TransportType
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.view.mymap.TextDialogFragment
+import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
 
 object SpinnerUtils {
-    fun setSpinnerAdapter(context: Context, spinner: Spinner) {
+    fun setTransportSpinnerAdapter(context: Context, spinner: Spinner) {
+        setSpinnerAdatper(context, spinner, R.array.transport_types)
+    }
+
+    fun setMarkerSpinnerAdapter(context: Context, spinner: Spinner) {
+        setSpinnerAdatper(context, spinner, R.array.markers)
+    }
+
+    private fun setSpinnerAdatper(context: Context, spinner: Spinner, arrayId: Int) {
         ArrayAdapter.createFromResource(
             context,
-            R.array.markers,
+            arrayId,
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -22,8 +32,25 @@ object SpinnerUtils {
         }
     }
 
+    fun onTransportItemSelected(
+        pos: Int,
+        viewModel: HikePlanViewModel
+    ) {
+        when(pos) {
+            TransportType.NOTHING.ordinal -> {
+                viewModel.transportType = TransportType.NOTHING
+            }
+            TransportType.BICYCLE.ordinal -> {
+                viewModel.transportType = TransportType.BICYCLE
+            }
+            TransportType.CAR.ordinal -> {
+                viewModel.transportType = TransportType.CAR
+            }
+        }
+    }
+
     // TODO: try to use sg less error-prone/more flexible instead of ordinal and pos
-    fun onItemSelected(
+    fun onMarkerItemSelected(
         pos: Int,
         viewModel: RouteViewModel,
         parentFragmentManager: FragmentManager,

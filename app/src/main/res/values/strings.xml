@@ -214,4 +214,5 @@
         "Fent egy szöveges mező mutatja az út és a felhasználó nevét, valamint a túra leírását."
         "A lap alján levő gombbal hozzáadhatjuk a térképünkhöz az útvonalat."
     </string>
+    <string name="hike_plan_button_text">Túra Tervezése</string>
 </resources>
