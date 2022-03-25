@@ -32,8 +32,8 @@ import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
-import hu.kristof.nagy.hikebookclient.model.HelpRequestType
-import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
 /**

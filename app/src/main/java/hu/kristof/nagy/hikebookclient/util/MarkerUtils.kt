@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
 import org.osmdroid.util.GeoPoint

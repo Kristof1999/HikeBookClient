@@ -97,12 +97,12 @@
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.HelpFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.help.HelpFragment"
         android:label="@string/help_title"
-        tools:layout="@layout/fragment_help" >
+        tools:layout="@layout/fragment_help">
         <argument
             android:name="helpRequestType"
-            app:argType="hu.kristof.nagy.hikebookclient.model.HelpRequestType" />
+            app:argType="hu.kristof.nagy.hikebookclient.view.help.HelpRequestType" />
     </fragment>
     <action
         android:id="@+id/action_global_helpFragment"

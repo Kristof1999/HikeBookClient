@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.model
+package hu.kristof.nagy.hikebookclient.view.mymap
 
 enum class MarkerType {
     NEW, CASTLE, LOOKOUT, TEXT,

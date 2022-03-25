@@ -7,7 +7,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
 import org.osmdroid.events.MapEventsReceiver

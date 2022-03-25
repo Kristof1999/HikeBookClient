@@ -60,6 +60,16 @@
     <string name="name_exists_error_msg">Ez a név már foglalt.</string>
     <string name="login_fail_msg">Vagy a név, vagy a jelszó hibás.</string>
 
+    <!-- Hike -->
+    <string name="transport_types_spinner_description">Travel types</string>
+    <string name="date_picker_button_text">Dátum Kiválasztása</string>
+    <string name="hike_start_button_text">Kezdés</string>
+    <string-array name="transport_types">
+        <item>Nem kérek ajánlást</item>
+        <item>Bicikli</item>
+        <item>Autó</item>
+    </string-array>
+
     <!-- Help -->
     <string name="help_title">Súgó</string>
     <string name="about">

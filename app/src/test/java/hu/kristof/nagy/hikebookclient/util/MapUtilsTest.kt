@@ -5,7 +5,7 @@
 package hu.kristof.nagy.hikebookclient.util
 
 import android.graphics.drawable.Drawable
-import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.hasItem

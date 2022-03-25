@@ -1,5 +1,6 @@
 // based on the osmdroid tutorial:
 // https://github.com/osmdroid/osmdroid/wiki
+// spinner: https://developer.android.com/guide/topics/ui/controls/spinner
 
 package hu.kristof.nagy.hikebookclient.view.mymap
 
@@ -19,12 +20,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteCreateBinding
-import hu.kristof.nagy.hikebookclient.model.HelpRequestType
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.SpinnerUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
-import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
@@ -54,7 +55,7 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         initMap()
 
         binding.routeCreateMarkerSpinner.onItemSelectedListener = this
-        SpinnerUtils.setSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
+        SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
 
         binding.routeCreateCreateButton.setOnClickListener {
             onCreate(viewModel)
@@ -70,7 +71,7 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        SpinnerUtils.onItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
+        SpinnerUtils.onMarkerItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

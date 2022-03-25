@@ -17,12 +17,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
-import hu.kristof.nagy.hikebookclient.model.HelpRequestType
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
-import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -57,7 +57,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         initMap(args)
 
         binding.routeEditSpinner.onItemSelectedListener = this
-        SpinnerUtils.setSpinnerAdapter(requireContext(), binding.routeEditSpinner)
+        SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
         val routeName = args.userRoute.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
@@ -78,7 +78,7 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        SpinnerUtils.onItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
+        SpinnerUtils.onMarkerItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

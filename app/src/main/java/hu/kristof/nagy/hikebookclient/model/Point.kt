@@ -1,6 +1,7 @@
 package hu.kristof.nagy.hikebookclient.model
 
 import android.os.Parcelable
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import kotlinx.parcelize.Parcelize
 import org.osmdroid.util.GeoPoint
 

@@ -2,7 +2,7 @@ package hu.kristof.nagy.hikebookclient.viewModel.mymap
 
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModel
-import hu.kristof.nagy.hikebookclient.model.MarkerType
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils

@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseListBinding
-import hu.kristof.nagy.hikebookclient.model.HelpRequestType
-import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseViewModel
 
 /**

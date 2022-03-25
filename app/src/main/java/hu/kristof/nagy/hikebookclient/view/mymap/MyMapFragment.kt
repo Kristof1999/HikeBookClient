@@ -18,12 +18,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapBinding
-import hu.kristof.nagy.hikebookclient.model.HelpRequestType
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
-import hu.kristof.nagy.hikebookclient.view.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.config.Configuration.getInstance
 import org.osmdroid.views.MapView

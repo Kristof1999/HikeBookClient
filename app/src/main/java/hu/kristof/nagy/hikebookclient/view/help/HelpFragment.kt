@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.view
+package hu.kristof.nagy.hikebookclient.view.help
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHelpBinding
-import hu.kristof.nagy.hikebookclient.model.HelpRequestType
 
 class HelpFragment : Fragment() {
     private lateinit var binding: FragmentHelpBinding
