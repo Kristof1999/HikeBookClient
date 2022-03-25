@@ -12,13 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanBinding
-import hu.kristof.nagy.hikebookclient.util.MapUtils
-import hu.kristof.nagy.hikebookclient.util.SpinnerUtils
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanViewModel
 import org.osmdroid.config.Configuration
+import org.osmdroid.events.MapEventsReceiver
+import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.MapEventsOverlay
+import org.osmdroid.views.overlay.Marker
 
 class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanBinding
@@ -72,9 +74,40 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
         viewModel.switchOffStart.observe(viewLifecycleOwner) {
             binding.hikePlanStartSwitch.isChecked = false
         }
-        viewModel.switchOffDestination.observe(viewLifecycleOwner) {
+        viewModel.switchOffEnd.observe(viewLifecycleOwner) {
             binding.hikePlanDestinationSwitch.isChecked = false
         }
+        val startMarker = Marker(map)
+        startMarker.position = viewModel.startPoint
+        startMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+        startMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.SET, requireContext())
+        map.overlays.add(startMarker)
+        viewModel.startPointChanged.observe(viewLifecycleOwner) {
+            startMarker.position = viewModel.startPoint
+            map.invalidate()
+        }
+        val endMarker = Marker(map)
+        endMarker.position = viewModel.endPoint
+        endMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+        endMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.NEW, requireContext())
+        map.overlays.add(endMarker)
+        viewModel.endPointChanged.observe(viewLifecycleOwner) {
+            endMarker.position = viewModel.endPoint
+            map.invalidate()
+        }
+
+        val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                viewModel.onSingleTap(p!!)
+                return true
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                return true
+            }
+        })
+        map.overlays.add(0, mapEventsOverlay)
+        map.invalidate()
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
