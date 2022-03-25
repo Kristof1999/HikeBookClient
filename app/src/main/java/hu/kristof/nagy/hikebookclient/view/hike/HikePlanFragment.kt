@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanBinding
+import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.SpinnerUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
@@ -60,6 +61,20 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
             }
         }
+
+        binding.hikePlanStartSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setStartTo(isChecked)
+        }
+        binding.hikePlanDestinationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setDestinationTo(isChecked)
+        }
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.switchOffStart.observe(viewLifecycleOwner) {
+            binding.hikePlanStartSwitch.isChecked = false
+        }
+        viewModel.switchOffDestination.observe(viewLifecycleOwner) {
+            binding.hikePlanDestinationSwitch.isChecked = false
+        }
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -68,5 +83,22 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // keep type as is
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        MapUtils.onRequestPermissionsResult(
+            requestCode, permissions, grantResults, requireActivity()
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+        map.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        map.onPause()
     }
 }
