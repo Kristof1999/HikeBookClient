@@ -1,6 +1,7 @@
 package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +13,16 @@ import androidx.fragment.app.viewModels
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanBinding
 import hu.kristof.nagy.hikebookclient.util.SpinnerUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanViewModel
+import org.osmdroid.config.Configuration
+import org.osmdroid.views.MapView
 
 class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanBinding
     private val viewModel: HikePlanViewModel by viewModels()
+    private lateinit var map: MapView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +37,13 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.hikePlanMeanSpinner.onItemSelectedListener = this
-        SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanMeanSpinner)
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.hikePlanMap
+        map.setStartZoomAndCenter()
+        map.addCopyRightOverlay()
+
+        binding.hikePlanTransportMeanSpinner.onItemSelectedListener = this
+        SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportMeanSpinner)
 
         binding.hikePlanDateButton.setOnClickListener {
             val datePickerFragment = DatePickerFragment()
