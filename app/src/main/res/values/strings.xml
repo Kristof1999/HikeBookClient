@@ -42,6 +42,7 @@
     <string name="route_name_hint">Útvonal név</string>
     <string name="marker_text_dialog_text">Add meg a kiemelt pont szövegét:</string>
     <string name="marker_text_dialog_hint">Szöveg</string>
+    <string name="hike_plan_button_text">Túra Tervezése</string>
     <string-array name="markers">
         <item>Új</item>
         <item>Várrom</item>
@@ -214,5 +215,4 @@
         "Fent egy szöveges mező mutatja az út és a felhasználó nevét, valamint a túra leírását."
         "A lap alján levő gombbal hozzáadhatjuk a térképünkhöz az útvonalat."
     </string>
-    <string name="hike_plan_button_text">Túra Tervezése</string>
 </resources>
