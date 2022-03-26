@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.hike.HikePlanFragment">
+        tools:context=".view.hike.HikePlanTransportFragment">
 
         <org.osmdroid.views.MapView
             android:id="@+id/hikePlanMap"
@@ -31,20 +31,8 @@
             android:contentDescription="@string/transport_types_spinner_description"
             android:minHeight="48dp"
             android:spinnerMode="dialog"
-            app:layout_constraintBottom_toTopOf="@+id/hikePlanDateButton"
+            app:layout_constraintBottom_toTopOf="@+id/hikePlanStartButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/hikePlanDateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/date_picker_button_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toTopOf="@+id/hikePlanWeatherTv"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
@@ -79,17 +67,6 @@
             android:text="Végállomás"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/hikePlanWeatherTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="Időjárás információ"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toTopOf="@+id/hikePlanStartButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

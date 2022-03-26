@@ -106,9 +106,10 @@ class MyMapListFragment : Fragment() {
                     findNavController().navigate(action)
                 },
                 hikePlanListener = { routeName ->
-                    findNavController().navigate(
-                        R.id.action_myMapListFragment_to_hikePlanFragment
-                    )
+                    val userRoute = viewModel.getRoute(routeName)
+                    val directions = MyMapListFragmentDirections
+                        .actionMyMapListFragmentToHikePlanDateFragment(userRoute)
+                    findNavController().navigate(directions)
                 }
             )
         )

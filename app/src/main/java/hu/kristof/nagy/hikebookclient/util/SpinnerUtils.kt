@@ -9,7 +9,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.view.hike.TransportType
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.view.mymap.TextDialogFragment
-import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
 
 object SpinnerUtils {
@@ -34,12 +34,9 @@ object SpinnerUtils {
 
     fun onTransportItemSelected(
         pos: Int,
-        viewModel: HikePlanViewModel
+        viewModel: HikePlanTransportViewModel
     ) {
         when(pos) {
-            TransportType.NOTHING.ordinal -> {
-                viewModel.transportType = TransportType.NOTHING
-            }
             TransportType.BICYCLE.ordinal -> {
                 viewModel.transportType = TransportType.BICYCLE
             }

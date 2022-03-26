@@ -3,21 +3,18 @@ package hu.kristof.nagy.hikebookclient.viewModel.hike
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.data.network.WeatherService
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.view.hike.TransportType
-import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
 @HiltViewModel
-class HikePlanViewModel @Inject constructor(
+class HikePlanTransportViewModel @Inject constructor(
     private val service: WeatherService
     ) : ViewModel() {
-    var transportType = TransportType.NOTHING
+    var transportType = TransportType.BICYCLE
 
     var startPoint: GeoPoint = Constants.START_POINT
     var endPoint: GeoPoint = Constants.START_POINT
@@ -37,10 +34,6 @@ class HikePlanViewModel @Inject constructor(
     private var _switchOffEnd = MutableLiveData(false)
     val switchOffEnd: LiveData<Boolean>
         get() = _switchOffEnd
-
-    private var _forecastRes = MutableLiveData<String>()
-    val forecastRes: LiveData<String>
-        get() = _forecastRes
 
     /**
      * Indicates if we want to put the start point on the map.
@@ -78,16 +71,6 @@ class HikePlanViewModel @Inject constructor(
         if(isEnd) {
             endPoint = p
             _endPointChanged.value = !_endPointChanged.value!!
-        }
-    }
-
-    fun forecast() {
-        viewModelScope.launch {
-            _forecastRes.value = service.forecast(
-                startPoint.latitude, startPoint.longitude,
-                Constants.METRIC_UNIT, Constants.FORECAST_CNT,
-                BuildConfig.WEATHER_API_KEY
-            ).toString()
         }
     }
 }

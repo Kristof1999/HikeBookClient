@@ -9,14 +9,12 @@ import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanBinding
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
-import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
@@ -25,9 +23,9 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 
 @AndroidEntryPoint
-class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
-    private lateinit var binding: FragmentHikePlanBinding
-    private val viewModel: HikePlanViewModel by viewModels()
+class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener {
+    private lateinit var binding: hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
+    private val viewModel: HikePlanTransportViewModel by viewModels()
     private lateinit var map: MapView
 
     override fun onCreateView(
@@ -35,7 +33,7 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_hike_plan, container, false
+            inflater, R.layout.fragment_hike_plan_transport, container, false
         )
         return binding.root
     }
@@ -52,7 +50,7 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
         SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportMeanSpinner)
 
         binding.hikePlanStartButton.setOnClickListener {
-            if (viewModel.transportType != TransportType.NOTHING) {
+
                 val startPoint = Point(
                     viewModel.startPoint.latitude, viewModel.startPoint.longitude,
                     MarkerType.SET, ""
@@ -62,32 +60,8 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     MarkerType.NEW, ""
                 )
                 val transportType = viewModel.transportType
-                val directions = HikePlanFragmentDirections
-                    .actionHikePlanFragmentToHikeTransportFragment(startPoint, endPoint, transportType)
-                findNavController().navigate(directions)
-            } else {
-                // go directly to hike fragment
-            }
-        }
-        binding.hikePlanDateButton.setOnClickListener {
-            //val datePickerFragment = DatePickerFragment()
-            //datePickerFragment.show(parentFragmentManager, "datePicker")
+                val directions = HikePlanTransportFragmentDirections
 
-            binding.lifecycleOwner = viewLifecycleOwner
-//            datePickerFragment.yearRes.observe(viewLifecycleOwner) {
-//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-//            }
-//            datePickerFragment.monthRes.observe(viewLifecycleOwner) {
-//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-//            }
-//            datePickerFragment.dayRes.observe(viewLifecycleOwner) {
-//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-//            }
-            viewModel.forecast()
-        }
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.forecastRes.observe(viewLifecycleOwner) {
-            binding.hikePlanWeatherTv.text = it
         }
 
         binding.hikePlanStartSwitch.setOnCheckedChangeListener { _, isChecked ->
