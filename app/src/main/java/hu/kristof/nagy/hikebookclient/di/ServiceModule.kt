@@ -45,6 +45,7 @@ import dagger.hilt.components.SingletonComponent
 import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.data.network.AuthService
 import hu.kristof.nagy.hikebookclient.data.network.RouteService
+import hu.kristof.nagy.hikebookclient.data.network.WeatherService
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -66,5 +67,19 @@ object ServiceModule {
             .baseUrl(baseUrl)
             .build()
             .create(Service::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideWeatherService(): WeatherService {
+        val baseUrl = "http://api.openweathermap.org/data/2.5/"
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+        return Retrofit.Builder()
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .baseUrl(baseUrl)
+            .build()
+            .create(WeatherService::class.java)
     }
 }

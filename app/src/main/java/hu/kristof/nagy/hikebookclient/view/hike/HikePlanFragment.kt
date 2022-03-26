@@ -6,11 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanBinding
 import hu.kristof.nagy.hikebookclient.model.Point
@@ -24,6 +24,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 
+@AndroidEntryPoint
 class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanBinding
     private val viewModel: HikePlanViewModel by viewModels()
@@ -50,21 +51,6 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.hikePlanTransportMeanSpinner.onItemSelectedListener = this
         SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportMeanSpinner)
 
-        binding.hikePlanDateButton.setOnClickListener {
-            val datePickerFragment = DatePickerFragment()
-            datePickerFragment.show(parentFragmentManager, "datePicker")
-
-            binding.lifecycleOwner = viewLifecycleOwner
-            datePickerFragment.yearRes.observe(viewLifecycleOwner) {
-                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-            }
-            datePickerFragment.monthRes.observe(viewLifecycleOwner) {
-                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-            }
-            datePickerFragment.dayRes.observe(viewLifecycleOwner) {
-                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-            }
-        }
         binding.hikePlanStartButton.setOnClickListener {
             if (viewModel.transportType != TransportType.NOTHING) {
                 val startPoint = Point(
@@ -82,6 +68,26 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
             } else {
                 // go directly to hike fragment
             }
+        }
+        binding.hikePlanDateButton.setOnClickListener {
+            //val datePickerFragment = DatePickerFragment()
+            //datePickerFragment.show(parentFragmentManager, "datePicker")
+
+            binding.lifecycleOwner = viewLifecycleOwner
+//            datePickerFragment.yearRes.observe(viewLifecycleOwner) {
+//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+//            }
+//            datePickerFragment.monthRes.observe(viewLifecycleOwner) {
+//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+//            }
+//            datePickerFragment.dayRes.observe(viewLifecycleOwner) {
+//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
+//            }
+            viewModel.forecast()
+        }
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.forecastRes.observe(viewLifecycleOwner) {
+            binding.hikePlanWeatherTv.text = it
         }
 
         binding.hikePlanStartSwitch.setOnCheckedChangeListener { _, isChecked ->
