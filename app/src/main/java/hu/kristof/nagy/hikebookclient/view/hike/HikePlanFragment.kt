@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanBinding
+import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanViewModel
@@ -62,6 +64,19 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
             datePickerFragment.dayRes.observe(viewLifecycleOwner) {
                 Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
             }
+        }
+        binding.hikePlanStartButton.setOnClickListener {
+            val startPoint = Point(
+                viewModel.startPoint.latitude, viewModel.startPoint.longitude,
+                MarkerType.SET, ""
+            )
+            val endPoint = Point(
+                viewModel.endPoint.latitude, viewModel.endPoint.longitude,
+                MarkerType.NEW, ""
+            )
+            val directions = HikePlanFragmentDirections
+                .actionHikePlanFragmentToHikeTransportFragment(startPoint, endPoint)
+            findNavController().navigate(directions)
         }
 
         binding.hikePlanStartSwitch.setOnCheckedChangeListener { _, isChecked ->

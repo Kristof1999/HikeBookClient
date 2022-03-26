@@ -116,5 +116,20 @@
     <fragment
         android:id="@+id/hikePlanFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanFragment"
-        android:label="HikePlanFragment" />
+        android:label="HikePlanFragment" >
+        <action
+            android:id="@+id/action_hikePlanFragment_to_hikeTransportFragment"
+            app:destination="@id/hikeTransportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hikeTransportFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.hike.HikeTransportFragment"
+        android:label="HikeTransportFragment" >
+        <argument
+            android:name="startPoint"
+            app:argType="hu.kristof.nagy.hikebookclient.model.Point" />
+        <argument
+            android:name="endPoint"
+            app:argType="hu.kristof.nagy.hikebookclient.model.Point" />
+    </fragment>
 </navigation>

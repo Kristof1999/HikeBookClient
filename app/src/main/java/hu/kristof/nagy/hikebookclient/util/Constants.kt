@@ -21,4 +21,6 @@ object Constants {
      * Key for user name in preferences datastore
      */
     val DATA_STORE_USER_NAME = stringPreferencesKey("userName")
+
+    const val USER_AGENT = "hu.kristof.nagy.hikebookclient"
 }
