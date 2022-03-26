@@ -79,15 +79,23 @@ android {
         Properties properties = new Properties()
         properties.load(project.rootProject.file("local.properties").newDataInputStream())
         def baseUrl = properties.getProperty("base_url", "")
+        def weatherApiKey = properties.getProperty("weather_api_key", "")
 
         debug {
             buildConfigField 'String', "BASE_URL", baseUrl
             resValue 'string', "base_url", baseUrl
+
+            buildConfigField 'String', "WEATHER_API_KEY", weatherApiKey
+            resValue 'string', "weather_api_key", weatherApiKey
         }
 
         release {
             buildConfigField 'String', "BASE_URL", baseUrl
             resValue 'string', "base_url", baseUrl
+
+            buildConfigField 'String', "WEATHER_API_KEY", weatherApiKey
+            resValue 'string', "weather_api_key", weatherApiKey
+
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
