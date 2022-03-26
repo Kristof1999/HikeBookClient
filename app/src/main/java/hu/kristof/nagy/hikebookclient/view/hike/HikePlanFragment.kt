@@ -66,17 +66,22 @@ class HikePlanFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
         binding.hikePlanStartButton.setOnClickListener {
-            val startPoint = Point(
-                viewModel.startPoint.latitude, viewModel.startPoint.longitude,
-                MarkerType.SET, ""
-            )
-            val endPoint = Point(
-                viewModel.endPoint.latitude, viewModel.endPoint.longitude,
-                MarkerType.NEW, ""
-            )
-            val directions = HikePlanFragmentDirections
-                .actionHikePlanFragmentToHikeTransportFragment(startPoint, endPoint)
-            findNavController().navigate(directions)
+            if (viewModel.transportType != TransportType.NOTHING) {
+                val startPoint = Point(
+                    viewModel.startPoint.latitude, viewModel.startPoint.longitude,
+                    MarkerType.SET, ""
+                )
+                val endPoint = Point(
+                    viewModel.endPoint.latitude, viewModel.endPoint.longitude,
+                    MarkerType.NEW, ""
+                )
+                val transportType = viewModel.transportType
+                val directions = HikePlanFragmentDirections
+                    .actionHikePlanFragmentToHikeTransportFragment(startPoint, endPoint, transportType)
+                findNavController().navigate(directions)
+            } else {
+                // go directly to hike fragment
+            }
         }
 
         binding.hikePlanStartSwitch.setOnCheckedChangeListener { _, isChecked ->

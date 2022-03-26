@@ -131,5 +131,8 @@
         <argument
             android:name="endPoint"
             app:argType="hu.kristof.nagy.hikebookclient.model.Point" />
+        <argument
+            android:name="transportType"
+            app:argType="hu.kristof.nagy.hikebookclient.view.hike.TransportType" />
     </fragment>
 </navigation>
