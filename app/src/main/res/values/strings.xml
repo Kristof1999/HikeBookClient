@@ -63,7 +63,8 @@
 
     <!-- Hike -->
     <string name="transport_types_spinner_description">Travel types</string>
-    <string name="date_picker_button_text">Dátum Kiválasztása</string>
+    <string name="date_picker_button_text">Dátum\nKiválasztása</string>
+    <string name="time_picker_button_text">Idő\nKiválasztása</string>
     <string name="hike_start_button_text">Túra\nKezdése</string>
     <string name="hike_route_plan_button_text">Útvonal\nTervezése</string>
     <string name="transport_start_button_text">Vezetés\nKezdése</string>
