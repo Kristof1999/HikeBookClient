@@ -4,6 +4,7 @@
 
 package hu.kristof.nagy.hikebookclient.data.network
 
+import hu.kristof.nagy.hikebookclient.model.weather.WeatherResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -15,5 +16,5 @@ interface WeatherService {
         @Query("units") unit: String,
         @Query("cnt") cnt: Int,
         @Query("appid") appid: String
-    ): Any
+    ): WeatherResponse
 }
