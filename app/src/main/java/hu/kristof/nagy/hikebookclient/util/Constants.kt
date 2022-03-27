@@ -26,4 +26,5 @@ object Constants {
 
     const val METRIC_UNIT = "metric"
     const val FORECAST_CNT = 3
+    const val LANGUAGE = "hu"
 }
