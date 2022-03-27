@@ -13,17 +13,9 @@ import androidx.lifecycle.MutableLiveData
 import java.util.*
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private var _yearRes = MutableLiveData<Int>()
-    val yearRes: LiveData<Int>
-        get() = _yearRes
-
-    private var _monthRes = MutableLiveData<Int>()
-    val monthRes: LiveData<Int>
-        get() = _monthRes
-
-    private var _dayRes = MutableLiveData<Int>()
-    val dayRes: LiveData<Int>
-        get() = _dayRes
+    private var _dateRes = MutableLiveData<Long>()
+    val dateRes: LiveData<Long>
+        get() = _dateRes
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         // Use the current date as the default date in the picker
@@ -40,8 +32,11 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        _yearRes.value = year
-        _monthRes.value = month
-        _dayRes.value = day
+        val c = Calendar.getInstance()
+        c.clear()
+        c.set(Calendar.YEAR, year)
+        c.set(Calendar.MONTH, month)
+        c.set(Calendar.DAY_OF_MONTH, day)
+        _dateRes.value = c.timeInMillis
     }
 }
