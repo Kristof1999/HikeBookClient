@@ -15,6 +15,7 @@ interface WeatherService {
         @Query("lon") lon: Double,
         @Query("units") unit: String,
         @Query("cnt") cnt: Int,
+        @Query("lang") lang: String,
         @Query("appid") appid: String
     ): WeatherResponse
 }
