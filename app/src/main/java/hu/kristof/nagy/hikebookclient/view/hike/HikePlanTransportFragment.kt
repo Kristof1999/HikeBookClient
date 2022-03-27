@@ -9,8 +9,10 @@ import android.widget.AdapterView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
@@ -24,7 +26,7 @@ import org.osmdroid.views.overlay.Marker
 
 @AndroidEntryPoint
 class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener {
-    private lateinit var binding: hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
+    private lateinit var binding: FragmentHikePlanTransportBinding
     private val viewModel: HikePlanTransportViewModel by viewModels()
     private lateinit var map: MapView
 
@@ -41,42 +43,39 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.hikePlanMap
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        initMap()
 
-        binding.hikePlanTransportMeanSpinner.onItemSelectedListener = this
-        SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportMeanSpinner)
+        binding.hikePlanTransportTransportMeanSpinner.onItemSelectedListener = this
+        SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportTransportMeanSpinner)
 
-        binding.hikePlanStartButton.setOnClickListener {
-
-                val startPoint = Point(
-                    viewModel.startPoint.latitude, viewModel.startPoint.longitude,
-                    MarkerType.SET, ""
-                )
-                val endPoint = Point(
-                    viewModel.endPoint.latitude, viewModel.endPoint.longitude,
-                    MarkerType.NEW, ""
-                )
-                val transportType = viewModel.transportType
-                val directions = HikePlanTransportFragmentDirections
-
+        binding.hikePlanTransportStartButton.setOnClickListener {
+            onTransportStart()
         }
 
-        binding.hikePlanStartSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setStartTo(isChecked)
-        }
-        binding.hikePlanDestinationSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setDestinationTo(isChecked)
-        }
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.switchOffStart.observe(viewLifecycleOwner) {
-            binding.hikePlanStartSwitch.isChecked = false
-        }
-        viewModel.switchOffEnd.observe(viewLifecycleOwner) {
-            binding.hikePlanDestinationSwitch.isChecked = false
-        }
+        handleStartAndEndSwitches()
+
+        handleStartAndEndPointChanges()
+
+        addMapEventsOverlay()
+
+        map.invalidate()
+    }
+
+    private fun addMapEventsOverlay() {
+        val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                viewModel.onSingleTap(p!!)
+                return true
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                return true
+            }
+        })
+        map.overlays.add(0, mapEventsOverlay)
+    }
+
+    private fun handleStartAndEndPointChanges() {
         val startMarker = Marker(map)
         startMarker.position = viewModel.startPoint
         startMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
@@ -95,19 +94,45 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
             endMarker.position = viewModel.endPoint
             map.invalidate()
         }
+    }
 
-        val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
-            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                viewModel.onSingleTap(p!!)
-                return true
-            }
+    private fun handleStartAndEndSwitches() {
+        binding.hikePlanTransportStartSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setStartTo(isChecked)
+        }
+        binding.hikePlanTransportEndSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.setEndTo(isChecked)
+        }
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.switchOffStart.observe(viewLifecycleOwner) {
+            binding.hikePlanTransportStartSwitch.isChecked = false
+        }
+        viewModel.switchOffEnd.observe(viewLifecycleOwner) {
+            binding.hikePlanTransportEndSwitch.isChecked = false
+        }
+    }
 
-            override fun longPressHelper(p: GeoPoint?): Boolean {
-                return true
-            }
-        })
-        map.overlays.add(0, mapEventsOverlay)
-        map.invalidate()
+    private fun onTransportStart() {
+        val startPoint = Point(
+            viewModel.startPoint.latitude, viewModel.startPoint.longitude,
+            MarkerType.SET, ""
+        )
+        val endPoint = Point(
+            viewModel.endPoint.latitude, viewModel.endPoint.longitude,
+            MarkerType.NEW, ""
+        )
+        val transportType = viewModel.transportType
+        val directions = HikePlanTransportFragmentDirections
+            .actionHikePlanFragmentToHikeTransportFragment(startPoint, endPoint, transportType)
+        findNavController().navigate(directions)
+    }
+
+    private fun initMap() {
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.hikePlanTransportMap
+        map.setStartZoomAndCenter()
+        map.addCopyRightOverlay()
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {

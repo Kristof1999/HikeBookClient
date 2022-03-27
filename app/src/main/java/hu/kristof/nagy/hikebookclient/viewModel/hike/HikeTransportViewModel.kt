@@ -28,6 +28,7 @@ class HikeTransportViewModel : ViewModel() {
         val wayPoints = ArrayList<GeoPoint>()
         wayPoints.add(args.startPoint.toGeoPoint())
         wayPoints.add(args.endPoint.toGeoPoint())
+
         val deferred = viewModelScope.async(Dispatchers.IO) {
              roadManager.getRoad(wayPoints)
         }

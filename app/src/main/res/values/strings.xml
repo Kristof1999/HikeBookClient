@@ -65,6 +65,8 @@
     <string name="transport_types_spinner_description">Travel types</string>
     <string name="date_picker_button_text">Dátum Kiválasztása</string>
     <string name="hike_start_button_text">Túra\nKezdése</string>
+    <string name="hike_route_plan_button_text">Útvonal\nTervezése</string>
+    <string name="transport_start_button_text">Vezetés\nKezdése</string>
     <string-array name="transport_types">
         <item>Bicikli</item>
         <item>Autó</item>
@@ -214,7 +216,4 @@
         "Fent egy szöveges mező mutatja az út és a felhasználó nevét, valamint a túra leírását."
         "A lap alján levő gombbal hozzáadhatjuk a térképünkhöz az útvonalat."
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="hike_route_plan_button_text">Útvonal\nTervezése</string>
 </resources>

@@ -53,7 +53,7 @@ class HikePlanTransportViewModel @Inject constructor(
         }
     }
 
-    fun setDestinationTo(value: Boolean) {
+    fun setEndTo(value: Boolean) {
         if (value && isStart) {
             isEnd = value
             _switchOffStart.value = !_switchOffStart.value!!
