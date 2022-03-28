@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
@@ -49,7 +50,7 @@ class HikeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initMap()
-        
+
         val myLocationMarker = Marker(map)
         myLocationMarker.icon = AppCompatResources.getDrawable(requireContext(),
             org.osmdroid.bonuspack.R.drawable.person
@@ -59,39 +60,45 @@ class HikeFragment : Fragment() {
         val fusedLocationProviderClient =  LocationServices
             .getFusedLocationProviderClient(requireContext())
         binding.hikeMyLocationFab.setOnClickListener {
-            if (ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ),
-                    Constants.REQUEST_PERMISSIONS_REQUEST_CODE
-                )
-                return@setOnClickListener
-            }
-            // TODO: add fail/deny message -> request handler
-            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                val controller = map.controller
-                val p = GeoPoint(location.latitude, location.longitude)
-                controller.setCenter(p)
-                myLocationMarker.position = p
-            }
+            onMyLocation(fusedLocationProviderClient, myLocationMarker)
         }
 
         val args: HikeFragmentArgs by navArgs()
-
         val polyLine = args.userRoute.toPolyline()
         map.overlays.add(polyLine)
         map.invalidate()
+    }
+
+    private fun onMyLocation(
+        fusedLocationProviderClient: FusedLocationProviderClient,
+        myLocationMarker: Marker
+    ) {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                requireActivity(),
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                Constants.REQUEST_PERMISSIONS_REQUEST_CODE
+            )
+            return
+        }
+        // TODO: add fail/deny message -> request handler
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
+            val controller = map.controller
+            val p = GeoPoint(location.latitude, location.longitude)
+            controller.setCenter(p)
+            myLocationMarker.position = p
+        }
     }
 
     private fun initMap() {
