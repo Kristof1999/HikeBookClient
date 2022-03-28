@@ -5,13 +5,11 @@ package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -33,7 +31,6 @@ import org.osmdroid.views.overlay.Marker
 class HikeFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentHikeBinding
-    //private lateinit var locationOverlay: MyLocationNewOverlay
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,7 +42,6 @@ class HikeFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -57,7 +53,7 @@ class HikeFragment : Fragment() {
         )
         map.overlays.add(myLocationMarker)
 
-        val fusedLocationProviderClient =  LocationServices
+        val fusedLocationProviderClient = LocationServices
             .getFusedLocationProviderClient(requireContext())
         binding.hikeMyLocationFab.setOnClickListener {
             onMyLocation(fusedLocationProviderClient, myLocationMarker)
@@ -119,12 +115,10 @@ class HikeFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         map.onResume()
-        //locationOverlay.enableMyLocation()
     }
 
     override fun onPause() {
         super.onPause()
         map.onPause()
-        //locationOverlay.disableMyLocation()
     }
 }
