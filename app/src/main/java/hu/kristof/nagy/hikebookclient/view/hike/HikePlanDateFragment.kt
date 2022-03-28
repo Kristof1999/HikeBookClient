@@ -65,9 +65,14 @@ class HikePlanDateFragment : Fragment() {
         }
 
         binding.hikePlanDateTransportPlanButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_hikePlanDateFragment_to_hikePlanTransportFragment
-            )
+            val directions = HikePlanDateFragmentDirections
+                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.userRoute)
+            findNavController().navigate(directions)
+        }
+        binding.hikePlanDateHikeStartButton.setOnClickListener {
+            val directions = HikePlanDateFragmentDirections
+                .actionHikePlanDateFragmentToHikeFragment(args.userRoute)
+            findNavController().navigate(directions)
         }
     }
 }

@@ -120,6 +120,9 @@
         <action
             android:id="@+id/action_hikePlanFragment_to_hikeTransportFragment"
             app:destination="@id/hikeTransportFragment" />
+        <argument
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
     </fragment>
     <fragment
         android:id="@+id/hikeTransportFragment"
@@ -134,6 +137,12 @@
         <argument
             android:name="transportType"
             app:argType="hu.kristof.nagy.hikebookclient.view.hike.TransportType" />
+        <action
+            android:id="@+id/action_hikeTransportFragment_to_hikeFragment"
+            app:destination="@id/hikeFragment" />
+        <argument
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
     </fragment>
     <fragment
         android:id="@+id/hikePlanDateFragment"
@@ -145,5 +154,17 @@
         <action
             android:id="@+id/action_hikePlanDateFragment_to_hikePlanTransportFragment"
             app:destination="@id/hikePlanTransportFragment" />
+        <action
+            android:id="@+id/action_hikePlanDateFragment_to_hikeFragment"
+            app:destination="@id/hikeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/hikeFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.hike.HikeFragment"
+        android:label="fragment_hike"
+        tools:layout="@layout/fragment_hike" >
+        <argument
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
     </fragment>
 </navigation>

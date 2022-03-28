@@ -11,6 +11,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeTransportBinding
@@ -53,6 +54,12 @@ class HikeTransportFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.roadRes.observe(viewLifecycleOwner) { road ->
             onRoadResult(road)
+        }
+
+        binding.hikeTransportStartButton.setOnClickListener {
+            val directions = HikeTransportFragmentDirections
+                .actionHikeTransportFragmentToHikeFragment(args.userRoute)
+            findNavController().navigate(directions)
         }
     }
 

@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
@@ -122,8 +123,11 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
             MarkerType.NEW, ""
         )
         val transportType = viewModel.transportType
+        val args: HikePlanTransportFragmentArgs by navArgs()
         val directions = HikePlanTransportFragmentDirections
-            .actionHikePlanFragmentToHikeTransportFragment(startPoint, endPoint, transportType)
+            .actionHikePlanFragmentToHikeTransportFragment(
+                startPoint, endPoint, transportType, args.userRoute
+            )
         findNavController().navigate(directions)
     }
 

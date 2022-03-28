@@ -68,6 +68,8 @@
     <string name="hike_start_button_text">Túra\nKezdése</string>
     <string name="hike_route_plan_button_text">Útvonal\nTervezése</string>
     <string name="transport_start_button_text">Vezetés\nKezdése</string>
+    <string name="my_location_fab_description">My Location</string>
+    <string name="hike_finish_description">X mark</string>
     <string-array name="transport_types">
         <item>Bicikli</item>
         <item>Autó</item>
