@@ -11,7 +11,7 @@ class WeatherRepository @Inject constructor(
 ) {
     suspend fun forecast(lat: Double, lon: Double): WeatherResponse {
         return service.forecast(
-            lat, lon, Constants.METRIC_UNIT, Constants.FORECAST_CNT,
+            lat, lon, Constants.METRIC_UNIT,
             Constants.LANGUAGE, BuildConfig.WEATHER_API_KEY
         )
     }
