@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.viewModel.hike
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,14 +21,17 @@ class HikePlanDateViewModel @Inject constructor(
     val forecastRes: LiveData<String>
         get() = _forecastRes
 
-    fun forecast(points: List<Point>, date: String) {
+    // TODO: test -> edge cases
+    fun forecast(points: List<Point>, date: String, hour: Int) {
+        // TODO: cache result -> 10 min window
         viewModelScope.launch {
             var res = ""
 
             val responseStart = repository.forecast(
                 points.first().latitude, points.first().longitude,
             )
-            val idxStart = findDate(date, responseStart)
+            val dayStartIdx = findDate(date, responseStart)
+            val idxStart = findHour(hour, responseStart, dayStartIdx)
             res += "Túra kezdetén:\n\n" + mapResponse(responseStart, idxStart)
 
             val pointsMiddle = points.size/2
@@ -50,7 +54,27 @@ class HikePlanDateViewModel @Inject constructor(
         }
     }
 
+    private fun findHour(hour: Int, response: WeatherResponse, dayStartIdx: Int): Int {
+        Log.i("HikePlanDateViewModel", (0..7).toString())
+        for (i in 0..7) {
+            val hourResponse = response?.list?.get(dayStartIdx + i)?.dtTxt?.substring(11, 13)!!.toInt()
+            val nextHourResponse = response?.list?.get(dayStartIdx + i + 1)?.dtTxt?.substring(11, 13)!!.toInt()
+            Log.i("HikePlanDateViewModel", hourResponse.toString())
+            if (hour in hourResponse..nextHourResponse) {
+                // which hourResponse is hour closer to?
+                if (hour - hourResponse < nextHourResponse - hour)
+                    return dayStartIdx + i
+                else
+                    return dayStartIdx + i + 1
+            }
+        }
+        throw IndexOutOfBoundsException("$hour cannot be found in the weather response.")
+    }
+
     private fun findDate(date: String, response: WeatherResponse): Int {
+        // TODO: make it more optimized:
+        // search for the end of the current day, and then calculate
+        // how much we have to go for the chosen date -> 3h intervals!
         for (i in response?.list?.indices!!) {
             if (response?.list?.get(i)?.dtTxt?.substring(0, 10) == date)
                 return i
@@ -62,6 +86,7 @@ class HikePlanDateViewModel @Inject constructor(
         val cityName = response.city?.name
         val dateTime = response.list?.get(idx)?.dtTxt
         val temp = response.list?.get(idx)?.main?.feelsLike
+        // TODO: see if there is more than one description
         val description = response.list?.get(idx)?.weather?.get(0)?.description
         val rainPrecent = response.list?.get(idx)?.pop
         val windSpeed = response.list?.get(idx)?.wind?.speed

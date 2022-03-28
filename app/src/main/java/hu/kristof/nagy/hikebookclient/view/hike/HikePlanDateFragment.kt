@@ -33,13 +33,30 @@ class HikePlanDateFragment : Fragment() {
 
         val viewModel: HikePlanDateViewModel by viewModels()
         val args: HikePlanDateFragmentArgs by navArgs()
+        var date: String? = null
+        var hour: Int? = null
         binding.hikePlanDateDatePickerButton.setOnClickListener {
             val datePickerFragment = DatePickerFragment()
             datePickerFragment.show(parentFragmentManager, "datePicker")
 
             binding.lifecycleOwner = viewLifecycleOwner
-            datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateInMillis ->
-                viewModel.forecast(args.userRoute.points, dateInMillis)
+            datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateRes ->
+                date = dateRes
+                hour?.let {
+                    viewModel.forecast(args.userRoute.points, dateRes, it)
+                }
+            }
+        }
+        binding.hikePlanDateTimePickerButton.setOnClickListener {
+            val timePickerFragment = TimePickerFragment()
+            timePickerFragment.show(parentFragmentManager, "timePicker")
+
+            binding.lifecycleOwner = viewLifecycleOwner
+            timePickerFragment.hourRes.observe(viewLifecycleOwner) { hourRes ->
+                hour = hourRes
+                date?.let {
+                    viewModel.forecast(args.userRoute.points, it, hourRes)
+                }
             }
         }
         binding.lifecycleOwner = viewLifecycleOwner
