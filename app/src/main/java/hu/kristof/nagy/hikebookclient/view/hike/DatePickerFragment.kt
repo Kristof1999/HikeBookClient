@@ -13,8 +13,8 @@ import androidx.lifecycle.MutableLiveData
 import java.util.*
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
-    private var _dateRes = MutableLiveData<Long>()
-    val dateRes: LiveData<Long>
+    private var _dateRes = MutableLiveData<String>()
+    val dateRes: LiveData<String>
         get() = _dateRes
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -32,11 +32,18 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        val c = Calendar.getInstance()
-        c.clear()
-        c.set(Calendar.YEAR, year)
-        c.set(Calendar.MONTH, month)
-        c.set(Calendar.DAY_OF_MONTH, day)
-        _dateRes.value = c.timeInMillis
+        if (month < 10) {
+            if (day < 10) {
+                _dateRes.value = "$year-0${month + 1}-0$day"
+            } else {
+                _dateRes.value = "$year-0${month + 1}-$day"
+            }
+        } else {
+            if (day < 10) {
+                _dateRes.value = "$year-${month + 1}-0$day"
+            } else {
+                _dateRes.value = "$year-${month + 1}-$day"
+            }
+        }
     }
 }

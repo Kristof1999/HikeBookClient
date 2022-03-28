@@ -34,27 +34,20 @@ class HikePlanDateFragment : Fragment() {
         val viewModel: HikePlanDateViewModel by viewModels()
         val args: HikePlanDateFragmentArgs by navArgs()
         binding.hikePlanDateDatePickerButton.setOnClickListener {
-            //val datePickerFragment = DatePickerFragment()
-            //datePickerFragment.show(parentFragmentManager, "datePicker")
+            val datePickerFragment = DatePickerFragment()
+            datePickerFragment.show(parentFragmentManager, "datePicker")
 
             binding.lifecycleOwner = viewLifecycleOwner
-//            datePickerFragment.yearRes.observe(viewLifecycleOwner) {
-//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-//            }
-//            datePickerFragment.monthRes.observe(viewLifecycleOwner) {
-//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-//            }
-//            datePickerFragment.dayRes.observe(viewLifecycleOwner) {
-//                Toast.makeText(context, it.toString(), Toast.LENGTH_SHORT).show()
-//            }
-            viewModel.forecast(args.userRoute.points)
+            datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateInMillis ->
+                viewModel.forecast(args.userRoute.points, dateInMillis)
+            }
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.forecastRes.observe(viewLifecycleOwner) {
             binding.hikePlanDateTw.text = it
         }
 
-        binding.hikePlanTransportPlanButton.setOnClickListener {
+        binding.hikePlanDateTransportPlanButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_hikePlanDateFragment_to_hikePlanTransportFragment
             )

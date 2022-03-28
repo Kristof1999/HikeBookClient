@@ -20,31 +20,42 @@ class HikePlanDateViewModel @Inject constructor(
     val forecastRes: LiveData<String>
         get() = _forecastRes
 
-    fun forecast(points: List<Point>) {
+    fun forecast(points: List<Point>, date: String) {
         viewModelScope.launch {
             var res = ""
 
             val responseStart = repository.forecast(
                 points.first().latitude, points.first().longitude,
             )
-            val idxStart = 0
+            val idxStart = findDate(date, responseStart)
             res += "Túra kezdetén:\n\n" + mapResponse(responseStart, idxStart)
 
             val pointsMiddle = points.size/2
             val responseMiddle = repository.forecast(
                 points[pointsMiddle].latitude, points[pointsMiddle].longitude,
             )
-            val idxMiddle = 1
+            // could be a 6h increment if we made the
+            // first call at 9:59 and the second at
+            // 10:01, because see api specifications
+            val idxMiddle = idxStart + 1 // 3h increment
             res += "Túra felénél:\n\n" + mapResponse(responseMiddle, idxMiddle)
 
             val responseEnd = repository.forecast(
                 points.last().latitude, points.last().longitude,
             )
-            val idxEnd = 2
+            val idxEnd = idxMiddle + 1 // 3h increment
             res += "Túra végénél:\n\n" + mapResponse(responseEnd, idxEnd)
 
             _forecastRes.value = res
         }
+    }
+
+    private fun findDate(date: String, response: WeatherResponse): Int {
+        for (i in response?.list?.indices!!) {
+            if (response?.list?.get(i)?.dtTxt?.substring(0, 10) == date)
+                return i
+        }
+        throw IndexOutOfBoundsException("$date cannot be found in the weather response.")
     }
 
     private fun mapResponse(response: WeatherResponse, idx: Int): String {
