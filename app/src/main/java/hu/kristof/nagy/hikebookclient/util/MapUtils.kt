@@ -7,8 +7,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
@@ -17,8 +17,6 @@ import org.osmdroid.views.overlay.*
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 object MapUtils {
-    private const val REQUEST_PERMISSIONS_REQUEST_CODE = 1
-
     fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -35,7 +33,7 @@ object MapUtils {
             ActivityCompat.requestPermissions(
                 activity,
                 permissionsToRequest.toTypedArray(),
-                REQUEST_PERMISSIONS_REQUEST_CODE
+                Constants.REQUEST_PERMISSIONS_REQUEST_CODE
             )
         }
     }
