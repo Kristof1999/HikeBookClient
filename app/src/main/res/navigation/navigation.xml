@@ -166,5 +166,10 @@
         <argument
             android:name="userRoute"
             app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
+        <action
+            android:id="@+id/action_hikeFragment_to_myMapFragment"
+            app:destination="@id/myMapFragment"
+            app:popUpTo="@id/hikePlanDateFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>
