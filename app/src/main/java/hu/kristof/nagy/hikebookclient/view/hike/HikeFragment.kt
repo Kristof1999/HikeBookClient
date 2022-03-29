@@ -26,6 +26,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.*
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
+import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
@@ -69,18 +70,55 @@ class HikeFragment : Fragment() {
         }
 
         val args: HikeFragmentArgs by navArgs()
+
+        // TODO: add geofencing for starting point
+        // needs more refactoring: separate BroadcastReceiver, ...
+        // when entering/exiting start, record current time
+        val (geofencingLastPointClient,
+            geofencingLastPointRequest,
+            geofenceLastPointPendingIntent: PendingIntent
+        ) = initGeofence(args.userRoute.points.last())
+        addGeofence(geofencingLastPointClient,
+            geofencingLastPointRequest,
+            geofenceLastPointPendingIntent)
+
+        // TODO: when finishing, compute average speed
+        // if we entered start geofence
+        handleFinishButton(geofencingLastPointClient)
+
+        val polyLine = args.userRoute.toPolyline()
+        map.overlays.add(polyLine)
+
+        addCircleToMap(args.userRoute.points.last().toGeoPoint())
+        addCircleToMap(args.userRoute.points.first().toGeoPoint())
+
+        map.invalidate()
+    }
+
+    private fun addCircleToMap(center: GeoPoint) {
+        val circle = Polygon(map)
+        val points = Polygon.pointsAsCircle(center,
+            Constants.GEOFENCE_RADIUS_IN_METERS.toDouble()
+        )
+        circle.points = points
+        map.overlays.add(circle)
+    }
+
+    private fun initGeofence(center: Point)
+    : Triple<GeofencingClient, GeofencingRequest, PendingIntent> {
         val geofencingClient = LocationServices
             .getGeofencingClient(requireContext())
-        val geofenceList = listOf(Geofence.Builder()
-            .setRequestId(Constants.GEOFENCE_REQUEST_ID)
-            .setCircularRegion(
-                args.userRoute.points.last().latitude,
-                args.userRoute.points.last().longitude,
-                Constants.GEOFENCE_RADIUS_IN_METERS
-            )
-            .setExpirationDuration(Geofence.NEVER_EXPIRE)
-            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
-            .build()
+        val geofenceList = listOf(
+            Geofence.Builder()
+                .setRequestId(Constants.GEOFENCE_REQUEST_ID)
+                .setCircularRegion(
+                    center.latitude,
+                    center.longitude,
+                    Constants.GEOFENCE_RADIUS_IN_METERS
+                )
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build()
         )
         val geofencingRequest = GeofencingRequest.Builder().apply {
             setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
@@ -93,6 +131,35 @@ class HikeFragment : Fragment() {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
+        return Triple(geofencingClient, geofencingRequest, geofencePendingIntent)
+    }
+
+    private fun handleFinishButton(geofencingClient: GeofencingClient) {
+        binding.hikeHikeFinishFab.setOnClickListener {
+            if (GeofenceBroadcastReceiver.inRadius) {
+                removeGeofence(geofencingClient)
+                findNavController().navigate(
+                    R.id.action_hikeFragment_to_myMapFragment
+                )
+            } else {
+                Toast.makeText(requireContext(), "Nem vagy elég közel a célhoz.", Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
+        binding.hikeHikeFinishFab.setOnLongClickListener {
+            removeGeofence(geofencingClient)
+            findNavController().navigate(
+                R.id.action_hikeFragment_to_myMapFragment
+            )
+            return@setOnLongClickListener true
+        }
+    }
+
+    private fun addGeofence(
+        geofencingClient: GeofencingClient,
+        geofencingRequest: GeofencingRequest,
+        geofencePendingIntent: PendingIntent
+    ) {
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_BACKGROUND_LOCATION
@@ -127,37 +194,6 @@ class HikeFragment : Fragment() {
                 Log.e(TAG, "Failed to add geofence: ${it.message}")
             }
         }
-        binding.lifecycleOwner = viewLifecycleOwner
-        binding.hikeHikeFinishFab.setOnClickListener {
-            if (GeofenceBroadcastReceiver.inRadius) {
-                removeGeofence(geofencingClient)
-                findNavController().navigate(
-                    R.id.action_hikeFragment_to_myMapFragment
-                )
-            } else {
-                Toast.makeText(requireContext(), "Nem vagy elég közel a célhoz.", Toast.LENGTH_LONG).show()
-            }
-        }
-        binding.hikeHikeFinishFab.setOnLongClickListener {
-            removeGeofence(geofencingClient)
-            findNavController().navigate(
-                R.id.action_hikeFragment_to_myMapFragment
-            )
-            return@setOnLongClickListener true
-        }
-
-        val polyLine = args.userRoute.toPolyline()
-        map.overlays.add(polyLine)
-
-        val circle = Polygon(map)
-        val points = Polygon.pointsAsCircle(
-            args.userRoute.points.last().toGeoPoint(),
-            Constants.GEOFENCE_RADIUS_IN_METERS.toDouble()
-        )
-        circle.points = points
-        map.overlays.add(circle)
-
-        map.invalidate()
     }
 
     private fun removeGeofence(geofencingClient: GeofencingClient) {
