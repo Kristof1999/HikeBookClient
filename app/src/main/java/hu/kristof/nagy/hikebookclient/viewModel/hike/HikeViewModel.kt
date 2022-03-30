@@ -4,6 +4,7 @@ import android.icu.util.Calendar
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
@@ -12,6 +13,7 @@ import hu.kristof.nagy.hikebookclient.view.hike.GeofenceLastPointBroadcastReceiv
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class HikeViewModel @Inject constructor(
     private val service: Service
 ) : ViewModel() {
