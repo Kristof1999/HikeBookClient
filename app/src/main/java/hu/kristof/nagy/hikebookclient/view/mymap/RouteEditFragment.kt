@@ -17,12 +17,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
-import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -112,9 +112,9 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         map = binding.routeEditMap
         map.addCopyRightOverlay()
 
-        val mapController = map.controller
-        mapController.setZoom(Constants.START_ZOOM)
-        mapController.setCenter(args.userRoute.toPolyline().bounds.centerWithDateLine)
+        val polyline = args.userRoute.toPolyline()
+        map.setMapCenterOnPolylineCenter(polyline)
+        map.setZoomForPolyline(polyline)
     }
 
     // adapter design pattern/wrapper kellene ehelyett

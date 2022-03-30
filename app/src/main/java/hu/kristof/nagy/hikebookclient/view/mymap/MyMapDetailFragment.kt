@@ -16,11 +16,12 @@ import androidx.print.PrintHelper
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapDetailBinding
-import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
-import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
+import hu.kristof.nagy.hikebookclient.util.setZoomForPolyline
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
@@ -51,9 +52,8 @@ class MyMapDetailFragment : Fragment() {
         val args: MyMapDetailFragmentArgs by navArgs()
         binding.myMapDetailRouteNameTv.text = args.userRoute.routeName
         val polyline = args.userRoute.toPolyline()
-        val mapController = map.controller
-        mapController.setCenter(polyline.bounds.centerWithDateLine)
-        mapController.setZoom(Constants.START_ZOOM)
+        map.setMapCenterOnPolylineCenter(polyline)
+        map.setZoomForPolyline(polyline)
         map.overlays.add(polyline)
         map.invalidate()
 
