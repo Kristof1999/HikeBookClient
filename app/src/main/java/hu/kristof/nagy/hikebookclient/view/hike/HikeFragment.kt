@@ -25,6 +25,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.*
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
 import hu.kristof.nagy.hikebookclient.model.Point
@@ -32,7 +33,7 @@ import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineStart
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
@@ -40,6 +41,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
 
+@AndroidEntryPoint
 class HikeFragment : Fragment() {
     private lateinit var map: MapView
     private lateinit var binding: FragmentHikeBinding
@@ -58,7 +60,9 @@ class HikeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initMap()
+        Configuration.getInstance()
+            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        map = binding.hikeMap
 
         val myLocationMarker = Marker(map)
         myLocationMarker.icon = AppCompatResources.getDrawable(requireContext(),
@@ -80,13 +84,24 @@ class HikeFragment : Fragment() {
         val viewModel: HikeViewModel by viewModels()
         handleFinishButton(geofencingClient, args.userRoute, viewModel)
 
+        customizeMap(args)
+
+        map.invalidate()
+    }
+
+    private fun customizeMap(args: HikeFragmentArgs) {
         val polyLine = args.userRoute.toPolyline()
         map.overlays.add(polyLine)
+
+        // TODO: add points to map
 
         addCircleToMap(args.userRoute.points.first().toGeoPoint())
         addCircleToMap(args.userRoute.points.last().toGeoPoint())
 
-        map.invalidate()
+        map.setMapCenterOnPolylineStart(args.userRoute.toPolyline())
+        val controller = map.controller
+        controller.setZoom(18.0)
+        map.addCopyRightOverlay()
     }
 
     private fun addCircleToMap(center: GeoPoint) {
@@ -276,15 +291,6 @@ class HikeFragment : Fragment() {
                 Log.e(TAG, "Failed to get last known location: ${it.message}")
             }
         }
-    }
-
-    private fun initMap() {
-        Configuration.getInstance()
-            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
-        map = binding.hikeMap
-        // TODO: center on the given route
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
