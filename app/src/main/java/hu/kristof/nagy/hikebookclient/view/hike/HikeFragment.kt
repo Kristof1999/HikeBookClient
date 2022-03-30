@@ -70,27 +70,19 @@ class HikeFragment : Fragment() {
         }
 
         val args: HikeFragmentArgs by navArgs()
-
-        // TODO: add geofencing for starting point
-        // needs more refactoring: separate BroadcastReceiver, ...
-        // when entering/exiting start, record current time
-        val (geofencingLastPointClient,
-            geofencingLastPointRequest,
-            geofenceLastPointPendingIntent: PendingIntent
-        ) = initGeofence(args.userRoute.points.last())
-        addGeofence(geofencingLastPointClient,
-            geofencingLastPointRequest,
-            geofenceLastPointPendingIntent)
+        val geofencingClient = LocationServices
+            .getGeofencingClient(requireContext())
+        initGeofence(args.userRoute.points, geofencingClient)
 
         // TODO: when finishing, compute average speed
         // if we entered start geofence
-        handleFinishButton(geofencingLastPointClient)
+        handleFinishButton(geofencingClient)
 
         val polyLine = args.userRoute.toPolyline()
         map.overlays.add(polyLine)
 
-        addCircleToMap(args.userRoute.points.last().toGeoPoint())
         addCircleToMap(args.userRoute.points.first().toGeoPoint())
+        addCircleToMap(args.userRoute.points.last().toGeoPoint())
 
         map.invalidate()
     }
@@ -104,40 +96,65 @@ class HikeFragment : Fragment() {
         map.overlays.add(circle)
     }
 
-    private fun initGeofence(center: Point)
-    : Triple<GeofencingClient, GeofencingRequest, PendingIntent> {
-        val geofencingClient = LocationServices
-            .getGeofencingClient(requireContext())
-        val geofenceList = listOf(
-            Geofence.Builder()
-                .setRequestId(Constants.GEOFENCE_REQUEST_ID)
+    private fun initGeofence(points: List<Point>, geofencingClient: GeofencingClient) {
+        val firstPointGeofence = Geofence.Builder()
+            .setRequestId(Constants.GEOFENCE_REQUEST_ID_FIRST_POINT)
+            .setCircularRegion(
+                points.first().latitude,
+                points.first().longitude,
+                Constants.GEOFENCE_RADIUS_IN_METERS
+            )
+            .setExpirationDuration(Geofence.NEVER_EXPIRE)
+            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
+            .build()
+        val lastPointGeofence = Geofence.Builder()
+                .setRequestId(Constants.GEOFENCE_REQUEST_ID_LAST_POINT)
                 .setCircularRegion(
-                    center.latitude,
-                    center.longitude,
+                    points.last().latitude,
+                    points.last().longitude,
                     Constants.GEOFENCE_RADIUS_IN_METERS
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER or Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build()
-        )
-        val geofencingRequest = GeofencingRequest.Builder().apply {
-            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
-            addGeofences(geofenceList)
+        // TODO: decide if one geofenceRequest would be enough
+        val geofencingRequestFirstPoint = GeofencingRequest.Builder().apply {
+            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
+            addGeofences(listOf(firstPointGeofence))
         }.build()
-        val geofencePendingIntent: PendingIntent by lazy {
-            val intent = Intent(requireContext(), GeofenceBroadcastReceiver::class.java)
+        val geofencingRequestLastPoint = GeofencingRequest.Builder().apply {
+            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
+            addGeofences(listOf(lastPointGeofence))
+        }.build()
+        val geofenceFirstPointPendingIntent: PendingIntent by lazy {
+            val intent = Intent(requireContext(), GeofenceFirstPointBroadcastReceiver::class.java)
             PendingIntent.getBroadcast(
                 requireContext(), Constants.GEOFENCE_REQUEST_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
-        return Triple(geofencingClient, geofencingRequest, geofencePendingIntent)
+        val geofenceLastPointPendingIntent: PendingIntent by lazy {
+            val intent = Intent(requireContext(), GeofenceLastPointBroadcastReceiver::class.java)
+            PendingIntent.getBroadcast(
+                requireContext(), Constants.GEOFENCE_REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        }
+
+        addGeofence(geofencingClient,
+            geofencingRequestFirstPoint,
+            geofenceFirstPointPendingIntent
+        )
+        addGeofence(geofencingClient,
+            geofencingRequestLastPoint,
+            geofenceLastPointPendingIntent
+        )
     }
 
     private fun handleFinishButton(geofencingClient: GeofencingClient) {
         binding.hikeHikeFinishFab.setOnClickListener {
-            if (GeofenceBroadcastReceiver.inRadius) {
-                removeGeofence(geofencingClient)
+            if (GeofenceLastPointBroadcastReceiver.entered) {
+                removeGeofences(geofencingClient)
                 findNavController().navigate(
                     R.id.action_hikeFragment_to_myMapFragment
                 )
@@ -147,7 +164,7 @@ class HikeFragment : Fragment() {
             }
         }
         binding.hikeHikeFinishFab.setOnLongClickListener {
-            removeGeofence(geofencingClient)
+            removeGeofences(geofencingClient)
             findNavController().navigate(
                 R.id.action_hikeFragment_to_myMapFragment
             )
@@ -196,10 +213,14 @@ class HikeFragment : Fragment() {
         }
     }
 
-    private fun removeGeofence(geofencingClient: GeofencingClient) {
-        geofencingClient.removeGeofences(listOf(Constants.GEOFENCE_REQUEST_ID)).run {
+    private fun removeGeofences(geofencingClient: GeofencingClient) {
+        geofencingClient.removeGeofences(
+            listOf(
+                Constants.GEOFENCE_REQUEST_ID_FIRST_POINT,
+                Constants.GEOFENCE_REQUEST_ID_LAST_POINT
+            )).run {
             addOnFailureListener {
-                Log.e(TAG, "Failed to remove geofence: ${it.message}")
+                Log.e(TAG, "Failed to remove geofences: ${it.message}")
             }
         }
     }

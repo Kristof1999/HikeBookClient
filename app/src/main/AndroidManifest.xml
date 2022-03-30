@@ -21,7 +21,12 @@
         tools:replace="android:allowBackup">
 
         <receiver
-            android:name=".view.hike.GeofenceBroadcastReceiver"
+            android:name=".view.hike.GeofenceFirstPointBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".view.hike.GeofenceLastPointBroadcastReceiver"
             android:enabled="true"
             android:exported="false" />
 

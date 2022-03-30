@@ -1,6 +1,3 @@
-// based on:
-// https://developer.android.com/training/location/geofencing
-
 package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.content.BroadcastReceiver
@@ -11,8 +8,8 @@ import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
 
-class GeofenceBroadcastReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+class GeofenceFirstPointBroadcastReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context?, intent: Intent) {
         val geofencingEvent = GeofencingEvent.fromIntent(intent)
         if (geofencingEvent.hasError()) {
             val errorMessage = GeofenceStatusCodes
@@ -20,19 +17,18 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
             Log.e(TAG, errorMessage)
             return
         }
-        Log.i(TAG, "BroadcastReceiver received intent.")
+        Log.i(TAG, "Received intent.")
 
         val geofenceTransition = geofencingEvent.geofenceTransition
 
         when (geofenceTransition) {
-            Geofence.GEOFENCE_TRANSITION_ENTER -> inRadius = true
-            Geofence.GEOFENCE_TRANSITION_EXIT -> inRadius = false
-            else -> Log.e(TAG, "Invalid geofence transition type.")
+            Geofence.GEOFENCE_TRANSITION_EXIT -> exited = true
+            else -> Log.e(TAG, "Invalid geofence transition type: $geofenceTransition")
         }
     }
 
     companion object {
-        private const val TAG = "GeofenceBroadcastRcvr"
-        var inRadius = false
+        private const val TAG = "GeofenceFirstBroadcast"
+        var exited = false
     }
 }

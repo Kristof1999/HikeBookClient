@@ -29,7 +29,8 @@ object Constants {
     const val METRIC_UNIT = "metric"
     const val LANGUAGE = "hu"
 
-    const val GEOFENCE_REQUEST_ID = "geofence"
+    const val GEOFENCE_REQUEST_ID_LAST_POINT = "geofence_last"
+    const val GEOFENCE_REQUEST_ID_FIRST_POINT = "geofence_first"
     const val GEOFENCE_RADIUS_IN_METERS = 100f
     const val GEOFENCE_REQUEST_CODE = 0
 }
