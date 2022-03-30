@@ -21,16 +21,19 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.*
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -74,9 +77,8 @@ class HikeFragment : Fragment() {
             .getGeofencingClient(requireContext())
         initGeofence(args.userRoute.points, geofencingClient)
 
-        // TODO: when finishing, compute average speed
-        // if we entered start geofence
-        handleFinishButton(geofencingClient)
+        val viewModel: HikeViewModel by viewModels()
+        handleFinishButton(geofencingClient, args.userRoute, viewModel)
 
         val polyLine = args.userRoute.toPolyline()
         map.overlays.add(polyLine)
@@ -151,9 +153,16 @@ class HikeFragment : Fragment() {
         )
     }
 
-    private fun handleFinishButton(geofencingClient: GeofencingClient) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun handleFinishButton(
+        geofencingClient: GeofencingClient,
+        route: UserRoute,
+        viewModel: HikeViewModel) {
         binding.hikeHikeFinishFab.setOnClickListener {
             if (GeofenceLastPointBroadcastReceiver.entered) {
+                if (GeofenceFirstPointBroadcastReceiver.exited) {
+                    viewModel.computeAndUpdateAvgSpeed(route)
+                }
                 removeGeofences(geofencingClient)
                 findNavController().navigate(
                     R.id.action_hikeFragment_to_myMapFragment

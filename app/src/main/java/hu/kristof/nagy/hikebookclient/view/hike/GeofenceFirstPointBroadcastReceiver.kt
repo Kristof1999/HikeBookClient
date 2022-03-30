@@ -7,6 +7,7 @@ import android.util.Log
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofenceStatusCodes
 import com.google.android.gms.location.GeofencingEvent
+import java.util.*
 
 class GeofenceFirstPointBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
@@ -22,7 +23,11 @@ class GeofenceFirstPointBroadcastReceiver : BroadcastReceiver() {
         val geofenceTransition = geofencingEvent.geofenceTransition
 
         when (geofenceTransition) {
-            Geofence.GEOFENCE_TRANSITION_EXIT -> exited = true
+            Geofence.GEOFENCE_TRANSITION_EXIT -> {
+                exited = true
+                // TODO: handle edge case -> route is circle, ...
+                exitTime = Calendar.getInstance().timeInMillis
+            }
             else -> Log.e(TAG, "Invalid geofence transition type: $geofenceTransition")
         }
     }
@@ -30,5 +35,6 @@ class GeofenceFirstPointBroadcastReceiver : BroadcastReceiver() {
     companion object {
         private const val TAG = "GeofenceFirstBroadcast"
         var exited = false
+        var exitTime: Long = -1
     }
 }
