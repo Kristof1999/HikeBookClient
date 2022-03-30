@@ -5,7 +5,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface HikeService {
-
     @PUT("avgSpeed/{userName}")
     suspend fun updateAvgSpeed(
         @Path("userName") userName: String,
