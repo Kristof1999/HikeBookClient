@@ -172,4 +172,8 @@
             app:popUpTo="@id/hikePlanDateFragment"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/groupsFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsFragment"
+        android:label="GroupsFragment" />
 </navigation>

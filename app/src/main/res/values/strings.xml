@@ -75,6 +75,14 @@
         <item>Autó</item>
     </string-array>
 
+    <!-- Groups -->
+    <string name="tab_groups_connected_text">Csatlakozott</string>
+    <string name="tab_groups_unconnected_text">Nem Csatlakozott</string>
+    <!-- TODO: change other content descriptions too to something more meaningful -->
+    <!-- describe action/purpose -->
+    <string name="tab_description_text">Tabs for navigating between connected and unconnected group lists</string>
+    <string name="view_pager_description">Layouts associated with the given tabs</string>
+
     <!-- Help -->
     <string name="help_title">Súgó</string>
     <string name="about">

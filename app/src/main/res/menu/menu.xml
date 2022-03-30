@@ -8,7 +8,7 @@
         android:id="@+id/groupHikeMenuItem"
         android:title="@string/group_hike_menu" />
     <item
-        android:id="@+id/groupsMenuItem"
+        android:id="@+id/groupsFragment"
         android:title="@string/groups_menu" />
     <item
         android:id="@+id/browseListFragment"
