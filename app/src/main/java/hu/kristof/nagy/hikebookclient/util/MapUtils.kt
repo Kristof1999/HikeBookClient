@@ -50,7 +50,6 @@ object MapUtils {
             }
 
             override fun longPressHelper(p: GeoPoint?): Boolean {
-                // itt (is) lehetne kiemelt pontok közül választani
                 return true
             }
         })

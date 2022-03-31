@@ -6,6 +6,7 @@ package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.Manifest
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -121,26 +122,16 @@ class HikeFragment : Fragment() {
     }
 
     private fun initGeofence(points: List<Point>, geofencingClient: GeofencingClient) {
-        val firstPointGeofence = Geofence.Builder()
-            .setRequestId(Constants.GEOFENCE_REQUEST_ID_FIRST_POINT)
-            .setCircularRegion(
-                points.first().latitude,
-                points.first().longitude,
-                Constants.GEOFENCE_RADIUS_IN_METERS
-            )
-            .setExpirationDuration(Geofence.NEVER_EXPIRE)
-            .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_EXIT)
-            .build()
-        val lastPointGeofence = Geofence.Builder()
-                .setRequestId(Constants.GEOFENCE_REQUEST_ID_LAST_POINT)
-                .setCircularRegion(
-                    points.last().latitude,
-                    points.last().longitude,
-                    Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
-                .build()
+        val firstPointGeofence = buildGeofence(
+            points.first(),
+            Constants.GEOFENCE_REQUEST_ID_FIRST_POINT,
+            Geofence.GEOFENCE_TRANSITION_EXIT
+        )
+        val lastPointGeofence = buildGeofence(
+            points.last(),
+            Constants.GEOFENCE_REQUEST_ID_LAST_POINT,
+            Geofence.GEOFENCE_TRANSITION_ENTER
+        )
         // TODO: decide if one geofenceRequest would be enough
         val geofencingRequestFirstPoint = GeofencingRequest.Builder().apply {
             setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
@@ -150,19 +141,12 @@ class HikeFragment : Fragment() {
             setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
             addGeofences(listOf(lastPointGeofence))
         }.build()
+        // TODO: test: is it okay to use the same request code
         val geofenceFirstPointPendingIntent: PendingIntent by lazy {
-            val intent = Intent(requireContext(), GeofenceFirstPointBroadcastReceiver::class.java)
-            PendingIntent.getBroadcast(
-                requireContext(), Constants.GEOFENCE_REQUEST_CODE,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            makeIntent(GeofenceFirstPointBroadcastReceiver::class.java)
         }
         val geofenceLastPointPendingIntent: PendingIntent by lazy {
-            val intent = Intent(requireContext(), GeofenceLastPointBroadcastReceiver::class.java)
-            PendingIntent.getBroadcast(
-                requireContext(), Constants.GEOFENCE_REQUEST_CODE,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT
-            )
+            makeIntent(GeofenceLastPointBroadcastReceiver::class.java)
         }
 
         addGeofence(geofencingClient,
@@ -173,6 +157,29 @@ class HikeFragment : Fragment() {
             geofencingRequestLastPoint,
             geofenceLastPointPendingIntent
         )
+    }
+
+    private fun <T: BroadcastReceiver> makeIntent(
+        broadcastReceiverClass: Class<T>
+    ): PendingIntent {
+        val intent = Intent(requireContext(), broadcastReceiverClass)
+        return PendingIntent.getBroadcast(
+            requireContext(), Constants.GEOFENCE_REQUEST_CODE,
+            intent, PendingIntent.FLAG_UPDATE_CURRENT
+        )
+    }
+
+    private fun buildGeofence(center: Point, requestId: String, transitionType: Int): Geofence {
+        return Geofence.Builder()
+            .setRequestId(requestId)
+            .setCircularRegion(
+                center.latitude,
+                center.longitude,
+                Constants.GEOFENCE_RADIUS_IN_METERS
+            )
+            .setExpirationDuration(Geofence.NEVER_EXPIRE)
+            .setTransitionTypes(transitionType)
+            .build()
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
