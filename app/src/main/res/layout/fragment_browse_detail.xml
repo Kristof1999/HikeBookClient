@@ -29,7 +29,6 @@
 
         <org.osmdroid.views.MapView
             android:id="@+id/browseDetailMap"
-            tilesource="Mapnik"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"

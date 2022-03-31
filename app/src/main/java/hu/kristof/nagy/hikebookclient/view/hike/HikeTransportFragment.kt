@@ -13,9 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeTransportBinding
-import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
@@ -24,6 +24,7 @@ import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.Road
 import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 
@@ -48,7 +49,7 @@ class HikeTransportFragment : Fragment() {
 
         val viewModel: HikeTransportViewModel by viewModels()
         val args: HikeTransportFragmentArgs by navArgs()
-        val roadManager = OSRMRoadManager(context, Constants.USER_AGENT)
+        val roadManager = OSRMRoadManager(context, BuildConfig.APPLICATION_ID)
         viewModel.getRoad(args, roadManager)
 
         binding.lifecycleOwner = viewLifecycleOwner
@@ -86,8 +87,9 @@ class HikeTransportFragment : Fragment() {
     }
 
     private fun initMap() {
-        Configuration.getInstance().userAgentValue = Constants.USER_AGENT
+        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         map = binding.hikeTransportMap
+        map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
         map.addCopyRightOverlay()
     }

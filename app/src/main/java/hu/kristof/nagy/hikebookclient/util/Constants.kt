@@ -24,8 +24,6 @@ object Constants {
      */
     val DATA_STORE_USER_NAME = stringPreferencesKey("userName")
 
-    const val USER_AGENT = "hu.kristof.nagy.hikebookclient"
-
     const val METRIC_UNIT = "metric"
     const val LANGUAGE = "hu"
 
