@@ -30,14 +30,12 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.UserRoute
-import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapUtils
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineStart
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
 
@@ -93,7 +91,16 @@ class HikeFragment : Fragment() {
         val polyLine = args.userRoute.toPolyline()
         map.overlays.add(polyLine)
 
-        // TODO: add points to map
+        val folderOverlay = FolderOverlay()
+        for (p in args.userRoute.points) {
+            val marker = Marker(map)
+            marker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+            marker.title = p.title
+            marker.position = p.toGeoPoint()
+            marker.icon = MarkerUtils.getMarkerIcon(p.type, requireContext())
+            folderOverlay.add(marker)
+        }
+        map.overlays.add(folderOverlay)
 
         addCircleToMap(args.userRoute.points.first().toGeoPoint())
         addCircleToMap(args.userRoute.points.last().toGeoPoint())
