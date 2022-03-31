@@ -106,13 +106,6 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         map.addCopyRightOverlay()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapUtils.onRequestPermissionsResult(
-            requestCode, permissions, grantResults, requireActivity()
-        )
-    }
-
     override fun onResume() {
         super.onResume()
         map.onResume()

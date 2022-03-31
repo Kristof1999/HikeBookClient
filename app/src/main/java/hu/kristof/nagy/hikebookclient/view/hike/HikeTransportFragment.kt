@@ -16,7 +16,6 @@ import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeTransportBinding
-import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeTransportViewModel
@@ -92,13 +91,6 @@ class HikeTransportFragment : Fragment() {
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
         map.addCopyRightOverlay()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapUtils.onRequestPermissionsResult(
-            requestCode, permissions, grantResults, requireActivity()
-        )
     }
 
     override fun onResume() {

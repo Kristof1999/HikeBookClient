@@ -15,7 +15,10 @@ import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.util.MarkerUtils
+import hu.kristof.nagy.hikebookclient.util.SpinnerUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
 import org.osmdroid.config.Configuration
@@ -146,13 +149,6 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // keep type as is
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapUtils.onRequestPermissionsResult(
-            requestCode, permissions, grantResults, requireActivity()
-        )
     }
 
     override fun onResume() {

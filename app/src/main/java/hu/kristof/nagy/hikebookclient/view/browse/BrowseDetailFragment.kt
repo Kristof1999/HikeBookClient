@@ -17,7 +17,6 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
@@ -109,13 +108,6 @@ class BrowseDetailFragment : Fragment() {
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
         map.addCopyRightOverlay()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        MapUtils.onRequestPermissionsResult(
-            requestCode, permissions, grantResults, requireActivity()
-        )
     }
 
     override fun onResume() {
