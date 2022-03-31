@@ -82,6 +82,7 @@
     <!-- describe action/purpose -->
     <string name="tab_description_text">Tabs for navigating between connected and unconnected group lists</string>
     <string name="view_pager_description">Layouts associated with the given tabs</string>
+    <string name="offline_hike_button_text">Offline Használatra Letöltés</string>
 
     <!-- Help -->
     <string name="help_title">Súgó</string>
