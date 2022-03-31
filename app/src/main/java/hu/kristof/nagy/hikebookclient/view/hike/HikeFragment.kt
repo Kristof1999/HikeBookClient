@@ -55,7 +55,7 @@ class HikeFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -63,8 +63,33 @@ class HikeFragment : Fragment() {
             .load(context, PreferenceManager.getDefaultSharedPreferences(context))
         map = binding.hikeMap
 
+        myLocation()
+
+        val args: HikeFragmentArgs by navArgs()
+        geofence(args)
+
+        customizeMap(args)
+
+        map.invalidate()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun geofence(args: HikeFragmentArgs) {
+        addCircleToMap(args.userRoute.points.first().toGeoPoint())
+        addCircleToMap(args.userRoute.points.last().toGeoPoint())
+
+        val geofencingClient = LocationServices
+            .getGeofencingClient(requireContext())
+        initGeofence(args.userRoute.points, geofencingClient)
+
+        val viewModel: HikeViewModel by viewModels()
+        handleFinishButton(geofencingClient, args.userRoute, viewModel)
+    }
+
+    private fun myLocation() {
         val myLocationMarker = Marker(map)
-        myLocationMarker.icon = AppCompatResources.getDrawable(requireContext(),
+        myLocationMarker.icon = AppCompatResources.getDrawable(
+            requireContext(),
             org.osmdroid.bonuspack.R.drawable.person
         )
         map.overlays.add(myLocationMarker)
@@ -74,18 +99,6 @@ class HikeFragment : Fragment() {
         binding.hikeMyLocationFab.setOnClickListener {
             onMyLocation(fusedLocationProviderClient, myLocationMarker)
         }
-
-        val args: HikeFragmentArgs by navArgs()
-        val geofencingClient = LocationServices
-            .getGeofencingClient(requireContext())
-        initGeofence(args.userRoute.points, geofencingClient)
-
-        val viewModel: HikeViewModel by viewModels()
-        handleFinishButton(geofencingClient, args.userRoute, viewModel)
-
-        customizeMap(args)
-
-        map.invalidate()
     }
 
     private fun customizeMap(args: HikeFragmentArgs) {
@@ -102,9 +115,6 @@ class HikeFragment : Fragment() {
             folderOverlay.add(marker)
         }
         map.overlays.add(folderOverlay)
-
-        addCircleToMap(args.userRoute.points.first().toGeoPoint())
-        addCircleToMap(args.userRoute.points.last().toGeoPoint())
 
         map.setMapCenterOnPolylineStart(args.userRoute.toPolyline())
         val controller = map.controller
