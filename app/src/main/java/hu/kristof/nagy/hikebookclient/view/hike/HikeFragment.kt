@@ -7,6 +7,7 @@
 package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Intent
@@ -286,12 +287,10 @@ class HikeFragment : Fragment() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         when {
-            permissions[Manifest.permission.ACCESS_FINE_LOCATION] != null &&
-            permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true -> {
+            isPermissionGranted(permissions, Manifest.permission.ACCESS_FINE_LOCATION) -> {
                 // Precise location access granted.
             }
-            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] != null &&
-            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true-> {
+            isPermissionGranted(permissions, Manifest.permission.ACCESS_COARSE_LOCATION) -> {
                 // Only approximate location access granted.
             }
             else -> {
@@ -302,19 +301,19 @@ class HikeFragment : Fragment() {
         }
     }
 
+    private fun isPermissionGranted(
+        permissions: Map<String, Boolean>,
+        permission: String
+    ): Boolean = permissions[permission] != null && permissions[permission] == true
+
+    @SuppressLint("MissingPermission")
     private fun onMyLocation(
         fusedLocationProviderClient: FusedLocationProviderClient,
         myLocationMarker: Marker
     ) {
         when {
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
+            isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) ||
+            isPermissionGranted(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
                 fusedLocationProviderClient.lastLocation.run {
                     addOnSuccessListener { location ->
                         if (location == null) {
@@ -376,6 +375,12 @@ class HikeFragment : Fragment() {
             }
         }
     }
+
+    private fun isPermissionGranted(permission: String): Boolean =
+        ActivityCompat.checkSelfPermission(
+            requireContext(),
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
 
     override fun onResume() {
         super.onResume()
