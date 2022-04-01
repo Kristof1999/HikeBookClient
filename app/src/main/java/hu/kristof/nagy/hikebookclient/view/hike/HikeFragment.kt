@@ -286,10 +286,12 @@ class HikeFragment : Fragment() {
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
         when {
-            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+            permissions[Manifest.permission.ACCESS_FINE_LOCATION] != null &&
+            permissions[Manifest.permission.ACCESS_FINE_LOCATION] == true -> {
                 // Precise location access granted.
             }
-            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] != null &&
+            permissions[Manifest.permission.ACCESS_COARSE_LOCATION] == true-> {
                 // Only approximate location access granted.
             }
             else -> {
