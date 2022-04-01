@@ -1,11 +1,9 @@
 package hu.kristof.nagy.hikebookclient.util
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
-import androidx.core.app.ActivityCompat
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
@@ -17,27 +15,6 @@ import org.osmdroid.views.overlay.*
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 object MapUtils {
-    fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray,
-        activity: Activity
-    ) {
-        val permissionsToRequest = ArrayList<String>()
-        var i = 0
-        while (i < grantResults.size) {
-            permissionsToRequest.add(permissions[i])
-            i++
-        }
-        if (permissionsToRequest.size > 0) {
-            ActivityCompat.requestPermissions(
-                activity,
-                permissionsToRequest.toTypedArray(),
-                Constants.REQUEST_PERMISSIONS_REQUEST_CODE
-            )
-        }
-    }
-
     fun setMapClickListeners(
         context: Context,
         map: MapView,
