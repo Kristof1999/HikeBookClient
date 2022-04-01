@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     // This method's code was taken from here:
     // https://github.com/google-developer-training/android-advanced/tree/master/Wander
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
         return true
