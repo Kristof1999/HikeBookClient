@@ -7,8 +7,6 @@ import org.osmdroid.util.GeoPoint
  * Contains constants for maps and datastores.
  */
 object Constants {
-    const val REQUEST_PERMISSIONS_REQUEST_CODE = 1
-
     /**
      * Budapest
      */
