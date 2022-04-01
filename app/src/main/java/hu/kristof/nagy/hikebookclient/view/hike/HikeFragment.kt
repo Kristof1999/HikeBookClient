@@ -1,6 +1,8 @@
 // based on:
 // https://developer.android.com/training/location/retrieve-current
 // https://developer.android.com/training/location/geofencing
+// https://developer.android.com/training/location/permissions
+// https://developer.android.com/training/permissions/requesting
 
 package hu.kristof.nagy.hikebookclient.view.hike
 
@@ -9,14 +11,13 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.RequiresApi
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
@@ -32,7 +33,10 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.UserRoute
-import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.util.Constants
+import hu.kristof.nagy.hikebookclient.util.MarkerUtils
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineStart
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -57,7 +61,6 @@ class HikeFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -72,7 +75,7 @@ class HikeFragment : Fragment() {
 
         binding.hikeOfflineButton.setOnClickListener {
             AlertDialog.Builder(requireContext())
-                .setMessage(getString(R.string.offline_dialog_text))
+                .setMessage(R.string.offline_dialog_text)
                 .show()
         }
 
@@ -81,7 +84,6 @@ class HikeFragment : Fragment() {
         map.invalidate()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun geofence(args: HikeFragmentArgs) {
         addCircleToMap(args.userRoute.points.first().toGeoPoint())
         addCircleToMap(args.userRoute.points.last().toGeoPoint())
@@ -200,7 +202,6 @@ class HikeFragment : Fragment() {
             .build()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun handleFinishButton(
         geofencingClient: GeofencingClient,
         route: UserRoute,
@@ -243,7 +244,7 @@ class HikeFragment : Fragment() {
                 arrayOf(
                     Manifest.permission.ACCESS_BACKGROUND_LOCATION
                 ),
-                Constants.REQUEST_PERMISSIONS_REQUEST_CODE
+                1//Constants.GEOFENCE_PERMISSIONS_REQUEST_CODE
             )
         }
         if (ActivityCompat.checkSelfPermission(
@@ -256,7 +257,7 @@ class HikeFragment : Fragment() {
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION
                 ),
-                Constants.REQUEST_PERMISSIONS_REQUEST_CODE
+                1//Constants.GEOFENCE_PERMISSIONS_REQUEST_CODE
             )
         }
         geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
@@ -281,56 +282,97 @@ class HikeFragment : Fragment() {
         }
     }
 
-    private fun onMyLocation(
-        fusedLocationProviderClient: FusedLocationProviderClient,
-        myLocationMarker: Marker
-    ) {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                Constants.REQUEST_PERMISSIONS_REQUEST_CODE
-            )
-            return
-        }
-        fusedLocationProviderClient.lastLocation.run {
-            addOnSuccessListener { location ->
-                if (location == null) {
-                    Toast.makeText(requireContext(),
-                        "Kérem, hogy kapcsolja be a GPS-t a saját pozíció megtekintéséhez.",
-                        Toast.LENGTH_LONG
-                    ).show()
-                    return@addOnSuccessListener
-                }
-                val controller = map.controller
-                val p = GeoPoint(location.latitude, location.longitude)
-                controller.setCenter(p)
-                myLocationMarker.position = p
+    private val myLocationRequestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                // Precise location access granted.
             }
-            addOnFailureListener {
-                Toast.makeText(requireContext(), "Valamilyen hiba történt.", Toast.LENGTH_LONG).show()
-                Log.e(TAG, "Failed to get last known location: ${it.message}")
+            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                // Only approximate location access granted.
+            }
+            else -> {
+                AlertDialog.Builder(requireContext())
+                    .setMessage("A saját pozíció funkció nem érhető el, ugyanis a működéshez hozzáférés szükséges az eszköz helyadataihoz.")
+                    .show()
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // TODO: handle permission more nicely -> https://developer.android.com/training/permissions/requesting
-        MapUtils.onRequestPermissionsResult(
-            requestCode, permissions, grantResults, requireActivity()
-        )
+    private fun onMyLocation(
+        fusedLocationProviderClient: FusedLocationProviderClient,
+        myLocationMarker: Marker
+    ) {
+        when {
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                fusedLocationProviderClient.lastLocation.run {
+                    addOnSuccessListener { location ->
+                        if (location == null) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Kérem, hogy kapcsolja be a GPS-t a saját pozíció megtekintéséhez.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            return@addOnSuccessListener
+                        }
+                        val controller = map.controller
+                        val p = GeoPoint(location.latitude, location.longitude)
+                        controller.setCenter(p)
+                        myLocationMarker.position = p
+                    }
+                    addOnFailureListener {
+                        Toast.makeText(
+                            requireContext(),
+                            "Valamilyen hiba történt.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        Log.e(TAG, "Failed to get last known location: ${it.message}")
+                    }
+                }
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
+                AlertDialog.Builder(requireContext())
+                    .setMessage("A kevésbé jó minőségű helyhozzáféréssel a saját pozíció funkció megközelítő választ tud csak adni. Szeretné engedélyezni a helyhozzáférést?")
+                    .setPositiveButton("Igen") { _, _ ->
+                        myLocationRequestPermissionLauncher.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            )
+                        )
+                    }
+                    .setNegativeButton("Nem") { _, _ -> }
+                    .show()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION) -> {
+                AlertDialog.Builder(requireContext())
+                    .setMessage("A jó minőségű helyhozzáféréssel a saját pozíció funkció pontos választ tud adni. Szeretné engedélyezni a helyhozzáférést?")
+                    .setPositiveButton("Igen") { _, _ ->
+                        myLocationRequestPermissionLauncher.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            )
+                        )
+                    }
+                    .setNegativeButton("Nem") { _, _ -> }
+                    .show()
+            }
+            else -> {
+                myLocationRequestPermissionLauncher.launch(
+                    arrayOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    )
+                )
+            }
+        }
     }
 
     override fun onResume() {
