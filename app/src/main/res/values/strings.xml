@@ -70,6 +70,13 @@
     <string name="transport_start_button_text">Vezetés\nKezdése</string>
     <string name="my_location_fab_description">My Location</string>
     <string name="hike_finish_description">X mark</string>
+    <string name="offline_dialog_text">
+        "Ha offline szeretnéd használni a térképet, akkor amíg online vagy, "
+        "menj végig virtuálisan az úton a kívánt nagyításban. "
+        "Ez után offlinera válthatsz, és amikor újrba bekapcsolod a mobileszközöd, "
+        "akkor a térkép továbbra is elérhető lesz. Megkötés: "
+        "ne kapcsold ki az alkalmazást, amíg újra internetelérhetőség közelben nem leszel."
+    </string>
     <string-array name="transport_types">
         <item>Bicikli</item>
         <item>Autó</item>

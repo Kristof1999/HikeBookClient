@@ -11,16 +11,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +27,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.*
 import dagger.hilt.android.AndroidEntryPoint
+import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
 import hu.kristof.nagy.hikebookclient.model.Point
@@ -35,6 +35,7 @@ import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.config.Configuration
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
@@ -60,18 +61,20 @@ class HikeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Configuration.getInstance()
-            .load(context, PreferenceManager.getDefaultSharedPreferences(context))
+        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         map = binding.hikeMap
-
-        binding.hikeOfflineButton.setOnClickListener {
-            it.isVisible = false
-        }
+        map.setTileSource(TileSourceFactory.MAPNIK)
 
         myLocation()
 
         val args: HikeFragmentArgs by navArgs()
         geofence(args)
+
+        binding.hikeOfflineButton.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setMessage(getString(R.string.offline_dialog_text))
+                .show()
+        }
 
         customizeMap(args)
 
