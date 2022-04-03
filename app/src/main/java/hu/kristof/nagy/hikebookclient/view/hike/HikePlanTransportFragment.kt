@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +29,7 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 @AndroidEntryPoint
 class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -52,11 +54,21 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
         // TODO: add start hike point to map
         initMap()
 
+        val args: HikePlanTransportFragmentArgs by navArgs()
+        val hikeStartMarker = Marker(map)
+        val startPoint = args.userRoute.points.first()
+        hikeStartMarker.position = startPoint.toGeoPoint()
+        hikeStartMarker.title = startPoint.title
+        hikeStartMarker.icon = AppCompatResources.getDrawable(
+            requireContext(), org.osmdroid.library.R.drawable.marker_default
+        )
+        map.overlays.add(hikeStartMarker)
+
         binding.hikePlanTransportTransportMeanSpinner.onItemSelectedListener = this
         SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportTransportMeanSpinner)
 
         binding.hikePlanTransportStartButton.setOnClickListener {
-            onTransportStart()
+            onTransportStart(args)
         }
 
         handleStartAndEndSwitches()
@@ -71,6 +83,7 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
     private fun addMapEventsOverlay() {
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                InfoWindow.closeAllInfoWindowsOn(map)
                 viewModel.onSingleTap(p!!)
                 return true
             }
@@ -119,7 +132,7 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
         }
     }
 
-    private fun onTransportStart() {
+    private fun onTransportStart(args: HikePlanTransportFragmentArgs) {
         val startPoint = Point(
             viewModel.startPoint.latitude, viewModel.startPoint.longitude,
             MarkerType.SET, ""
@@ -128,8 +141,9 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
             viewModel.endPoint.latitude, viewModel.endPoint.longitude,
             MarkerType.NEW, ""
         )
+        // TODO: implement public transport
+        // starting point: https://menetrend.app/data-sources
         val transportType = viewModel.transportType
-        val args: HikePlanTransportFragmentArgs by navArgs()
         val directions = HikePlanTransportFragmentDirections
             .actionHikePlanFragmentToHikeTransportFragment(
                 startPoint, endPoint, transportType, args.userRoute
