@@ -88,6 +88,7 @@ class HikeTransportFragment : Fragment() {
     private fun initMap() {
         Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         map = binding.hikeTransportMap
+        // TODO: use different map sources based on chosen transport mean
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
         map.addCopyRightOverlay()

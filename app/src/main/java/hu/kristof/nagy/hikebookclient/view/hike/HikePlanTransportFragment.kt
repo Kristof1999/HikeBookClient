@@ -48,6 +48,8 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // TODO: add backwards plan, and add hike end point to map
+        // TODO: add start hike point to map
         initMap()
 
         binding.hikePlanTransportTransportMeanSpinner.onItemSelectedListener = this
