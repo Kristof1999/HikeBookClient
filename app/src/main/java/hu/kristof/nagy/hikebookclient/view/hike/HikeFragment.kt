@@ -1,6 +1,5 @@
 // based on:
 // https://developer.android.com/training/location/retrieve-current
-// https://developer.android.com/training/location/geofencing
 // https://developer.android.com/training/location/permissions
 // https://developer.android.com/training/permissions/requesting
 
@@ -83,13 +82,7 @@ class HikeFragment : Fragment() {
             val currentPosition = myLocationMarker.position
             val startPosition = args.userRoute.points.first().toGeoPoint()
 
-            val polyline = Polyline()
-            polyline.setPoints(listOf(currentPosition, startPosition))
-            // TODO: test if this really works
-            val distance = polyline.distance
-
-            // are we in the start circle?
-            if (distance <= Constants.GEOFENCE_RADIUS_IN_METERS*Constants.GEOFENCE_RADIUS_IN_METERS) {
+            if (isPointInCircle(currentPosition, startPosition, Constants.GEOFENCE_RADIUS_IN_METERS)) {
                 Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG).show()
@@ -100,12 +93,7 @@ class HikeFragment : Fragment() {
             val currentPosition = myLocationMarker.position
             val endPosition = args.userRoute.points.last().toGeoPoint()
 
-            val polyline = Polyline()
-            polyline.setPoints(listOf(currentPosition, endPosition))
-            val distance = polyline.distance
-
-            // are we in the end circle?
-            if (distance <= Constants.GEOFENCE_RADIUS_IN_METERS*Constants.GEOFENCE_RADIUS_IN_METERS) {
+            if (isPointInCircle(currentPosition, endPosition, Constants.GEOFENCE_RADIUS_IN_METERS)) {
                 Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
             } else {
                 Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG).show()
@@ -129,6 +117,13 @@ class HikeFragment : Fragment() {
         map.invalidate()
     }
 
+    private fun isPointInCircle(point: GeoPoint, center: GeoPoint, radius: Int): Boolean {
+        val polyline = Polyline()
+        polyline.setPoints(listOf(center, point))
+        val distance = polyline.distance
+
+        return distance <= radius*radius
+    }
 
     private fun mapCustomization(args: HikeFragmentArgs) {
         val polyLine = args.userRoute.toPolyline()
