@@ -56,10 +56,16 @@ class HikeTransportFragment : Fragment() {
             onRoadResult(road)
         }
 
-        binding.hikeTransportStartButton.setOnClickListener {
-            val directions = HikeTransportFragmentDirections
-                .actionHikeTransportFragmentToHikeFragment(args.userRoute)
-            findNavController().navigate(directions)
+        binding.hikeTransportFinishButton.setOnClickListener {
+            if (args.isForward) {
+                val directions = HikeTransportFragmentDirections
+                    .actionHikeTransportFragmentToHikeFragment(args.userRoute)
+                findNavController().navigate(directions)
+            } else {
+                findNavController().navigate(
+                    R.id.action_hikeTransportFragment_to_myMapFragment
+                )
+            }
         }
     }
 

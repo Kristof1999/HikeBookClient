@@ -123,6 +123,9 @@
         <argument
             android:name="userRoute"
             app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
+        <argument
+            android:name="isForward"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/hikeTransportFragment"
@@ -143,6 +146,12 @@
         <argument
             android:name="userRoute"
             app:argType="hu.kristof.nagy.hikebookclient.model.UserRoute" />
+        <action
+            android:id="@+id/action_hikeTransportFragment_to_myMapFragment"
+            app:destination="@id/myMapFragment" />
+        <argument
+            android:name="isForward"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/hikePlanDateFragment"
@@ -171,6 +180,9 @@
             app:destination="@id/myMapFragment"
             app:popUpTo="@id/hikePlanDateFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_hikeFragment_to_hikePlanTransportFragment"
+            app:destination="@id/hikePlanTransportFragment" />
     </fragment>
     <fragment
         android:id="@+id/groupsFragment"

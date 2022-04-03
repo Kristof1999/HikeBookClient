@@ -82,10 +82,18 @@ class HikeFragment : Fragment() {
         val args: HikeFragmentArgs by navArgs()
         myGeofence(fusedLocationProviderClient, myLocationMarker, args)
 
-        binding.hikeHikeCloseFab.setOnClickListener {
+        binding.hikeFinishButton.setOnLongClickListener {
             findNavController().navigate(
                 R.id.action_hikeFragment_to_myMapFragment
             )
+            return@setOnLongClickListener true
+        }
+        binding.hikeBackwardsPlanTransportButton.setOnLongClickListener {
+            val isForward = false
+            val directions = HikeFragmentDirections
+                .actionHikeFragmentToHikePlanTransportFragment(args.userRoute, isForward)
+            findNavController().navigate(directions)
+            return@setOnLongClickListener true
         }
 
         binding.hikeOfflineButton.setOnClickListener {
@@ -128,26 +136,49 @@ class HikeFragment : Fragment() {
             }
         }
 
-        var finishTime = 0L
         binding.hikeFinishButton.setOnClickListener {
-            onMyLocation(fusedLocationProviderClient, myLocationMarker)
-            val currentPosition = myLocationMarker.position
-            val endPosition = args.userRoute.points.last().toGeoPoint()
-
-            if (isPointInCircle(
-                    currentPosition,
-                    endPosition,
-                    Constants.GEOFENCE_RADIUS_IN_METERS
+            if (onFinish(fusedLocationProviderClient, myLocationMarker, args, startTime)) {
+                findNavController().navigate(
+                    R.id.action_hikeFragment_to_myMapFragment
                 )
-            ) {
-                Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
-                finishTime = Calendar.getInstance().timeInMillis
-                val viewModel: HikeViewModel by viewModels()
-                viewModel.computeAndUpdateAvgSpeed(args.userRoute, startTime, finishTime)
-            } else {
-                Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)
-                    .show()
             }
+        }
+
+        binding.hikeBackwardsPlanTransportButton.setOnClickListener {
+            if (onFinish(fusedLocationProviderClient, myLocationMarker, args, startTime)) {
+                val isForward = false
+                val directions = HikeFragmentDirections
+                    .actionHikeFragmentToHikePlanTransportFragment(args.userRoute, isForward)
+                findNavController().navigate(directions)
+            }
+        }
+    }
+
+    private fun onFinish(
+        fusedLocationProviderClient: FusedLocationProviderClient,
+        myLocationMarker: Marker,
+        args: HikeFragmentArgs,
+        startTime: Long
+    ): Boolean {
+        onMyLocation(fusedLocationProviderClient, myLocationMarker)
+        val currentPosition = myLocationMarker.position
+        val endPosition = args.userRoute.points.last().toGeoPoint()
+
+        if (isPointInCircle(
+                currentPosition,
+                endPosition,
+                Constants.GEOFENCE_RADIUS_IN_METERS
+            )
+        ) {
+            Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
+            val finishTime = Calendar.getInstance().timeInMillis
+            val viewModel: HikeViewModel by viewModels()
+            viewModel.computeAndUpdateAvgSpeed(args.userRoute, startTime, finishTime)
+            return true
+        } else {
+            Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)
+                .show()
+            return false
         }
     }
 
@@ -221,7 +252,7 @@ class HikeFragment : Fragment() {
                         if (location == null) {
                             Toast.makeText(
                                 requireContext(),
-                                "Kérem, hogy kapcsolja be a GPS-t a saját pozíció megtekintéséhez.",
+                                "Kérem, hogy kapcsolja be a GPS-t.",
                                 Toast.LENGTH_LONG
                             ).show()
                             return@addOnSuccessListener

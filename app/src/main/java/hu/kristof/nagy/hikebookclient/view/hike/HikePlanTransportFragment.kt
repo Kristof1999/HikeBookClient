@@ -50,19 +50,29 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO: add backwards plan, and add hike end point to map
-        // TODO: add start hike point to map
         initMap()
 
         val args: HikePlanTransportFragmentArgs by navArgs()
-        val hikeStartMarker = Marker(map)
-        val startPoint = args.userRoute.points.first()
-        hikeStartMarker.position = startPoint.toGeoPoint()
-        hikeStartMarker.title = startPoint.title
-        hikeStartMarker.icon = AppCompatResources.getDrawable(
-            requireContext(), org.osmdroid.library.R.drawable.marker_default
-        )
-        map.overlays.add(hikeStartMarker)
+        if (args.isForward) {
+            val hikeStartMarker = Marker(map)
+            val startPoint = args.userRoute.points.first()
+            hikeStartMarker.position = startPoint.toGeoPoint()
+            hikeStartMarker.title = startPoint.title
+            hikeStartMarker.icon = AppCompatResources.getDrawable(
+                requireContext(), org.osmdroid.library.R.drawable.marker_default
+            )
+            map.overlays.add(hikeStartMarker)
+        } else {
+            val hikeEndMarker = Marker(map)
+            val startPoint = args.userRoute.points.last()
+            hikeEndMarker.position = startPoint.toGeoPoint()
+            hikeEndMarker.title = startPoint.title
+            hikeEndMarker.icon = AppCompatResources.getDrawable(
+                requireContext(), org.osmdroid.library.R.drawable.marker_default
+            )
+            map.overlays.add(hikeEndMarker)
+        }
+
 
         binding.hikePlanTransportTransportMeanSpinner.onItemSelectedListener = this
         SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportTransportMeanSpinner)
@@ -146,7 +156,7 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
         val transportType = viewModel.transportType
         val directions = HikePlanTransportFragmentDirections
             .actionHikePlanFragmentToHikeTransportFragment(
-                startPoint, endPoint, transportType, args.userRoute
+                startPoint, endPoint, transportType, args.userRoute, args.isForward
             )
         findNavController().navigate(directions)
     }

@@ -65,8 +65,9 @@ class HikePlanDateFragment : Fragment() {
         }
 
         binding.hikePlanDateTransportPlanButton.setOnClickListener {
+            val isForward = true
             val directions = HikePlanDateFragmentDirections
-                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.userRoute)
+                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.userRoute, isForward)
             findNavController().navigate(directions)
         }
         binding.hikePlanDateHikeStartButton.setOnClickListener {
