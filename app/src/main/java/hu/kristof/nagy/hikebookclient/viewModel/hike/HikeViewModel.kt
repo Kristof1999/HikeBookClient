@@ -8,8 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.view.hike.GeofenceFirstPointBroadcastReceiver
-import hu.kristof.nagy.hikebookclient.view.hike.GeofenceLastPointBroadcastReceiver
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,10 +15,9 @@ import javax.inject.Inject
 class HikeViewModel @Inject constructor(
     private val service: Service
 ) : ViewModel() {
-    fun computeAndUpdateAvgSpeed(route: UserRoute) {
+    fun computeAndUpdateAvgSpeed(route: UserRoute, startTime: Long, finishTime: Long) {
         val distance: Double = route.toPolyline().distance - 2 * Constants.GEOFENCE_RADIUS_IN_METERS
-        val timeInMillis: Long =
-            GeofenceLastPointBroadcastReceiver.enterTime - GeofenceFirstPointBroadcastReceiver.exitTime
+        val timeInMillis: Long = finishTime - startTime
         val millisecondsInHour: Float = Calendar.MILLISECONDS_IN_DAY / 24f
         val timeInHour: Float = timeInMillis / ( millisecondsInHour )
         val avgSpeed: Double = distance / timeInHour

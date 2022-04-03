@@ -20,6 +20,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -32,6 +33,7 @@ import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineStart
+import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -40,6 +42,7 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
+import java.util.*
 
 @AndroidEntryPoint
 class HikeFragment : Fragment() {
@@ -77,28 +80,8 @@ class HikeFragment : Fragment() {
         }
 
         val args: HikeFragmentArgs by navArgs()
-        binding.hikeStartButton.setOnClickListener {
-            onMyLocation(fusedLocationProviderClient, myLocationMarker)
-            val currentPosition = myLocationMarker.position
-            val startPosition = args.userRoute.points.first().toGeoPoint()
+        myGeofence(fusedLocationProviderClient, myLocationMarker, args)
 
-            if (isPointInCircle(currentPosition, startPosition, Constants.GEOFENCE_RADIUS_IN_METERS)) {
-                Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG).show()
-            }
-        }
-        binding.hikeFinishButton.setOnClickListener {
-            onMyLocation(fusedLocationProviderClient, myLocationMarker)
-            val currentPosition = myLocationMarker.position
-            val endPosition = args.userRoute.points.last().toGeoPoint()
-
-            if (isPointInCircle(currentPosition, endPosition, Constants.GEOFENCE_RADIUS_IN_METERS)) {
-                Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG).show()
-            }
-        }
         binding.hikeHikeCloseFab.setOnClickListener {
             findNavController().navigate(
                 R.id.action_hikeFragment_to_myMapFragment
@@ -115,6 +98,57 @@ class HikeFragment : Fragment() {
         mapCustomization(args)
 
         map.invalidate()
+    }
+
+    private fun myGeofence(
+        fusedLocationProviderClient: FusedLocationProviderClient,
+        myLocationMarker: Marker,
+        args: HikeFragmentArgs
+    ) {
+        var startTime = 0L
+        binding.hikeStartButton.setOnClickListener {
+            onMyLocation(fusedLocationProviderClient, myLocationMarker)
+            val currentPosition = myLocationMarker.position
+            val startPosition = args.userRoute.points.first().toGeoPoint()
+
+            if (isPointInCircle(
+                    currentPosition,
+                    startPosition,
+                    Constants.GEOFENCE_RADIUS_IN_METERS
+                )
+            ) {
+                Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG)
+                    .show()
+                // TODO: try to get better data
+                // problem: circle is big -> time can be out dated -> avgSpeed is not realistic
+                startTime = Calendar.getInstance().timeInMillis
+            } else {
+                Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
+
+        var finishTime = 0L
+        binding.hikeFinishButton.setOnClickListener {
+            onMyLocation(fusedLocationProviderClient, myLocationMarker)
+            val currentPosition = myLocationMarker.position
+            val endPosition = args.userRoute.points.last().toGeoPoint()
+
+            if (isPointInCircle(
+                    currentPosition,
+                    endPosition,
+                    Constants.GEOFENCE_RADIUS_IN_METERS
+                )
+            ) {
+                Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
+                finishTime = Calendar.getInstance().timeInMillis
+                val viewModel: HikeViewModel by viewModels()
+                viewModel.computeAndUpdateAvgSpeed(args.userRoute, startTime, finishTime)
+            } else {
+                Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)
+                    .show()
+            }
+        }
     }
 
     private fun isPointInCircle(point: GeoPoint, center: GeoPoint, radius: Int): Boolean {
@@ -209,7 +243,6 @@ class HikeFragment : Fragment() {
             }
             shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
                 AlertDialog.Builder(requireContext())
-                    // TODO: update text -> next to my location, we use it for the geofence replacement
                     .setMessage("A kevésbé jó minőségű helyhozzáféréssel a saját pozíció funkció megközelítő választ tud csak adni. Szeretné engedélyezni a helyhozzáférést?")
                     .setPositiveButton("Igen") { _, _ ->
                         myLocationRequestPermissionLauncher.launch(
