@@ -66,6 +66,7 @@
     <string name="date_picker_button_text">Dátum\nKiválasztása</string>
     <string name="time_picker_button_text">Idő\nKiválasztása</string>
     <string name="hike_start_button_text">Túra\nKezdése</string>
+    <string name="hike_finish_button_text">Túra\nBefejezése</string>
     <string name="hike_route_plan_button_text">Útvonal\nTervezése</string>
     <string name="transport_start_button_text">Vezetés\nKezdése</string>
     <string name="my_location_fab_description">My Location</string>
@@ -77,6 +78,8 @@
         "akkor a térkép továbbra is elérhető lesz. Megkötés: "
         "ne kapcsold ki az alkalmazást, amíg újra internetelérhetőség közelben nem leszel."
     </string>
+    <string name="offline_hike_button_text">Offlinera Váltás</string>
+
     <string-array name="transport_types">
         <item>Bicikli</item>
         <item>Autó</item>
@@ -89,7 +92,6 @@
     <!-- describe action/purpose -->
     <string name="tab_description_text">Tabs for navigating between connected and unconnected group lists</string>
     <string name="view_pager_description">Layouts associated with the given tabs</string>
-    <string name="offline_hike_button_text">Offline Használatra Letöltés</string>
 
     <!-- Help -->
     <string name="help_title">Súgó</string>

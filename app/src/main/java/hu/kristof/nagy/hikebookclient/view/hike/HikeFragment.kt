@@ -8,9 +8,6 @@ package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -24,21 +21,18 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
-import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineStart
-import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -46,6 +40,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
+import org.osmdroid.views.overlay.Polyline
 
 @AndroidEntryPoint
 class HikeFragment : Fragment() {
@@ -69,35 +64,6 @@ class HikeFragment : Fragment() {
         map = binding.hikeMap
         map.setTileSource(TileSourceFactory.MAPNIK)
 
-        myLocation()
-
-        val args: HikeFragmentArgs by navArgs()
-        geofence(args)
-
-        binding.hikeOfflineButton.setOnClickListener {
-            AlertDialog.Builder(requireContext())
-                .setMessage(R.string.offline_dialog_text)
-                .show()
-        }
-
-        customizeMap(args)
-
-        map.invalidate()
-    }
-
-    private fun geofence(args: HikeFragmentArgs) {
-        addCircleToMap(args.userRoute.points.first().toGeoPoint())
-        addCircleToMap(args.userRoute.points.last().toGeoPoint())
-
-        val geofencingClient = LocationServices
-            .getGeofencingClient(requireContext())
-        initGeofence(args.userRoute.points, geofencingClient)
-
-        val viewModel: HikeViewModel by viewModels()
-        handleFinishButton(geofencingClient, args.userRoute, viewModel)
-    }
-
-    private fun myLocation() {
         val myLocationMarker = Marker(map)
         myLocationMarker.icon = AppCompatResources.getDrawable(
             requireContext(),
@@ -110,9 +76,61 @@ class HikeFragment : Fragment() {
         binding.hikeMyLocationFab.setOnClickListener {
             onMyLocation(fusedLocationProviderClient, myLocationMarker)
         }
+
+        val args: HikeFragmentArgs by navArgs()
+        binding.hikeStartButton.setOnClickListener {
+            onMyLocation(fusedLocationProviderClient, myLocationMarker)
+            val currentPosition = myLocationMarker.position
+            val startPosition = args.userRoute.points.first().toGeoPoint()
+
+            val polyline = Polyline()
+            polyline.setPoints(listOf(currentPosition, startPosition))
+            // TODO: test if this really works
+            val distance = polyline.distance
+
+            // are we in the start circle?
+            if (distance <= Constants.GEOFENCE_RADIUS_IN_METERS*Constants.GEOFENCE_RADIUS_IN_METERS) {
+                Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG).show()
+            }
+        }
+        binding.hikeFinishButton.setOnClickListener {
+            onMyLocation(fusedLocationProviderClient, myLocationMarker)
+            val currentPosition = myLocationMarker.position
+            val endPosition = args.userRoute.points.last().toGeoPoint()
+
+            val polyline = Polyline()
+            polyline.setPoints(listOf(currentPosition, endPosition))
+            val distance = polyline.distance
+
+            // are we in the end circle?
+            if (distance <= Constants.GEOFENCE_RADIUS_IN_METERS*Constants.GEOFENCE_RADIUS_IN_METERS) {
+                Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG).show()
+            }
+        }
+        binding.hikeHikeCloseFab.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_hikeFragment_to_myMapFragment
+            )
+        }
+
+        binding.hikeOfflineButton.setOnClickListener {
+            // TODO: test if the cache still stays after we turn of the app (and wifi of course)
+            AlertDialog.Builder(requireContext())
+                .setMessage(R.string.offline_dialog_text)
+                .show()
+        }
+
+        mapCustomization(args)
+
+        map.invalidate()
     }
 
-    private fun customizeMap(args: HikeFragmentArgs) {
+
+    private fun mapCustomization(args: HikeFragmentArgs) {
         val polyLine = args.userRoute.toPolyline()
         map.overlays.add(polyLine)
 
@@ -126,6 +144,9 @@ class HikeFragment : Fragment() {
             folderOverlay.add(marker)
         }
         map.overlays.add(folderOverlay)
+
+        addCircleToMap(args.userRoute.points.first().toGeoPoint())
+        addCircleToMap(args.userRoute.points.last().toGeoPoint())
 
         map.setMapCenterOnPolylineStart(args.userRoute.toPolyline())
         val controller = map.controller
@@ -142,163 +163,15 @@ class HikeFragment : Fragment() {
         map.overlays.add(circle)
     }
 
-    private fun initGeofence(points: List<Point>, geofencingClient: GeofencingClient) {
-        val firstPointGeofence = buildGeofence(
-            points.first(),
-            Constants.GEOFENCE_REQUEST_ID_FIRST_POINT,
-            Geofence.GEOFENCE_TRANSITION_EXIT
-        )
-        val lastPointGeofence = buildGeofence(
-            points.last(),
-            Constants.GEOFENCE_REQUEST_ID_LAST_POINT,
-            Geofence.GEOFENCE_TRANSITION_ENTER
-        )
-        // TODO: decide if one geofenceRequest would be enough
-        val geofencingRequestFirstPoint = GeofencingRequest.Builder().apply {
-            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
-            addGeofences(listOf(firstPointGeofence))
-        }.build()
-        val geofencingRequestLastPoint = GeofencingRequest.Builder().apply {
-            setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_DWELL)
-            addGeofences(listOf(lastPointGeofence))
-        }.build()
-        // TODO: test: is it okay to use the same request code
-        val geofenceFirstPointPendingIntent: PendingIntent by lazy {
-            makeIntent(GeofenceFirstPointBroadcastReceiver::class.java)
-        }
-        val geofenceLastPointPendingIntent: PendingIntent by lazy {
-            makeIntent(GeofenceLastPointBroadcastReceiver::class.java)
-        }
-
-        addGeofence(geofencingClient,
-            geofencingRequestFirstPoint,
-            geofenceFirstPointPendingIntent
-        )
-        addGeofence(geofencingClient,
-            geofencingRequestLastPoint,
-            geofenceLastPointPendingIntent
-        )
-    }
-
-    private fun <T: BroadcastReceiver> makeIntent(
-        broadcastReceiverClass: Class<T>
-    ): PendingIntent {
-        val intent = Intent(requireContext(), broadcastReceiverClass)
-        return PendingIntent.getBroadcast(
-            requireContext(), Constants.GEOFENCE_REQUEST_CODE,
-            intent, PendingIntent.FLAG_UPDATE_CURRENT
-        )
-    }
-
-    private fun buildGeofence(center: Point, requestId: String, transitionType: Int): Geofence {
-        return Geofence.Builder()
-            .setRequestId(requestId)
-            .setCircularRegion(
-                center.latitude,
-                center.longitude,
-                Constants.GEOFENCE_RADIUS_IN_METERS
-            )
-            .setExpirationDuration(Geofence.NEVER_EXPIRE)
-            .setTransitionTypes(transitionType)
-            .build()
-    }
-
-    private fun handleFinishButton(
-        geofencingClient: GeofencingClient,
-        route: UserRoute,
-        viewModel: HikeViewModel) {
-        binding.hikeHikeFinishFab.setOnClickListener {
-            if (GeofenceLastPointBroadcastReceiver.entered) {
-                if (GeofenceFirstPointBroadcastReceiver.exited) {
-                    viewModel.computeAndUpdateAvgSpeed(route)
-                }
-                removeGeofences(geofencingClient)
-                findNavController().navigate(
-                    R.id.action_hikeFragment_to_myMapFragment
-                )
-            } else {
-                Toast.makeText(requireContext(), "Nem vagy elég közel a célhoz.", Toast.LENGTH_LONG)
-                    .show()
-            }
-        }
-        binding.hikeHikeFinishFab.setOnLongClickListener {
-            removeGeofences(geofencingClient)
-            findNavController().navigate(
-                R.id.action_hikeFragment_to_myMapFragment
-            )
-            return@setOnLongClickListener true
-        }
-    }
-
-    private fun addGeofence(
-        geofencingClient: GeofencingClient,
-        geofencingRequest: GeofencingRequest,
-        geofencePendingIntent: PendingIntent
-    ) {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                ),
-                1//Constants.GEOFENCE_PERMISSIONS_REQUEST_CODE
-            )
-        }
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                requireActivity(),
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                1//Constants.GEOFENCE_PERMISSIONS_REQUEST_CODE
-            )
-        }
-        geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent).run {
-            addOnSuccessListener {
-                Log.i(TAG, "Successfully added geofence.")
-            }
-            addOnFailureListener {
-                Log.e(TAG, "Failed to add geofence: ${it.message}")
-            }
-        }
-    }
-
-    private fun removeGeofences(geofencingClient: GeofencingClient) {
-        geofencingClient.removeGeofences(
-            listOf(
-                Constants.GEOFENCE_REQUEST_ID_FIRST_POINT,
-                Constants.GEOFENCE_REQUEST_ID_LAST_POINT
-            )).run {
-            addOnFailureListener {
-                Log.e(TAG, "Failed to remove geofences: ${it.message}")
-            }
-        }
-    }
-
     private val myLocationRequestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { permissions ->
-        when {
-            isPermissionGranted(permissions, Manifest.permission.ACCESS_FINE_LOCATION) -> {
-                // Precise location access granted.
-            }
-            isPermissionGranted(permissions, Manifest.permission.ACCESS_COARSE_LOCATION) -> {
-                // Only approximate location access granted.
-            }
-            else -> {
+        if (!isPermissionGranted(permissions, Manifest.permission.ACCESS_FINE_LOCATION) &&
+            !isPermissionGranted(permissions, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 AlertDialog.Builder(requireContext())
                     .setMessage("A saját pozíció funkció nem érhető el, ugyanis a működéshez hozzáférés szükséges az eszköz helyadataihoz.")
                     .show()
             }
-        }
     }
 
     private fun isPermissionGranted(
@@ -341,6 +214,7 @@ class HikeFragment : Fragment() {
             }
             shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION) -> {
                 AlertDialog.Builder(requireContext())
+                    // TODO: update text -> next to my location, we use it for the geofence replacement
                     .setMessage("A kevésbé jó minőségű helyhozzáféréssel a saját pozíció funkció megközelítő választ tud csak adni. Szeretné engedélyezni a helyhozzáférést?")
                     .setPositiveButton("Igen") { _, _ ->
                         myLocationRequestPermissionLauncher.launch(
