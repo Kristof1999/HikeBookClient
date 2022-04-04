@@ -187,5 +187,13 @@
     <fragment
         android:id="@+id/groupsFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsFragment"
-        android:label="GroupsFragment" />
+        android:label="GroupsFragment" >
+        <action
+            android:id="@+id/action_groupsFragment_to_groupsDetailFragment"
+            app:destination="@id/groupsDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupsDetailFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailFragment"
+        android:label="GroupsDetailFragment" />
 </navigation>

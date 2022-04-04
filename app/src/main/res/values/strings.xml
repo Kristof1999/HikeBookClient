@@ -28,7 +28,7 @@
     <string name="switch_to_my_map_button_text">Átváltás Térkép Nézetre</string>
     <string name="my_map_title">Saját Térkép: Térkép Nézet</string>
     <string name="my_map_list_title">Saját Térkép: Lista Nézet</string>
-    <string name="create_route_image_description">Plus sign</string>
+    <string name="create_route_image_description">Route create</string>
     <string name="hike_image_description">Walking man</string>
     <string name="route_create_button_text">Létrehozás</string>
     <string name="edit_route_edit_finalize_button_text">Mentés</string>
@@ -93,6 +93,10 @@
     <!-- describe action/purpose -->
     <string name="tab_description_text">Tabs for navigating between connected and unconnected group lists</string>
     <string name="view_pager_description">Layouts associated with the given tabs</string>
+    <string name="groups_map_button_text">Térkép\nNézet</string>
+    <string name="groups_list_button_text">Lista\nNézet</string>
+    <string name="groups_members_button_text">Tagok</string>
+    <string name="groups_add_from_my_map_button_text">Saját Térképről Felvétel</string>
 
     <!-- Help -->
     <string name="help_title">Súgó</string>
@@ -238,4 +242,10 @@
         "Fent egy szöveges mező mutatja az út és a felhasználó nevét, valamint a túra leírását."
         "A lap alján levő gombbal hozzáadhatjuk a térképünkhöz az útvonalat."
     </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_bottom_nav_demo">BottomNavDemo</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/groups_navigation"
+    app:startDestination="@id/groupsMapFragment">
+
+    <fragment
+        android:id="@+id/groupsMapFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMapFragment"
+        android:label="GroupsMapFragment" />
+    <fragment
+        android:id="@+id/groupsDetailListFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailListFragment"
+        android:label="fragment_groups_detail_list"
+        tools:layout="@layout/fragment_groups_detail_list" />
+    <fragment
+        android:id="@+id/groupsDetailMembersFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMembersFragment"
+        android:label="fragment_groups_detail_members"
+        tools:layout="@layout/fragment_groups_detail_members" />
+</navigation>

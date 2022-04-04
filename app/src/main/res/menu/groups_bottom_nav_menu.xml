@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/groupsMapFragment"
+        android:title="@string/groups_map_button_text" />
+    <item
+        android:id="@+id/groupsDetailListFragment"
+        android:title="@string/groups_list_button_text" />
+    <item
+        android:id="@+id/groupsDetailMembersFragment"
+        android:title="@string/groups_members_button_text" />
+</menu>

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
 
@@ -26,7 +27,17 @@ class GroupsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = GroupsListAdapter(isConnectedPage!!)
+        val groupName = "asd"
+        val adapter = GroupsListAdapter(isConnectedPage!!, GroupsClickListener(
+            connectListener = { groupName, isConnectedPage ->
+                // viewmodel call
+            },
+            detailListener = {groupName, isConnectedPage ->
+                findNavController().navigate(
+                    R.id.action_groupsFragment_to_groupsDetailFragment
+                )
+            })
+        )
         binding.groupsRecyclerView.adapter = adapter
     }
 

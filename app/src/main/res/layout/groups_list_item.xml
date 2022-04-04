@@ -3,20 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-
+        <variable
+            name="groupName"
+            type="String" />
+        <variable
+            name="isConnectedPage"
+            type="Boolean" />
+        <variable
+            name="clickListener"
+            type="hu.kristof.nagy.hikebookclient.view.groups.GroupsClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:onClick="@{() -> clickListener.onDetail(groupName, isConnectedPage)}">
 
         <TextView
             android:id="@+id/groupsListItemGroupNameButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="TextView"
+            android:text="@{groupName}"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,6 +40,7 @@
             android:layout_marginBottom="8dp"
             android:text="Button"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:onClick="@{() -> clickListener.onConnect(groupName, isConnectedPage)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
