@@ -4,11 +4,14 @@
 
     <item
         android:id="@+id/groupsMapFragment"
+        android:icon="@drawable/map_image"
         android:title="@string/groups_map_menu_text" />
     <item
         android:id="@+id/groupsDetailListFragment"
+        android:icon="@drawable/list_image"
         android:title="@string/groups_list_menu_text" />
     <item
         android:id="@+id/groupsDetailMembersFragment"
+        android:icon="@drawable/members_image"
         android:title="@string/groups_members_menu_text" />
 </menu>
