@@ -11,8 +11,6 @@
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsConnectedFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".view.groups.GroupsListFragment"
         tools:listitem="@layout/groups_list_item" />

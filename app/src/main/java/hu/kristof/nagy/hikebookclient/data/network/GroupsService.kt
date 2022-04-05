@@ -1,6 +1,7 @@
 package hu.kristof.nagy.hikebookclient.data.network
 
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface GroupsService {
@@ -9,4 +10,9 @@ interface GroupsService {
         @Path("userName") userName: String,
         @Path("isConnectedPage") isConnectedPage: Boolean
     ): List<String>
+
+    @PUT("groups/{groupName}")
+    suspend fun createGroup(
+        @Path("groupName") groupName: String
+    ): Boolean
 }

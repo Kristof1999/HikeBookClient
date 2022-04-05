@@ -95,6 +95,9 @@
     <string name="groups_list_menu_text">Lista</string>
     <string name="groups_members_menu_text">Tagok</string>
     <string name="groups_add_from_my_map_button_text">Saját Térképről Felvétel</string>
+    <string name="groups_create_group_button_text">Csoport Létrehozása</string>
+    <string name="groups_create_dialog_text">Add meg a csoport nevét:</string>
+    <string name="groups_create_dialog_hint_text">Név</string>
 
     <!-- Help -->
     <string name="help_title">Súgó</string>
