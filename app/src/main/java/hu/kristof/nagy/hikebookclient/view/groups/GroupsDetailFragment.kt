@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
@@ -26,6 +27,14 @@ class GroupsDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val args: GroupsDetailFragmentArgs by navArgs()
+        binding.groupsDetailGroupNameTv.text = args.groupName
+        if (args.isConnectedPage) {
+            binding.groupsDetailConnectButton.text = "Elhagyás"
+        } else {
+            binding.groupsDetailConnectButton.text = "Csatlakozás"
+        }
 
         val navController = findNavController(requireActivity(), R.id.groupsNavHostFragment)
         val bottomNav = binding.groupsDetailBottomNav

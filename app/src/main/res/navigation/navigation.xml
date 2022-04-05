@@ -195,5 +195,12 @@
     <fragment
         android:id="@+id/groupsDetailFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailFragment"
-        android:label="GroupsDetailFragment" />
+        android:label="GroupsDetailFragment" >
+        <argument
+            android:name="groupName"
+            app:argType="string" />
+        <argument
+            android:name="isConnectedPage"
+            app:argType="boolean" />
+    </fragment>
 </navigation>

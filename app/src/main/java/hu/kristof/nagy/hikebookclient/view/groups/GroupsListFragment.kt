@@ -27,15 +27,14 @@ class GroupsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val groupName = "asd"
         val adapter = GroupsListAdapter(isConnectedPage!!, GroupsClickListener(
             connectListener = { groupName, isConnectedPage ->
                 // viewmodel call
             },
             detailListener = {groupName, isConnectedPage ->
-                findNavController().navigate(
-                    R.id.action_groupsFragment_to_groupsDetailFragment
-                )
+                val directions = GroupsFragmentDirections
+                    .actionGroupsFragmentToGroupsDetailFragment(groupName, isConnectedPage)
+                findNavController().navigate(directions)
             })
         )
         binding.groupsRecyclerView.adapter = adapter
