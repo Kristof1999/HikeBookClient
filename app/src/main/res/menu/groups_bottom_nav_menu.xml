@@ -4,11 +4,11 @@
 
     <item
         android:id="@+id/groupsMapFragment"
-        android:title="@string/groups_map_button_text" />
+        android:title="@string/groups_map_menu_text" />
     <item
         android:id="@+id/groupsDetailListFragment"
-        android:title="@string/groups_list_button_text" />
+        android:title="@string/groups_list_menu_text" />
     <item
         android:id="@+id/groupsDetailMembersFragment"
-        android:title="@string/groups_members_button_text" />
+        android:title="@string/groups_members_menu_text" />
 </menu>

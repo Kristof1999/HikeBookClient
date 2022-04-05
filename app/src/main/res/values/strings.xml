@@ -28,15 +28,15 @@
     <string name="switch_to_my_map_button_text">Átváltás Térkép Nézetre</string>
     <string name="my_map_title">Saját Térkép: Térkép Nézet</string>
     <string name="my_map_list_title">Saját Térkép: Lista Nézet</string>
-    <string name="create_route_image_description">Route create</string>
-    <string name="hike_image_description">Walking man</string>
+    <string name="create_route_image_description">Create a route</string>
+    <string name="hike_image_description">Start hike for the given route</string>
     <string name="route_create_button_text">Létrehozás</string>
     <string name="edit_route_edit_finalize_button_text">Mentés</string>
-    <string name="printer_image_description">Printer</string>
-    <string name="edit_image_description">Pen</string>
+    <string name="printer_image_description">Print the given route</string>
+    <string name="edit_image_description">Edit the given route</string>
     <string name="route_create_title">Útvonal Létrehozás</string>
     <string name="route_edit_title">Útvonal Szerkesztés</string>
-    <string name="delete_image_description">Trash can</string>
+    <string name="delete_image_description">Delete the given route</string>
     <string name="marker_spinner_description">marker picker</string>
     <string name="hike_description_hint">Túra leírás, részletek, megjegyzések</string>
     <string name="route_name_hint">Útvonal név</string>
@@ -51,7 +51,7 @@
     </string-array>
 
     <!-- Browse -->
-    <string name="route_add_image_description">Road with a plus</string>
+    <string name="route_add_image_description">Add the given route to your map</string>
     <string name="browse_hike_detail_description">Felhasználói név:%1$s\nÚtvonal név: %2$s\n%3$s</string>
     <string name="add_to_my_map_text">Hozzáadás a saját térképhez</string>
 
@@ -71,7 +71,7 @@
     <string name="transport_start_button_text">Vezetés\nKezdése</string>
     <string name="transport_finish_button_text">Vezetés\nBefejezése</string>
     <string name="my_location_fab_description">My Location</string>
-    <string name="hike_finish_description">X mark</string>
+    <string name="hike_finish_description">Finish the hike</string>
     <string name="offline_dialog_text">
         "Ha offline szeretnéd használni a térképet, akkor amíg online vagy, "
         "menj végig virtuálisan az úton a kívánt nagyításban. "
@@ -89,13 +89,11 @@
     <!-- Groups -->
     <string name="tab_groups_connected_text">Csatlakozott</string>
     <string name="tab_groups_unconnected_text">Nem Csatlakozott</string>
-    <!-- TODO: change other content descriptions too to something more meaningful -->
-    <!-- describe action/purpose -->
     <string name="tab_description_text">Tabs for navigating between connected and unconnected group lists</string>
     <string name="view_pager_description">Layouts associated with the given tabs</string>
-    <string name="groups_map_button_text">Térkép\nNézet</string>
-    <string name="groups_list_button_text">Lista\nNézet</string>
-    <string name="groups_members_button_text">Tagok</string>
+    <string name="groups_map_menu_text">Térkép</string>
+    <string name="groups_list_menu_text">Lista</string>
+    <string name="groups_members_menu_text">Tagok</string>
     <string name="groups_add_from_my_map_button_text">Saját Térképről Felvétel</string>
 
     <!-- Help -->
