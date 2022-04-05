@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,16 @@ class GroupsRepository @Inject constructor(
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             service.listGroups(userName!!, isConnectedPage)
+        }
+    }
+
+    suspend fun createGroup(groupName: String): Flow<Result<Boolean>> {
+        return dataStore.data.map {
+            it[Constants.DATA_STORE_USER_NAME]
+        }.map { userName ->
+            handleRequest {
+                service.createGroup(groupName, userName!!)
+            }
         }
     }
 }

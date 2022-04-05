@@ -5,14 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.network.handleRequest
-import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.data.GroupsRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GroupsViewModel @Inject constructor(
-    private val service: Service
+    private val repository: GroupsRepository
     ): ViewModel() {
     private var _createRes = MutableLiveData<Result<Boolean>>()
     val createRes: LiveData<Result<Boolean>>
@@ -22,9 +22,9 @@ class GroupsViewModel @Inject constructor(
         check(name)
 
         viewModelScope.launch {
-            _createRes.value = handleRequest {
-                service.createGroup(name)
-            }!!
+            repository.createGroup(name).collect { res ->
+                _createRes.value = res
+            }
         }
     }
 
