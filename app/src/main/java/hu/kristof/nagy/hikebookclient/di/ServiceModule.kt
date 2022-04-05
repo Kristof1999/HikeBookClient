@@ -43,15 +43,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.kristof.nagy.hikebookclient.BuildConfig
-import hu.kristof.nagy.hikebookclient.data.network.AuthService
-import hu.kristof.nagy.hikebookclient.data.network.HikeService
-import hu.kristof.nagy.hikebookclient.data.network.RouteService
-import hu.kristof.nagy.hikebookclient.data.network.WeatherService
+import hu.kristof.nagy.hikebookclient.data.network.*
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-interface Service : AuthService, RouteService, HikeService
+interface Service : AuthService, RouteService, HikeService, GroupsService
 
 @Module
 @InstallIn(SingletonComponent::class)
