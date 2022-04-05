@@ -14,9 +14,9 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsListViewModel
 
 @AndroidEntryPoint
-class GroupsListFragment : Fragment() {
-    private var isConnectedPage: Boolean? = null
+class GroupsListFragment(private val isConnectedPage: Boolean) : Fragment() {
     private lateinit var binding: FragmentGroupsListBinding
+    private val viewModel: GroupsListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,10 +31,7 @@ class GroupsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel: GroupsListViewModel by viewModels()
-        viewModel.listGroups(isConnectedPage!!)
-
-        val adapter = GroupsListAdapter(isConnectedPage!!, GroupsClickListener(
+        val adapter = GroupsListAdapter(isConnectedPage, GroupsClickListener(
             connectListener = { groupName, isConnectedPage ->
                 // viewmodel call
             },
@@ -46,16 +43,19 @@ class GroupsListFragment : Fragment() {
         )
         binding.groupsRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.groups.observe(viewLifecycleOwner) {
-            adapter.submitList(it.toMutableList())
+        viewModel.groups.observe(viewLifecycleOwner) { groupNames ->
+            adapter.submitList(groupNames.toMutableList())
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.listGroups(isConnectedPage)
     }
 
     companion object {
         fun newInstance(isConnectedPage: Boolean): GroupsListFragment {
-            return GroupsListFragment().apply {
-                this.isConnectedPage = isConnectedPage
-            }
+            return GroupsListFragment(isConnectedPage)
         }
     }
 }
