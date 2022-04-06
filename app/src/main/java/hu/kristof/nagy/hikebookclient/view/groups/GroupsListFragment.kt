@@ -36,7 +36,7 @@ class GroupsListFragment(private val isConnectedPage: Boolean) : Fragment() {
             connectListener = { groupName, isConnectedPage ->
                 viewModel.generalConnect(groupName, isConnectedPage)
             },
-            detailListener = {groupName, isConnectedPage ->
+            detailListener = { groupName, isConnectedPage ->
                 val directions = GroupsFragmentDirections
                     .actionGroupsFragmentToGroupsDetailFragment(groupName, isConnectedPage)
                 findNavController().navigate(directions)
