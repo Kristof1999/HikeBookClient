@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,7 +34,7 @@ class GroupsListFragment(private val isConnectedPage: Boolean) : Fragment() {
 
         val adapter = GroupsListAdapter(isConnectedPage, GroupsClickListener(
             connectListener = { groupName, isConnectedPage ->
-                // viewmodel call
+                viewModel.generalConnect(groupName, isConnectedPage)
             },
             detailListener = {groupName, isConnectedPage ->
                 val directions = GroupsFragmentDirections
@@ -45,6 +46,17 @@ class GroupsListFragment(private val isConnectedPage: Boolean) : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.groups.observe(viewLifecycleOwner) { groupNames ->
             adapter.submitList(groupNames.toMutableList())
+        }
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            if (res) {
+                if (isConnectedPage) {
+                    Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG).show()
+                } else {
+                    Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Valami hiba történt.", Toast.LENGTH_LONG).show()
+            }
         }
     }
 

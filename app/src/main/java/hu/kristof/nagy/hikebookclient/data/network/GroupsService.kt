@@ -16,4 +16,11 @@ interface GroupsService {
         @Path("groupName") groupName: String,
         @Path("userName") userName: String
     ): Boolean
+
+    @PUT("groups/{groupName}/{userName}/{isConnectedPage}")
+    suspend fun generalConnect(
+        @Path("groupName") groupName: String,
+        @Path("userName") userName: String,
+        @Path("isConnectedPage") isConnectedPage: Boolean
+    ): Boolean
 }

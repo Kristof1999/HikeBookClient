@@ -32,4 +32,12 @@ class GroupsRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun generalConnect(groupName: String, isConnectedPage: Boolean): Flow<Boolean> {
+        return dataStore.data.map {
+            it[Constants.DATA_STORE_USER_NAME]
+        }.map { userName ->
+            service.generalConnect(groupName, userName!!, isConnectedPage)
+        }
+    }
 }
