@@ -28,7 +28,7 @@ class GroupsFragment : Fragment() {
             inflater, R.layout.fragment_groups, container, false
         )
 
-        val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), parentFragmentManager)
+        val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
         val viewPager: ViewPager = binding.groupsViewPager
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.groupsTabLayout

@@ -12,19 +12,6 @@
         android:layout_height="match_parent"
         tools:context=".view.groups.GroupsFragment">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/groupsTabLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/tab_description_text"
-            app:layout_constraintBottom_toTopOf="@+id/groupsViewPager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupsGroupCreateButton"
-            app:layout_constraintVertical_chainStyle="packed" />
-
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/groupsViewPager"
             android:layout_width="0dp"
@@ -35,7 +22,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupsTabLayout">
+            app:layout_constraintTop_toBottomOf="@id/groupsGroupCreateButton">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/groupsTabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/tab_description_text" />
 
         </androidx.viewpager.widget.ViewPager>
 
