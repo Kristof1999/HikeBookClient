@@ -23,4 +23,9 @@ interface GroupsService {
         @Path("userName") userName: String,
         @Path("isConnectedPage") isConnectedPage: Boolean
     ): Boolean
+
+    @GET("groups/{groupName}")
+    suspend fun listMembers(
+        @Path("groupName") groupName: String
+    ): List<String>
 }

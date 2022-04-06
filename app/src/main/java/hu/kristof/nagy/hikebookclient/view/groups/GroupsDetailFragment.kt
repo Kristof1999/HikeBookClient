@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavArgument
+import androidx.navigation.NavType
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
@@ -37,6 +39,17 @@ class GroupsDetailFragment : Fragment() {
         }
 
         val navController = findNavController(requireActivity(), R.id.groupsNavHostFragment)
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.groupsDetailMembersFragment -> {
+                    val argument = NavArgument.Builder()
+                        .setDefaultValue(args.groupName)
+                        .setType(NavType.StringType)
+                        .build()
+                    destination.addArgument("groupName", argument)
+                }
+            }
+        }
         val bottomNav = binding.groupsDetailBottomNav
         bottomNav.setupWithNavController(navController)
     }
