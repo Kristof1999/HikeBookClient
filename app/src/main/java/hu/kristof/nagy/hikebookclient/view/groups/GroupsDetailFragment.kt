@@ -38,7 +38,7 @@ class GroupsDetailFragment : Fragment() {
             binding.groupsDetailConnectButton.text = "Csatlakozás"
         }
 
-        val navController = findNavController(requireActivity(), R.id.groupsNavHostFragment)
+        val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
                 R.id.groupsDetailMembersFragment -> {

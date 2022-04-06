@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/groups_navigation"
-    app:startDestination="@id/groupsMapFragment">
+    app:startDestination="@id/groupsDetailMapFragment">
 
     <fragment
-        android:id="@+id/groupsMapFragment"
+        android:id="@+id/groupsDetailMapFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMapFragment"
         android:label="GroupsMapFragment" />
     <fragment
