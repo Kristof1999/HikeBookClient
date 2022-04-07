@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
@@ -58,12 +59,13 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         binding.routeCreateMarkerSpinner.onItemSelectedListener = this
         SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
 
+        val args: RouteCreateFragmentArgs by navArgs()
         binding.routeCreateCreateButton.setOnClickListener {
-            onCreate(viewModel)
+            onCreate(args, viewModel)
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
-            onRouteCreateResult(it)
+            onRouteCreateResult(args.routeType, it)
             // névnek egyedinek kell lennie
         }
 
@@ -79,9 +81,10 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         // keep type as is
     }
 
-    private fun onCreate(viewModel: RouteCreateViewModel) {
+    private fun onCreate(args: RouteCreateFragmentArgs, viewModel: RouteCreateViewModel) {
         try {
             viewModel.onRouteCreate(
+                args,
                 binding.routeCreateRouteNameEditText.text.toString(),
                 binding.routeCreateHikeDescriptionEditText.text.toString()
             )
@@ -90,11 +93,21 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onRouteCreateResult(res: Result<Boolean>) {
+    private fun onRouteCreateResult(routeType: RouteType, res: Result<Boolean>) {
         handleResult(context, res) {
-            findNavController().navigate(
-                R.id.action_routeCreateFragment_to_myMapFragment
-            )
+            when (routeType) {
+                RouteType.USER -> findNavController().navigate(
+                    R.id.action_routeCreateFragment_to_myMapFragment
+                )
+                RouteType.GROUP -> findNavController().navigate(
+                    R.id.action_routeCreateFragment_to_groupsDetailFragment
+                )
+                // TODO: update
+                RouteType.GROUP_HIKE -> findNavController().navigate(
+                    R.id.action_routeCreateFragment_to_groupsDetailFragment
+                )
+            }
+
         }
     }
 

@@ -22,10 +22,11 @@ package hu.kristof.nagy.hikebookclient.model
 
 import org.osmdroid.views.overlay.Polyline
 
-abstract class Route {
-    abstract val routeName: String
-    abstract val points: List<Point>
-    abstract val description: String
+open class Route(
+    open var routeName: String,
+    open var points: List<Point>,
+    open var description: String
+    ) {
 
     fun toPolyline(): Polyline {
         val polyline = Polyline()

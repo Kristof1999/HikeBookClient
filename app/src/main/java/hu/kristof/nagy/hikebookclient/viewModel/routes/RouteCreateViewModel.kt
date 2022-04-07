@@ -23,10 +23,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.GroupRouteRepository
+import hu.kristof.nagy.hikebookclient.data.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
+import hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragmentArgs
+import hu.kristof.nagy.hikebookclient.view.routes.RouteType
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
@@ -34,7 +37,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RouteCreateViewModel @Inject constructor(
-    private val userRepository: IUserRouteRepository
+    private val userRouteRepository: UserRouteRepository,
+    private val groupRouteRepository: GroupRouteRepository
     ) : RouteViewModel() {
     override val markers = ArrayList<MyMarker>()
     override val polylines = ArrayList<Polyline>()
@@ -46,21 +50,62 @@ class RouteCreateViewModel @Inject constructor(
     val routeCreateRes: LiveData<Result<Boolean>>
         get() = _routeCreateRes
 
+    fun onRouteCreate(
+        args: RouteCreateFragmentArgs,
+        routeName: String,
+        hikeDescription: String
+    ) {
+        val points: List<Point> = markers.map {
+            Point.from(it)
+        }
+        RouteUtils.checkRoute(routeName, points)
+
+        when (args.routeType) {
+            RouteType.USER -> onUserRouteCreate(routeName, hikeDescription, points)
+            RouteType.GROUP ->
+                onGroupRouteCreate(routeName, hikeDescription, points, args.groupName!!)
+            RouteType.GROUP_HIKE ->
+                onGroupHikeRouteCreate(routeName, hikeDescription, points, args.groupHikeName!!)
+        }
+    }
+
     /**
      * Creates the route for the logged in user.
      * @param routeName name of the created route
      * @throws IllegalArgumentException if the route has an illegal name, or it has less than 2 points
      */
-    fun onRouteCreate(routeName: String, hikeDescription: String) {
-        val points: List<Point> = markers.map {
-            Point.from(it)
-        }
-        RouteUtils.checkRoute(routeName, points)
+    private fun onUserRouteCreate(
+        routeName: String,
+        hikeDescription: String,
+        points: List<Point>
+    ) {
         viewModelScope.launch {
-            userRepository.createUserRoute(routeName, points, hikeDescription)
+            userRouteRepository.createUserRoute(routeName, points, hikeDescription)
                 .collect { res ->
                     _routeCreateRes.value = res
                 }
         }
+    }
+
+    private fun onGroupRouteCreate(
+        routeName: String,
+        hikeDescription: String,
+        points: List<Point>,
+        groupName: String
+    ) {
+        viewModelScope.launch {
+            _routeCreateRes.value = groupRouteRepository.createRoute(
+                groupName, routeName, points, hikeDescription
+            )
+        }
+    }
+
+    private fun onGroupHikeRouteCreate(
+        routeName: String,
+        hikeDescription: String,
+        points: List<Point>,
+        groupHikeName: String
+    ) {
+
     }
 }

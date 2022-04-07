@@ -3,15 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/groupsDetailMapFragment"
+        android:id="@+id/groupsDetailMapMenuItem"
         android:icon="@drawable/map_image"
         android:title="@string/groups_map_menu_text" />
     <item
-        android:id="@+id/groupsDetailListFragment"
+        android:id="@+id/groupsDetailListMenuItem"
         android:icon="@drawable/list_image"
         android:title="@string/groups_list_menu_text" />
     <item
-        android:id="@+id/groupsDetailMembersFragment"
+        android:id="@+id/groupsDetailMembersMenuItem"
         android:icon="@drawable/members_image"
         android:title="@string/groups_members_menu_text" />
 </menu>

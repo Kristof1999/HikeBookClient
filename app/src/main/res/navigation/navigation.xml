@@ -48,6 +48,20 @@
             app:destination="@id/myMapFragment"
             app:popUpTo="@id/routeCreateFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="routeType"
+            app:argType="hu.kristof.nagy.hikebookclient.view.routes.RouteType" />
+        <argument
+            android:name="groupName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="groupHikeName"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_routeCreateFragment_to_groupsDetailFragment"
+            app:destination="@id/groupsDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/routeEditFragment"
@@ -202,5 +216,16 @@
         <argument
             android:name="isConnectedPage"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_groupsDetailFragment_to_routeCreateFragment"
+            app:destination="@id/routeCreateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupsDetailMapFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMapFragment"
+        android:label="GroupsDetailMapFragment" >
+        <action
+            android:id="@+id/action_groupsDetailMapFragment_to_routeCreateFragment"
+            app:destination="@id/routeCreateFragment" />
     </fragment>
 </navigation>

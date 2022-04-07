@@ -53,11 +53,11 @@ class UserRouteRepository @Inject constructor(
 
     override suspend fun editUserRoute(editedUserRoute: EditedUserRoute): Result<Boolean> {
         return handleRequest {
-                service.editUserRoute(
-                    editedUserRoute.newUserRoute.userName,
-                    editedUserRoute.oldUserRoute.routeName,
-                    editedUserRoute
-                )
+            service.editUserRoute(
+                editedUserRoute.newUserRoute.userName,
+                editedUserRoute.oldUserRoute.routeName,
+                editedUserRoute
+            )
         }
     }
 }

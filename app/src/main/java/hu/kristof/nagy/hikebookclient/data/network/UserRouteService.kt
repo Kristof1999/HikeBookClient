@@ -5,7 +5,7 @@ import hu.kristof.nagy.hikebookclient.model.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.UserRoute
 import retrofit2.http.*
 
-interface RouteService {
+interface UserRouteService {
     /**
      * Persists the created route if it's unique for the given user.
      * @param userName name of user who created the route

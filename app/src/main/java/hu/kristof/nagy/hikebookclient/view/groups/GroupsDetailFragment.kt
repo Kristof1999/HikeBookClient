@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavArgument
 import androidx.navigation.NavType
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
+import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
 
@@ -51,6 +53,17 @@ class GroupsDetailFragment : Fragment() {
             }
         }
         val bottomNav = binding.groupsDetailBottomNav
+        bottomNav.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.groupsDetailMapMenuItem -> {
+                    val groupName = args.groupName
+                    val directions = GroupsNavigationDirections
+                        .actionGlobalGroupsDetailMapFragment(groupName)
+                    findNavController().navigate(directions)
+                }
+            }
+            return@setOnItemSelectedListener true
+        }
         bottomNav.setupWithNavController(navController)
     }
 }

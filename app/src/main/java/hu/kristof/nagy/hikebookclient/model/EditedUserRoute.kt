@@ -1,3 +1,6 @@
 package hu.kristof.nagy.hikebookclient.model
 
-data class EditedUserRoute(val newUserRoute: UserRoute, val oldUserRoute: UserRoute)
+class EditedUserRoute(
+    val newUserRoute: UserRoute,
+    val oldUserRoute: UserRoute
+) : EditedRoute(newUserRoute, oldUserRoute)
