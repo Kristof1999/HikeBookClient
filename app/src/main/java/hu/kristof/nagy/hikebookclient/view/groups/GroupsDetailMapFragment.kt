@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
@@ -47,17 +46,17 @@ class GroupsDetailMapFragment : Fragment() {
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
 
-        val args: GroupsDetailMapFragmentArgs by navArgs()
+        val groupName = arguments?.getString("groupName")!!
+
         binding.groupsMapCreateRouteFab.setOnClickListener {
             val routeType = RouteType.GROUP
-            val groupName = args.groupName
             val directions = GroupsDetailFragmentDirections
                 .actionGroupsDetailFragmentToRouteCreateFragment(routeType, groupName, null)
             findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
         }
 
         val viewModel: GroupsDetailMapViewModel by viewModels()
-        viewModel.loadRoutesOfGroup(args.groupName)
+        viewModel.loadRoutesOfGroup(groupName)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             onRoutesLoad(routes)

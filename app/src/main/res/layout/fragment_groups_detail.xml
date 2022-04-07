@@ -47,7 +47,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/groupsDetailGroupNameTv"
-            app:navGraph="@navigation/groups_navigation"
             app:defaultNavHost="true" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

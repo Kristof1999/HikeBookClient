@@ -4,15 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavArgument
-import androidx.navigation.NavType
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.setupWithNavController
-import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
 
@@ -41,25 +39,18 @@ class GroupsDetailFragment : Fragment() {
         }
 
         val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            when (destination.id) {
-                R.id.groupsDetailMembersFragment -> {
-                    val argument = NavArgument.Builder()
-                        .setDefaultValue(args.groupName)
-                        .setType(NavType.StringType)
-                        .build()
-                    destination.addArgument("groupName", argument)
-                }
-            }
-        }
+
+        // set start destination's arguments
+        val bundle = bundleOf("groupName" to args.groupName)
+        navController.setGraph(R.navigation.groups_navigation, bundle)
+
         val bottomNav = binding.groupsDetailBottomNav
         bottomNav.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.groupsDetailMapMenuItem -> {
-                    val groupName = args.groupName
-                    val directions = GroupsNavigationDirections
-                        .actionGlobalGroupsDetailMapFragment(groupName)
-                    findNavController().navigate(directions)
+                    findNavController().navigate(
+                        R.id.action_global_groupsDetailMapFragment
+                    )
                 }
             }
             return@setOnItemSelectedListener true

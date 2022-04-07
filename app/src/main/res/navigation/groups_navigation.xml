@@ -9,9 +9,6 @@
         android:id="@+id/groupsDetailMapFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMapFragment"
         android:label="GroupsMapFragment" >
-        <argument
-            android:name="groupName"
-            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/groupsDetailListFragment"
