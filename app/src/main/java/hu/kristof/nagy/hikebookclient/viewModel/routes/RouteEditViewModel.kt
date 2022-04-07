@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IUserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.EditedUserRoute
-import hu.kristof.nagy.hikebookclient.model.MyMarker
-import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.UserRoute
+import hu.kristof.nagy.hikebookclient.model.*
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
@@ -41,15 +38,15 @@ class RouteEditViewModel @Inject constructor(
      * @throws IllegalArgumentException if the edited route has an illegal name, or it has less than 2 points
      */
     fun onRouteEdit(
-        oldUserRoute: UserRoute,
+        oldUserRoute: Route,
         routeName: String,
         hikeDescription: String) {
         val points = markers.map {
             Point.from(it)
         }
         RouteUtils.checkRoute(routeName, points)
-        val newUserRoute = UserRoute(oldUserRoute.userName, routeName, points, hikeDescription)
-        val editedUserRoute = EditedUserRoute(newUserRoute, oldUserRoute)
+        val newUserRoute = Route(oldUserRoute.ownerName, oldUserRoute.routeType, routeName, points, hikeDescription)
+        val editedUserRoute = EditedRoute(newUserRoute, oldUserRoute)
         viewModelScope.launch {
             _routeEditRes.value = userRepository.editUserRoute(editedUserRoute)
         }

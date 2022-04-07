@@ -21,6 +21,7 @@ import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteCreateBinding
+import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.SpinnerUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
@@ -65,7 +66,7 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
-            onRouteCreateResult(args.routeType, it)
+            onRouteCreateResult(args.routeType, it, args)
             // névnek egyedinek kell lennie
         }
 
@@ -93,15 +94,24 @@ class RouteCreateFragment : Fragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun onRouteCreateResult(routeType: RouteType, res: Result<Boolean>) {
+    private fun onRouteCreateResult(
+        routeType: RouteType,
+        res: Result<Boolean>,
+        args: RouteCreateFragmentArgs
+    ) {
         handleResult(context, res) {
             when (routeType) {
                 RouteType.USER -> findNavController().navigate(
                     R.id.action_routeCreateFragment_to_myMapFragment
                 )
-                RouteType.GROUP -> findNavController().navigate(
-                    R.id.action_routeCreateFragment_to_groupsDetailFragment
-                )
+                RouteType.GROUP -> {
+                    val groupName = args.groupName!!
+                    // isConnectedPage is true because
+                    // only a connected member can create routes
+                    val directions = RouteCreateFragmentDirections
+                        .actionRouteCreateFragmentToGroupsDetailFragment(groupName, true)
+                    findNavController().navigate(directions)
+                }
                 // TODO: update
                 RouteType.GROUP_HIKE -> findNavController().navigate(
                     R.id.action_routeCreateFragment_to_groupsDetailFragment

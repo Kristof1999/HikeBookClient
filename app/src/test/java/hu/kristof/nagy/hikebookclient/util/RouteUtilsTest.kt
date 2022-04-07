@@ -2,7 +2,6 @@ package hu.kristof.nagy.hikebookclient.util
 
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.UserRoute
 import org.junit.Assert.assertThrows
 import org.junit.Test
 

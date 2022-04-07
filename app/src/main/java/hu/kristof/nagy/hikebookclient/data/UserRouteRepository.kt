@@ -4,9 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
-import hu.kristof.nagy.hikebookclient.model.EditedUserRoute
+import hu.kristof.nagy.hikebookclient.model.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.UserRoute
+import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -16,12 +17,12 @@ class UserRouteRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : IUserRouteRepository {
-    override suspend fun loadUserRoutes(): Flow<Result<List<UserRoute>>> {
+    override suspend fun loadUserRoutes(): Flow<Result<List<Route>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             handleRequest {
-                service.loadUserRoutesForUser(userName!!)
+                service.loadRoutes(userName!!, RouteType.USER)
             }
         }
     }
@@ -31,7 +32,7 @@ class UserRouteRepository @Inject constructor(
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             handleRequest {
-                service.deleteUserRoute(userName!!, routeName)
+                service.deleteRoute(userName!!, routeName, RouteType.USER)
             }
         }
     }
@@ -44,18 +45,18 @@ class UserRouteRepository @Inject constructor(
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
+            val userRoute = Route(userName!!, RouteType.USER, routeName, points, hikeDescription)
             handleRequest {
-                service.createUserRouteForUser(userName, userRoute.routeName, userRoute)
+                service.createRoute(userName, userRoute.routeName, userRoute)
             }
         }
     }
 
-    override suspend fun editUserRoute(editedUserRoute: EditedUserRoute): Result<Boolean> {
+    override suspend fun editUserRoute(editedUserRoute: EditedRoute): Result<Boolean> {
         return handleRequest {
-            service.editUserRoute(
-                editedUserRoute.newUserRoute.userName,
-                editedUserRoute.oldUserRoute.routeName,
+            service.editRoute(
+                editedUserRoute.newRoute.ownerName,
+                editedUserRoute.oldRoute.routeName,
                 editedUserRoute
             )
         }

@@ -48,7 +48,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
-interface Service : AuthService, UserRouteService, HikeService, GroupsService, GroupRouteService
+interface Service : AuthService, RouteService, HikeService, GroupsService
 
 @Module
 @InstallIn(SingletonComponent::class)

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.di.Service
-import hu.kristof.nagy.hikebookclient.model.UserRoute
+import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Inject
 class HikeViewModel @Inject constructor(
     private val service: Service
 ) : ViewModel() {
-    fun computeAndUpdateAvgSpeed(route: UserRoute, startTime: Long, finishTime: Long) {
+    fun computeAndUpdateAvgSpeed(route: Route, startTime: Long, finishTime: Long) {
         val distance: Double = route.toPolyline().distance - 2 * Constants.GEOFENCE_RADIUS_IN_METERS
         val timeInMillis: Long = finishTime - startTime
         val millisecondsInHour: Float = Calendar.MILLISECONDS_IN_DAY / 24f
@@ -28,7 +28,7 @@ class HikeViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            service.updateAvgSpeed(route.userName, avgSpeed)
+            service.updateAvgSpeed(route.ownerName, avgSpeed)
         }
     }
 }

@@ -20,13 +20,18 @@
 
 package hu.kristof.nagy.hikebookclient.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import org.osmdroid.views.overlay.Polyline
 
-open class Route(
-    open var routeName: String,
-    open var points: List<Point>,
-    open var description: String
-    ) {
+@Parcelize
+data class Route(
+    val ownerName: String,
+    val routeType: RouteType,
+    val routeName: String,
+    val points: List<Point>,
+    val description: String
+    ) : Parcelable {
 
     fun toPolyline(): Polyline {
         val polyline = Polyline()

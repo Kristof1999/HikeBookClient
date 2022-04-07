@@ -1,12 +1,12 @@
 package hu.kristof.nagy.hikebookclient.data
 
-import hu.kristof.nagy.hikebookclient.model.EditedUserRoute
+import hu.kristof.nagy.hikebookclient.model.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.UserRoute
+import hu.kristof.nagy.hikebookclient.model.Route
 import kotlinx.coroutines.flow.Flow
 
 interface IUserRouteRepository {
-    suspend fun loadUserRoutes(): Flow<Result<List<UserRoute>>>
+    suspend fun loadUserRoutes(): Flow<Result<List<Route>>>
     suspend fun deleteUserRoute(routeName: String): Flow<Result<Boolean>>
     suspend fun createUserRoute(
         routeName: String,
@@ -14,6 +14,6 @@ interface IUserRouteRepository {
         hikeDescription: String
     ): Flow<Result<Boolean>>
     suspend fun editUserRoute(
-        editedUserRoute: EditedUserRoute
+        editedUserRoute: EditedRoute
     ): Result<Boolean>
 }
