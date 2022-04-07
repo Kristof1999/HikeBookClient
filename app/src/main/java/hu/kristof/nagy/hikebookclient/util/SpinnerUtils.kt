@@ -8,9 +8,9 @@ import androidx.lifecycle.LifecycleOwner
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.view.hike.TransportType
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
-import hu.kristof.nagy.hikebookclient.view.mymap.TextDialogFragment
+import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 
 object SpinnerUtils {
     fun setTransportSpinnerAdapter(context: Context, spinner: Spinner) {

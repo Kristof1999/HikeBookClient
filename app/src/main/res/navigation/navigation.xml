@@ -40,7 +40,7 @@
         android:label="LoginActivity" />
     <fragment
         android:id="@+id/routeCreateFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteCreateFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragment"
         android:label="@string/route_create_title"
         tools:layout="@layout/fragment_route_create" >
         <action
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/routeEditFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.mymap.RouteEditFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.routes.RouteEditFragment"
         android:label="@string/route_edit_title" >
         <action
             android:id="@+id/action_routeEditFragment_to_myMapFragment"

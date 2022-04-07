@@ -8,7 +8,7 @@ import androidx.appcompat.widget.SwitchCompat
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker

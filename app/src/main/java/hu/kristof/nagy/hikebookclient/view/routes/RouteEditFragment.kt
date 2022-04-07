@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.view.mymap
+package hu.kristof.nagy.hikebookclient.view.routes
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -23,7 +23,7 @@ import hu.kristof.nagy.hikebookclient.model.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteEditViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteEditViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint

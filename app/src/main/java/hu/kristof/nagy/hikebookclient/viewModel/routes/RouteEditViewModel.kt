@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.viewModel.mymap
+package hu.kristof.nagy.hikebookclient.viewModel.routes
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

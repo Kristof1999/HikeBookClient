@@ -2,7 +2,7 @@
 // https://github.com/osmdroid/osmdroid/wiki
 // spinner: https://developer.android.com/guide/topics/ui/controls/spinner
 
-package hu.kristof.nagy.hikebookclient.view.mymap
+package hu.kristof.nagy.hikebookclient.view.routes
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,7 +26,7 @@ import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.RouteCreateViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteCreateViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.MapView

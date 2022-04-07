@@ -1,7 +1,7 @@
 // based on:
 // https://developer.android.com/guide/topics/ui/dialogs
 
-package hu.kristof.nagy.hikebookclient.view.mymap
+package hu.kristof.nagy.hikebookclient.view.routes
 
 import android.app.Dialog
 import android.os.Bundle
@@ -22,7 +22,7 @@ class TextDialogFragment : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
-            val binding = DataBindingUtil.inflate<TextDialogBinding>(
+            val binding = DataBindingUtil.inflate<hu.kristof.nagy.hikebookclient.databinding.TextDialogBinding>(
                 inflater, R.layout.text_dialog, null, false
             )
             builder.setView(binding.root)

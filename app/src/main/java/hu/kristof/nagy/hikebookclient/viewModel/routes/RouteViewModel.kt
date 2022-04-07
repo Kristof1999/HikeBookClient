@@ -1,11 +1,11 @@
-package hu.kristof.nagy.hikebookclient.viewModel.mymap
+package hu.kristof.nagy.hikebookclient.viewModel.routes
 
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModel
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.MarkerUtils
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
