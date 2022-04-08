@@ -8,32 +8,27 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapBinding
-import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.util.MapFragment
+import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.FolderOverlay
 
 /**
  * A Fragment to display the routes of the logged in user on a map.
  */
 @AndroidEntryPoint
-class MyMapFragment : Fragment() {
-    private lateinit var map: MapView
+class MyMapFragment : MapFragment() {
     private lateinit var binding: FragmentMyMapBinding
 
     override fun onCreateView(
@@ -58,23 +53,7 @@ class MyMapFragment : Fragment() {
         viewModel.loadRoutesForLoggedInUser()
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
-            onRoutesLoad(routes)
-        }
-    }
-
-    private fun onRoutesLoad(res: Result<List<Route>>) {
-        handleResult(context, res) { routes ->
-            val folderOverlay = FolderOverlay()
-            routes.forEach { route ->
-                val polyline = route.toPolyline()
-                folderOverlay.add(polyline)
-                polyline.setOnClickListener { _, _, _ ->
-                    Toast.makeText(context, route.routeName, Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener true
-                }
-            }
-            map.overlays.add(folderOverlay)
-            map.invalidate()
+            MapUtils.onRoutesLoad(routes, context, map)
         }
     }
 

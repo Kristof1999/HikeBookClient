@@ -2,10 +2,13 @@ package hu.kristof.nagy.hikebookclient.util
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import org.osmdroid.events.MapEventsReceiver
@@ -105,6 +108,26 @@ object MapUtils {
             polyline.setPoints(points)
             polylines.add(polyline)
             overlays.add(polyline)
+        }
+    }
+
+    fun onRoutesLoad(
+        res: Result<List<Route>>,
+        context: Context?,
+        map: MapView
+    ) {
+        handleResult(context, res) { routes ->
+            val folderOverlay = FolderOverlay()
+            routes.forEach { route ->
+                val polyline = route.toPolyline()
+                folderOverlay.add(polyline)
+                polyline.setOnClickListener { _, _, _ ->
+                    Toast.makeText(context, route.routeName, Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener true
+                }
+            }
+            map.overlays.add(folderOverlay)
+            map.invalidate()
         }
     }
 }
