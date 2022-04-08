@@ -36,31 +36,50 @@ class GroupsDetailMapFragment : MapFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        map = binding.groupsMapMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setStartZoomAndCenter()
+        initMap()
 
         val groupName = arguments?.getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
-        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
-        if (!isConnectedPage) {
-            binding.groupsMapCreateRouteFab.isVisible = false
-            binding.groupsMapAddFromMyMapButton.isVisible = false
-        }
+        adaptView()
 
         binding.groupsMapCreateRouteFab.setOnClickListener {
-            val routeType = RouteType.GROUP
-            val directions = GroupsDetailFragmentDirections
-                .actionGroupsDetailFragmentToRouteCreateFragment(routeType, groupName, null)
-            findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+            onRouteCreate(groupName)
         }
 
         val viewModel: GroupsDetailMapViewModel by viewModels()
+        loadRoutesOfGroup(viewModel, groupName)
+
+        map.invalidate()
+    }
+
+    private fun loadRoutesOfGroup(
+        viewModel: GroupsDetailMapViewModel,
+        groupName: String
+    ) {
         viewModel.loadRoutesOfGroup(groupName)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             MapUtils.onRoutesLoad(routes, context, map)
         }
+    }
 
-        map.invalidate()
+    private fun onRouteCreate(groupName: String) {
+        val routeType = RouteType.GROUP
+        val directions = GroupsDetailFragmentDirections
+            .actionGroupsDetailFragmentToRouteCreateFragment(routeType, groupName, null)
+        findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+    }
+
+    private fun adaptView() {
+        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        if (!isConnectedPage) {
+            binding.groupsMapCreateRouteFab.isVisible = false
+            binding.groupsMapAddFromMyMapButton.isVisible = false
+        }
+    }
+
+    private fun initMap() {
+        map = binding.groupsMapMap
+        map.setTileSource(TileSourceFactory.MAPNIK)
+        map.setStartZoomAndCenter()
     }
 }
