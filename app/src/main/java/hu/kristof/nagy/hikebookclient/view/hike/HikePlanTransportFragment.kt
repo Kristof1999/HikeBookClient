@@ -11,14 +11,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
-import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -163,7 +161,14 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        SpinnerUtils.onTransportItemSelected(pos, viewModel)
+        when(pos) {
+            TransportType.BICYCLE.ordinal -> {
+                viewModel.transportType = TransportType.BICYCLE
+            }
+            TransportType.CAR.ordinal -> {
+                viewModel.transportType = TransportType.CAR
+            }
+        }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
