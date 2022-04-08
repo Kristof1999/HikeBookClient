@@ -48,7 +48,7 @@ class GroupsDetailFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.groupsDetailMapMenuItem -> {
                     navController.navigate(
-                        R.id.action_global_groupsDetailMapFragment
+                        R.id.action_global_groupsDetailMapFragment, bundle
                     )
                 }
                 R.id.groupsDetailMembersMenuItem -> {
