@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.data
+package hu.kristof.nagy.hikebookclient.data.routes
 
 import hu.kristof.nagy.hikebookclient.model.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.Point
