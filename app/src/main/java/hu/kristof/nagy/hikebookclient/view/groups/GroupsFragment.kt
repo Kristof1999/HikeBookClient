@@ -45,6 +45,7 @@ class GroupsFragment : Fragment() {
             val dialogFragment = GroupCreateDialogFragment()
             dialogFragment.show(parentFragmentManager, "group create")
 
+            // TODO: move outside of click listener
             binding.lifecycleOwner = viewLifecycleOwner
             dialogFragment.name.observe(viewLifecycleOwner) { name ->
                 try {

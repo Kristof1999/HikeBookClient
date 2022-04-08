@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
@@ -47,6 +48,15 @@ class GroupsDetailMapFragment : MapFragment() {
 
         val viewModel: GroupsDetailMapViewModel by viewModels()
         loadRoutesOfGroup(viewModel, groupName)
+
+        val dialog = AddFromMyMapDialogFragment()
+        binding.groupsMapAddFromMyMapButton.setOnClickListener {
+            dialog.show(parentFragmentManager, "add from my map")
+        }
+        binding.lifecycleOwner = viewLifecycleOwner
+        dialog.route.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_LONG).show()
+        }
 
         map.invalidate()
     }
