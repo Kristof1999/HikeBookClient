@@ -1,12 +1,12 @@
 package hu.kristof.nagy.hikebookclient.view.groups
 
+import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -39,6 +39,14 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
             )
 
             binding.addFromMyMapDialogSpinner.onItemSelectedListener = this
+            // TODO: when testing this, place big emphasis on lifecycle
+            //       related concerns as this observer is different from usual,
+            //       namely, it uses the parent fragment's viewLifecycleOwner
+            //       instead of its own
+            //       OR try to make it work with its own viewLifecycleOwner
+            binding.lifecycleOwner = parentFragment?.viewLifecycleOwner
+            viewModel.routes.observe(requireParentFragment().viewLifecycleOwner, observer)
+            viewModel.loadRoutesForLoggedInUser()
 
             builder.setView(binding.root)
                 .setPositiveButton("OK") { _, _ ->
@@ -58,28 +66,26 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onDestroyView() {
+        super.onDestroyView()
 
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { routes ->
-                val routeNames = routes.map { it.routeName }
-                val objects = mutableListOf("Válassz útvonalat")
-                objects.addAll(routeNames)
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_item,
-                    objects
-                ).also { adapter ->
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    binding.addFromMyMapDialogSpinner.adapter = adapter
-                }
+        viewModel.routes.removeObserver(observer)
+    }
+
+    private val observer = { res: Result<List<Route>> ->
+        handleResult(context, res) { routes ->
+            val routeNames = routes.map { it.routeName }
+            val objects = mutableListOf("Válassz útvonalat")
+            objects.addAll(routeNames)
+            ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                objects
+            ).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                binding.addFromMyMapDialogSpinner.adapter = adapter
             }
         }
-
-        // TODO: move request starter after observer setter in other places too
-        viewModel.loadRoutesForLoggedInUser()
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
