@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMembersBinding
@@ -20,7 +20,7 @@ class GroupsDetailMembersFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_groups_detail_members, container, false
         )
@@ -31,13 +31,8 @@ class GroupsDetailMembersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: GroupsDetailMembersViewModel by viewModels()
-        val groupName = findNavController()
-            .currentDestination
-            ?.arguments
-            ?.get("groupName")
-            ?.defaultValue
-            ?.toString()
-        viewModel.listMembers(groupName!!)
+        val args: GroupsDetailMembersFragmentArgs by navArgs()
+        viewModel.listMembers(args.groupName)
 
         val adapter = GroupsDetailMembersAdapter()
         binding.lifecycleOwner = viewLifecycleOwner

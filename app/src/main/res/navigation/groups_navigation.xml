@@ -19,8 +19,15 @@
         android:id="@+id/groupsDetailMembersFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMembersFragment"
         android:label="fragment_groups_detail_members"
-        tools:layout="@layout/fragment_groups_detail_members" />
+        tools:layout="@layout/fragment_groups_detail_members" >
+        <argument
+            android:name="groupName"
+            app:argType="string" />
+    </fragment>
     <action
         android:id="@+id/action_global_groupsDetailMapFragment"
         app:destination="@id/groupsDetailMapFragment" />
+    <action
+        android:id="@+id/action_global_groupsDetailMembersFragment"
+        app:destination="@id/groupsDetailMembersFragment" />
 </navigation>
