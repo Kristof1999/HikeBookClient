@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,26 +15,21 @@ import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.util.MarkerUtils
-import hu.kristof.nagy.hikebookclient.util.SpinnerUtils
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 @AndroidEntryPoint
-class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanTransportBinding
     private val viewModel: HikePlanTransportViewModel by viewModels()
-    private lateinit var map: MapView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -162,7 +156,6 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
     }
 
     private fun initMap() {
-        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         map = binding.hikePlanTransportMap
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
@@ -175,15 +168,5 @@ class HikePlanTransportFragment : Fragment(), AdapterView.OnItemSelectedListener
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // keep type as is
-    }
-
-    override fun onResume() {
-        super.onResume()
-        map.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        map.onPause()
     }
 }

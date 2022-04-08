@@ -19,25 +19,18 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
-import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MarkerUtils
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineStart
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
-import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
@@ -45,8 +38,7 @@ import org.osmdroid.views.overlay.Polyline
 import java.util.*
 
 @AndroidEntryPoint
-class HikeFragment : Fragment() {
-    private lateinit var map: MapView
+class HikeFragment : MapFragment() {
     private lateinit var binding: FragmentHikeBinding
 
     override fun onCreateView(
@@ -62,7 +54,6 @@ class HikeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         map = binding.hikeMap
         map.setTileSource(TileSourceFactory.MAPNIK)
 
@@ -314,16 +305,6 @@ class HikeFragment : Fragment() {
             requireContext(),
             permission
         ) == PackageManager.PERMISSION_GRANTED
-
-    override fun onResume() {
-        super.onResume()
-        map.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        map.onPause()
-    }
 
     companion object {
         private const val TAG = "HikeFragment"

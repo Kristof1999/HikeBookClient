@@ -8,12 +8,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
@@ -24,10 +22,8 @@ import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteEditViewModel
-import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
@@ -35,8 +31,7 @@ import org.osmdroid.views.overlay.Polyline
  * A Fragment to edit the chosen route.
  */
 @AndroidEntryPoint
-class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
-    private lateinit var map: MapView
+class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentRouteEditBinding
     private val viewModel: RouteEditViewModel by viewModels()
 
@@ -108,7 +103,6 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun initMap(args: RouteEditFragmentArgs) {
-        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         map = binding.routeEditMap
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.addCopyRightOverlay()
@@ -174,16 +168,6 @@ class RouteEditFragment : Fragment(), AdapterView.OnItemSelectedListener {
         polylines.add(polyline)
         map.invalidate()
         viewModel.setup(markers, polylines)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        map.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        map.onPause()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

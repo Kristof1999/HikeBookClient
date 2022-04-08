@@ -7,34 +7,30 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.util.MapFragment
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseDetailViewModel
-import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Polyline
 
 /**
  * A Fragment to display the details of a route while browsing.
  */
 @AndroidEntryPoint
-class BrowseDetailFragment : Fragment() {
+class BrowseDetailFragment : MapFragment() {
     private lateinit var binding: FragmentBrowseDetailBinding
-    private lateinit var map: MapView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,21 +99,10 @@ class BrowseDetailFragment : Fragment() {
     }
 
     private fun initMap() {
-        Configuration.getInstance().userAgentValue = BuildConfig.APPLICATION_ID
         map = binding.browseDetailMap
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
         map.addCopyRightOverlay()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        map.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        map.onPause()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
