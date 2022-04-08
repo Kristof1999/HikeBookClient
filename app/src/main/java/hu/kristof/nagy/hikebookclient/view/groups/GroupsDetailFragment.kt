@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
+import hu.kristof.nagy.hikebookclient.util.Constants
 
 class GroupsDetailFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailBinding
@@ -40,7 +41,10 @@ class GroupsDetailFragment : Fragment() {
         val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
 
         // set start destination's arguments
-        val bundle = bundleOf("groupName" to args.groupName)
+        val bundle = bundleOf(
+            Constants.GROUP_NAME_BUNDLE_KEY to args.groupName,
+            Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to args.isConnectedPage
+        )
         navController.setGraph(R.navigation.groups_navigation, bundle)
 
         val bottomNav = binding.groupsDetailBottomNav

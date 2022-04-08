@@ -26,4 +26,7 @@ object Constants {
     const val LANGUAGE = "hu"
 
     const val GEOFENCE_RADIUS_IN_METERS = 100
+
+    const val GROUP_NAME_BUNDLE_KEY = "groupName"
+    const val IS_CONNECTED_PAGE_BUNDLE_KEY = "isConnectedPage"
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
@@ -11,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMapBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.MapFragment
 import hu.kristof.nagy.hikebookclient.util.MapUtils
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
@@ -38,7 +40,12 @@ class GroupsDetailMapFragment : MapFragment() {
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setStartZoomAndCenter()
 
-        val groupName = arguments?.getString("groupName")!!
+        val groupName = arguments?.getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
+        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        if (!isConnectedPage) {
+            binding.groupsMapCreateRouteFab.isVisible = false
+            binding.groupsMapAddFromMyMapButton.isVisible = false
+        }
 
         binding.groupsMapCreateRouteFab.setOnClickListener {
             val routeType = RouteType.GROUP
