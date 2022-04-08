@@ -18,9 +18,24 @@ class GroupsDetailMapViewModel @Inject constructor(
     val routes: LiveData<Result<List<Route>>>
         get() = _routes
 
+    private var _addFromMyMapRes = MutableLiveData<Result<Boolean>>()
+    val addFromMyMapRes: LiveData<Result<Boolean>>
+        get() = _addFromMyMapRes
+
     fun loadRoutesOfGroup(groupName: String) {
         viewModelScope.launch {
             _routes.value = groupRepository.loadRoutes(groupName)
+        }
+    }
+
+    fun onAddFromMyMap(route: Route, groupName: String) {
+        viewModelScope.launch {
+            _addFromMyMapRes.value = groupRepository.createRoute(
+                groupName, route.routeName, route.points, route.description
+            )
+            // refresh if successful
+            if (_addFromMyMapRes.value?.isSuccess!!)
+                loadRoutesOfGroup(groupName)
         }
     }
 }

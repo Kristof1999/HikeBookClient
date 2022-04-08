@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMapBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.Constants
@@ -54,8 +55,14 @@ class GroupsDetailMapFragment : MapFragment() {
             dialog.show(parentFragmentManager, "add from my map")
         }
         binding.lifecycleOwner = viewLifecycleOwner
-        dialog.route.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), it.toString(), Toast.LENGTH_LONG).show()
+        dialog.route.observe(viewLifecycleOwner) { route ->
+            viewModel.onAddFromMyMap(route, groupName)
+        }
+        viewModel.addFromMyMapRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { addFromMyMapRes ->
+                if (addFromMyMapRes)
+                    Toast.makeText(requireContext(), "A felvétel sikeres!", Toast.LENGTH_SHORT).show()
+            }
         }
 
         map.invalidate()
