@@ -99,11 +99,10 @@ object MapUtils {
             }
 
             // connect the new point with the previous one
-            val points = ArrayList<GeoPoint>()
-            points.add(prevMarker.position)
-            points.add(newMarker.position)
             val polyline = Polyline()
-            polyline.setPoints(points)
+            polyline.setPoints(listOf(
+                prevMarker.position, newMarker.position
+            ))
             polylines.add(polyline)
             overlays.add(polyline)
         }
@@ -156,10 +155,9 @@ fun MapView.setZoomForPolyline(polyline: Polyline) {
     mapController.setZoom(zoomLevel)
 }
 
-fun MapView.setStartZoomAndCenter() {
-    val mapController = controller
-    mapController.setZoom(Constants.START_ZOOM)
-    mapController.setCenter(Constants.START_POINT)
+fun MapView.setStartZoomAndCenter() = controller.apply {
+    setZoom(Constants.START_ZOOM)
+    setCenter(Constants.START_POINT)
 }
 
 fun MapView.addCopyRightOverlay() {

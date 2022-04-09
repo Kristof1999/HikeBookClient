@@ -187,12 +187,12 @@ class HikeFragment : MapFragment() {
 
         val folderOverlay = FolderOverlay()
         for (p in args.userRoute.points) {
-            val marker = Marker(map)
-            marker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-            marker.title = p.title
-            marker.position = p.toGeoPoint()
-            marker.icon = MarkerUtils.getMarkerIcon(p.type, resources)
-            folderOverlay.add(marker)
+            folderOverlay.add(Marker(map).apply {
+                setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+                title = p.title
+                position = p.toGeoPoint()
+                icon = MarkerUtils.getMarkerIcon(p.type, resources)
+            })
         }
         map.overlays.add(folderOverlay)
 

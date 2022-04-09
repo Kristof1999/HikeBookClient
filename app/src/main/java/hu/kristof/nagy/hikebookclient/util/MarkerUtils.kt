@@ -88,25 +88,25 @@ object MarkerUtils {
         idx: Int,
         markers: List<Marker>,
         polylines: List<Polyline>
-    ) = polylines[idx - 1].apply {
-            setPoints(listOf(
-                markers[idx - 1].position,
-                markers[idx].position
-            ))
-            isVisible = true
-        }
+    ) = with(polylines[idx - 1]) {
+        setPoints(listOf(
+            markers[idx - 1].position,
+            markers[idx].position
+        ))
+        isVisible = true
+    }
 
     private fun refreshNextPolyline(
         idx: Int,
         markers: List<Marker>,
         polylines: List<Polyline>
-    ) = polylines[idx].apply {
-            setPoints(listOf(
-                markers[idx].position,
-                markers[idx + 1].position
-            ))
-            isVisible = true
-        }
+    ) = with(polylines[idx]) {
+        setPoints(listOf(
+            markers[idx].position,
+            markers[idx + 1].position
+        ))
+        isVisible = true
+    }
 
     /**
      * Disconnects the to be dragged marker from its neighbors.
@@ -191,23 +191,24 @@ object MarkerUtils {
         MarkerType.SET -> ResourcesCompat.getDrawable(resources, R.drawable.set_marker_image, null)!!
     }
 
-    fun customizeMarker(myMarker: MyMarker, icon: Drawable, p: GeoPoint) {
-        val marker = myMarker.marker
-        marker.apply {
-            setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-            isDraggable = true
-            position = p
-            title = myMarker.title
-            this.icon = icon
-        }
+    fun customizeMarker(
+        myMarker: MyMarker,
+        icon: Drawable,
+        p: GeoPoint
+    ) = myMarker.marker.apply {
+        setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+        isDraggable = true
+        position = p
+        title = myMarker.title
+        this.icon = icon
     }
 
-    fun makePolylineFromLastTwo(markers: List<MyMarker>): Polyline {
-        val polyline = Polyline()
-        polyline.setPoints(listOf(
+    fun makePolylineFromLastTwo(
+        markers: List<MyMarker>
+    ): Polyline = Polyline().apply {
+        setPoints(listOf(
             markers[markers.size - 2].marker.position,
             markers[markers.size - 1].marker.position
         ))
-        return polyline
     }
 }

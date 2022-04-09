@@ -98,19 +98,21 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     }
 
     private fun handleStartAndEndPointChanges() {
-        val startMarker = Marker(map)
-        startMarker.position = viewModel.startPoint
-        startMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        startMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.SET, resources)
+        val startMarker = Marker(map).apply {
+            position = viewModel.startPoint
+            setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+            icon = MarkerUtils.getMarkerIcon(MarkerType.SET, resources)
+        }
         map.overlays.add(startMarker)
         viewModel.startPointChanged.observe(viewLifecycleOwner) {
             startMarker.position = viewModel.startPoint
             map.invalidate()
         }
-        val endMarker = Marker(map)
-        endMarker.position = viewModel.endPoint
-        endMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        endMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.NEW, resources)
+        val endMarker = Marker(map).apply {
+            position = viewModel.endPoint
+            setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+            icon = MarkerUtils.getMarkerIcon(MarkerType.NEW, resources)
+        }
         map.overlays.add(endMarker)
         viewModel.endPointChanged.observe(viewLifecycleOwner) {
             endMarker.position = viewModel.endPoint
@@ -154,10 +156,11 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     }
 
     private fun initMap() {
-        map = binding.hikePlanTransportMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        map = binding.hikePlanTransportMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            setStartZoomAndCenter()
+            addCopyRightOverlay()
+        }
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
