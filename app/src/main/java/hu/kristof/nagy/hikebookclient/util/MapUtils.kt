@@ -51,7 +51,7 @@ object MapUtils {
         val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, context.resources)
         val setMarkerIcon = MarkerUtils.getMarkerIcon(MarkerType.SET, context.resources)
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
-        MarkerUtils.setMarkerListeners(context, map, deleteSwitch, newMarker, viewModel)
+        newMarker.setListeners(context, map, deleteSwitch, viewModel)
         map.invalidate()
         return true
     }
@@ -84,9 +84,10 @@ object MapUtils {
         polylines: ArrayList<Polyline>
     ) {
         // add new marker
-        val myMarker = MyMarker(newMarker, newMarkerType, newMarkerTitle)
-        MarkerUtils.customizeMarker(myMarker, markerIcon, p)
-        markers.add(myMarker)
+        newMarker.customize(newMarkerTitle, markerIcon, p)
+        MyMarker(newMarker, newMarkerType, newMarkerTitle).also { myMarker ->
+            markers.add(myMarker)
+        }
         overlays.add(newMarker)
 
         if (markers.size > 1) {
@@ -99,12 +100,14 @@ object MapUtils {
             }
 
             // connect the new point with the previous one
-            val polyline = Polyline()
-            polyline.setPoints(listOf(
-                prevMarker.position, newMarker.position
-            ))
-            polylines.add(polyline)
-            overlays.add(polyline)
+            Polyline().apply {
+                setPoints(listOf(
+                    prevMarker.position, newMarker.position
+                ))
+            }.also { polyline ->
+                polylines.add(polyline)
+                overlays.add(polyline)
+            }
         }
     }
 

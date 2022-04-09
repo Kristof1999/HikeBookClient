@@ -23,7 +23,6 @@ import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteEditViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
@@ -103,13 +102,14 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun initMap(args: RouteEditFragmentArgs) {
-        map = binding.routeEditMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.addCopyRightOverlay()
+        map = binding.routeEditMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            addCopyRightOverlay()
 
-        val polyline = args.userRoute.toPolyline()
-        map.setMapCenterOnPolylineCenter(polyline)
-        map.setZoomForPolyline(polyline)
+            val polyline = args.userRoute.toPolyline()
+            setMapCenterOnPolylineCenter(polyline)
+            setZoomForPolyline(polyline)
+        }
     }
 
     // adapter design pattern/wrapper kellene ehelyett
@@ -117,55 +117,40 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         viewModel: RouteEditViewModel,
         points: List<Point>
     ) {
-        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, resources)
         val markers = ArrayList<MyMarker>()
         val polylines = ArrayList<Polyline>()
 
-        val firstMarker = Marker(map)
-        val firstMarkerType = points.first().type
-        val myFirstMarker = MyMarker(firstMarker, firstMarkerType, points.first().title)
-        MarkerUtils.customizeMarker(myFirstMarker,
-            MarkerUtils.getMarkerIcon(firstMarkerType, resources),
-            GeoPoint(points.first().latitude, points.first().longitude)
-        )
-        map.overlays.add(firstMarker)
-        markers.add(myFirstMarker)
-        MarkerUtils.setMarkerListeners(
-            requireContext(), map, binding.routeEditDeleteSwitch, firstMarker, viewModel
-        )
-        for (point in points.subList(1, points.size-1)) {
+        val makeMyMarker = { point: Point ->
             val marker = Marker(map)
             val markerType = point.type
             val myMarker = MyMarker(marker, markerType, point.title)
-            MarkerUtils.customizeMarker(myMarker,
+            marker.customize(
+                myMarker.title,
                 MarkerUtils.getMarkerIcon(markerType, resources),
-                GeoPoint(point.latitude, point.longitude)
+                point.toGeoPoint()
             )
-            map.overlays.add(marker)
-            markers.add(myMarker)
-            MarkerUtils.setMarkerListeners(
-                requireContext(), map, binding.routeEditDeleteSwitch, marker, viewModel
+            marker.setListeners(
+                requireContext(), map, binding.routeEditDeleteSwitch, viewModel
             )
-
-            val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
-            map.overlays.add(polyline)
-            polylines.add(polyline)
+            myMarker
         }
-        val lastMarker = Marker(map)
-        val lastMarkerType = points.last().type
-        val myLastMarker = MyMarker(lastMarker, lastMarkerType, points.last().title)
-        MarkerUtils.customizeMarker(myLastMarker,
-            MarkerUtils.getMarkerIcon(lastMarkerType, resources),
-            GeoPoint(points.last().latitude, points.last().longitude)
-        )
-        map.overlays.add(lastMarker)
-        markers.add(myLastMarker)
-        MarkerUtils.setMarkerListeners(
-            requireContext(), map, binding.routeEditDeleteSwitch, lastMarker, viewModel
-        )
-        val polyline = MarkerUtils.makePolylineFromLastTwo(markers)
-        map.overlays.add(polyline)
-        polylines.add(polyline)
+
+        makeMyMarker(points.first()).also { myFirstMarker ->
+            map.overlays.add(myFirstMarker.marker)
+            markers.add(myFirstMarker)
+        }
+        for (point in points.subList(1, points.size)) {
+            makeMyMarker(point).also { myMarker ->
+                map.overlays.add(myMarker.marker)
+                markers.add(myMarker)
+            }
+
+            MarkerUtils.makePolylineFromLastTwo(markers).also { polyline ->
+                map.overlays.add(polyline)
+                polylines.add(polyline)
+            }
+        }
+
         map.invalidate()
         viewModel.setup(markers, polylines)
     }

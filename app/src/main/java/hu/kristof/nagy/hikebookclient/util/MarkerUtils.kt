@@ -16,49 +16,6 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
 object MarkerUtils {
-    fun setMarkerListeners(
-        context: Context,
-        map: MapView,
-        deleteSwitch: SwitchCompat,
-        newMarker: Marker,
-        viewModel: RouteViewModel,
-    ) {
-        newMarker.setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
-            if (deleteSwitch.isChecked) {
-                onDeleteViewHandler(context, marker, mapView, viewModel)
-            } else {
-                if (marker.isInfoWindowShown) {
-                    marker.closeInfoWindow()
-                } else {
-                    marker.showInfoWindow()
-                }
-            }
-            return@OnMarkerClickListener true
-        })
-
-        newMarker.setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
-            override fun onMarkerDrag(marker: Marker?) {
-
-            }
-
-            override fun onMarkerDragEnd(marker: Marker?) {
-                if (marker == null)
-                    return
-
-                viewModel.onMarkerDragEnd(marker)
-                map.invalidate()
-            }
-
-            override fun onMarkerDragStart(marker: Marker?) {
-                if (marker == null)
-                    return
-
-                viewModel.onMarkerDragStart(marker)
-                map.invalidate()
-            }
-        })
-    }
-
     /**
      * Reconnects the dragged marker with its neighbors.
      * @param marker the dragged marker
@@ -133,7 +90,7 @@ object MarkerUtils {
         }
     }
 
-    private fun onDeleteViewHandler(
+    fun onDeleteViewHandler(
         context: Context,
         marker: Marker,
         mapView: MapView,
@@ -191,24 +148,61 @@ object MarkerUtils {
         MarkerType.SET -> ResourcesCompat.getDrawable(resources, R.drawable.set_marker_image, null)!!
     }
 
-    fun customizeMarker(
-        myMarker: MyMarker,
-        icon: Drawable,
-        p: GeoPoint
-    ) = myMarker.marker.apply {
-        setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        isDraggable = true
-        position = p
-        title = myMarker.title
-        this.icon = icon
-    }
+    fun makePolylineFromLastTwo(markers: List<MyMarker>): Polyline =
+        Polyline().apply {
+            setPoints(listOf(
+                markers[markers.size - 2].marker.position,
+                markers[markers.size - 1].marker.position
+            ))
+        }
+}
 
-    fun makePolylineFromLastTwo(
-        markers: List<MyMarker>
-    ): Polyline = Polyline().apply {
-        setPoints(listOf(
-            markers[markers.size - 2].marker.position,
-            markers[markers.size - 1].marker.position
-        ))
-    }
+fun Marker.customize(title: String, icon: Drawable, p: GeoPoint) {
+    setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+    isDraggable = true
+    position = p
+    this.title = title
+    this.icon = icon
+}
+
+fun Marker.setListeners(
+    context: Context,
+    map: MapView,
+    deleteSwitch: SwitchCompat,
+    viewModel: RouteViewModel
+) {
+    setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
+        if (deleteSwitch.isChecked) {
+            MarkerUtils.onDeleteViewHandler(context, marker, mapView, viewModel)
+        } else {
+            if (marker.isInfoWindowShown) {
+                marker.closeInfoWindow()
+            } else {
+                marker.showInfoWindow()
+            }
+        }
+        return@OnMarkerClickListener true
+    })
+
+    setOnMarkerDragListener(object : Marker.OnMarkerDragListener {
+        override fun onMarkerDrag(marker: Marker?) {
+
+        }
+
+        override fun onMarkerDragEnd(marker: Marker?) {
+            if (marker == null)
+                return
+
+            viewModel.onMarkerDragEnd(marker)
+            map.invalidate()
+        }
+
+        override fun onMarkerDragStart(marker: Marker?) {
+            if (marker == null)
+                return
+
+            viewModel.onMarkerDragStart(marker)
+            map.invalidate()
+        }
+    })
 }
