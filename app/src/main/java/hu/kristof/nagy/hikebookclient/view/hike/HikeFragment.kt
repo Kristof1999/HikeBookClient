@@ -182,19 +182,19 @@ class HikeFragment : MapFragment() {
     }
 
     private fun mapCustomization(args: HikeFragmentArgs) {
-        val polyLine = args.userRoute.toPolyline()
-        map.overlays.add(polyLine)
+        map.overlays.add(args.userRoute.toPolyline())
 
-        val folderOverlay = FolderOverlay()
-        for (p in args.userRoute.points) {
-            folderOverlay.add(Marker(map).apply {
-                setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-                title = p.title
-                position = p.toGeoPoint()
-                icon = MarkerUtils.getMarkerIcon(p.type, resources)
-            })
+        FolderOverlay().also { folderOverlay ->
+            for (p in args.userRoute.points) {
+                folderOverlay.add(Marker(map).apply {
+                    setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+                    title = p.title
+                    position = p.toGeoPoint()
+                    icon = MarkerUtils.getMarkerIcon(p.type, resources)
+                })
+            }
+            map.overlays.add(folderOverlay)
         }
-        map.overlays.add(folderOverlay)
 
         addCircleToMap(args.userRoute.points.first().toGeoPoint())
         addCircleToMap(args.userRoute.points.last().toGeoPoint())
