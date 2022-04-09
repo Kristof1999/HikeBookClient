@@ -58,8 +58,7 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
-            onRouteCreateResult(args.routeType, it, args)
-            // névnek egyedinek kell lennie
+            onRouteCreateResult(it, args)
         }
 
         MapUtils.setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
@@ -87,12 +86,11 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onRouteCreateResult(
-        routeType: RouteType,
         res: Result<Boolean>,
         args: RouteCreateFragmentArgs
     ) {
         handleResult(context, res) {
-            when (routeType) {
+            when (args.routeType) {
                 RouteType.USER -> findNavController().navigate(
                     R.id.action_routeCreateFragment_to_myMapFragment
                 )
