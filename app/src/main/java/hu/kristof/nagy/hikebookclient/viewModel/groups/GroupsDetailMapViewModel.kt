@@ -6,13 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
+import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.Route
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class GroupsDetailMapViewModel @Inject constructor(
-    private val groupRepository: GroupRouteRepository
+    private val groupRouteRepository: GroupRouteRepository,
+    private val userRouteRepository: UserRouteRepository
     ) : ViewModel() {
     private var _routes = MutableLiveData<Result<List<Route>>>()
     val routes: LiveData<Result<List<Route>>>
@@ -26,15 +29,19 @@ class GroupsDetailMapViewModel @Inject constructor(
     val deleteRes: LiveData<Result<Boolean>>
         get() = _deleteRes
 
+    private var _addToMyMapRes = MutableLiveData<Result<Boolean>>()
+    val addToMyMapRes: LiveData<Result<Boolean>>
+        get() = _addToMyMapRes
+
     fun loadRoutesOfGroup(groupName: String) {
         viewModelScope.launch {
-            _routes.value = groupRepository.loadRoutes(groupName)
+            _routes.value = groupRouteRepository.loadRoutes(groupName)
         }
     }
 
     fun onAddFromMyMap(route: Route, groupName: String) {
         viewModelScope.launch {
-            _addFromMyMapRes.value = groupRepository.createRoute(
+            _addFromMyMapRes.value = groupRouteRepository.createRoute(
                 groupName, route.routeName, route.points, route.description
             )
             // refresh if successful
@@ -43,9 +50,20 @@ class GroupsDetailMapViewModel @Inject constructor(
         }
     }
 
+    fun onAddToMyMap(routeName: String) {
+        viewModelScope.launch {
+            val route = getRoute(routeName)
+            userRouteRepository.createUserRoute(
+                routeName, route.points, route.description
+            ).collect { res ->
+                _addToMyMapRes.value = res
+            }
+        }
+    }
+
     fun onDelete(groupName: String, routeName: String) {
         viewModelScope.launch {
-            _deleteRes.value = groupRepository.deleteRoute(groupName, routeName)
+            _deleteRes.value = groupRouteRepository.deleteRoute(groupName, routeName)
         }
     }
 

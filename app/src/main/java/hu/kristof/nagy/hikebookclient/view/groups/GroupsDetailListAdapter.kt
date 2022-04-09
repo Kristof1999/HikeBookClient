@@ -67,8 +67,10 @@ class GroupsDetailListDiffCallback : DiffUtil.ItemCallback<String>() {
 
 class GroupsDetailListClickListener(
     private val editListener: (routeName: String) -> Unit,
-    private val deleteListener: (routeName: String) -> Unit
+    private val deleteListener: (routeName: String) -> Unit,
+    private val addToMyMapListener: (routeName: String) -> Unit
 ) {
     fun onEdit(routeName: String) = editListener(routeName)
     fun onDelete(routeName: String) = deleteListener(routeName)
+    fun onAddToMyMap(routeName: String) = addToMyMapListener(routeName)
 }

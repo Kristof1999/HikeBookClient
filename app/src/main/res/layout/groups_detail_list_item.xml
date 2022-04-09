@@ -50,6 +50,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/add_to_my_map_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:onClick="@{() -> clickListener.onAddToMyMap(routeName)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/groupsDetailListItemEditImageButton" />
 

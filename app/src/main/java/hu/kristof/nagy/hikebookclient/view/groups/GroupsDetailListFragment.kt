@@ -43,6 +43,9 @@ class GroupsDetailListFragment : Fragment() {
             },
             deleteListener = { routeName ->
                 viewModel.onDelete(args.groupName, routeName)
+            },
+            addToMyMapListener = { routeName ->
+                viewModel.onAddToMyMap(routeName)
             }
         ), args.isConnectedPage)
         binding.groupsDetailListRecyclerView.adapter = adapter
@@ -60,6 +63,14 @@ class GroupsDetailListFragment : Fragment() {
                 } else {
                     Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+        viewModel.addToMyMapRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { addToMyMapRes ->
+                if (addToMyMapRes)
+                    Toast.makeText(context, "A hozzáadás sikeres!", Toast.LENGTH_SHORT).show()
+                else
+                    Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
             }
         }
     }
