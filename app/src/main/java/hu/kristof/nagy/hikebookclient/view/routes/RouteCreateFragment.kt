@@ -114,10 +114,11 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun initMap() {
-        map = binding.routeCreateMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        map = binding.routeCreateMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            setStartZoomAndCenter()
+            addCopyRightOverlay()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
