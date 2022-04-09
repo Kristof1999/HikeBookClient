@@ -48,10 +48,12 @@ class MyMapDetailFragment : MapFragment() {
         val args: MyMapDetailFragmentArgs by navArgs()
         binding.myMapDetailRouteNameTv.text = args.userRoute.routeName
         val polyline = args.userRoute.toPolyline()
-        map.setMapCenterOnPolylineCenter(polyline)
-        map.setZoomForPolyline(polyline)
-        map.overlays.add(polyline)
-        map.invalidate()
+        with(map) {
+            setMapCenterOnPolylineCenter(polyline)
+            setZoomForPolyline(polyline)
+            overlays.add(polyline)
+            invalidate()
+        }
 
         setClickListeners(args, viewModel)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -87,9 +89,10 @@ class MyMapDetailFragment : MapFragment() {
     }
 
     private fun initMap() {
-        map = binding.myMapDetailMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.addCopyRightOverlay()
+        map = binding.myMapDetailMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            addCopyRightOverlay()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
