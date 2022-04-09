@@ -55,6 +55,11 @@ class GroupsDetailFragment : Fragment() {
                         R.id.action_global_groupsDetailMapFragment, bundle
                     )
                 }
+                R.id.groupsDetailListMenuItem -> {
+                    val directions = GroupsNavigationDirections
+                        .actionGlobalGroupsDetailListFragment(args.groupName, args.isConnectedPage)
+                    navController.navigate(directions)
+                }
                 R.id.groupsDetailMembersMenuItem -> {
                     val directions = GroupsNavigationDirections
                         .actionGlobalGroupsDetailMembersFragment(args.groupName)

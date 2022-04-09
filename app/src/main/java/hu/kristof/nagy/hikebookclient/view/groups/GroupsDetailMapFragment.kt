@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
@@ -47,7 +47,7 @@ class GroupsDetailMapFragment : MapFragment() {
             onRouteCreate(groupName)
         }
 
-        val viewModel: GroupsDetailMapViewModel by viewModels()
+        val viewModel: GroupsDetailMapViewModel by activityViewModels()
         loadRoutesOfGroup(viewModel, groupName)
 
         val dialog = AddFromMyMapDialogFragment()
