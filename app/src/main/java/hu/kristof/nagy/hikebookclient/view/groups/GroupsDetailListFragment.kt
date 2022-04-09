@@ -44,7 +44,7 @@ class GroupsDetailListFragment : Fragment() {
             deleteListener = { routeName ->
                 viewModel.onDelete(args.groupName, routeName)
             }
-        ))
+        ), args.isConnectedPage)
         binding.groupsDetailListRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { res ->
