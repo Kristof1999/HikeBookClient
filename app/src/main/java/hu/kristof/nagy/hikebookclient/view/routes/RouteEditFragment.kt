@@ -117,7 +117,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         viewModel: RouteEditViewModel,
         points: List<Point>
     ) {
-        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, requireActivity())
+        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, resources)
         val markers = ArrayList<MyMarker>()
         val polylines = ArrayList<Polyline>()
 
@@ -125,7 +125,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         val firstMarkerType = points.first().type
         val myFirstMarker = MyMarker(firstMarker, firstMarkerType, points.first().title)
         MarkerUtils.customizeMarker(myFirstMarker,
-            MarkerUtils.getMarkerIcon(firstMarkerType, requireActivity()),
+            MarkerUtils.getMarkerIcon(firstMarkerType, resources),
             GeoPoint(points.first().latitude, points.first().longitude)
         )
         map.overlays.add(firstMarker)
@@ -138,7 +138,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
             val markerType = point.type
             val myMarker = MyMarker(marker, markerType, point.title)
             MarkerUtils.customizeMarker(myMarker,
-                MarkerUtils.getMarkerIcon(markerType, requireActivity()),
+                MarkerUtils.getMarkerIcon(markerType, resources),
                 GeoPoint(point.latitude, point.longitude)
             )
             map.overlays.add(marker)
@@ -155,7 +155,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         val lastMarkerType = points.last().type
         val myLastMarker = MyMarker(lastMarker, lastMarkerType, points.last().title)
         MarkerUtils.customizeMarker(myLastMarker,
-            MarkerUtils.getMarkerIcon(lastMarkerType, requireActivity()),
+            MarkerUtils.getMarkerIcon(lastMarkerType, resources),
             GeoPoint(points.last().latitude, points.last().longitude)
         )
         map.overlays.add(lastMarker)

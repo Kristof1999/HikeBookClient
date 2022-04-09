@@ -1,13 +1,14 @@
 package hu.kristof.nagy.hikebookclient.util
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.content.res.ResourcesCompat
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -66,8 +67,8 @@ object MarkerUtils {
      */
     fun onMarkerDragEnd(
         marker: Marker,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
+        markers: List<Marker>,
+        polylines: List<Polyline>
     ) {
         if (markers.size == 1)
             return
@@ -85,27 +86,27 @@ object MarkerUtils {
 
     private fun refreshPrevPolyline(
         idx: Int,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
-    ) {
-        val prevPoints = ArrayList<GeoPoint>()
-        prevPoints.add(markers[idx - 1].position)
-        prevPoints.add(markers[idx].position)
-        polylines[idx - 1].setPoints(prevPoints)
-        polylines[idx - 1].isVisible = true
-    }
+        markers: List<Marker>,
+        polylines: List<Polyline>
+    ) = polylines[idx - 1].apply {
+            setPoints(listOf(
+                markers[idx - 1].position,
+                markers[idx].position
+            ))
+            isVisible = true
+        }
 
     private fun refreshNextPolyline(
         idx: Int,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
-    ) {
-        val nextPoints = ArrayList<GeoPoint>()
-        nextPoints.add(markers[idx].position)
-        nextPoints.add(markers[idx + 1].position)
-        polylines[idx].setPoints(nextPoints)
-        polylines[idx].isVisible = true
-    }
+        markers: List<Marker>,
+        polylines: List<Polyline>
+    ) = polylines[idx].apply {
+            setPoints(listOf(
+                markers[idx].position,
+                markers[idx + 1].position
+            ))
+            isVisible = true
+        }
 
     /**
      * Disconnects the to be dragged marker from its neighbors.
@@ -115,8 +116,8 @@ object MarkerUtils {
      */
     fun onMarkerDragStart(
         marker: Marker,
-        markers: ArrayList<Marker>,
-        polylines: ArrayList<Polyline>
+        markers: List<Marker>,
+        polylines: List<Polyline>
     ) {
         if (markers.size == 1)
             return
@@ -138,7 +139,7 @@ object MarkerUtils {
         mapView: MapView,
         viewModel: RouteViewModel
     ) {
-        if (viewModel.onDelete(marker, AppCompatResources.getDrawable(context, R.drawable.marker_image)!!)) {
+        if (viewModel.onDelete(marker, getMarkerIcon(MarkerType.NEW, context.resources))) {
             marker.remove(mapView)
             mapView.invalidate()
         } else {
@@ -161,7 +162,7 @@ object MarkerUtils {
     fun onDeleteLogicHandler(
         marker: Marker,
         markerIcon: Drawable, // TODO: eliminate this dependency, because this is fixed
-        markers: ArrayList<MyMarker>,
+        markers: ArrayList<MyMarker>, // TODO: try to make the function immutable
         polylines: ArrayList<Polyline>
     ): Boolean {
         if (markers.last().marker == marker) {
@@ -182,32 +183,31 @@ object MarkerUtils {
         }
     }
 
-    // TODO: use ResourceCompat or sg. else that would allow
-    // this method to be called in a viewModel instead of a Fragment
-    // ResourcesCompat.getDrawable(...) jó lehet
-    fun getMarkerIcon(type: MarkerType, context: Context): Drawable = when(type) {
-        MarkerType.NEW -> AppCompatResources.getDrawable(context, R.drawable.marker_image)!!
-        MarkerType.CASTLE -> AppCompatResources.getDrawable(context, R.drawable.castle_image)!!
-        MarkerType.LOOKOUT -> AppCompatResources.getDrawable(context, R.drawable.landscape_image)!!
-        MarkerType.TEXT -> AppCompatResources.getDrawable(context, R.drawable.text_marker)!!
-        MarkerType.SET -> AppCompatResources.getDrawable(context, R.drawable.set_marker_image)!!
+    fun getMarkerIcon(type: MarkerType, resources: Resources): Drawable = when(type) {
+        MarkerType.NEW -> ResourcesCompat.getDrawable(resources, R.drawable.marker_image, null)!!
+        MarkerType.CASTLE -> ResourcesCompat.getDrawable(resources, R.drawable.castle_image, null)!!
+        MarkerType.LOOKOUT -> ResourcesCompat.getDrawable(resources, R.drawable.landscape_image, null)!!
+        MarkerType.TEXT -> ResourcesCompat.getDrawable(resources, R.drawable.text_marker, null)!!
+        MarkerType.SET -> ResourcesCompat.getDrawable(resources, R.drawable.set_marker_image, null)!!
     }
 
     fun customizeMarker(myMarker: MyMarker, icon: Drawable, p: GeoPoint) {
         val marker = myMarker.marker
-        marker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        marker.isDraggable = true
-        marker.position = p
-        marker.title = myMarker.title
-        marker.icon = icon
+        marker.apply {
+            setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+            isDraggable = true
+            position = p
+            title = myMarker.title
+            this.icon = icon
+        }
     }
 
-    fun makePolylineFromLastTwo(markers: ArrayList<MyMarker>): Polyline {
-        val polylinePoints = ArrayList<GeoPoint>()
-        polylinePoints.add(markers[markers.size - 2].marker.position)
-        polylinePoints.add(markers[markers.size - 1].marker.position)
+    fun makePolylineFromLastTwo(markers: List<MyMarker>): Polyline {
         val polyline = Polyline()
-        polyline.setPoints(polylinePoints)
+        polyline.setPoints(listOf(
+            markers[markers.size - 2].marker.position,
+            markers[markers.size - 1].marker.position
+        ))
         return polyline
     }
 }

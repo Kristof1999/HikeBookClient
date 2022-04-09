@@ -101,7 +101,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         val startMarker = Marker(map)
         startMarker.position = viewModel.startPoint
         startMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        startMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.SET, requireContext())
+        startMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.SET, resources)
         map.overlays.add(startMarker)
         viewModel.startPointChanged.observe(viewLifecycleOwner) {
             startMarker.position = viewModel.startPoint
@@ -110,7 +110,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         val endMarker = Marker(map)
         endMarker.position = viewModel.endPoint
         endMarker.setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-        endMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.NEW, requireContext())
+        endMarker.icon = MarkerUtils.getMarkerIcon(MarkerType.NEW, resources)
         map.overlays.add(endMarker)
         viewModel.endPointChanged.observe(viewLifecycleOwner) {
             endMarker.position = viewModel.endPoint

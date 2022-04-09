@@ -3,9 +3,7 @@ package hu.kristof.nagy.hikebookclient.util
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.Toast
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.SwitchCompat
-import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Route
@@ -50,8 +48,8 @@ object MapUtils {
             return true
 
         val newMarker = Marker(map)
-        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, context)
-        val setMarkerIcon = AppCompatResources.getDrawable(context, R.drawable.set_marker_image)!!
+        val markerIcon = MarkerUtils.getMarkerIcon(viewModel.markerType, context.resources)
+        val setMarkerIcon = MarkerUtils.getMarkerIcon(MarkerType.SET, context.resources)
         viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
         MarkerUtils.setMarkerListeners(context, map, deleteSwitch, newMarker, viewModel)
         map.invalidate()
