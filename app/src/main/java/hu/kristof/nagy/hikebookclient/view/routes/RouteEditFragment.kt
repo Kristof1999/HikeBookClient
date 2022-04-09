@@ -18,6 +18,7 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -54,19 +55,19 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         binding.routeEditSpinner.onItemSelectedListener = this
         SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
-        val routeName = args.userRoute.routeName
+        val routeName = args.route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
-        val hikeDescription = args.userRoute.description
+        val hikeDescription = args.route.description
         binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
 
         val viewModel: RouteEditViewModel by viewModels()
-        setup(viewModel, args.userRoute.points)
+        setup(viewModel, args.route.points)
         binding.routeEditEditButton.setOnClickListener {
-            onEdit(viewModel, args.userRoute)
+            onEdit(viewModel, args.route)
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
-            onRouteEditResult(it)
+            onRouteEditResult(it, args)
         }
 
         MapUtils.setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
@@ -82,22 +83,36 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
     private fun onEdit(
         viewModel: RouteEditViewModel,
-        oldUserRoute: Route
+        oldRoute: Route
     ) {
         try {
             val newRouteName = binding.routeEditRouteNameEditText.text.toString()
             val newHikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
-            viewModel.onRouteEdit(oldUserRoute, newRouteName, newHikeDescription)
+            viewModel.onRouteEdit(oldRoute, newRouteName, newHikeDescription)
         } catch (e: IllegalArgumentException) {
             Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun onRouteEditResult(res: Result<Boolean>) {
+    private fun onRouteEditResult(res: Result<Boolean>, args: RouteEditFragmentArgs) {
         handleResult(context, res) {
-            findNavController().navigate(
-                R.id.action_routeEditFragment_to_myMapFragment
-            )
+            when (args.route.routeType) {
+                RouteType.USER -> findNavController().navigate(
+                    R.id.action_routeEditFragment_to_myMapFragment
+                )
+                RouteType.GROUP -> {
+                    val groupName = args.route.ownerName
+                    // isConnectedPage is true because
+                    // only a connected member can edit routes
+                    val directions = RouteEditFragmentDirections
+                        .actionRouteEditFragmentToGroupsDetailFragment(groupName, true)
+                    findNavController().navigate(directions)
+                }
+                RouteType.GROUP_HIKE -> {
+                    // TODO: implement
+                }
+            }
+
         }
     }
 
@@ -106,7 +121,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
             setTileSource(TileSourceFactory.MAPNIK)
             addCopyRightOverlay()
 
-            val polyline = args.userRoute.toPolyline()
+            val polyline = args.route.toPolyline()
             setMapCenterOnPolylineCenter(polyline)
             setZoomForPolyline(polyline)
         }

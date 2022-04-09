@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.*
+import hu.kristof.nagy.hikebookclient.data.routes.RouteRepository
+import hu.kristof.nagy.hikebookclient.model.EditedRoute
+import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.Route
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
@@ -13,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RouteEditViewModel @Inject constructor(
-    private val userRepository: IUserRouteRepository // TODO: change name
+    private val routeRepository: RouteRepository
     ) : RouteViewModel() {
     override lateinit var markers: ArrayList<MyMarker>
     override lateinit var polylines: ArrayList<Polyline>
@@ -30,25 +33,20 @@ class RouteEditViewModel @Inject constructor(
         this.polylines = polylines
     }
 
-    // TODO: update javadoc
-    /**
-     * Saves the edited route.
-     * @param oldRouteName name of the route before editing
-     * @param routeName name of the route after editing
-     * @throws IllegalArgumentException if the edited route has an illegal name, or it has less than 2 points
-     */
     fun onRouteEdit(
-        oldUserRoute: Route,
+        oldRoute: Route,
         routeName: String,
-        hikeDescription: String) {
+        hikeDescription: String
+    ) {
         val points = markers.map {
             Point.from(it)
         }
         RouteUtils.checkRoute(routeName, points)
-        val newUserRoute = Route(oldUserRoute.ownerName, oldUserRoute.routeType, routeName, points, hikeDescription)
-        val editedUserRoute = EditedRoute(newUserRoute, oldUserRoute)
+        val newRoute = Route(oldRoute.ownerName, oldRoute.routeType, routeName, points, hikeDescription)
+        val editedRoute = EditedRoute(newRoute, oldRoute)
+
         viewModelScope.launch {
-            _routeEditRes.value = userRepository.editUserRoute(editedUserRoute)
+            _routeEditRes.value = routeRepository.editRoute(editedRoute)
         }
     }
 }

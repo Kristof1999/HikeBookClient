@@ -22,6 +22,10 @@ class GroupsDetailMapViewModel @Inject constructor(
     val addFromMyMapRes: LiveData<Result<Boolean>>
         get() = _addFromMyMapRes
 
+    private var _deleteRes = MutableLiveData<Result<Boolean>>()
+    val deleteRes: LiveData<Result<Boolean>>
+        get() = _deleteRes
+
     fun loadRoutesOfGroup(groupName: String) {
         viewModelScope.launch {
             _routes.value = groupRepository.loadRoutes(groupName)
@@ -37,5 +41,17 @@ class GroupsDetailMapViewModel @Inject constructor(
             if (_addFromMyMapRes.value?.isSuccess!!)
                 loadRoutesOfGroup(groupName)
         }
+    }
+
+    fun onDelete(groupName: String, routeName: String) {
+        viewModelScope.launch {
+            _deleteRes.value = groupRepository.deleteRoute(groupName, routeName)
+        }
+    }
+
+    fun getRoute(routeName: String): Route {
+        return _routes.value!!.getOrNull()!!.filter { route ->
+            route.routeName == routeName
+        }[0]
     }
 }
