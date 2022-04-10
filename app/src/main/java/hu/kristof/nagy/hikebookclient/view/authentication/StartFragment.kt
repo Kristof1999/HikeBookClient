@@ -68,9 +68,7 @@ class StartFragment : Fragment() {
         }
 
         binding.lifecycleOwner = viewLifecycleOwner
-
         val loginViewModel: LoginViewModel by viewModels()
-        // TODO: handle multiple clicks
         binding.loginButton.setOnClickListener {
             onLogin(it, binding, loginViewModel)
         }
