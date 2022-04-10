@@ -5,7 +5,6 @@ import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import kotlinx.parcelize.Parcelize
 import org.osmdroid.util.GeoPoint
 
-// TODO: use composition to separate lat and lng from the rest as sometimes the type and tiel are not needed
 @Parcelize
 data class Point(val latitude: Double, val longitude: Double, val type: MarkerType, val title: String)
     : Parcelable {
