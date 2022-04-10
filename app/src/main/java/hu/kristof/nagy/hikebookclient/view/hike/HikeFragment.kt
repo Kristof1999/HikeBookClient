@@ -88,7 +88,6 @@ class HikeFragment : MapFragment() {
         }
 
         binding.hikeOfflineButton.setOnClickListener {
-            // TODO: test if the cache still stays after we turn of the app (and wifi of course)
             AlertDialog.Builder(requireContext())
                 .setMessage(R.string.offline_dialog_text)
                 .show()
