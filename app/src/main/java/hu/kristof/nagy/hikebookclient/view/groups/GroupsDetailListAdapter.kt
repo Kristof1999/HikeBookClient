@@ -44,7 +44,6 @@ class GroupsDetailListAdapter(
                 clickListener: GroupsDetailListClickListener,
                 isConnectedPage: Boolean
             ): ViewHolder {
-                // TODO: replace boilerplate code with generic lambda across other adapters too
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = GroupsDetailListItemBinding.inflate(
                     layoutInflater, parent, false

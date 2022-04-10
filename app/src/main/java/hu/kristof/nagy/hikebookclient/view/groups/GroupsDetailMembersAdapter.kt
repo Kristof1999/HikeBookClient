@@ -30,7 +30,6 @@ class GroupsDetailMembersAdapter
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
-                // TODO: replace boilerplate code with generic lambda across other adapters too
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = GroupsDetailMembersListItemBinding.inflate(
                     layoutInflater, parent, false
