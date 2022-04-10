@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsBinding
+import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
 
 @AndroidEntryPoint
@@ -58,10 +59,7 @@ class GroupsFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.createRes.observe(viewLifecycleOwner) { res ->
             handleResult(requireContext(), res) { createRes ->
-                if (createRes)
-                    Toast.makeText(requireContext(), "Csoport sikeresen létrehozva!", Toast.LENGTH_LONG).show()
-                else
-                    Toast.makeText(requireContext(), "Valamilyen hiba történt.", Toast.LENGTH_LONG).show()
+                throwGenericErrorOr(context, createRes, "Csoport sikeresen létrehozva!")
             }
         }
     }

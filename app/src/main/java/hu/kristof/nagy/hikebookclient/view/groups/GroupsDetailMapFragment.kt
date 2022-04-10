@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -14,10 +13,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMapBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.MapFragment
-import hu.kristof.nagy.hikebookclient.util.MapUtils
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
@@ -69,12 +65,7 @@ class GroupsDetailMapFragment : MapFragment() {
         }
         viewModel.addFromMyMapRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { addFromMyMapRes ->
-                if (addFromMyMapRes)
-                    Toast.makeText(requireContext(), "A felvétel sikeres!", Toast.LENGTH_SHORT)
-                        .show()
-                else
-                    Toast.makeText(requireContext(), "Valamilyen hiba történt.", Toast.LENGTH_SHORT)
-                        .show()
+                throwGenericErrorOr(context, addFromMyMapRes, "A felvétel sikeres!")
             }
         }
     }
@@ -106,8 +97,9 @@ class GroupsDetailMapFragment : MapFragment() {
     }
 
     private fun initMap() {
-        map = binding.groupsMapMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setStartZoomAndCenter()
+        map = binding.groupsMapMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            setStartZoomAndCenter()
+        }
     }
 }

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,6 +17,7 @@ import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
 import hu.kristof.nagy.hikebookclient.util.Constants
+import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 
 @AndroidEntryPoint
@@ -46,12 +46,10 @@ class GroupsDetailFragment : Fragment() {
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            if (generalConnectRes) {
+            throwGenericErrorOr(context, generalConnectRes) {
                 findNavController(requireActivity(), R.id.navHostFragment).navigate(
                     R.id.action_groupsDetailFragment_to_groupsFragment
                 )
-            } else {
-                Toast.makeText(requireContext(), "Valamilyen hiba történt.", Toast.LENGTH_SHORT).show()
             }
         }
 

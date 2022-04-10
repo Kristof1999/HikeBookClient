@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailListBinding
+import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 
 class GroupsDetailListFragment : Fragment() {
@@ -54,20 +55,15 @@ class GroupsDetailListFragment : Fragment() {
             }
             deleteRes.observe(viewLifecycleOwner) { res ->
                 handleResult(context, res) { deleteRes ->
-                    if (deleteRes) {
+                    throwGenericErrorOr(context, deleteRes) {
                         Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
                         viewModel.loadRoutesOfGroup(args.groupName) // refresh
-                    } else {
-                        Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
             addToMyMapRes.observe(viewLifecycleOwner) { res ->
                 handleResult(context, res) { addToMyMapRes ->
-                    if (addToMyMapRes)
-                        Toast.makeText(context, "A hozzáadás sikeres!", Toast.LENGTH_SHORT).show()
-                    else
-                        Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
+                    throwGenericErrorOr(context, addToMyMapRes, "A hozzáadás sikeres!")
                 }
             }
         }

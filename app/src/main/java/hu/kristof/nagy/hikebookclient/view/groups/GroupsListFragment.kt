@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
+import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsListViewModel
 
 @AndroidEntryPoint
@@ -44,15 +45,12 @@ class GroupsListFragment : Fragment() {
         }
 
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
-            if (res) {
+            throwGenericErrorOr(context, res) {
                 if (isConnectedPage!!) {
                     Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
                 }
-            } else {
-                // TODO: replace boilerplate code with lambda
-                Toast.makeText(requireContext(), "Valami hiba történt.", Toast.LENGTH_LONG).show()
             }
         }
     }

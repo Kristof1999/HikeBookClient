@@ -74,14 +74,16 @@ class HikeTransportFragment : MapFragment() {
         )
         for (i in road.mNodes.indices) {
             val node = road.mNodes[i]
-            val nodeMarker = Marker(map)
-            nodeMarker.position = node.mLocation
-            nodeMarker.icon = nodeIcon
-            nodeMarker.title = "Step $i"
-            nodeMarker.snippet = node.mInstructions
-            nodeMarker.subDescription =
-                Road.getLengthDurationText(requireContext(), node.mLength, node.mDuration)
-            map.overlays.add(nodeMarker)
+            Marker(map).apply {
+                position = node.mLocation
+                icon = nodeIcon
+                title = "Step $i"
+                snippet = node.mInstructions
+                subDescription =
+                    Road.getLengthDurationText(requireContext(), node.mLength, node.mDuration)
+            }.also { nodeMarker ->
+                map.overlays.add(nodeMarker)
+            }
         }
 
         map.getOverlays().add(roadOverlay)
@@ -89,10 +91,10 @@ class HikeTransportFragment : MapFragment() {
     }
 
     private fun initMap() {
-        map = binding.hikeTransportMap
-        // TODO: use different map sources based on chosen transport mean
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        map = binding.hikeTransportMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            setStartZoomAndCenter()
+            addCopyRightOverlay()
+        }
     }
 }

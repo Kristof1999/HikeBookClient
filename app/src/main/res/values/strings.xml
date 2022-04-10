@@ -56,7 +56,8 @@
     <string name="add_to_my_map_text">Hozzáadás a saját térképhez</string>
 
     <!-- In code usage -->
-    <string name="generic_error_msg">Valamilyen hiba lépett fel, további információkért tekintse meg a súgót.</string>
+    <string name="generic_error_msg_with_hint">Valamilyen hiba lépett fel, további információkért tekintse meg a súgót.</string>
+    <string name="generic_error_msg">Valamilyen hiba történt</string>
     <string name="not_last_point_delete_error_msg">Csak a legutóbb felvett pontot lehet törölni.</string>
     <string name="name_exists_error_msg">Ez a név már foglalt.</string>
     <string name="login_fail_msg">Vagy a név, vagy a jelszó hibás.</string>
