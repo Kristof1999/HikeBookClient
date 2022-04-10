@@ -96,7 +96,7 @@ object MarkerUtils {
         mapView: MapView,
         viewModel: RouteViewModel
     ) {
-        if (viewModel.onDelete(marker, getMarkerIcon(MarkerType.NEW, context.resources))) {
+        if (viewModel.onDelete(context.resources, marker)) {
             marker.remove(mapView)
             mapView.invalidate()
         } else {
@@ -117,16 +117,16 @@ object MarkerUtils {
      * @return true if marker was the last marker in markers
      */
     fun onDeleteLogicHandler(
+        resources: Resources,
         marker: Marker,
-        markerIcon: Drawable, // TODO: eliminate this dependency, because this is fixed
-        markers: ArrayList<MyMarker>, // TODO: try to make the function immutable
+        markers: ArrayList<MyMarker>,
         polylines: ArrayList<Polyline>
     ): Boolean {
         if (markers.last().marker == marker) {
             markers.removeLast()
             if (markers.isNotEmpty()) {
                 if (markers.last().type == MarkerType.SET) {
-                    markers.last().marker.icon = markerIcon
+                    markers.last().marker.icon = getMarkerIcon(MarkerType.NEW, resources)
                     markers[markers.size - 1] = MyMarker(
                         markers.last().marker, MarkerType.NEW, markers.last().title
                     )

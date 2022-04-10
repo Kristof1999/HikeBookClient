@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModel
 import hu.kristof.nagy.hikebookclient.model.MyMarker
@@ -41,7 +42,7 @@ abstract class RouteViewModel : ViewModel() {
         MarkerUtils.onMarkerDragStart(marker, markers.map {it.marker} as ArrayList<Marker>, polylines)
 
     fun onDelete(
-        marker: Marker,
-        markerIcon: Drawable
-    ): Boolean = MarkerUtils.onDeleteLogicHandler(marker, markerIcon, markers, polylines)
+        resources: Resources,
+        marker: Marker
+    ): Boolean = MarkerUtils.onDeleteLogicHandler(resources, marker, markers, polylines)
 }
