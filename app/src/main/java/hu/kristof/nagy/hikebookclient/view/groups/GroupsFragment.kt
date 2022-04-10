@@ -42,25 +42,33 @@ class GroupsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: GroupsViewModel by viewModels()
-        binding.groupsGroupCreateButton.setOnClickListener {
-            val dialogFragment = GroupCreateDialogFragment()
-            dialogFragment.show(parentFragmentManager, "group create")
 
-            // TODO: move outside of click listener
-            binding.lifecycleOwner = viewLifecycleOwner
-            dialogFragment.name.observe(viewLifecycleOwner) { name ->
-                try {
-                    viewModel.createGroup(name)
-                } catch(e: IllegalArgumentException) {
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        setupGroupCreation(viewModel)
+
+        onGroupCreateRes(viewModel)
+    }
+
+    private fun onGroupCreateRes(viewModel: GroupsViewModel) {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.createRes.observe(viewLifecycleOwner) { res ->
             handleResult(requireContext(), res) { createRes ->
                 throwGenericErrorOr(context, createRes, "Csoport sikeresen létrehozva!")
             }
+        }
+    }
+
+    private fun setupGroupCreation(viewModel: GroupsViewModel) {
+        binding.lifecycleOwner = viewLifecycleOwner
+        val dialogFragment = GroupCreateDialogFragment()
+        dialogFragment.name.observe(viewLifecycleOwner) { name ->
+            try {
+                viewModel.createGroup(name)
+            } catch (e: IllegalArgumentException) {
+                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.groupsGroupCreateButton.setOnClickListener {
+            dialogFragment.show(parentFragmentManager, "group create")
         }
     }
 }

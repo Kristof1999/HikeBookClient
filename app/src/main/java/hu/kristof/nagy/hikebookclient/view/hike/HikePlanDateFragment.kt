@@ -33,19 +33,42 @@ class HikePlanDateFragment : Fragment() {
 
         val viewModel: HikePlanDateViewModel by viewModels()
         val args: HikePlanDateFragmentArgs by navArgs()
+
+        setupForecasting(viewModel, args)
+
+        setClickListeners(args)
+    }
+
+    private fun setClickListeners(args: HikePlanDateFragmentArgs) = with(binding) {
+        hikePlanDateTransportPlanButton.setOnClickListener {
+            val isForward = true
+            val directions = HikePlanDateFragmentDirections
+                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.route, isForward)
+            findNavController().navigate(directions)
+        }
+        hikePlanDateHikeStartButton.setOnClickListener {
+            val directions = HikePlanDateFragmentDirections
+                .actionHikePlanDateFragmentToHikeFragment(args.route)
+            findNavController().navigate(directions)
+        }
+    }
+
+    private fun setupForecasting(
+        viewModel: HikePlanDateViewModel,
+        args: HikePlanDateFragmentArgs
+    ) {
         var date: String? = null
         var hour: Int? = null
-        binding.hikePlanDateDatePickerButton.setOnClickListener {
-            val datePickerFragment = DatePickerFragment()
-            datePickerFragment.show(parentFragmentManager, "datePicker")
-
-            binding.lifecycleOwner = viewLifecycleOwner
-            datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateRes ->
-                date = dateRes
-                hour?.let {
-                    viewModel.forecast(args.route.points, dateRes, it)
-                }
+        val datePickerFragment = DatePickerFragment()
+        binding.lifecycleOwner = viewLifecycleOwner
+        datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateRes ->
+            date = dateRes
+            hour?.let {
+                viewModel.forecast(args.route.points, dateRes, it)
             }
+        }
+        binding.hikePlanDateDatePickerButton.setOnClickListener {
+            datePickerFragment.show(parentFragmentManager, "datePicker")
         }
         binding.hikePlanDateTimePickerButton.setOnClickListener {
             val timePickerFragment = TimePickerFragment()
@@ -62,18 +85,6 @@ class HikePlanDateFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.forecastRes.observe(viewLifecycleOwner) {
             binding.hikePlanDateTw.text = it
-        }
-
-        binding.hikePlanDateTransportPlanButton.setOnClickListener {
-            val isForward = true
-            val directions = HikePlanDateFragmentDirections
-                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.route, isForward)
-            findNavController().navigate(directions)
-        }
-        binding.hikePlanDateHikeStartButton.setOnClickListener {
-            val directions = HikePlanDateFragmentDirections
-                .actionHikePlanDateFragmentToHikeFragment(args.route)
-            findNavController().navigate(directions)
         }
     }
 }
