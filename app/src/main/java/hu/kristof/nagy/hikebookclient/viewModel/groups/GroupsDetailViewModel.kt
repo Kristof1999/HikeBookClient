@@ -11,13 +11,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GroupsListViewModel @Inject constructor(
+class GroupsDetailViewModel @Inject constructor(
     private val repository: GroupsRepository
-) : ViewModel() {
-    private var _groups = MutableLiveData<List<String>>()
-    val groups: LiveData<List<String>>
-        get() = _groups
-
+)  : ViewModel() {
     private var _generalConnectRes = MutableLiveData<Boolean>()
     val generalConnectRes: LiveData<Boolean>
         get() = _generalConnectRes
@@ -26,14 +22,6 @@ class GroupsListViewModel @Inject constructor(
         viewModelScope.launch {
             repository.generalConnect(groupName, isConnectedPage).collect { res ->
                 _generalConnectRes.value = res
-            }
-        }
-    }
-
-    fun listGroups(isConnectedPage: Boolean) {
-        viewModelScope.launch {
-            repository.listGroups(isConnectedPage).collect { groupsRes ->
-                _groups.value = groupsRes
             }
         }
     }

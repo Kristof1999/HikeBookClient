@@ -225,6 +225,11 @@
         <action
             android:id="@+id/action_groupsDetailFragment_to_routeEditFragment"
             app:destination="@id/routeEditFragment" />
+        <action
+            android:id="@+id/action_groupsDetailFragment_to_groupsFragment"
+            app:destination="@id/groupsFragment"
+            app:popUpTo="@id/groupsDetailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/groupsDetailMapFragment"
