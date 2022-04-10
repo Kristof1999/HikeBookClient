@@ -30,7 +30,6 @@ object SpinnerUtils {
         }
     }
 
-    // TODO: try to use sg less error-prone/more flexible instead of ordinal and pos
     fun onMarkerItemSelected(
         pos: Int,
         viewModel: RouteViewModel,
