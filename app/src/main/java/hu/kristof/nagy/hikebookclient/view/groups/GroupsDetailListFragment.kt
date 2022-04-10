@@ -32,46 +32,62 @@ class GroupsDetailListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args: GroupsDetailListFragmentArgs by navArgs()
-
         val viewModel: GroupsDetailMapViewModel by activityViewModels()
-        val adapter = GroupsDetailListAdapter(GroupsDetailListClickListener(
-            editListener = { routeName ->
-                val route = viewModel.getRoute(routeName)
-                val directions = GroupsDetailFragmentDirections
-                    .actionGroupsDetailFragmentToRouteEditFragment(route)
-                findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
-            },
-            deleteListener = { routeName ->
-                viewModel.onDelete(args.groupName, routeName)
-            },
-            addToMyMapListener = { routeName ->
-                viewModel.onAddToMyMap(routeName)
-            }
-        ), args.isConnectedPage)
+
+        val adapter = initAdapter(viewModel, args)
         binding.groupsDetailListRecyclerView.adapter = adapter
+
+        observeViewModel(viewModel, adapter, args)
+    }
+
+    private fun observeViewModel(
+        viewModel: GroupsDetailMapViewModel,
+        adapter: GroupsDetailListAdapter,
+        args: GroupsDetailListFragmentArgs
+    ) {
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { routes ->
-                adapter.submitList(routes.map { it.routeName }.toMutableList())
+        with(viewModel) {
+            routes.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { routes ->
+                    adapter.submitList(routes.map { it.routeName }.toMutableList())
+                }
             }
-        }
-        viewModel.deleteRes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { deleteRes ->
-                if (deleteRes) {
-                    Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
-                    viewModel.loadRoutesOfGroup(args.groupName) // refresh
-                } else {
-                    Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
+            deleteRes.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { deleteRes ->
+                    if (deleteRes) {
+                        Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
+                        viewModel.loadRoutesOfGroup(args.groupName) // refresh
+                    } else {
+                        Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            addToMyMapRes.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { addToMyMapRes ->
+                    if (addToMyMapRes)
+                        Toast.makeText(context, "A hozzáadás sikeres!", Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-        viewModel.addToMyMapRes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { addToMyMapRes ->
-                if (addToMyMapRes)
-                    Toast.makeText(context, "A hozzáadás sikeres!", Toast.LENGTH_SHORT).show()
-                else
-                    Toast.makeText(context, "Valamilyen hiba történt", Toast.LENGTH_SHORT).show()
-            }
-        }
     }
+
+    private fun initAdapter(
+        viewModel: GroupsDetailMapViewModel,
+        args: GroupsDetailListFragmentArgs
+    ) = GroupsDetailListAdapter(GroupsDetailListClickListener(
+        editListener = { routeName ->
+            val route = viewModel.getRoute(routeName)
+            val directions = GroupsDetailFragmentDirections
+                .actionGroupsDetailFragmentToRouteEditFragment(route)
+            findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+        },
+        deleteListener = { routeName ->
+            viewModel.onDelete(args.groupName, routeName)
+        },
+        addToMyMapListener = { routeName ->
+            viewModel.onAddToMyMap(routeName)
+        }
+    ), args.isConnectedPage)
 }

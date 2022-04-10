@@ -2,11 +2,13 @@ package hu.kristof.nagy.hikebookclient.view.groups
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
@@ -31,12 +33,7 @@ class GroupsDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args: GroupsDetailFragmentArgs by navArgs()
-        binding.groupsDetailGroupNameTv.text = args.groupName
-        if (args.isConnectedPage) {
-            binding.groupsDetailConnectButton.text = "Elhagyás"
-        } else {
-            binding.groupsDetailConnectButton.text = "Csatlakozás"
-        }
+        adaptView(args)
 
         val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
 
@@ -49,24 +46,42 @@ class GroupsDetailFragment : Fragment() {
 
         val bottomNav = binding.groupsDetailBottomNav
         bottomNav.setOnItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.groupsDetailMapMenuItem -> {
-                    navController.navigate(
-                        R.id.action_global_groupsDetailMapFragment, bundle
-                    )
-                }
-                R.id.groupsDetailListMenuItem -> {
-                    val directions = GroupsNavigationDirections
-                        .actionGlobalGroupsDetailListFragment(args.groupName, args.isConnectedPage)
-                    navController.navigate(directions)
-                }
-                R.id.groupsDetailMembersMenuItem -> {
-                    val directions = GroupsNavigationDirections
-                        .actionGlobalGroupsDetailMembersFragment(args.groupName)
-                    navController.navigate(directions)
-                }
+            return@setOnItemSelectedListener setupBottomNav(menuItem, navController, bundle, args)
+        }
+    }
+
+    private fun setupBottomNav(
+        menuItem: MenuItem,
+        navController: NavController,
+        bundle: Bundle,
+        args: GroupsDetailFragmentArgs
+    ): Boolean {
+        when (menuItem.itemId) {
+            R.id.groupsDetailMapMenuItem -> {
+                navController.navigate(
+                    R.id.action_global_groupsDetailMapFragment, bundle
+                )
             }
-            return@setOnItemSelectedListener true
+            R.id.groupsDetailListMenuItem -> {
+                val directions = GroupsNavigationDirections
+                    .actionGlobalGroupsDetailListFragment(args.groupName, args.isConnectedPage)
+                navController.navigate(directions)
+            }
+            R.id.groupsDetailMembersMenuItem -> {
+                val directions = GroupsNavigationDirections
+                    .actionGlobalGroupsDetailMembersFragment(args.groupName)
+                navController.navigate(directions)
+            }
+        }
+        return true
+    }
+
+    private fun adaptView(args: GroupsDetailFragmentArgs) {
+        binding.groupsDetailGroupNameTv.text = args.groupName
+        if (args.isConnectedPage) {
+            binding.groupsDetailConnectButton.text = "Elhagyás"
+        } else {
+            binding.groupsDetailConnectButton.text = "Csatlakozás"
         }
     }
 }

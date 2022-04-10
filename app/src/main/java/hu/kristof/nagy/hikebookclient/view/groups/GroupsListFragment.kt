@@ -36,21 +36,13 @@ class GroupsListFragment : Fragment() {
 
         isConnectedPage = arguments?.getBoolean("isConnectedPage")
 
-        val adapter = GroupsListAdapter(isConnectedPage!!, GroupsClickListener(
-            connectListener = { groupName, isConnectedPage ->
-                viewModel.generalConnect(groupName, isConnectedPage)
-            },
-            detailListener = { groupName, isConnectedPage ->
-                val directions = GroupsFragmentDirections
-                    .actionGroupsFragmentToGroupsDetailFragment(groupName, isConnectedPage)
-                findNavController().navigate(directions)
-            })
-        )
+        val adapter = initAdapter()
         binding.groupsRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.groups.observe(viewLifecycleOwner) { groupNames ->
             adapter.submitList(groupNames.toMutableList())
         }
+
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             if (res) {
                 if (isConnectedPage!!) {
@@ -59,10 +51,23 @@ class GroupsListFragment : Fragment() {
                     Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
                 }
             } else {
+                // TODO: replace boilerplate code with lambda
                 Toast.makeText(requireContext(), "Valami hiba történt.", Toast.LENGTH_LONG).show()
             }
         }
     }
+
+    private fun initAdapter() = GroupsListAdapter(
+        isConnectedPage!!, GroupsClickListener(
+            connectListener = { groupName, isConnectedPage ->
+                viewModel.generalConnect(groupName, isConnectedPage)
+            },
+            detailListener = { groupName, isConnectedPage ->
+                val directions = GroupsFragmentDirections
+                    .actionGroupsFragmentToGroupsDetailFragment(groupName, isConnectedPage)
+                findNavController().navigate(directions)
+            })
+    )
 
     override fun onResume() {
         super.onResume()
