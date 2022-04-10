@@ -46,14 +46,7 @@ class MyMapDetailFragment : MapFragment() {
 
         val viewModel: MyMapViewModel by activityViewModels()
         val args: MyMapDetailFragmentArgs by navArgs()
-        binding.myMapDetailRouteNameTv.text = args.userRoute.routeName
-        val polyline = args.userRoute.toPolyline()
-        with(map) {
-            setMapCenterOnPolylineCenter(polyline)
-            setZoomForPolyline(polyline)
-            overlays.add(polyline)
-            invalidate()
-        }
+        adaptView(args)
 
         setClickListeners(args, viewModel)
         binding.lifecycleOwner = viewLifecycleOwner
@@ -62,21 +55,37 @@ class MyMapDetailFragment : MapFragment() {
         }
     }
 
+    private fun adaptView(args: MyMapDetailFragmentArgs) {
+        binding.myMapDetailRouteNameTv.text = args.route.routeName
+        val polyline = args.route.toPolyline()
+        with(map) {
+            setMapCenterOnPolylineCenter(polyline)
+            setZoomForPolyline(polyline)
+            overlays.add(polyline)
+            invalidate()
+        }
+    }
+
     private fun setClickListeners(
         args: MyMapDetailFragmentArgs,
         viewModel: MyMapViewModel
-    ) {
-        binding.myMapDetailEditButton.setOnClickListener {
-            val action = MyMapDetailFragmentDirections
-                .actionMyMapDetailFragmentToRouteEditFragment(args.userRoute)
-            findNavController().navigate(action)
+    ) = with(binding) {
+        myMapDetailEditButton.setOnClickListener {
+            val directions = MyMapDetailFragmentDirections
+                .actionMyMapDetailFragmentToRouteEditFragment(args.route)
+            findNavController().navigate(directions)
         }
-        binding.myMapDetailDeleteButton.setOnClickListener {
-            viewModel.deleteRoute(args.userRoute.routeName)
+        myMapDetailDeleteButton.setOnClickListener {
+            viewModel.deleteRoute(args.route.routeName)
         }
-        binding.myMapDetailPrintButton.setOnClickListener {
+        myMapDetailPrintButton.setOnClickListener {
             val bitmap = map.drawToBitmap()
-            PrintHelper(requireContext()).printBitmap(args.userRoute.routeName, bitmap)
+            PrintHelper(requireContext()).printBitmap(args.route.routeName, bitmap)
+        }
+        myMapDetailHikePlanFab.setOnClickListener {
+            val directions = MyMapDetailFragmentDirections
+                .actionMyMapDetailFragmentToHikePlanDateFragment(args.route)
+            findNavController().navigate(directions)
         }
     }
 
