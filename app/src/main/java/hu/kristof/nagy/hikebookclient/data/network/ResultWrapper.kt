@@ -8,8 +8,11 @@ suspend fun <T: Any> handleRequest(request: suspend () -> T): Result<T> {
     return try {
         Result.success(request.invoke())
     } catch (e: HttpException) {
-        // TODO: decide if exception is worth rethrowing
-        Result.failure(IllegalArgumentException(e.response()?.errorBody()?.string()))
+        if (e.response()?.code() == 500) {
+            Result.failure(IllegalArgumentException(e.response()?.errorBody()?.string()))
+        } else {
+            Result.failure(Exception(e.response()?.errorBody()?.string()))
+        }
     }
 }
 
