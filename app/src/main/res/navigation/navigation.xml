@@ -109,7 +109,7 @@
             app:popUpTo="@id/myMapDetailFragment"
             app:popUpToInclusive="true" />
         <argument
-            android:name="userRoute"
+            android:name="route"
             app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
         <action
             android:id="@+id/action_myMapDetailFragment_to_routeEditFragment"
@@ -138,7 +138,7 @@
             android:id="@+id/action_hikePlanFragment_to_hikeTransportFragment"
             app:destination="@id/hikeTransportFragment" />
         <argument
-            android:name="userRoute"
+            android:name="route"
             app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
         <argument
             android:name="isForward"
@@ -161,7 +161,7 @@
             android:id="@+id/action_hikeTransportFragment_to_hikeFragment"
             app:destination="@id/hikeFragment" />
         <argument
-            android:name="userRoute"
+            android:name="route"
             app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
         <action
             android:id="@+id/action_hikeTransportFragment_to_myMapFragment"
@@ -175,7 +175,7 @@
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanDateFragment"
         android:label="HikePlanDateFragment" >
         <argument
-            android:name="userRoute"
+            android:name="route"
             app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
         <action
             android:id="@+id/action_hikePlanDateFragment_to_hikePlanTransportFragment"
@@ -190,7 +190,7 @@
         android:label="fragment_hike"
         tools:layout="@layout/fragment_hike" >
         <argument
-            android:name="userRoute"
+            android:name="route"
             app:argType="hu.kristof.nagy.hikebookclient.model.Route" />
         <action
             android:id="@+id/action_hikeFragment_to_myMapFragment"
