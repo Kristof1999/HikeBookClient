@@ -45,6 +45,7 @@ class RouteEditViewModel @Inject constructor(
         when (oldRoute) {
             is UserRoute -> onUserRouteEdit(oldRoute, routeName, hikeDescription, points)
             is GroupRoute -> onGroupRouteEdit(oldRoute, routeName, hikeDescription, points)
+            else -> throw IllegalArgumentException("Unkown route type: $oldRoute")
         }
     }
 

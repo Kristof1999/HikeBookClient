@@ -17,8 +17,8 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -56,9 +56,9 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
         val routeName = args.route.routeName
-        binding.routeEditRouteNameEditText.setText(routeName)
+        binding.routeEditRouteNameEditText.text = routeName
         val hikeDescription = args.route.description
-        binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
+        binding.routeEditHikeDescriptionEditText.text = hikeDescription
 
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.route.points)
@@ -96,7 +96,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
     private fun onRouteEditResult(res: Result<Boolean>, args: RouteEditFragmentArgs) {
         handleResult(context, res) {
-            when (args.route.routeType) {
+            when (args.routeType) {
                 RouteType.USER -> findNavController().navigate(
                     R.id.action_routeEditFragment_to_myMapFragment
                 )

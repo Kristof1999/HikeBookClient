@@ -32,6 +32,7 @@ import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
+import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
@@ -87,7 +88,7 @@ class MyMapListFragment : Fragment() {
                 editListener = { routeName ->
                     val route = viewModel.getRoute(routeName)
                     val action = MyMapListFragmentDirections
-                        .actionMyMapListFragmentToRouteEditFragment(route)
+                        .actionMyMapListFragmentToRouteEditFragment(route, RouteType.USER, null)
                     findNavController().navigate(action)
                 },
                 deleteListener = { routeName ->
@@ -117,7 +118,7 @@ class MyMapListFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) {
-                adapter.submitList(it.toMutableList())
+                adapter.submitList(it.toMutableList().map { it.routeName })
             }
         }
     }

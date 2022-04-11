@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailListBinding
+import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 
@@ -76,7 +77,7 @@ class GroupsDetailListFragment : Fragment() {
         editListener = { routeName ->
             val route = viewModel.getRoute(routeName)
             val directions = GroupsDetailFragmentDirections
-                .actionGroupsDetailFragmentToRouteEditFragment(route)
+                .actionGroupsDetailFragmentToRouteEditFragment(route, RouteType.GROUP, args.groupName)
             findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
         },
         deleteListener = { routeName ->

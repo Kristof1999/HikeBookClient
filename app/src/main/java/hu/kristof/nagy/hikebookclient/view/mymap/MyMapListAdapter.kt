@@ -42,16 +42,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hu.kristof.nagy.hikebookclient.databinding.MyMapListItemBinding
-import hu.kristof.nagy.hikebookclient.model.routes.Route
 
 class MyMapListAdapter(private val clickListener: MyMapClickListener)
-    : ListAdapter<Route, MyMapListAdapter.ViewHolder>(MyMapListDiffCallback()) {
+    : ListAdapter<String, MyMapListAdapter.ViewHolder>(MyMapListDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent, clickListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val routeName = getItem(position).routeName
+        val routeName = getItem(position)
         holder.bind(routeName)
     }
 
@@ -75,14 +74,12 @@ class MyMapListAdapter(private val clickListener: MyMapClickListener)
     }
 }
 
-class MyMapListDiffCallback : DiffUtil.ItemCallback<Route>() {
-    override fun areItemsTheSame(oldItem: Route, newItem: Route): Boolean {
-        return oldItem.routeName == newItem.routeName &&
-                oldItem.ownerName == newItem.ownerName &&
-                oldItem.routeType == newItem.routeType
+class MyMapListDiffCallback : DiffUtil.ItemCallback<String>() {
+    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: Route, newItem: Route): Boolean {
+    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
         return oldItem == newItem
     }
 }

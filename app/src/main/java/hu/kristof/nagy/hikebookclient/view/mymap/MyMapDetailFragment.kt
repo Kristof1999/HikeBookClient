@@ -14,6 +14,7 @@ import androidx.print.PrintHelper
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapDetailBinding
+import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.MapFragment
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
@@ -72,7 +73,7 @@ class MyMapDetailFragment : MapFragment() {
     ) = with(binding) {
         myMapDetailEditButton.setOnClickListener {
             val directions = MyMapDetailFragmentDirections
-                .actionMyMapDetailFragmentToRouteEditFragment(args.route)
+                .actionMyMapDetailFragmentToRouteEditFragment(args.route, RouteType.USER, null)
             findNavController().navigate(directions)
         }
         myMapDetailDeleteButton.setOnClickListener {

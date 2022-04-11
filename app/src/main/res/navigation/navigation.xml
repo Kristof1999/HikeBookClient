@@ -76,6 +76,13 @@
         <action
             android:id="@+id/action_routeEditFragment_to_groupsDetailFragment"
             app:destination="@id/groupsDetailFragment" />
+        <argument
+            android:name="routeType"
+            app:argType="hu.kristof.nagy.hikebookclient.model.RouteType" />
+        <argument
+            android:name="groupName"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/browseListFragment"
