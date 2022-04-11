@@ -27,6 +27,6 @@ interface GroupRouteService {
     suspend fun editGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") oldRouteName: String,
-        @Body route: EditedGroupRoute
+        @Body editedGroupRoute: EditedGroupRoute
     ): Boolean
 }

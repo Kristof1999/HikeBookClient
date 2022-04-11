@@ -34,7 +34,7 @@ interface UserRouteService {
     suspend fun editUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") oldRouteName: String,
-        @Body route: EditedUserRoute
+        @Body editedUserRoute: EditedUserRoute
     ): Boolean
 
     /**
