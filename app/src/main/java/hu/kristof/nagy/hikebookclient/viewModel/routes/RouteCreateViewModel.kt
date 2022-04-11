@@ -28,7 +28,6 @@ import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragmentArgs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

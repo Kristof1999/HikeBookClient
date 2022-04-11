@@ -1,7 +1,7 @@
 package hu.kristof.nagy.hikebookclient.data.network
 
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
-import hu.kristof.nagy.hikebookclient.model.EditedRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import retrofit2.http.*

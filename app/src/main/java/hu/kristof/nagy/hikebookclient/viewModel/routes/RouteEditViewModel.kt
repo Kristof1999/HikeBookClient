@@ -5,11 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.RouteRepository
-import hu.kristof.nagy.hikebookclient.model.EditedRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
 import javax.inject.Inject
