@@ -10,7 +10,7 @@ interface UserRouteService {
     suspend fun createUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String,
-        @Body route: UserRoute
+        @Body userRoute: UserRoute
     ): Boolean
 
     @GET("users/routes/{userName}")

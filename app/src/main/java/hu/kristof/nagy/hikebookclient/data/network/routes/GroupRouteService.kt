@@ -9,7 +9,7 @@ interface GroupRouteService {
     suspend fun createGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") routeName: String,
-        @Body route: GroupRoute
+        @Body groupRoute: GroupRoute
     ): Boolean
 
     @GET("groups/routes/{groupName}")
