@@ -57,7 +57,6 @@ class RouteCreateViewModel @Inject constructor(
         val points: List<Point> = markers.map {
             Point.from(it)
         }
-        RouteUtils.checkRoute(routeName, points)
 
         when (args.routeType) {
             RouteType.USER -> onUserRouteCreate(routeName, hikeDescription, points)

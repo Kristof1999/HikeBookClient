@@ -3,17 +3,11 @@ package hu.kristof.nagy.hikebookclient.viewModel.hike
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.network.WeatherService
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.view.hike.TransportType
 import org.osmdroid.util.GeoPoint
-import javax.inject.Inject
 
-@HiltViewModel
-class HikePlanTransportViewModel @Inject constructor(
-    private val service: WeatherService
-    ) : ViewModel() {
+class HikePlanTransportViewModel : ViewModel() {
     var transportType = TransportType.BICYCLE
 
     var startPoint: GeoPoint = Constants.START_POINT

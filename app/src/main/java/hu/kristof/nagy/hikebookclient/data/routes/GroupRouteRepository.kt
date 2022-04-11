@@ -5,13 +5,12 @@ import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
 import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
-import hu.kristof.nagy.hikebookclient.model.routes.Route
 import javax.inject.Inject
 
 class GroupRouteRepository  @Inject constructor(
     private val service: Service
 ) {
-    suspend fun loadRoutes(groupName: String): Result<List<Route>> {
+    suspend fun loadRoutes(groupName: String): Result<List<GroupRoute>> {
         return handleRequest {
             service.loadGroupRoutes(groupName)
         }
@@ -36,10 +35,10 @@ class GroupRouteRepository  @Inject constructor(
         }
     }
 
-    suspend fun editGroupRoute(groupName: String, editedGroupRoute: EditedGroupRoute): Result<Boolean> {
+    suspend fun editGroupRoute(editedGroupRoute: EditedGroupRoute): Result<Boolean> {
         return handleRequest {
             service.editGroupRoute(
-                groupName,
+                editedGroupRoute.newGroupRoute.groupName,
                 editedGroupRoute.oldGroupRoute.routeName,
                 editedGroupRoute)
         }

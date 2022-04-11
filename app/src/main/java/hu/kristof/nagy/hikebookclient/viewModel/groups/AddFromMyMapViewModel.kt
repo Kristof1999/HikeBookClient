@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,8 +15,8 @@ import javax.inject.Inject
 class AddFromMyMapViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository
     ) : ViewModel() {
-    private var _routes = MutableLiveData<Result<List<Route>>>()
-    val routes: LiveData<Result<List<Route>>>
+    private var _routes = MutableLiveData<Result<List<UserRoute>>>()
+    val routes: LiveData<Result<List<UserRoute>>>
         get() = _routes
 
     fun loadRoutesForLoggedInUser() {

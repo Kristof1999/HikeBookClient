@@ -24,7 +24,6 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
-@AndroidEntryPoint
 class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanTransportBinding
     private val viewModel: HikePlanTransportViewModel by viewModels()
