@@ -2,10 +2,10 @@ package hu.kristof.nagy.hikebookclient.data.routes
 
 import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
-import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
+import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.model.RouteType
 import javax.inject.Inject
 
 class GroupRouteRepository  @Inject constructor(
@@ -13,13 +13,13 @@ class GroupRouteRepository  @Inject constructor(
 ) {
     suspend fun loadRoutes(groupName: String): Result<List<Route>> {
         return handleRequest {
-            service.loadRoutes(groupName, RouteType.GROUP)
+            service.loadGroupRoutes(groupName)
         }
     }
 
     suspend fun deleteRoute(groupName: String, routeName: String): Result<Boolean> {
         return handleRequest {
-            service.deleteRoute(groupName, routeName, RouteType.GROUP)
+            service.deleteGroupRoute(groupName, routeName)
         }
     }
 
@@ -30,18 +30,18 @@ class GroupRouteRepository  @Inject constructor(
         hikeDescription: String
     ): Result<Boolean> {
         return handleRequest {
-            service.createRoute(groupName, routeName,
-                Route(groupName, RouteType.GROUP, routeName, points, hikeDescription)
+            service.createGroupRoute(groupName, routeName,
+                GroupRoute(groupName, routeName, points, hikeDescription)
             )
         }
     }
 
-    suspend fun editRoute(groupName: String, editedRoute: EditedRoute): Result<Boolean> {
+    suspend fun editGroupRoute(groupName: String, editedGroupRoute: EditedGroupRoute): Result<Boolean> {
         return handleRequest {
-            service.editRoute(
+            service.editGroupRoute(
                 groupName,
-                editedRoute.oldRoute.routeName,
-                editedRoute)
+                editedGroupRoute.oldGroupRoute.routeName,
+                editedGroupRoute)
         }
     }
 }
