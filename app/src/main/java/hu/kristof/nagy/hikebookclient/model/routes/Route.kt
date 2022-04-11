@@ -31,6 +31,11 @@ open class Route(
     open val points: List<Point>,
     open val description: String
     ) : Parcelable {
+    
+    init {
+        checkRouteName()
+        checkPointSize()
+    }
 
     fun toPolyline(): Polyline {
         val polyline = Polyline()
@@ -38,5 +43,19 @@ open class Route(
             it.toGeoPoint()
         })
         return polyline
+    }
+
+    fun getLength() = toPolyline().distance
+
+    fun checkRouteName() {
+        if (routeName.isEmpty())
+            throw IllegalArgumentException("Az útvonal név nem lehet üres.")
+        if (routeName.contains("/"))
+            throw IllegalArgumentException("Az útvonal név nem tartalmazhat / jelet.")
+    }
+
+    fun checkPointSize() {
+        if (points.size < 2)
+            throw IllegalArgumentException("Az útvonalnak legalább 2 pontból kell állnia.")
     }
 }
