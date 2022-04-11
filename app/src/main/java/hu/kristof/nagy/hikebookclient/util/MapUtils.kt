@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.model.MyMarker
-import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import org.osmdroid.events.MapEventsReceiver

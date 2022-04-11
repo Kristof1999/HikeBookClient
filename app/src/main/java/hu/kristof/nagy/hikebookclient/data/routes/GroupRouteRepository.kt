@@ -4,7 +4,7 @@ import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import javax.inject.Inject
 

@@ -8,7 +8,7 @@ import hu.kristof.nagy.hikebookclient.data.routes.RouteRepository
 import hu.kristof.nagy.hikebookclient.model.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.Route
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.RouteUtils
 import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
