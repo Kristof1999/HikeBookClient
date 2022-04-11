@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -36,6 +35,10 @@ class MyMapViewModel @Inject constructor(
     val deleteRes: LiveData<Result<Boolean>>
         get() = _deleteRes
 
+    private var _userNameRes = MutableLiveData<String>()
+    val userNameRes: LiveData<String>
+        get() = _userNameRes
+
     fun loadRoutesForLoggedInUser() {
         viewModelScope.launch {
             userRepository.loadUserRoutes()
@@ -55,7 +58,7 @@ class MyMapViewModel @Inject constructor(
         }
     }
 
-    fun getRoute(routeName: String): Route {
+    fun getRoute(routeName: String): UserRoute {
         return _routes.value!!.getOrNull()!!.filter { route ->
             route.routeName == routeName
         }[0]

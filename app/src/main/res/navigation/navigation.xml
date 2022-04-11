@@ -145,8 +145,8 @@
             android:id="@+id/action_hikePlanFragment_to_hikeTransportFragment"
             app:destination="@id/hikeTransportFragment" />
         <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.Route" />
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
         <argument
             android:name="isForward"
             app:argType="boolean" />
@@ -168,8 +168,8 @@
             android:id="@+id/action_hikeTransportFragment_to_hikeFragment"
             app:destination="@id/hikeFragment" />
         <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.Route" />
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
         <action
             android:id="@+id/action_hikeTransportFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
@@ -182,8 +182,8 @@
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanDateFragment"
         android:label="HikePlanDateFragment" >
         <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.Route" />
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
         <action
             android:id="@+id/action_hikePlanDateFragment_to_hikePlanTransportFragment"
             app:destination="@id/hikePlanTransportFragment" />
@@ -197,8 +197,8 @@
         android:label="fragment_hike"
         tools:layout="@layout/fragment_hike" >
         <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.Route" />
+            android:name="userRoute"
+            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
         <action
             android:id="@+id/action_hikeFragment_to_myMapFragment"
             app:destination="@id/myMapFragment"

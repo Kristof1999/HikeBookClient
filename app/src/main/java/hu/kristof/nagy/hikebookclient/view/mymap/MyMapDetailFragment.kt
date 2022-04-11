@@ -84,8 +84,9 @@ class MyMapDetailFragment : MapFragment() {
             PrintHelper(requireContext()).printBitmap(args.route.routeName, bitmap)
         }
         myMapDetailHikePlanFab.setOnClickListener {
+            val userRoute = viewModel.getRoute(args.route.routeName)
             val directions = MyMapDetailFragmentDirections
-                .actionMyMapDetailFragmentToHikePlanDateFragment(args.route)
+                .actionMyMapDetailFragmentToHikePlanDateFragment(userRoute)
             findNavController().navigate(directions)
         }
     }

@@ -56,14 +56,14 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
         val routeName = args.route.routeName
-        binding.routeEditRouteNameEditText.text = routeName
+        binding.routeEditRouteNameEditText.setText(routeName)
         val hikeDescription = args.route.description
-        binding.routeEditHikeDescriptionEditText.text = hikeDescription
+        binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
 
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.route.points)
         binding.routeEditEditButton.setOnClickListener {
-            onEdit(viewModel, args.route)
+            onRouteEdit(viewModel, args.route)
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
@@ -81,7 +81,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         // keep type as is
     }
 
-    private fun onEdit(
+    private fun onRouteEdit(
         viewModel: RouteEditViewModel,
         oldRoute: Route
     ) {
@@ -101,7 +101,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
                     R.id.action_routeEditFragment_to_myMapFragment
                 )
                 RouteType.GROUP -> {
-                    val groupName = args.route.ownerName
+                    val groupName = args.groupName!!
                     // isConnectedPage is true because
                     // only a connected member can edit routes
                     val directions = RouteEditFragmentDirections

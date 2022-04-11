@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
 import hu.kristof.nagy.hikebookclient.model.Point
@@ -46,7 +45,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         val args: HikePlanTransportFragmentArgs by navArgs()
         if (args.isForward) {
             val hikeStartMarker = Marker(map)
-            val startPoint = args.route.points.first()
+            val startPoint = args.userRoute.points.first()
             hikeStartMarker.position = startPoint.toGeoPoint()
             hikeStartMarker.title = startPoint.title
             hikeStartMarker.icon = AppCompatResources.getDrawable(
@@ -55,7 +54,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
             map.overlays.add(hikeStartMarker)
         } else {
             val hikeEndMarker = Marker(map)
-            val startPoint = args.route.points.last()
+            val startPoint = args.userRoute.points.last()
             hikeEndMarker.position = startPoint.toGeoPoint()
             hikeEndMarker.title = startPoint.title
             hikeEndMarker.icon = AppCompatResources.getDrawable(
@@ -149,7 +148,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         val transportType = viewModel.transportType
         val directions = HikePlanTransportFragmentDirections
             .actionHikePlanFragmentToHikeTransportFragment(
-                startPoint, endPoint, transportType, args.route, args.isForward
+                startPoint, endPoint, transportType, args.userRoute, args.isForward
             )
         findNavController().navigate(directions)
     }

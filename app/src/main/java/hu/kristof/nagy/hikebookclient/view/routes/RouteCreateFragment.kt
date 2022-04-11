@@ -54,7 +54,7 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
         val args: RouteCreateFragmentArgs by navArgs()
         binding.routeCreateCreateButton.setOnClickListener {
-            onCreate(args, viewModel)
+            onRouteCreate(args, viewModel)
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
@@ -73,7 +73,7 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         // keep type as is
     }
 
-    private fun onCreate(args: RouteCreateFragmentArgs, viewModel: RouteCreateViewModel) {
+    private fun onRouteCreate(args: RouteCreateFragmentArgs, viewModel: RouteCreateViewModel) {
         try {
             viewModel.onRouteCreate(
                 args,

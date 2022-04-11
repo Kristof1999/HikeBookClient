@@ -43,12 +43,12 @@ class HikePlanDateFragment : Fragment() {
         hikePlanDateTransportPlanButton.setOnClickListener {
             val isForward = true
             val directions = HikePlanDateFragmentDirections
-                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.route, isForward)
+                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.userRoute, isForward)
             findNavController().navigate(directions)
         }
         hikePlanDateHikeStartButton.setOnClickListener {
             val directions = HikePlanDateFragmentDirections
-                .actionHikePlanDateFragmentToHikeFragment(args.route)
+                .actionHikePlanDateFragmentToHikeFragment(args.userRoute)
             findNavController().navigate(directions)
         }
     }
@@ -64,7 +64,7 @@ class HikePlanDateFragment : Fragment() {
         datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateRes ->
             date = dateRes
             hour?.let {
-                viewModel.forecast(args.route.points, dateRes, it)
+                viewModel.forecast(args.userRoute.points, dateRes, it)
             }
         }
         binding.hikePlanDateDatePickerButton.setOnClickListener {
@@ -78,7 +78,7 @@ class HikePlanDateFragment : Fragment() {
             timePickerFragment.hourRes.observe(viewLifecycleOwner) { hourRes ->
                 hour = hourRes
                 date?.let {
-                    viewModel.forecast(args.route.points, it, hourRes)
+                    viewModel.forecast(args.userRoute.points, it, hourRes)
                 }
             }
         }
