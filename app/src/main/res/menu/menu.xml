@@ -5,7 +5,7 @@
         android:id="@+id/myMapFragment"
         android:title="@string/my_map_menu" />
     <item
-        android:id="@+id/groupHikeMenuItem"
+        android:id="@+id/groupHikeFragment"
         android:title="@string/group_hike_menu" />
     <item
         android:id="@+id/groupsFragment"

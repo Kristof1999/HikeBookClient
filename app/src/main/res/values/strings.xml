@@ -87,8 +87,8 @@
     </string-array>
 
     <!-- Groups -->
-    <string name="tab_groups_connected_text">Csatlakozott</string>
-    <string name="tab_groups_unconnected_text">Nem Csatlakozott</string>
+    <string name="tab_connected_text">Csatlakozott</string>
+    <string name="tab_unconnected_text">Nem Csatlakozott</string>
     <string name="tab_description_text">Tabs for navigating between connected and unconnected group lists</string>
     <string name="view_pager_description">Layouts associated with the given tabs</string>
     <string name="groups_map_menu_text">Térkép</string>
@@ -99,6 +99,9 @@
     <string name="groups_create_dialog_text">Add meg a csoport nevét:</string>
     <string name="groups_create_dialog_hint_text">Név</string>
     <string name="add_from_my_map_spinner_description">Pick route from your map to add to group map</string>
+
+    <!-- GroupHike -->
+    <string name="group_hike_tab_description_text">Tabs for navigating between connected and unconnected group hike lists</string>
 
     <!-- Help -->
     <string name="help_title">Súgó</string>
@@ -244,4 +247,6 @@
         "Fent egy szöveges mező mutatja az út és a felhasználó nevét, valamint a túra leírását."
         "A lap alján levő gombbal hozzáadhatjuk a térképünkhöz az útvonalat."
     </string>
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

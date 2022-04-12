@@ -246,4 +246,8 @@
             android:id="@+id/action_groupsDetailMapFragment_to_routeCreateFragment"
             app:destination="@id/routeCreateFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/groupHikeFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.grouphike.GroupHikeFragment"
+        android:label="GroupHikeFragment" />
 </navigation>
