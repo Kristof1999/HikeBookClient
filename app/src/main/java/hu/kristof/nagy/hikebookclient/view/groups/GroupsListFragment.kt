@@ -19,7 +19,6 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsListViewModel
 @AndroidEntryPoint
 class GroupsListFragment : Fragment() {
     private lateinit var binding: FragmentGroupsListBinding
-    private var isConnectedPage: Boolean? = null
     private val viewModel: GroupsListViewModel by viewModels()
 
     override fun onCreateView(
@@ -35,9 +34,9 @@ class GroupsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        isConnectedPage = arguments?.getBoolean("isConnectedPage")
+        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
-        val adapter = initAdapter()
+        val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.groups.observe(viewLifecycleOwner) { groupNames ->
@@ -46,7 +45,7 @@ class GroupsListFragment : Fragment() {
 
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             throwGenericErrorOr(context, res) {
-                if (isConnectedPage!!) {
+                if (isConnectedPage) {
                     Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG).show()
                 } else {
                     Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
@@ -55,8 +54,8 @@ class GroupsListFragment : Fragment() {
         }
     }
 
-    private fun initAdapter() = GroupsListAdapter(
-        isConnectedPage!!, GroupsClickListener(
+    private fun initAdapter(isConnectedPage: Boolean) = GroupsListAdapter(
+        isConnectedPage, GroupsClickListener(
             connectListener = { groupName, isConnectedPage ->
                 viewModel.generalConnect(groupName, isConnectedPage)
             },
@@ -69,14 +68,16 @@ class GroupsListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        isConnectedPage = arguments?.getBoolean("isConnectedPage")
-        viewModel.listGroups(isConnectedPage!!)
+        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        viewModel.listGroups(isConnectedPage)
     }
 
     companion object {
+        private const val IS_CONNECTED_PAGE_BUNDLE_KEY =  "isConnectedPage"
+
         fun newInstance(isConnectedPage: Boolean): GroupsListFragment {
             return GroupsListFragment().apply {
-                arguments = bundleOf("isConnectedPage" to isConnectedPage)
+                arguments = bundleOf(IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage)
             }
         }
     }

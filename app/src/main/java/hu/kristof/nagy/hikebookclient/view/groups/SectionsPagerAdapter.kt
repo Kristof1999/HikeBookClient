@@ -25,8 +25,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) :
 
     companion object {
         private val TAB_TITLES = arrayOf(
-            R.string.tab_groups_unconnected_text,
-            R.string.tab_groups_connected_text
+            R.string.tab_unconnected_text,
+            R.string.tab_connected_text
         )
     }
 }
