@@ -53,14 +53,14 @@ open class Route(
 
     fun getLength() = toPolyline().distance
 
-    fun checkRouteName(routeName: String) {
+    private fun checkRouteName(routeName: String) {
         if (routeName.isEmpty())
             throw IllegalArgumentException("Az útvonal név nem lehet üres.")
         if (routeName.contains("/"))
             throw IllegalArgumentException("Az útvonal név nem tartalmazhat / jelet.")
     }
 
-    fun checkPointSize(points: List<Point>) {
+    private fun checkPointSize(points: List<Point>) {
         if (points.size < 2)
             throw IllegalArgumentException("Az útvonalnak legalább 2 pontból kell állnia.")
     }
