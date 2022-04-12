@@ -72,10 +72,11 @@ class MyMapFragment : MapFragment() {
     }
 
     private fun initMap() {
-        map = binding.myMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        map = binding.myMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            setStartZoomAndCenter()
+            addCopyRightOverlay()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
