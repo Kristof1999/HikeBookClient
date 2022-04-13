@@ -9,6 +9,7 @@ import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,6 +57,12 @@ class MyMapViewModel @Inject constructor(
                     _deleteRes.value = res
                 }
         }
+    }
+
+    fun createGroupHike(dateTime: Calendar, routeName: String, groupHikeName: String) {
+        // TODO: create groupHike with a batched write on the server
+        // 2 creation: route and groupHike
+
     }
 
     fun getRoute(routeName: String): UserRoute {

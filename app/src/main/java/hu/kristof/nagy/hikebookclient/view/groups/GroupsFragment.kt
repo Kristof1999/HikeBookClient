@@ -15,6 +15,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsBinding
 import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
+import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
 
 @AndroidEntryPoint
@@ -59,8 +60,10 @@ class GroupsFragment : Fragment() {
 
     private fun setupGroupCreation(viewModel: GroupsViewModel) {
         binding.lifecycleOwner = viewLifecycleOwner
-        val dialogFragment = GroupCreateDialogFragment()
-        dialogFragment.name.observe(viewLifecycleOwner) { name ->
+        val dialogFragment = TextDialogFragment.instanceOf(
+            R.string.groups_create_dialog_text, R.string.groups_create_dialog_hint_text
+        )
+        dialogFragment.text.observe(viewLifecycleOwner) { name ->
             try {
                 viewModel.createGroup(name)
             } catch (e: IllegalArgumentException) {

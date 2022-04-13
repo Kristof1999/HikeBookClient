@@ -35,7 +35,10 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
+import hu.kristof.nagy.hikebookclient.view.hike.TimePickerFragment
+import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
+import java.util.*
 
 /**
  * A Fragment to list the routes of the logged in user.
@@ -111,6 +114,55 @@ class MyMapListFragment : Fragment() {
                     val directions = MyMapListFragmentDirections
                         .actionMyMapListFragmentToHikePlanDateFragment(userRoute)
                     findNavController().navigate(directions)
+                },
+                groupHikeCreateListener = { routeName ->
+                    val dateTime = Calendar.getInstance().apply { clear() }
+                    var groupHikeName: String? = null
+
+                    val isAllSet = { dateTime: Calendar, groupHikeName: String? ->
+                        dateTime.isSet(Calendar.HOUR_OF_DAY)
+                                && dateTime.isSet(Calendar.MINUTE)
+                                && dateTime.isSet(Calendar.YEAR)
+                                && dateTime.isSet(Calendar.MONTH)
+                                && dateTime.isSet(Calendar.DAY_OF_MONTH)
+                                && groupHikeName != null
+                    }
+
+                    val dateDialog = DatePickerFragment()
+                    binding.lifecycleOwner = viewLifecycleOwner
+                    dateDialog.dateRes.observe(viewLifecycleOwner) { dateRes ->
+                        dateTime.set(Calendar.YEAR, dateRes.get(Calendar.YEAR))
+                        dateTime.set(Calendar.MONTH, dateRes.get(Calendar.MONTH))
+                        dateTime.set(Calendar.DAY_OF_MONTH, dateRes.get(Calendar.DAY_OF_MONTH))
+
+                        if (isAllSet(dateTime, groupHikeName)) {
+                            viewModel.createGroupHike(dateTime, routeName, groupHikeName!!)
+                        }
+                    }
+
+                    val timeDialog = TimePickerFragment()
+                    timeDialog.timeRes.observe(viewLifecycleOwner) { timeRes ->
+                        dateTime.set(Calendar.HOUR_OF_DAY, timeRes.get(Calendar.HOUR_OF_DAY))
+                        dateTime.set(Calendar.MINUTE, timeRes.get(Calendar.MINUTE))
+
+                        if (isAllSet(dateTime, groupHikeName)) {
+                            viewModel.createGroupHike(dateTime, routeName, groupHikeName!!)
+                        }
+                    }
+
+                    dateDialog.show(parentFragmentManager, "date")
+                    timeDialog.show(parentFragmentManager, "time")
+
+                    val groupHikeCreateDialog = TextDialogFragment.instanceOf(
+                        R.string.group_hike_create_text, R.string.groups_create_dialog_hint_text
+                    )
+                    groupHikeCreateDialog.text.observe(viewLifecycleOwner) { name ->
+                        groupHikeName = name
+
+                        if (isAllSet(dateTime, groupHikeName)) {
+                            viewModel.createGroupHike(dateTime, routeName, groupHikeName!!)
+                        }
+                    }
                 }
             )
         )

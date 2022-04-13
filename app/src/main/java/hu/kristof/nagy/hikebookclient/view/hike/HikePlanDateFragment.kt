@@ -58,6 +58,7 @@ class HikePlanDateFragment : Fragment() {
         viewModel: HikePlanDateViewModel,
         args: HikePlanDateFragmentArgs
     ) {
+        // TODO: refactor by using one calendar here, example: myMapList
         var date: String? = null
         var hour: Int? = null
         val datePickerFragment = DatePickerFragment()
@@ -76,7 +77,7 @@ class HikePlanDateFragment : Fragment() {
             timePickerFragment.show(parentFragmentManager, "timePicker")
 
             binding.lifecycleOwner = viewLifecycleOwner
-            timePickerFragment.hourRes.observe(viewLifecycleOwner) { hourRes ->
+            timePickerFragment.timeRes.observe(viewLifecycleOwner) { hourRes ->
                 hour = hourRes.get(Calendar.HOUR_OF_DAY)
                 date?.let {
                     viewModel.forecast(args.userRoute.points, it, hourRes.get(Calendar.HOUR_OF_DAY))
