@@ -33,6 +33,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.view.hike.TimePickerFragment
@@ -67,8 +68,17 @@ class MyMapListFragment : Fragment() {
 
         val viewModel: MyMapViewModel by activityViewModels()
         setupAdapter(viewModel)
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.deleteRes.observe(viewLifecycleOwner) {
             onDeleteResult(viewModel, it)
+        }
+        viewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
+            if (!viewModel.groupHikeCreationFinished) {
+                handleResult(context, res) { groupHikeCreateRes ->
+                    throwGenericErrorOr(context, groupHikeCreateRes, "A csoportos túra létrehozása sikeres!")
+                }
+                viewModel.groupHikeCreationFinished = true
+            }
         }
     }
 
@@ -77,9 +87,11 @@ class MyMapListFragment : Fragment() {
         res: Result<Boolean>
     ) {
         if (!viewModel.deleteFinished) {
-            handleResult(context, res) {
-                Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
-                viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
+            handleResult(context, res) { deleteRes ->
+                throwGenericErrorOr(context, deleteRes) {
+                    Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
+                    viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
+                }
             }
             viewModel.deleteFinished = true
         }
@@ -117,15 +129,26 @@ class MyMapListFragment : Fragment() {
                 },
                 groupHikeCreateListener = { routeName ->
                     val dateTime = Calendar.getInstance().apply { clear() }
-                    var groupHikeName: String? = null
 
-                    val isAllSet = { dateTime: Calendar, groupHikeName: String? ->
-                        dateTime.isSet(Calendar.HOUR_OF_DAY)
-                                && dateTime.isSet(Calendar.MINUTE)
-                                && dateTime.isSet(Calendar.YEAR)
-                                && dateTime.isSet(Calendar.MONTH)
-                                && dateTime.isSet(Calendar.DAY_OF_MONTH)
-                                && groupHikeName != null
+                    // note to reader: read this block in reverse order
+                    // as that is the way in which the dialogs will be shown to the user
+                    val groupHikeCreateDialog = TextDialogFragment.instanceOf(
+                        R.string.group_hike_create_text, R.string.groups_create_dialog_hint_text
+                    )
+                    groupHikeCreateDialog.text.observe(viewLifecycleOwner) { name ->
+                        try {
+                            viewModel.createGroupHike(dateTime, routeName, name)
+                        } catch (e: IllegalArgumentException) {
+                            Toast.makeText(context, e.message!!, Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                    val timeDialog = TimePickerFragment()
+                    timeDialog.timeRes.observe(viewLifecycleOwner) { timeRes ->
+                        dateTime.set(Calendar.HOUR_OF_DAY, timeRes.get(Calendar.HOUR_OF_DAY))
+                        dateTime.set(Calendar.MINUTE, timeRes.get(Calendar.MINUTE))
+
+                        groupHikeCreateDialog.show(parentFragmentManager, "group hike name")
                     }
 
                     val dateDialog = DatePickerFragment()
@@ -135,34 +158,10 @@ class MyMapListFragment : Fragment() {
                         dateTime.set(Calendar.MONTH, dateRes.get(Calendar.MONTH))
                         dateTime.set(Calendar.DAY_OF_MONTH, dateRes.get(Calendar.DAY_OF_MONTH))
 
-                        if (isAllSet(dateTime, groupHikeName)) {
-                            viewModel.createGroupHike(dateTime, routeName, groupHikeName!!)
-                        }
+                        timeDialog.show(parentFragmentManager, "group hike time")
                     }
 
-                    val timeDialog = TimePickerFragment()
-                    timeDialog.timeRes.observe(viewLifecycleOwner) { timeRes ->
-                        dateTime.set(Calendar.HOUR_OF_DAY, timeRes.get(Calendar.HOUR_OF_DAY))
-                        dateTime.set(Calendar.MINUTE, timeRes.get(Calendar.MINUTE))
-
-                        if (isAllSet(dateTime, groupHikeName)) {
-                            viewModel.createGroupHike(dateTime, routeName, groupHikeName!!)
-                        }
-                    }
-
-                    dateDialog.show(parentFragmentManager, "date")
-                    timeDialog.show(parentFragmentManager, "time")
-
-                    val groupHikeCreateDialog = TextDialogFragment.instanceOf(
-                        R.string.group_hike_create_text, R.string.groups_create_dialog_hint_text
-                    )
-                    groupHikeCreateDialog.text.observe(viewLifecycleOwner) { name ->
-                        groupHikeName = name
-
-                        if (isAllSet(dateTime, groupHikeName)) {
-                            viewModel.createGroupHike(dateTime, routeName, groupHikeName!!)
-                        }
-                    }
+                    dateDialog.show(parentFragmentManager, "group hike date")
                 }
             )
         )
