@@ -14,9 +14,8 @@ import androidx.lifecycle.MutableLiveData
 import java.util.*
 
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
-
-    private var _hourRes = MutableLiveData<Int>()
-    val hourRes: LiveData<Int>
+    private var _hourRes = MutableLiveData<Calendar>()
+    val hourRes: LiveData<Calendar>
         get() = _hourRes
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -29,6 +28,9 @@ class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener 
     }
 
     override fun onTimeSet(view: TimePicker, hourOfDay: Int, minute: Int) {
-        _hourRes.value = hourOfDay
+        val c = Calendar.getInstance()
+        c.set(Calendar.HOUR_OF_DAY, hourOfDay)
+        c.set(Calendar.MINUTE, minute)
+        _hourRes.value = c
     }
 }

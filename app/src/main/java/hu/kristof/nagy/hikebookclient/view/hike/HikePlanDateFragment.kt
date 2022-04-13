@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanDateBinding
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanDateViewModel
+import java.util.*
 
 @AndroidEntryPoint
 class HikePlanDateFragment : Fragment() {
@@ -76,9 +77,9 @@ class HikePlanDateFragment : Fragment() {
 
             binding.lifecycleOwner = viewLifecycleOwner
             timePickerFragment.hourRes.observe(viewLifecycleOwner) { hourRes ->
-                hour = hourRes
+                hour = hourRes.get(Calendar.HOUR_OF_DAY)
                 date?.let {
-                    viewModel.forecast(args.userRoute.points, it, hourRes)
+                    viewModel.forecast(args.userRoute.points, it, hourRes.get(Calendar.HOUR_OF_DAY))
                 }
             }
         }
