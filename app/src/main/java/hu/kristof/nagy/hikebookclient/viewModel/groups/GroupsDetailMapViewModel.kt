@@ -30,6 +30,11 @@ class GroupsDetailMapViewModel @Inject constructor(
     val deleteRes: LiveData<Result<Boolean>>
         get() = _deleteRes
 
+    /**
+     * Variable indicating that the deletion has finished.
+     */
+    var deleteFinished = true
+
     private var _addToMyMapRes = MutableLiveData<Result<Boolean>>()
     val addToMyMapRes: LiveData<Result<Boolean>>
         get() = _addToMyMapRes
@@ -63,6 +68,7 @@ class GroupsDetailMapViewModel @Inject constructor(
     }
 
     fun onDelete(groupName: String, routeName: String) {
+        deleteFinished = false
         viewModelScope.launch {
             _deleteRes.value = groupRouteRepository.deleteRoute(groupName, routeName)
         }

@@ -55,11 +55,14 @@ class GroupsDetailListFragment : Fragment() {
                 }
             }
             deleteRes.observe(viewLifecycleOwner) { res ->
-                handleResult(context, res) { deleteRes ->
-                    throwGenericErrorOr(context, deleteRes) {
-                        Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
-                        viewModel.loadRoutesOfGroup(args.groupName) // refresh
+                if (!viewModel.deleteFinished) {
+                    handleResult(context, res) { deleteRes ->
+                        throwGenericErrorOr(context, deleteRes) {
+                            Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
+                            viewModel.loadRoutesOfGroup(args.groupName) // refresh
+                        }
                     }
+                    viewModel.deleteFinished = true
                 }
             }
             addToMyMapRes.observe(viewLifecycleOwner) { res ->
