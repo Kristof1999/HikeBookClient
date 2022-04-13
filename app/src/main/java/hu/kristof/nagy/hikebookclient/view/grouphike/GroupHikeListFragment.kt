@@ -10,10 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
 import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
 
+@AndroidEntryPoint
 class GroupHikeListFragment : Fragment() {
     private lateinit var binding: FragmentGroupHikeListBinding
 
