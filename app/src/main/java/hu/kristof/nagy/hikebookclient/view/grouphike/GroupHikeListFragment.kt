@@ -8,9 +8,11 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
+import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
 
 class GroupHikeListFragment : Fragment() {
     private lateinit var binding: FragmentGroupHikeListBinding
@@ -30,6 +32,9 @@ class GroupHikeListFragment : Fragment() {
 
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
+        val viewModel: GroupHikeListViewModel by viewModels()
+        viewModel.listGroupHikes(isConnectedPage)
+
         val adapter = GroupHikeListAdapter(isConnectedPage,
             GroupHikeClickListener(
             generalConnectListener = { groupHikeName ->
@@ -42,6 +47,10 @@ class GroupHikeListFragment : Fragment() {
             }
         ))
         binding.groupHikeListRecyclerView.adapter = adapter
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.groupHikes.observe(viewLifecycleOwner) { groupHikes ->
+            adapter.submitList(groupHikes.toMutableList())
+        }
     }
 
     companion object {
