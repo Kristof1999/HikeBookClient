@@ -249,5 +249,20 @@
     <fragment
         android:id="@+id/groupHikeFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.grouphike.GroupHikeFragment"
-        android:label="GroupHikeFragment" />
+        android:label="GroupHikeFragment" >
+        <action
+            android:id="@+id/action_groupHikeFragment_to_groupHikeDetailFragment"
+            app:destination="@id/groupHikeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/groupHikeDetailFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.grouphike.GroupHikeDetailFragment"
+        android:label="GroupHikeDetailFragment" >
+        <argument
+            android:name="groupHikeName"
+            app:argType="string" />
+        <argument
+            android:name="isConnectedPage"
+            app:argType="boolean" />
+    </fragment>
 </navigation>

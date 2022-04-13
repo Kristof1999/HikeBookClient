@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
 
 class GroupHikeListFragment : Fragment() {
     private lateinit var binding: FragmentGroupHikeListBinding
-    private var isConnectedPage: Boolean? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,9 +28,19 @@ class GroupHikeListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)
+        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
-        val adapter = GroupHikeListAdapter()
+        val adapter = GroupHikeListAdapter(isConnectedPage,
+            GroupHikeClickListener(
+            generalConnectListener = { groupHikeName ->
+                Toast.makeText(requireContext(), groupHikeName, Toast.LENGTH_SHORT).show()
+            },
+            detailNavListener = { groupHikeName ->
+                val directions = GroupHikeFragmentDirections
+                    .actionGroupHikeFragmentToGroupHikeDetailFragment(groupHikeName, isConnectedPage)
+                findNavController().navigate(directions)
+            }
+        ))
         binding.groupHikeListRecyclerView.adapter = adapter
     }
 
