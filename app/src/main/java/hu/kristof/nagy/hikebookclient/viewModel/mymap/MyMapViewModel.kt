@@ -68,8 +68,6 @@ class MyMapViewModel @Inject constructor(
     }
 
     fun createGroupHike(dateTime: Calendar, routeName: String, groupHikeName: String) {
-        // TODO: create groupHike with a batched write on the server
-        // 2 creation: route and groupHike
         if (groupHikeName.isEmpty())
             throw IllegalArgumentException("A csoportos túra neve nem lehet üres.")
         if (groupHikeName.contains("/"))
