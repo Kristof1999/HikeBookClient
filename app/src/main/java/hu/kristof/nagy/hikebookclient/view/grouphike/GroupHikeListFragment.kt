@@ -43,9 +43,9 @@ class GroupHikeListFragment : Fragment() {
             generalConnectListener = { groupHikeName, dateTime ->
                 viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime)
             },
-            detailNavListener = { groupHikeName ->
+            detailNavListener = { groupHikeName, dateTime ->
                 val directions = GroupHikeFragmentDirections
-                    .actionGroupHikeFragmentToGroupHikeDetailFragment(groupHikeName, isConnectedPage)
+                    .actionGroupHikeFragmentToGroupHikeDetailFragment(groupHikeName, isConnectedPage, dateTime)
                 findNavController().navigate(directions)
             }
         ))

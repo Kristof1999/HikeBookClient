@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
+import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.routes.Route
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,6 +24,10 @@ class GroupHikeDetailViewModel @Inject constructor(
     val participants: LiveData<List<String>>
         get() = _participants
 
+    private var _generalConnectRes = MutableLiveData<Boolean>()
+    val generalConnectRes: LiveData<Boolean>
+        get() = _generalConnectRes
+
     fun loadRoute(groupHikeName: String) {
         viewModelScope.launch {
             _route.value = groupHikeRepository.loadRoute(groupHikeName)
@@ -31,6 +37,14 @@ class GroupHikeDetailViewModel @Inject constructor(
     fun listParticipants(groupHikeName: String) {
         viewModelScope.launch {
             _participants.value = groupHikeRepository.listParticipants(groupHikeName)
+        }
+    }
+
+    fun generalConnect(groupHikeName: String, isConnectedPage: Boolean, dateTime: DateTime) {
+        viewModelScope.launch {
+            groupHikeRepository.generalConnect(groupHikeName, isConnectedPage, dateTime).collect {
+                _generalConnectRes.value = it
+            }
         }
     }
 }

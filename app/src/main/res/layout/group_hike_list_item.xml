@@ -21,7 +21,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> clickListener.onDetailNav(groupHikeName)}" >
+        android:onClick="@{() -> clickListener.onDetailNav(groupHikeName, dateTimeObj)}" >
 
         <TextView
             android:id="@+id/groupHikeListItemGroupHikeNameTv"

@@ -69,8 +69,8 @@ class GroupHikeDiffCallback : DiffUtil.ItemCallback<GroupHikeListHelper>() {
 
 class GroupHikeClickListener(
     private val generalConnectListener: (groupHikeName: String, dateTime: DateTime) -> Unit,
-    private val detailNavListener: (groupHikeName: String) -> Unit
+    private val detailNavListener: (groupHikeName: String, dateTime: DateTime) -> Unit
 ) {
     fun onGeneralConnect(groupHikeName: String, dateTime: DateTime) = generalConnectListener(groupHikeName, dateTime)
-    fun onDetailNav(groupHikeName: String) = detailNavListener(groupHikeName)
+    fun onDetailNav(groupHikeName: String, dateTime: DateTime) = detailNavListener(groupHikeName, dateTime)
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
@@ -49,9 +50,22 @@ class GroupHikeDetailFragment : MapFragment() {
                 text = "Csatlakozás"
             }
         }
-
+        
         val viewModel: GroupHikeDetailViewModel by viewModels()
+        binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
+            viewModel.generalConnect(args.groupHikeName, args.isConnectedPage, args.dateTime)
+        }
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
+            if (generalConnectRes) {
+                findNavController().navigate(
+                    R.id.action_groupHikeDetailFragment_to_groupHikeFragment
+                )
+            } else {
+                Toast.makeText(context, "Valami hiba történt.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         viewModel.route.observe(viewLifecycleOwner) { route ->
             route.toPolyline().apply {
                 setOnClickListener { _, _, _ ->

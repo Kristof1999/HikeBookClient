@@ -264,5 +264,11 @@
         <argument
             android:name="isConnectedPage"
             app:argType="boolean" />
+        <action
+            android:id="@+id/action_groupHikeDetailFragment_to_groupHikeFragment"
+            app:destination="@id/groupHikeFragment" />
+        <argument
+            android:name="dateTime"
+            app:argType="hu.kristof.nagy.hikebookclient.model.DateTime" />
     </fragment>
 </navigation>
