@@ -52,4 +52,18 @@ class GroupHikeRepository @Inject constructor(
     suspend fun listParticipants(groupHikeName: String): List<String> {
         return service.listParticipants(groupHikeName)
     }
+
+    suspend fun generalConnect(
+        groupHikeName: String,
+        isConnectedPage: Boolean,
+        dateTime: DateTime
+    ): Flow<Boolean> {
+        return dataStore.data.map {
+            it[Constants.DATA_STORE_USER_NAME]
+        }.map { userName ->
+            service.generalGroupHikeConnect(groupHikeName, userName!!, isConnectedPage, dateTime)
+        }
+    }
+
+
 }

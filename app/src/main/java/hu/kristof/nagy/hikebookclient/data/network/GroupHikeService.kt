@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.data.network
 
+import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeCreateHelper
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -24,4 +25,12 @@ interface GroupHikeService {
     suspend fun listParticipants(
         @Path("groupHikeName") groupHikeName: String
     ): List<String>
+
+    @PUT("groupHike/{groupHikeName}/{userName}/{isConnectedPage}")
+    suspend fun generalGroupHikeConnect(
+        @Path("groupHikeName") groupHikeName: String,
+        @Path("userName") userName: String,
+        @Path("isConnectedPage") isConnectedPage: Boolean,
+        @Body dateTime: DateTime
+    ): Boolean
 }

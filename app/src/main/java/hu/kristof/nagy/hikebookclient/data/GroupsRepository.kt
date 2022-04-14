@@ -37,7 +37,7 @@ class GroupsRepository @Inject constructor(
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            service.generalConnect(groupName, userName!!, isConnectedPage)
+            service.generalGroupConnect(groupName, userName!!, isConnectedPage)
         }
     }
 }
