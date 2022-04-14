@@ -44,4 +44,8 @@ class GroupHikeRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun loadRoute(groupHikeName: String): Route {
+        return service.loadGroupHikeRoute(groupHikeName)
+    }
 }
