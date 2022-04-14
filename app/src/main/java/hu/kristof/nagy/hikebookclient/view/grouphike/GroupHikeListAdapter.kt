@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hu.kristof.nagy.hikebookclient.databinding.GroupHikeListItemBinding
+import hu.kristof.nagy.hikebookclient.model.DateTime
+import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
 
 class GroupHikeListAdapter(
     private val isConnectedPage: Boolean,
     private val clickListener: GroupHikeClickListener
-) : ListAdapter<String, GroupHikeListAdapter.ViewHolder>(GroupHikeDiffCallback()) {
+) : ListAdapter<GroupHikeListHelper, GroupHikeListAdapter.ViewHolder>(GroupHikeDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent, isConnectedPage, clickListener)
     }
@@ -25,8 +27,10 @@ class GroupHikeListAdapter(
         private val isConnectedPage: Boolean,
         private val clickListener: GroupHikeClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(groupHikeName: String) {
-            binding.groupHikeName = groupHikeName
+        fun bind(helper: GroupHikeListHelper) {
+            binding.groupHikeName = helper.groupHikeName
+            binding.dateTimeStr = helper.dateTime.toString()
+            binding.dateTimeObj = helper.dateTime
             binding.clickListener = clickListener
             binding.groupHikeListItemGeneralConnectButton.apply {
                 if (isConnectedPage) {
@@ -53,20 +57,20 @@ class GroupHikeListAdapter(
     }
 }
 
-class GroupHikeDiffCallback : DiffUtil.ItemCallback<String>() {
-    override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
-        return oldItem == newItem
+class GroupHikeDiffCallback : DiffUtil.ItemCallback<GroupHikeListHelper>() {
+    override fun areItemsTheSame(oldItem: GroupHikeListHelper, newItem: GroupHikeListHelper): Boolean {
+        return oldItem.groupHikeName == newItem.groupHikeName
     }
 
-    override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+    override fun areContentsTheSame(oldItem: GroupHikeListHelper, newItem: GroupHikeListHelper): Boolean {
         return oldItem == newItem
     }
 }
 
 class GroupHikeClickListener(
-    private val generalConnectListener: (groupHikeName: String) -> Unit,
+    private val generalConnectListener: (groupHikeName: String, dateTime: DateTime) -> Unit,
     private val detailNavListener: (groupHikeName: String) -> Unit
 ) {
-    fun onGeneralConnect(groupHikeName: String) = generalConnectListener(groupHikeName)
+    fun onGeneralConnect(groupHikeName: String, dateTime: DateTime) = generalConnectListener(groupHikeName, dateTime)
     fun onDetailNav(groupHikeName: String) = detailNavListener(groupHikeName)
 }

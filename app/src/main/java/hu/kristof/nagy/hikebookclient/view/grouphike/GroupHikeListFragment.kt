@@ -40,8 +40,8 @@ class GroupHikeListFragment : Fragment() {
 
         val adapter = GroupHikeListAdapter(isConnectedPage,
             GroupHikeClickListener(
-            generalConnectListener = { groupHikeName ->
-                viewModel.generalConnect(groupHikeName, isConnectedPage)
+            generalConnectListener = { groupHikeName, dateTime ->
+                viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime)
             },
             detailNavListener = { groupHikeName ->
                 val directions = GroupHikeFragmentDirections

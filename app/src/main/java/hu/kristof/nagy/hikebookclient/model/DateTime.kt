@@ -4,4 +4,8 @@ package hu.kristof.nagy.hikebookclient.model
 data class DateTime(
     val year: Int, val month: Int, val dayOfMonth: Int,
     val hourOfDay: Int, val minute: Int
-)
+) {
+    override fun toString(): String {
+        return "$year-$month-$dayOfMonth, $hourOfDay:$minute";
+    }
+}

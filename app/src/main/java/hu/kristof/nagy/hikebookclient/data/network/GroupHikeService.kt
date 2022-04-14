@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.data.network
 
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeCreateHelper
+import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -12,7 +13,7 @@ interface GroupHikeService {
     suspend fun listGroupHikes(
         @Path("userName") userName: String,
         @Path("isConnectedPage") isConnectedPage: Boolean
-    ): List<String>
+    ): List<GroupHikeListHelper>
 
     @PUT("groupHike/{userName}/{groupHikeName}")
     suspend fun createGroupHike(

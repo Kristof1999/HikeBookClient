@@ -6,6 +6,7 @@ import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeCreateHelper
+import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +20,7 @@ class GroupHikeRepository @Inject constructor(
 ) {
     suspend fun listGroupHikes(
         isConnectedPage: Boolean
-    ): Flow<List<String>> {
+    ): Flow<List<GroupHikeListHelper>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
