@@ -93,6 +93,13 @@ class GroupHikeDetailFragment : MapFragment() {
         }
         viewModel.loadRoute(args.groupHikeName)
 
+        val adapter = GroupHikeDetailParticipantsListAdapter()
+        viewModel.participants.observe(viewLifecycleOwner) { participants ->
+            adapter.submitList(participants.toMutableList())
+        }
+        binding.groupHikeDetailRecyclerView.adapter = adapter
+        viewModel.listParticipants(args.groupHikeName)
+
         map = binding.groupHikeDetailMap.apply {
             setStartZoomAndCenter()
             setTileSource(TileSourceFactory.MAPNIK)

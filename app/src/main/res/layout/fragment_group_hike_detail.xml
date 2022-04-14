@@ -30,7 +30,6 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="2"
             app:layout_constraintBottom_toTopOf="@+id/groupHikeDetailRecyclerView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -38,13 +37,15 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/groupHikeDetailRecyclerView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="1"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/groupHikeDetailAddToMyMapButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/groupHikeDetailMap" />
 
         <Button
             android:id="@+id/groupHikeDetailGeneralConnectButton"

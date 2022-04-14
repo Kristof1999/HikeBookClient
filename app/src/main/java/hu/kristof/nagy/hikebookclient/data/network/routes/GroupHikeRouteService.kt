@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface GroupHikeRouteService {
-    @GET("groupHike/{groupHikeName}")
+    @GET("groupHike/routes/{groupHikeName}")
     suspend fun loadGroupHikeRoute(
         @Path("groupHikeName") groupHikeName: String
     ): Route

@@ -19,4 +19,9 @@ interface GroupHikeService {
         @Path("groupHikeName") groupHikeName: String,
         @Body helper: GroupHikeCreateHelper
     ): Boolean
+
+    @GET("groupHike/{groupHikeName}")
+    suspend fun listParticipants(
+        @Path("groupHikeName") groupHikeName: String
+    ): List<String>
 }

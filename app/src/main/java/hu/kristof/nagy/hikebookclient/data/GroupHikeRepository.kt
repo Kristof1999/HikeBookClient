@@ -48,4 +48,8 @@ class GroupHikeRepository @Inject constructor(
     suspend fun loadRoute(groupHikeName: String): Route {
         return service.loadGroupHikeRoute(groupHikeName)
     }
+
+    suspend fun listParticipants(groupHikeName: String): List<String> {
+        return service.listParticipants(groupHikeName)
+    }
 }

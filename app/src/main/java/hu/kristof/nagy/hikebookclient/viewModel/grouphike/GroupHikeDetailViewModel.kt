@@ -18,9 +18,19 @@ class GroupHikeDetailViewModel @Inject constructor(
     val route: LiveData<Route>
         get() = _route
 
+    private var _participants = MutableLiveData<List<String>>()
+    val participants: LiveData<List<String>>
+        get() = _participants
+
     fun loadRoute(groupHikeName: String) {
         viewModelScope.launch {
             _route.value = groupHikeRepository.loadRoute(groupHikeName)
+        }
+    }
+
+    fun listParticipants(groupHikeName: String) {
+        viewModelScope.launch {
+            _participants.value = groupHikeRepository.listParticipants(groupHikeName)
         }
     }
 }
