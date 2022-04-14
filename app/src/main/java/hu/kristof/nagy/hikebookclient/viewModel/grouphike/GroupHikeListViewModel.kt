@@ -36,6 +36,8 @@ class GroupHikeListViewModel @Inject constructor(
         viewModelScope.launch {
             groupHikeRepository.generalConnect(groupHikeName, isConnectedPage, dateTime).collect {
                 _generalConnectRes.value = it
+                if (it) // refresh if successful
+                    listGroupHikes(isConnectedPage)
             }
         }
     }
