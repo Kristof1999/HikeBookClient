@@ -11,11 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeDetailBinding
-import hu.kristof.nagy.hikebookclient.util.MapFragment
-import hu.kristof.nagy.hikebookclient.util.MarkerUtils
-import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeDetailViewModel
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -57,12 +55,25 @@ class GroupHikeDetailFragment : MapFragment() {
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            if (generalConnectRes) {
+            throwGenericErrorOr(context, generalConnectRes) {
                 findNavController().navigate(
                     R.id.action_groupHikeDetailFragment_to_groupHikeFragment
                 )
-            } else {
-                Toast.makeText(context, "Valami hiba történt.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
+            try {
+                viewModel.addToMyMap()
+            } catch (e: IllegalStateException) {
+                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+            }
+        }
+        viewModel.addToMyMapRes.observe(viewLifecycleOwner) { res ->
+            if (!viewModel.addToMyMapFinished) {
+                handleResult(context, res) { addToMyMapRes ->
+                    throwGenericErrorOr(context, addToMyMapRes, "A felvétel sikeres!")
+                }
+                viewModel.addToMyMapFinished = true
             }
         }
 
