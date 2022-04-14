@@ -7,4 +7,9 @@ data class UserRoute(
     override val routeName: String,
     override val points: List<Point>,
     override val description: String
-) : Route(routeName, points, description)
+) : Route(routeName, points, description) {
+    init {
+        checkRouteName(routeName)
+        checkPointSize(points)
+    }
+}

@@ -27,21 +27,10 @@ import org.osmdroid.views.overlay.Polyline
 
 @Parcelize
 open class Route(
-    private val _routeName: String,
-    private val _points: List<Point>,
-    private val _description: String
-    ) : Parcelable {
-    open val routeName: String
-        get() = _routeName
-    open val points: List<Point>
-        get() = _points
+    open val routeName: String,
+    open val points: List<Point>,
     open val description: String
-        get() = _description
-
-    init {
-        checkRouteName(_routeName)
-        checkPointSize(_points)
-    }
+    ) : Parcelable {
 
     fun toPolyline(): Polyline {
         val polyline = Polyline()
@@ -53,14 +42,14 @@ open class Route(
 
     fun getLength() = toPolyline().distance
 
-    private fun checkRouteName(routeName: String) {
+    protected fun checkRouteName(routeName: String) {
         if (routeName.isEmpty())
             throw IllegalArgumentException("Az útvonal név nem lehet üres.")
         if (routeName.contains("/"))
             throw IllegalArgumentException("Az útvonal név nem tartalmazhat / jelet.")
     }
 
-    private fun checkPointSize(points: List<Point>) {
+    protected fun checkPointSize(points: List<Point>) {
         if (points.size < 2)
             throw IllegalArgumentException("Az útvonalnak legalább 2 pontból kell állnia.")
     }
