@@ -28,6 +28,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
@@ -38,6 +39,7 @@ import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.view.hike.TimePickerFragment
 import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapListViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import java.util.*
 
@@ -66,38 +68,43 @@ class MyMapListFragment : Fragment() {
             )
         }
 
-        val viewModel: MyMapViewModel by activityViewModels()
-        setupAdapter(viewModel)
+        val myMapViewModel: MyMapViewModel by activityViewModels()
+        val myMapListViewModel: MyMapListViewModel by viewModels()
+        setupAdapter(myMapListViewModel, myMapViewModel)
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.deleteRes.observe(viewLifecycleOwner) {
-            onDeleteResult(viewModel, it)
+        myMapListViewModel.deleteRes.observe(viewLifecycleOwner) {
+            onDeleteResult(myMapViewModel, myMapListViewModel, it)
         }
-        viewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
-            if (!viewModel.groupHikeCreationFinished) {
+        myMapListViewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
+            if (!myMapListViewModel.groupHikeCreationFinished) {
                 handleResult(context, res) { groupHikeCreateRes ->
                     showGenericErrorOr(context, groupHikeCreateRes, "A csoportos túra létrehozása sikeres!")
                 }
-                viewModel.groupHikeCreationFinished = true
+                myMapListViewModel.groupHikeCreationFinished = true
             }
         }
     }
 
     private fun onDeleteResult(
-        viewModel: MyMapViewModel,
+        myMapViewModel: MyMapViewModel,
+        myMapListViewModel: MyMapListViewModel,
         res: Result<Boolean>
     ) {
-        if (!viewModel.deleteFinished) {
+        if (!myMapListViewModel.deleteFinished) {
             handleResult(context, res) { deleteRes ->
                 showGenericErrorOr(context, deleteRes) {
                     Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
-                    viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
+                    myMapViewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
                 }
             }
-            viewModel.deleteFinished = true
+            myMapListViewModel.deleteFinished = true
         }
     }
 
-    private fun setupAdapter(viewModel: MyMapViewModel) {
+    private fun setupAdapter(
+        myMapListViewModel: MyMapListViewModel,
+        myMapViewModel: MyMapViewModel
+    ) {
         val adapter = MyMapListAdapter(
             MyMapClickListener(
                 editListener = { routeName ->
@@ -106,24 +113,21 @@ class MyMapListFragment : Fragment() {
                     findNavController().navigate(action)
                 },
                 deleteListener = { routeName ->
-                    viewModel.deleteRoute(routeName)
+                    myMapListViewModel.deleteRoute(routeName)
                 },
                 printListener = { routeName ->
-                    val route = viewModel.getRoute(routeName)
                     val action = MyMapListFragmentDirections
-                        .actionMyMapListFragmentToMyMapDetailFragment(route)
+                        .actionMyMapListFragmentToMyMapDetailFragment(routeName)
                     findNavController().navigate(action)
                 },
                 detailNavListener = { routeName ->
-                    val route = viewModel.getRoute(routeName)
                     val action = MyMapListFragmentDirections
-                        .actionMyMapListFragmentToMyMapDetailFragment(route)
+                        .actionMyMapListFragmentToMyMapDetailFragment(routeName)
                     findNavController().navigate(action)
                 },
                 hikePlanListener = { routeName ->
-                    val userRoute = viewModel.getRoute(routeName)
                     val directions = MyMapListFragmentDirections
-                        .actionMyMapListFragmentToHikePlanDateFragment(userRoute)
+                        .actionMyMapListFragmentToHikePlanDateFragment(routeName)
                     findNavController().navigate(directions)
                 },
                 groupHikeCreateListener = { routeName ->
@@ -136,7 +140,7 @@ class MyMapListFragment : Fragment() {
                     )
                     groupHikeCreateDialog.text.observe(viewLifecycleOwner) { name ->
                         try {
-                            viewModel.createGroupHike(dateTime, routeName, name)
+                            myMapListViewModel.createGroupHike(dateTime, routeName, name)
                         } catch (e: IllegalArgumentException) {
                             Toast.makeText(context, e.message!!, Toast.LENGTH_LONG).show()
                         }
@@ -166,21 +170,20 @@ class MyMapListFragment : Fragment() {
         )
         binding.myMapRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routes.observe(viewLifecycleOwner) { res ->
+        myMapViewModel.routes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) {
                 adapter.submitList(it.toMutableList().map { it.routeName })
             }
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return if (item.itemId == R.id.helpMenuItem) {
-            val requestType = HelpRequestType.MY_MAP_LIST
-            val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
-            findNavController().navigate(action)
-            true
-        } else {
-            super.onOptionsItemSelected(item)
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+     if (item.itemId == R.id.helpMenuItem) {
+        val requestType = HelpRequestType.MY_MAP_LIST
+        val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+        findNavController().navigate(action)
+        true
+    } else {
+        super.onOptionsItemSelected(item)
     }
 }

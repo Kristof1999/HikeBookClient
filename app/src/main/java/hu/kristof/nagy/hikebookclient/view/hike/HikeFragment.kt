@@ -43,7 +43,6 @@ import java.util.*
 @AndroidEntryPoint
 class HikeFragment : MapFragment() {
     private lateinit var binding: FragmentHikeBinding
-    private val viewModel: HikeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,13 +72,14 @@ class HikeFragment : MapFragment() {
             onMyLocation(fusedLocationProviderClient, myLocationMarker)
         }
 
+        val viewModel: HikeViewModel by viewModels()
         val args: HikeFragmentArgs by navArgs()
         binding.lifecycleOwner = viewLifecycleOwner
 
         viewModel.loadUserRoute(args.routeName)
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
-                myGeofence(fusedLocationProviderClient, myLocationMarker, userRoute, args)
+                myGeofence(fusedLocationProviderClient, myLocationMarker, userRoute, args, viewModel)
                 mapCustomization(userRoute)
             }
         }
@@ -118,7 +118,8 @@ class HikeFragment : MapFragment() {
         fusedLocationProviderClient: FusedLocationProviderClient,
         myLocationMarker: Marker,
         route: UserRoute,
-        args: HikeFragmentArgs
+        args: HikeFragmentArgs,
+        viewModel: HikeViewModel
     ) {
         var startTime = 0L
         binding.hikeStartButton.setOnClickListener {
@@ -144,7 +145,7 @@ class HikeFragment : MapFragment() {
         }
 
         binding.hikeFinishButton.setOnClickListener {
-            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime)) {
+            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
                 findNavController().navigate(
                     R.id.action_hikeFragment_to_myMapFragment
                 )
@@ -152,7 +153,7 @@ class HikeFragment : MapFragment() {
         }
 
         binding.hikeBackwardsPlanTransportButton.setOnClickListener {
-            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime)) {
+            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
                 val isForward = false
                 val directions = HikeFragmentDirections
                     .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
@@ -165,7 +166,8 @@ class HikeFragment : MapFragment() {
         fusedLocationProviderClient: FusedLocationProviderClient,
         myLocationMarker: Marker,
         route: UserRoute,
-        startTime: Long
+        startTime: Long,
+        viewModel: HikeViewModel
     ): Boolean {
         onMyLocation(fusedLocationProviderClient, myLocationMarker)
         val currentPosition = myLocationMarker.position
