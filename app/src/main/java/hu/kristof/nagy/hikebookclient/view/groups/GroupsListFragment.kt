@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
-import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
+import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsListViewModel
 
 @AndroidEntryPoint
@@ -44,7 +44,7 @@ class GroupsListFragment : Fragment() {
         }
 
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
-            throwGenericErrorOr(context, res) {
+            showGenericErrorOr(context, res) {
                 if (isConnectedPage) {
                     Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG).show()
                 } else {

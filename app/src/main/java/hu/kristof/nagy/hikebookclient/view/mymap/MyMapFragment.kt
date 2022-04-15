@@ -57,16 +57,16 @@ class MyMapFragment : MapFragment() {
         }
     }
 
-    private fun setClickListeners() {
-        binding.switchToMyMapListButton.setOnClickListener {
+    private fun setClickListeners() = binding.apply {
+        switchToMyMapListButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_myMapFragment_to_myMapListFragment
             )
         }
-        binding.routeCreateFab.setOnClickListener {
+        routeCreateFab.setOnClickListener {
             val routeType = RouteType.USER
             val directions = MyMapFragmentDirections
-                .actionMyMapFragmentToRouteCreateFragment(routeType, null, null)
+                .actionMyMapFragmentToRouteCreateFragment(routeType, null)
             findNavController().navigate(directions)
         }
     }

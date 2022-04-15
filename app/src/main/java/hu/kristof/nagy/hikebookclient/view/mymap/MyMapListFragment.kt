@@ -33,7 +33,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
+import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.view.hike.TimePickerFragment
@@ -75,7 +75,7 @@ class MyMapListFragment : Fragment() {
         viewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.groupHikeCreationFinished) {
                 handleResult(context, res) { groupHikeCreateRes ->
-                    throwGenericErrorOr(context, groupHikeCreateRes, "A csoportos túra létrehozása sikeres!")
+                    showGenericErrorOr(context, groupHikeCreateRes, "A csoportos túra létrehozása sikeres!")
                 }
                 viewModel.groupHikeCreationFinished = true
             }
@@ -88,7 +88,7 @@ class MyMapListFragment : Fragment() {
     ) {
         if (!viewModel.deleteFinished) {
             handleResult(context, res) { deleteRes ->
-                throwGenericErrorOr(context, deleteRes) {
+                showGenericErrorOr(context, deleteRes) {
                     Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
                     viewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
                 }

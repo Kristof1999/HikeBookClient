@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeDetailBinding
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeDetailViewModel
 import org.osmdroid.events.MapEventsReceiver
@@ -40,27 +41,74 @@ class GroupHikeDetailFragment : MapFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args: GroupHikeDetailFragmentArgs by navArgs()
-        binding.groupHikeDetailNameTv.text = args.groupHikeName
-        binding.groupHikeDetailGeneralConnectButton.apply {
-            if (args.isConnectedPage) {
-                text = "Elhagyás"
-            } else {
-                text = "Csatlakozás"
-            }
-        }
-        
+        adaptView(args)
+
         val viewModel: GroupHikeDetailViewModel by viewModels()
-        binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
-            viewModel.generalConnect(args.groupHikeName, args.isConnectedPage, args.dateTime)
-        }
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            throwGenericErrorOr(context, generalConnectRes) {
-                findNavController().navigate(
-                    R.id.action_groupHikeDetailFragment_to_groupHikeFragment
-                )
+
+        setupGeneralConnect(viewModel, args)
+
+        setupAddToMyMap(viewModel)
+
+        viewModel.route.observe(viewLifecycleOwner) { route ->
+            showRoutePolylineOnMap(route)
+
+            showRoutePointsOnMap(route)
+
+            closeInfoWindows()
+
+            binding.groupHikeDetailDescriptionTv.text = route.description
+
+            map.invalidate()
+        }
+        viewModel.loadRoute(args.groupHikeName)
+
+        setupRecyclerView(viewModel, args)
+
+        initMap()
+    }
+
+    private fun closeInfoWindows() {
+        MapEventsOverlay(object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                InfoWindow.closeAllInfoWindowsOn(map)
+                return true
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                return true
+            }
+        }).also { mapEventsOverlay ->
+            map.overlays.add(0, mapEventsOverlay)
+        }
+    }
+
+    private fun showRoutePointsOnMap(route: Route) {
+        for (point in route.points) {
+            Marker(map).apply {
+                setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
+                icon = MarkerUtils.getMarkerIcon(point.type, resources)
+                title = point.title
+                position = point.toGeoPoint()
+            }.also { marker ->
+                map.overlays.add(marker)
             }
         }
+    }
+
+    private fun showRoutePolylineOnMap(route: Route) {
+        route.toPolyline().apply {
+            setOnClickListener { _, _, _ ->
+                Toast.makeText(context, route.routeName, Toast.LENGTH_SHORT).show()
+                return@setOnClickListener true
+            }
+        }.also { polyline ->
+            map.overlays.add(polyline)
+            map.setMapCenterOnPolylineCenter(polyline)
+        }
+    }
+
+    private fun setupAddToMyMap(viewModel: GroupHikeDetailViewModel) {
         binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
             try {
                 viewModel.addToMyMap()
@@ -71,63 +119,57 @@ class GroupHikeDetailFragment : MapFragment() {
         viewModel.addToMyMapRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.addToMyMapFinished) {
                 handleResult(context, res) { addToMyMapRes ->
-                    throwGenericErrorOr(context, addToMyMapRes, "A felvétel sikeres!")
+                    showGenericErrorOr(context, addToMyMapRes, "A felvétel sikeres!")
                 }
                 viewModel.addToMyMapFinished = true
             }
         }
+    }
 
-        viewModel.route.observe(viewLifecycleOwner) { route ->
-            route.toPolyline().apply {
-                setOnClickListener { _, _, _ ->
-                    Toast.makeText(context, route.routeName, Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener true
-                }
-            }.also { polyline ->
-                map.overlays.add(polyline)
-                map.setMapCenterOnPolylineCenter(polyline)
-            }
-
-            for (point in route.points) {
-                Marker(map).apply {
-                    setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-                    icon = MarkerUtils.getMarkerIcon(point.type, resources)
-                    title = point.title
-                    position = point.toGeoPoint()
-                }.also { marker ->
-                    map.overlays.add(marker)
-                }
-            }
-
-            MapEventsOverlay(object : MapEventsReceiver {
-                override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                    InfoWindow.closeAllInfoWindowsOn(map)
-                    return true
-                }
-
-                override fun longPressHelper(p: GeoPoint?): Boolean {
-                    return true
-                }
-            }).also { mapEventsOverlay ->
-                map.overlays.add(0, mapEventsOverlay)
-            }
-
-            binding.groupHikeDetailDescriptionTv.text = route.description
-
-            map.invalidate()
+    private fun setupGeneralConnect(
+        viewModel: GroupHikeDetailViewModel,
+        args: GroupHikeDetailFragmentArgs
+    ) {
+        binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
+            viewModel.generalConnect(args.groupHikeName, args.isConnectedPage, args.dateTime)
         }
-        viewModel.loadRoute(args.groupHikeName)
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
+            showGenericErrorOr(context, generalConnectRes) {
+                findNavController().navigate(
+                    R.id.action_groupHikeDetailFragment_to_groupHikeFragment
+                )
+            }
+        }
+    }
 
+    private fun setupRecyclerView(
+        viewModel: GroupHikeDetailViewModel,
+        args: GroupHikeDetailFragmentArgs
+    ) {
         val adapter = GroupHikeDetailParticipantsListAdapter()
         viewModel.participants.observe(viewLifecycleOwner) { participants ->
             adapter.submitList(participants.toMutableList())
         }
         binding.groupHikeDetailRecyclerView.adapter = adapter
         viewModel.listParticipants(args.groupHikeName)
+    }
 
+    private fun initMap() {
         map = binding.groupHikeDetailMap.apply {
             setStartZoomAndCenter()
             setTileSource(TileSourceFactory.MAPNIK)
+            addCopyRightOverlay()
+        }
+    }
+
+    private fun adaptView(args: GroupHikeDetailFragmentArgs) = binding.apply {
+        groupHikeDetailNameTv.text = args.groupHikeName
+        groupHikeDetailGeneralConnectButton.apply {
+            if (args.isConnectedPage) {
+                text = "Elhagyás"
+            } else {
+                text = "Csatlakozás"
+            }
         }
     }
 }

@@ -62,8 +62,6 @@ class RouteCreateViewModel @Inject constructor(
             RouteType.USER -> onUserRouteCreate(routeName, hikeDescription, points)
             RouteType.GROUP ->
                 onGroupRouteCreate(routeName, hikeDescription, points, args.groupName!!)
-            RouteType.GROUP_HIKE ->
-                onGroupHikeRouteCreate(routeName, hikeDescription, points, args.groupHikeName!!)
         }
     }
 
@@ -96,14 +94,5 @@ class RouteCreateViewModel @Inject constructor(
                 groupName, routeName, points, hikeDescription
             )
         }
-    }
-
-    private fun onGroupHikeRouteCreate(
-        routeName: String,
-        hikeDescription: String,
-        points: List<Point>,
-        groupHikeName: String
-    ) {
-
     }
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import hu.kristof.nagy.hikebookclient.R
 
-fun throwGenericErrorOr(context: Context?, res:Boolean, msg: String) {
+fun showGenericErrorOr(context: Context?, res:Boolean, msg: String) {
     if (res) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     } else {
@@ -14,7 +14,7 @@ fun throwGenericErrorOr(context: Context?, res:Boolean, msg: String) {
     }
 }
 
-fun throwGenericErrorOr(context: Context?, res:Boolean, f: () -> Unit) {
+fun showGenericErrorOr(context: Context?, res:Boolean, f: () -> Unit) {
     if (res) {
         f.invoke()
     } else {

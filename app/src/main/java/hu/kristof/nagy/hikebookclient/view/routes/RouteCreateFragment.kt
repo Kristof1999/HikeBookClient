@@ -102,12 +102,7 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
                         .actionRouteCreateFragmentToGroupsDetailFragment(groupName, true)
                     findNavController().navigate(directions)
                 }
-                // TODO: update
-                RouteType.GROUP_HIKE -> findNavController().navigate(
-                    R.id.action_routeCreateFragment_to_groupsDetailFragment
-                )
             }
-
         }
     }
 

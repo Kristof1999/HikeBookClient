@@ -17,7 +17,7 @@ import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
 import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
+import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 
 @AndroidEntryPoint
@@ -46,7 +46,7 @@ class GroupsDetailFragment : Fragment() {
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            throwGenericErrorOr(context, generalConnectRes) {
+            showGenericErrorOr(context, generalConnectRes) {
                 findNavController(requireActivity(), R.id.navHostFragment).navigate(
                     R.id.action_groupsDetailFragment_to_groupsFragment
                 )

@@ -55,10 +55,6 @@
             android:name="groupName"
             app:argType="string"
             app:nullable="true" />
-        <argument
-            android:name="groupHikeName"
-            app:argType="string"
-            app:nullable="true" />
         <action
             android:id="@+id/action_routeCreateFragment_to_groupsDetailFragment"
             app:destination="@id/groupsDetailFragment" />

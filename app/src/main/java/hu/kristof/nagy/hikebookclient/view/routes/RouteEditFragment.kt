@@ -50,15 +50,13 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         super.onViewCreated(view, savedInstanceState)
 
         val args: RouteEditFragmentArgs by navArgs()
+
         initMap(args)
 
         binding.routeEditSpinner.onItemSelectedListener = this
         SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
-        val routeName = args.route.routeName
-        binding.routeEditRouteNameEditText.setText(routeName)
-        val hikeDescription = args.route.description
-        binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
+        adaptView(args)
 
         val viewModel: RouteEditViewModel by viewModels()
         setup(viewModel, args.route.points)
@@ -71,6 +69,13 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         }
 
         MapUtils.setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
+    }
+
+    private fun adaptView(args: RouteEditFragmentArgs) {
+        val routeName = args.route.routeName
+        binding.routeEditRouteNameEditText.setText(routeName)
+        val hikeDescription = args.route.description
+        binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -108,11 +113,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
                         .actionRouteEditFragmentToGroupsDetailFragment(groupName, true)
                     findNavController().navigate(directions)
                 }
-                RouteType.GROUP_HIKE -> {
-                    // TODO: implement
-                }
             }
-
         }
     }
 

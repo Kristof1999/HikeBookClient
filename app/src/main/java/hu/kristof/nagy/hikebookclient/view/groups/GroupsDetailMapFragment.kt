@@ -65,7 +65,7 @@ class GroupsDetailMapFragment : MapFragment() {
         }
         viewModel.addFromMyMapRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { addFromMyMapRes ->
-                throwGenericErrorOr(context, addFromMyMapRes, "A felvétel sikeres!")
+                showGenericErrorOr(context, addFromMyMapRes, "A felvétel sikeres!")
             }
         }
     }
@@ -84,7 +84,7 @@ class GroupsDetailMapFragment : MapFragment() {
     private fun onRouteCreate(groupName: String) {
         val routeType = RouteType.GROUP
         val directions = GroupsDetailFragmentDirections
-            .actionGroupsDetailFragmentToRouteCreateFragment(routeType, groupName, null)
+            .actionGroupsDetailFragmentToRouteCreateFragment(routeType, groupName)
         findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
     }
 

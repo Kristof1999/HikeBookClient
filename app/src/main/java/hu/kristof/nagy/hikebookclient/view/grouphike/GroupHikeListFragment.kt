@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
-import hu.kristof.nagy.hikebookclient.util.throwGenericErrorOr
+import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
 
 @AndroidEntryPoint
@@ -55,7 +55,7 @@ class GroupHikeListFragment : Fragment() {
             adapter.submitList(groupHikes.toMutableList())
         }
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            throwGenericErrorOr(context, generalConnectRes) {
+            showGenericErrorOr(context, generalConnectRes) {
                 if (isConnectedPage) {
                     Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT).show()
                 } else {
