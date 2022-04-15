@@ -41,13 +41,13 @@ class GroupsDetailMapViewModel @Inject constructor(
 
     fun loadRoutesOfGroup(groupName: String) {
         viewModelScope.launch {
-            _routes.value = groupRouteRepository.loadRoutes(groupName)
+            _routes.value = groupRouteRepository.loadGroupRoutes(groupName)
         }
     }
 
     fun onAddFromMyMap(route: Route, groupName: String) {
         viewModelScope.launch {
-            _addFromMyMapRes.value = groupRouteRepository.createRoute(
+            _addFromMyMapRes.value = groupRouteRepository.createGroupRoute(
                 groupName, route.routeName, route.points, route.description
             )
             // refresh if successful
@@ -70,7 +70,7 @@ class GroupsDetailMapViewModel @Inject constructor(
     fun onDelete(groupName: String, routeName: String) {
         deleteFinished = false
         viewModelScope.launch {
-            _deleteRes.value = groupRouteRepository.deleteRoute(groupName, routeName)
+            _deleteRes.value = groupRouteRepository.deleteGroupRoute(groupName, routeName)
         }
     }
 

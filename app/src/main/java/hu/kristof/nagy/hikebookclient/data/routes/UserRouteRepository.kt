@@ -26,6 +26,16 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
+    override suspend fun loadUserRoute(routeName: String): Flow<Result<UserRoute>> {
+        return dataStore.data.map {
+            it[Constants.DATA_STORE_USER_NAME]
+        }.map { userName ->
+            handleRequest {
+                service.loadUserRoute(userName!!, routeName)
+            }
+        }
+    }
+
     override suspend fun deleteUserRoute(routeName: String): Flow<Result<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]

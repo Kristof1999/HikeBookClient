@@ -17,6 +17,12 @@ interface GroupRouteService {
         @Path("groupName") groupName: String
     ): List<GroupRoute>
 
+    @GET("groups/routes/{groupName}/{routeName}")
+    suspend fun loadGroupRoute(
+        @Path("groupName") groupName: String,
+        @Path("routeName") routeName: String
+    ): GroupRoute
+
     @DELETE("groups/routes/{groupName}/{routeName}")
     suspend fun deleteGroupRoute(
         @Path("groupName") groupName: String,

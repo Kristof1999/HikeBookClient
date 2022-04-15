@@ -78,9 +78,8 @@ class GroupsDetailListFragment : Fragment() {
         args: GroupsDetailListFragmentArgs
     ) = GroupsDetailListAdapter(GroupsDetailListClickListener(
         editListener = { routeName ->
-            val route = viewModel.getRoute(routeName)
             val directions = GroupsDetailFragmentDirections
-                .actionGroupsDetailFragmentToRouteEditFragment(route, RouteType.GROUP, args.groupName)
+                .actionGroupsDetailFragmentToRouteEditFragment(RouteType.GROUP, args.groupName, routeName)
             findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
         },
         deleteListener = { routeName ->

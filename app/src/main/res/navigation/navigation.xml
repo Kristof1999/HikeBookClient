@@ -66,9 +66,6 @@
         <action
             android:id="@+id/action_routeEditFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
-        <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.Route" />
         <action
             android:id="@+id/action_routeEditFragment_to_groupsDetailFragment"
             app:destination="@id/groupsDetailFragment" />
@@ -79,6 +76,9 @@
             android:name="groupName"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/browseListFragment"

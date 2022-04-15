@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface IUserRouteRepository {
     suspend fun loadUserRoutes(): Flow<Result<List<UserRoute>>>
+    suspend fun loadUserRoute(routeName: String): Flow<Result<UserRoute>>
     suspend fun deleteUserRoute(routeName: String): Flow<Result<Boolean>>
     suspend fun createUserRoute(
         routeName: String,

@@ -90,7 +90,7 @@ class RouteCreateViewModel @Inject constructor(
         groupName: String
     ) {
         viewModelScope.launch {
-            _routeCreateRes.value = groupRouteRepository.createRoute(
+            _routeCreateRes.value = groupRouteRepository.createGroupRoute(
                 groupName, routeName, points, hikeDescription
             )
         }

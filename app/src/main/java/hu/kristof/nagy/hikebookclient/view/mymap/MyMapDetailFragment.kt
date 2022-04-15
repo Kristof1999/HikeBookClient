@@ -73,7 +73,7 @@ class MyMapDetailFragment : MapFragment() {
     ) = with(binding) {
         myMapDetailEditButton.setOnClickListener {
             val directions = MyMapDetailFragmentDirections
-                .actionMyMapDetailFragmentToRouteEditFragment(args.route, RouteType.USER, null)
+                .actionMyMapDetailFragmentToRouteEditFragment(RouteType.USER, null, args.route.routeName)
             findNavController().navigate(directions)
         }
         myMapDetailDeleteButton.setOnClickListener {

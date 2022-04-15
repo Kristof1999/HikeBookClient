@@ -10,19 +10,25 @@ import javax.inject.Inject
 class GroupRouteRepository  @Inject constructor(
     private val service: Service
 ) {
-    suspend fun loadRoutes(groupName: String): Result<List<GroupRoute>> {
+    suspend fun loadGroupRoutes(groupName: String): Result<List<GroupRoute>> {
         return handleRequest {
             service.loadGroupRoutes(groupName)
         }
     }
 
-    suspend fun deleteRoute(groupName: String, routeName: String): Result<Boolean> {
+    suspend fun loadGroupRoute(groupName: String, routeName: String): Result<GroupRoute> {
+        return handleRequest {
+            service.loadGroupRoute(groupName, routeName)
+        }
+    }
+
+    suspend fun deleteGroupRoute(groupName: String, routeName: String): Result<Boolean> {
         return handleRequest {
             service.deleteGroupRoute(groupName, routeName)
         }
     }
 
-    suspend fun createRoute(
+    suspend fun createGroupRoute(
         groupName: String,
         routeName: String,
         points: List<Point>,

@@ -49,21 +49,27 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args: RouteEditFragmentArgs by navArgs()
-
-        initMap(args)
+        initMap()
 
         binding.routeEditSpinner.onItemSelectedListener = this
         SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
 
-        adaptView(args)
-
+        val args: RouteEditFragmentArgs by navArgs()
         val viewModel: RouteEditViewModel by viewModels()
-        setup(viewModel, args.route.points)
-        binding.routeEditEditButton.setOnClickListener {
-            onRouteEdit(viewModel, args.route)
-        }
         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.loadRoute(args)
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                showRoutePointsOnMap(viewModel, route.points)
+                adaptView(route)
+                showRoutePolylineOnMap(route)
+            }
+        }
+
+        binding.routeEditEditButton.setOnClickListener {
+            onRouteEdit(viewModel)
+        }
+
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
             onRouteEditResult(it, args)
         }
@@ -71,10 +77,10 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         MapUtils.setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
     }
 
-    private fun adaptView(args: RouteEditFragmentArgs) {
-        val routeName = args.route.routeName
+    private fun adaptView(route: Route) {
+        val routeName = route.routeName
         binding.routeEditRouteNameEditText.setText(routeName)
-        val hikeDescription = args.route.description
+        val hikeDescription = route.description
         binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
     }
 
@@ -87,15 +93,16 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onRouteEdit(
-        viewModel: RouteEditViewModel,
-        oldRoute: Route
+        viewModel: RouteEditViewModel
     ) {
         try {
             val newRouteName = binding.routeEditRouteNameEditText.text.toString()
             val newHikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
-            viewModel.onRouteEdit(oldRoute, newRouteName, newHikeDescription)
+            viewModel.onRouteEdit(newRouteName, newHikeDescription)
         } catch (e: IllegalArgumentException) {
             Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+        } catch (e: IllegalStateException) {
+            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -117,19 +124,21 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun initMap(args: RouteEditFragmentArgs) {
+    private fun initMap() {
         map = binding.routeEditMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             addCopyRightOverlay()
-
-            val polyline = args.route.toPolyline()
-            setMapCenterOnPolylineCenter(polyline)
-            setZoomForPolyline(polyline)
+            setStartZoomAndCenter()
         }
     }
 
-    // adapter design pattern/wrapper kellene ehelyett
-    private fun setup(
+    private fun showRoutePolylineOnMap(route: Route) {
+        val polyline = route.toPolyline()
+        map.setMapCenterOnPolylineCenter(polyline)
+        map.setZoomForPolyline(polyline)
+    }
+
+    private fun showRoutePointsOnMap(
         viewModel: RouteEditViewModel,
         points: List<Point>
     ) {
