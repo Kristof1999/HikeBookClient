@@ -7,50 +7,70 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.WeatherRepository
-import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.weather.WeatherResponse
+import hu.kristof.nagy.hikebookclient.util.routeLoaded
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HikePlanDateViewModel @Inject constructor(
-    private val repository: WeatherRepository
+    private val repository: WeatherRepository,
+    private val userRouteRepository: UserRouteRepository
     ) : ViewModel() {
 
     private var _forecastRes = MutableLiveData<String>()
     val forecastRes: LiveData<String>
         get() = _forecastRes
 
-    // TODO: test -> edge cases
-    fun forecast(points: List<Point>, date: String, hour: Int) {
-        // TODO: cache result -> 10 min window
+    private var _route = MutableLiveData<Result<Route>>()
+    val route: LiveData<Result<Route>>
+        get() = _route
+
+    fun loadRoute(routeName: String) {
         viewModelScope.launch {
-            var res = ""
+            userRouteRepository.loadUserRoute(routeName).collect {
+                _route.value = it
+            }
+        }
+    }
 
-            val responseStart = repository.forecast(
-                points.first().latitude, points.first().longitude,
-            )
-            val dayStartIdx = findDate(date, responseStart)
-            val idxStart = findHour(hour, responseStart, dayStartIdx)
-            res += "Túra kezdetén:\n\n" + mapResponse(responseStart, idxStart)
+    // TODO: test -> edge cases
+    fun forecast(date: String, hour: Int) {
+        if (routeLoaded(_route)) {
+            val points = _route.value!!.getOrNull()!!.points
 
-            val pointsMiddle = points.size/2
-            val responseMiddle = repository.forecast(
-                points[pointsMiddle].latitude, points[pointsMiddle].longitude,
-            )
-            // could be a 6h increment if we made the
-            // first call at 9:59 and the second at
-            // 10:01, because see api specifications
-            val idxMiddle = idxStart + 1 // 3h increment
-            res += "Túra felénél:\n\n" + mapResponse(responseMiddle, idxMiddle)
+            // TODO: cache result -> 10 min window
+            viewModelScope.launch {
+                var res = ""
 
-            val responseEnd = repository.forecast(
-                points.last().latitude, points.last().longitude,
-            )
-            val idxEnd = idxMiddle + 1 // 3h increment
-            res += "Túra végénél:\n\n" + mapResponse(responseEnd, idxEnd)
+                val responseStart = repository.forecast(
+                    points.first().latitude, points.first().longitude,
+                )
+                val dayStartIdx = findDate(date, responseStart)
+                val idxStart = findHour(hour, responseStart, dayStartIdx)
+                res += "Túra kezdetén:\n\n" + mapResponse(responseStart, idxStart)
 
-            _forecastRes.value = res
+                val pointsMiddle = points.size/2
+                val responseMiddle = repository.forecast(
+                    points[pointsMiddle].latitude, points[pointsMiddle].longitude,
+                )
+                // could be a 6h increment if we made the
+                // first call at 9:59 and the second at
+                // 10:01, because see api specifications
+                val idxMiddle = idxStart + 1 // 3h increment
+                res += "Túra felénél:\n\n" + mapResponse(responseMiddle, idxMiddle)
+
+                val responseEnd = repository.forecast(
+                    points.last().latitude, points.last().longitude,
+                )
+                val idxEnd = idxMiddle + 1 // 3h increment
+                res += "Túra végénél:\n\n" + mapResponse(responseEnd, idxEnd)
+
+                _forecastRes.value = res
+            }
         }
     }
 

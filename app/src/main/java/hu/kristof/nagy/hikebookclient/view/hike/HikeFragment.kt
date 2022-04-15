@@ -26,7 +26,10 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
+import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -40,6 +43,7 @@ import java.util.*
 @AndroidEntryPoint
 class HikeFragment : MapFragment() {
     private lateinit var binding: FragmentHikeBinding
+    private val viewModel: HikeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,8 +58,7 @@ class HikeFragment : MapFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        map = binding.hikeMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
+        initMap()
 
         val myLocationMarker = Marker(map)
         myLocationMarker.icon = AppCompatResources.getDrawable(
@@ -71,7 +74,15 @@ class HikeFragment : MapFragment() {
         }
 
         val args: HikeFragmentArgs by navArgs()
-        myGeofence(fusedLocationProviderClient, myLocationMarker, args)
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        viewModel.loadUserRoute(args.routeName)
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { userRoute ->
+                myGeofence(fusedLocationProviderClient, myLocationMarker, userRoute, args)
+                mapCustomization(userRoute)
+            }
+        }
 
         binding.hikeFinishButton.setOnLongClickListener {
             findNavController().navigate(
@@ -82,7 +93,7 @@ class HikeFragment : MapFragment() {
         binding.hikeBackwardsPlanTransportButton.setOnLongClickListener {
             val isForward = false
             val directions = HikeFragmentDirections
-                .actionHikeFragmentToHikePlanTransportFragment(args.userRoute, isForward)
+                .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
             findNavController().navigate(directions)
             return@setOnLongClickListener true
         }
@@ -93,21 +104,27 @@ class HikeFragment : MapFragment() {
                 .show()
         }
 
-        mapCustomization(args)
-
         map.invalidate()
+    }
+
+    private fun initMap() {
+        map = binding.hikeMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            addCopyRightOverlay()
+        }
     }
 
     private fun myGeofence(
         fusedLocationProviderClient: FusedLocationProviderClient,
         myLocationMarker: Marker,
+        route: UserRoute,
         args: HikeFragmentArgs
     ) {
         var startTime = 0L
         binding.hikeStartButton.setOnClickListener {
             onMyLocation(fusedLocationProviderClient, myLocationMarker)
             val currentPosition = myLocationMarker.position
-            val startPosition = args.userRoute.points.first().toGeoPoint()
+            val startPosition = route.points.first().toGeoPoint()
 
             if (isPointInCircle(
                     currentPosition,
@@ -127,7 +144,7 @@ class HikeFragment : MapFragment() {
         }
 
         binding.hikeFinishButton.setOnClickListener {
-            if (onFinish(fusedLocationProviderClient, myLocationMarker, args, startTime)) {
+            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime)) {
                 findNavController().navigate(
                     R.id.action_hikeFragment_to_myMapFragment
                 )
@@ -135,10 +152,10 @@ class HikeFragment : MapFragment() {
         }
 
         binding.hikeBackwardsPlanTransportButton.setOnClickListener {
-            if (onFinish(fusedLocationProviderClient, myLocationMarker, args, startTime)) {
+            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime)) {
                 val isForward = false
                 val directions = HikeFragmentDirections
-                    .actionHikeFragmentToHikePlanTransportFragment(args.userRoute, isForward)
+                    .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
                 findNavController().navigate(directions)
             }
         }
@@ -147,12 +164,12 @@ class HikeFragment : MapFragment() {
     private fun onFinish(
         fusedLocationProviderClient: FusedLocationProviderClient,
         myLocationMarker: Marker,
-        args: HikeFragmentArgs,
+        route: UserRoute,
         startTime: Long
     ): Boolean {
         onMyLocation(fusedLocationProviderClient, myLocationMarker)
         val currentPosition = myLocationMarker.position
-        val endPosition = args.userRoute.points.last().toGeoPoint()
+        val endPosition = route.points.last().toGeoPoint()
 
         if (isPointInCircle(
                 currentPosition,
@@ -162,8 +179,7 @@ class HikeFragment : MapFragment() {
         ) {
             Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
             val finishTime = Calendar.getInstance().timeInMillis
-            val viewModel: HikeViewModel by viewModels()
-            viewModel.computeAndUpdateAvgSpeed(args.userRoute, startTime, finishTime)
+            viewModel.computeAndUpdateAvgSpeed(route, startTime, finishTime)
             return true
         } else {
             Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)
@@ -180,11 +196,11 @@ class HikeFragment : MapFragment() {
         return distance <= radius*radius
     }
 
-    private fun mapCustomization(args: HikeFragmentArgs) {
-        map.overlays.add(args.userRoute.toPolyline())
+    private fun mapCustomization(route: Route) {
+        map.overlays.add(route.toPolyline())
 
         FolderOverlay().also { folderOverlay ->
-            for (p in args.userRoute.points) {
+            for (p in route.points) {
                 folderOverlay.add(Marker(map).apply {
                     setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
                     title = p.title
@@ -195,10 +211,10 @@ class HikeFragment : MapFragment() {
             map.overlays.add(folderOverlay)
         }
 
-        addCircleToMap(args.userRoute.points.first().toGeoPoint())
-        addCircleToMap(args.userRoute.points.last().toGeoPoint())
+        addCircleToMap(route.points.first().toGeoPoint())
+        addCircleToMap(route.points.last().toGeoPoint())
 
-        map.setMapCenterOnPolylineStart(args.userRoute.toPolyline())
+        map.setMapCenterOnPolylineStart(route.toPolyline())
         val controller = map.controller
         controller.setZoom(18.0)
         map.addCopyRightOverlay()

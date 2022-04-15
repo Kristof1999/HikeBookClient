@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanDateBinding
+import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanDateViewModel
 import java.util.*
 
@@ -33,9 +34,10 @@ class HikePlanDateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: HikePlanDateViewModel by viewModels()
-        val args: HikePlanDateFragmentArgs by navArgs()
+        setupForecasting(viewModel)
 
-        setupForecasting(viewModel, args)
+        val args: HikePlanDateFragmentArgs by navArgs()
+        viewModel.loadRoute(args.routeName)
 
         setClickListeners(args)
     }
@@ -44,19 +46,18 @@ class HikePlanDateFragment : Fragment() {
         hikePlanDateTransportPlanButton.setOnClickListener {
             val isForward = true
             val directions = HikePlanDateFragmentDirections
-                .actionHikePlanDateFragmentToHikePlanTransportFragment(args.userRoute, isForward)
+                .actionHikePlanDateFragmentToHikePlanTransportFragment(isForward, args.routeName)
             findNavController().navigate(directions)
         }
         hikePlanDateHikeStartButton.setOnClickListener {
             val directions = HikePlanDateFragmentDirections
-                .actionHikePlanDateFragmentToHikeFragment(args.userRoute)
+                .actionHikePlanDateFragmentToHikeFragment(args.routeName)
             findNavController().navigate(directions)
         }
     }
 
     private fun setupForecasting(
-        viewModel: HikePlanDateViewModel,
-        args: HikePlanDateFragmentArgs
+        viewModel: HikePlanDateViewModel
     ) {
         // TODO: refactor by using one calendar here, example: myMapList
         var date: String? = null
@@ -66,7 +67,9 @@ class HikePlanDateFragment : Fragment() {
         datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateRes ->
             date = dateRes
             hour?.let {
-                viewModel.forecast(args.userRoute.points, dateRes, it)
+                handleIllegalStateAndArgument(context) {
+                    viewModel.forecast(dateRes, it)
+                }
             }
         }
         binding.hikePlanDateDatePickerButton.setOnClickListener {
@@ -80,7 +83,9 @@ class HikePlanDateFragment : Fragment() {
             timePickerFragment.timeRes.observe(viewLifecycleOwner) { hourRes ->
                 hour = hourRes.get(Calendar.HOUR_OF_DAY)
                 date?.let {
-                    viewModel.forecast(args.userRoute.points, it, hourRes.get(Calendar.HOUR_OF_DAY))
+                    handleIllegalStateAndArgument(context) {
+                        viewModel.forecast(it, hourRes.get(Calendar.HOUR_OF_DAY))
+                    }
                 }
             }
         }

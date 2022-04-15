@@ -10,9 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBinding
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
@@ -23,6 +26,7 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
+@AndroidEntryPoint
 class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanTransportBinding
     private val viewModel: HikePlanTransportViewModel by viewModels()
@@ -43,26 +47,13 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         initMap()
 
         val args: HikePlanTransportFragmentArgs by navArgs()
-        if (args.isForward) {
-            val hikeStartMarker = Marker(map)
-            val startPoint = args.userRoute.points.first()
-            hikeStartMarker.position = startPoint.toGeoPoint()
-            hikeStartMarker.title = startPoint.title
-            hikeStartMarker.icon = AppCompatResources.getDrawable(
-                requireContext(), org.osmdroid.library.R.drawable.marker_default
-            )
-            map.overlays.add(hikeStartMarker)
-        } else {
-            val hikeEndMarker = Marker(map)
-            val startPoint = args.userRoute.points.last()
-            hikeEndMarker.position = startPoint.toGeoPoint()
-            hikeEndMarker.title = startPoint.title
-            hikeEndMarker.icon = AppCompatResources.getDrawable(
-                requireContext(), org.osmdroid.library.R.drawable.marker_default
-            )
-            map.overlays.add(hikeEndMarker)
+        viewModel.loadRoute(args.routeName)
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                adaptView(args, route)
+            }
         }
-
 
         binding.hikePlanTransportTransportMeanSpinner.onItemSelectedListener = this
         SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportTransportMeanSpinner)
@@ -78,6 +69,32 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         addMapEventsOverlay()
 
         map.invalidate()
+    }
+
+    private fun adaptView(args: HikePlanTransportFragmentArgs, route: Route) {
+        if (args.isForward) {
+            Marker(map).apply {
+                val startPoint = route.points.first()
+                position = startPoint.toGeoPoint()
+                title = startPoint.title
+                icon = AppCompatResources.getDrawable(
+                    requireContext(), org.osmdroid.library.R.drawable.marker_default
+                )
+            }.also { hikeStartMarker ->
+                map.overlays.add(hikeStartMarker)
+            }
+        } else {
+            Marker(map).apply {
+                val startPoint = route.points.last()
+                position = startPoint.toGeoPoint()
+                title = startPoint.title
+                icon = AppCompatResources.getDrawable(
+                    requireContext(), org.osmdroid.library.R.drawable.marker_default
+                )
+            }.also { hikeEndMarker ->
+                map.overlays.add(hikeEndMarker)
+            }
+        }
     }
 
     private fun addMapEventsOverlay() {
@@ -96,41 +113,51 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     }
 
     private fun handleStartAndEndPointChanges() {
-        val startMarker = Marker(map).apply {
+        Marker(map).apply {
             position = viewModel.startPoint
             setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
             icon = MarkerUtils.getMarkerIcon(MarkerType.SET, resources)
+
+            viewModel.startPointChanged.observe(viewLifecycleOwner) {
+                position = viewModel.startPoint
+                map.invalidate()
+            }
+        }.also { startMarker ->
+            map.overlays.add(startMarker)
         }
-        map.overlays.add(startMarker)
-        viewModel.startPointChanged.observe(viewLifecycleOwner) {
-            startMarker.position = viewModel.startPoint
-            map.invalidate()
-        }
-        val endMarker = Marker(map).apply {
+
+        Marker(map).apply {
             position = viewModel.endPoint
             setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
             icon = MarkerUtils.getMarkerIcon(MarkerType.NEW, resources)
-        }
-        map.overlays.add(endMarker)
-        viewModel.endPointChanged.observe(viewLifecycleOwner) {
-            endMarker.position = viewModel.endPoint
-            map.invalidate()
+
+            viewModel.endPointChanged.observe(viewLifecycleOwner) {
+                position = viewModel.endPoint
+                map.invalidate()
+            }
+        }.also { endMarker ->
+            map.overlays.add(endMarker)
         }
     }
 
     private fun handleStartAndEndSwitches() {
-        binding.hikePlanTransportStartSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setStartTo(isChecked)
+        binding.apply {
+            hikePlanTransportStartSwitch.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setStartTo(isChecked)
+            }
+            hikePlanTransportEndSwitch.setOnCheckedChangeListener { _, isChecked ->
+                viewModel.setEndTo(isChecked)
+            }
         }
-        binding.hikePlanTransportEndSwitch.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.setEndTo(isChecked)
-        }
+
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.switchOffStart.observe(viewLifecycleOwner) {
-            binding.hikePlanTransportStartSwitch.isChecked = false
-        }
-        viewModel.switchOffEnd.observe(viewLifecycleOwner) {
-            binding.hikePlanTransportEndSwitch.isChecked = false
+        viewModel.apply {
+            switchOffStart.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportStartSwitch.isChecked = false
+            }
+            switchOffEnd.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportEndSwitch.isChecked = false
+            }
         }
     }
 
@@ -148,7 +175,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         val transportType = viewModel.transportType
         val directions = HikePlanTransportFragmentDirections
             .actionHikePlanFragmentToHikeTransportFragment(
-                startPoint, endPoint, transportType, args.userRoute, args.isForward
+                startPoint, endPoint, transportType, args.isForward, args.routeName
             )
         findNavController().navigate(directions)
     }

@@ -141,11 +141,11 @@
             android:id="@+id/action_hikePlanFragment_to_hikeTransportFragment"
             app:destination="@id/hikeTransportFragment" />
         <argument
-            android:name="userRoute"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
-        <argument
             android:name="isForward"
             app:argType="boolean" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/hikeTransportFragment"
@@ -163,38 +163,35 @@
         <action
             android:id="@+id/action_hikeTransportFragment_to_hikeFragment"
             app:destination="@id/hikeFragment" />
-        <argument
-            android:name="userRoute"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
         <action
             android:id="@+id/action_hikeTransportFragment_to_myMapFragment"
             app:destination="@id/myMapFragment" />
         <argument
             android:name="isForward"
             app:argType="boolean" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/hikePlanDateFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanDateFragment"
         android:label="HikePlanDateFragment" >
-        <argument
-            android:name="userRoute"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
         <action
             android:id="@+id/action_hikePlanDateFragment_to_hikePlanTransportFragment"
             app:destination="@id/hikePlanTransportFragment" />
         <action
             android:id="@+id/action_hikePlanDateFragment_to_hikeFragment"
             app:destination="@id/hikeFragment" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/hikeFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikeFragment"
         android:label="fragment_hike"
         tools:layout="@layout/fragment_hike" >
-        <argument
-            android:name="userRoute"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.UserRoute" />
         <action
             android:id="@+id/action_hikeFragment_to_myMapFragment"
             app:destination="@id/myMapFragment"
@@ -203,6 +200,9 @@
         <action
             android:id="@+id/action_hikeFragment_to_hikePlanTransportFragment"
             app:destination="@id/hikePlanTransportFragment" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/groupsFragment"

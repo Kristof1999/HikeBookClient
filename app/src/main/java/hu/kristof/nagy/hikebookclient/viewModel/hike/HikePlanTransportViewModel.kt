@@ -3,11 +3,21 @@ package hu.kristof.nagy.hikebookclient.viewModel.hike
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.view.hike.TransportType
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
+import javax.inject.Inject
 
-class HikePlanTransportViewModel : ViewModel() {
+@HiltViewModel
+class HikePlanTransportViewModel @Inject constructor(
+    private val userRouteRepository: UserRouteRepository
+) : ViewModel() {
     var transportType = TransportType.BICYCLE
 
     var startPoint: GeoPoint = Constants.START_POINT
@@ -37,6 +47,18 @@ class HikePlanTransportViewModel : ViewModel() {
      * Indicates if we want to put the destination point on the map.
      */
     private var isEnd = false
+
+    private var _route = MutableLiveData<Result<Route>>()
+    val route: LiveData<Result<Route>>
+        get() = _route
+
+    fun loadRoute(routeName: String) {
+        viewModelScope.launch {
+            userRouteRepository.loadUserRoute(routeName).collect {
+                _route.value = it
+            }
+        }
+    }
 
     fun setStartTo(value: Boolean) {
         if (value && isEnd) {
