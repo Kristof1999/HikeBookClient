@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.view.drawToBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.print.PrintHelper
@@ -15,12 +16,14 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapDetailBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.MapFragment
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
 import hu.kristof.nagy.hikebookclient.util.setZoomForPolyline
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapListViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
@@ -45,20 +48,28 @@ class MyMapDetailFragment : MapFragment() {
         super.onViewCreated(view, savedInstanceState)
         initMap()
 
-        val viewModel: MyMapViewModel by activityViewModels()
+        val viewModel: MyMapListViewModel by viewModels()
+        binding.lifecycleOwner = viewLifecycleOwner
         val args: MyMapDetailFragmentArgs by navArgs()
-        adaptView(args)
+
+        viewModel.loadUserRoute(args.routeName)
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { userRoute ->
+                adaptView(args, userRoute)
+            }
+        }
+
 
         setClickListeners(args, viewModel)
-        binding.lifecycleOwner = viewLifecycleOwner
+
         viewModel.deleteRes.observe(viewLifecycleOwner) {
             onDeleteResult(it)
         }
     }
 
-    private fun adaptView(args: MyMapDetailFragmentArgs) {
-        binding.myMapDetailRouteNameTv.text = args.route.routeName
-        val polyline = args.route.toPolyline()
+    private fun adaptView(args: MyMapDetailFragmentArgs, route: Route) {
+        binding.myMapDetailRouteNameTv.text = args.routeName
+        val polyline = route.toPolyline()
         with(map) {
             setMapCenterOnPolylineCenter(polyline)
             setZoomForPolyline(polyline)
@@ -69,22 +80,22 @@ class MyMapDetailFragment : MapFragment() {
 
     private fun setClickListeners(
         args: MyMapDetailFragmentArgs,
-        viewModel: MyMapViewModel
+        viewModel: MyMapListViewModel
     ) = with(binding) {
         myMapDetailEditButton.setOnClickListener {
             val directions = MyMapDetailFragmentDirections
-                .actionMyMapDetailFragmentToRouteEditFragment(RouteType.USER, null, args.route.routeName)
+                .actionMyMapDetailFragmentToRouteEditFragment(RouteType.USER, null, args.routeName)
             findNavController().navigate(directions)
         }
         myMapDetailDeleteButton.setOnClickListener {
-            viewModel.deleteRoute(args.route.routeName)
+            viewModel.deleteRoute(args.routeName)
         }
         myMapDetailPrintButton.setOnClickListener {
             val bitmap = map.drawToBitmap()
-            PrintHelper(requireContext()).printBitmap(args.route.routeName, bitmap)
+            PrintHelper(requireContext()).printBitmap(args.routeName, bitmap)
         }
         myMapDetailHikePlanFab.setOnClickListener {
-            val userRoute = viewModel.getRoute(args.route.routeName)
+            val userRoute = viewModel.getRoute(args.routeName)
             val directions = MyMapDetailFragmentDirections
                 .actionMyMapDetailFragmentToHikePlanDateFragment(userRoute)
             findNavController().navigate(directions)

@@ -111,15 +111,15 @@
             app:destination="@id/myMapListFragment"
             app:popUpTo="@id/myMapDetailFragment"
             app:popUpToInclusive="true" />
-        <argument
-            android:name="route"
-            app:argType="hu.kristof.nagy.hikebookclient.model.routes.Route" />
         <action
             android:id="@+id/action_myMapDetailFragment_to_routeEditFragment"
             app:destination="@id/routeEditFragment" />
         <action
             android:id="@+id/action_myMapDetailFragment_to_hikePlanDateFragment"
             app:destination="@id/hikePlanDateFragment" />
+        <argument
+            android:name="routeName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/helpFragment"
