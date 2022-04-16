@@ -26,6 +26,8 @@ class GroupsDetailMapViewModel @Inject constructor(
     val addFromMyMapRes: LiveData<Result<Boolean>>
         get() = _addFromMyMapRes
 
+    var addFromMyMapFinished = true
+
     private var _deleteRes = MutableLiveData<Result<Boolean>>()
     val deleteRes: LiveData<Result<Boolean>>
         get() = _deleteRes
@@ -39,6 +41,8 @@ class GroupsDetailMapViewModel @Inject constructor(
     val addToMyMapRes: LiveData<Result<Boolean>>
         get() = _addToMyMapRes
 
+    var addToMyMapFinished = true
+
     fun loadRoutesOfGroup(groupName: String) {
         viewModelScope.launch {
             _routes.value = groupRouteRepository.loadGroupRoutes(groupName)
@@ -46,6 +50,7 @@ class GroupsDetailMapViewModel @Inject constructor(
     }
 
     fun onAddFromMyMap(route: Route, groupName: String) {
+        addFromMyMapFinished = false
         viewModelScope.launch {
             _addFromMyMapRes.value = groupRouteRepository.createGroupRoute(
                 groupName, route.routeName, route.points, route.description
@@ -57,6 +62,7 @@ class GroupsDetailMapViewModel @Inject constructor(
     }
 
     fun onAddToMyMap(routeName: String) {
+        addToMyMapFinished = false
         viewModelScope.launch {
             val route = getRoute(routeName)
             userRouteRepository.createUserRoute(

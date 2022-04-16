@@ -14,6 +14,8 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailListBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 
@@ -59,15 +61,20 @@ class GroupsDetailListFragment : Fragment() {
                     handleResult(context, res) { deleteRes ->
                         showGenericErrorOr(context, deleteRes) {
                             Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
-                            viewModel.loadRoutesOfGroup(args.groupName) // refresh
+                            handleOfflineLoad(requireContext()) {
+                                viewModel.loadRoutesOfGroup(args.groupName) // refresh
+                            }
                         }
                     }
                     viewModel.deleteFinished = true
                 }
             }
             addToMyMapRes.observe(viewLifecycleOwner) { res ->
-                handleResult(context, res) { addToMyMapRes ->
-                    showGenericErrorOr(context, addToMyMapRes, "A hozzáadás sikeres!")
+                if (!viewModel.addToMyMapFinished) {
+                    handleResult(context, res) { addToMyMapRes ->
+                        showGenericErrorOr(context, addToMyMapRes, "A hozzáadás sikeres!")
+                    }
+                    viewModel.addToMyMapFinished = true
                 }
             }
         }
@@ -83,10 +90,14 @@ class GroupsDetailListFragment : Fragment() {
             findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
         },
         deleteListener = { routeName ->
-            viewModel.onDelete(args.groupName, routeName)
+            handleOffline(requireContext()) {
+                viewModel.onDelete(args.groupName, routeName)
+            }
         },
         addToMyMapListener = { routeName ->
-            viewModel.onAddToMyMap(routeName)
+            handleOffline(requireContext()) {
+                viewModel.onAddToMyMap(routeName)
+            }
         }
     ), args.isConnectedPage)
 }

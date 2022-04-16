@@ -13,6 +13,8 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
+import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsListViewModel
 
@@ -36,40 +38,54 @@ class GroupsListFragment : Fragment() {
 
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
+        setupRecyclerView(isConnectedPage)
+
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            onGeneralConnectRes(res, isConnectedPage)
+        }
+    }
+
+    private fun onGeneralConnectRes(res: Boolean, isConnectedPage: Boolean) {
+        showGenericErrorOr(context, res) {
+            if (isConnectedPage) {
+                Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun setupRecyclerView(isConnectedPage: Boolean) {
         val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.groups.observe(viewLifecycleOwner) { groupNames ->
             adapter.submitList(groupNames.toMutableList())
         }
-
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
-            showGenericErrorOr(context, res) {
-                if (isConnectedPage) {
-                    Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG).show()
-                } else {
-                    Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
-                }
-            }
-        }
     }
 
     private fun initAdapter(isConnectedPage: Boolean) = GroupsListAdapter(
         isConnectedPage, GroupsClickListener(
             connectListener = { groupName, isConnectedPage ->
-                viewModel.generalConnect(groupName, isConnectedPage)
+                handleOffline(requireContext()) {
+                    viewModel.generalConnect(groupName, isConnectedPage)
+                }
             },
             detailListener = { groupName, isConnectedPage ->
                 val directions = GroupsFragmentDirections
                     .actionGroupsFragmentToGroupsDetailFragment(groupName, isConnectedPage)
                 findNavController().navigate(directions)
-            })
+            }
+        )
     )
 
     override fun onResume() {
         super.onResume()
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
-        viewModel.listGroups(isConnectedPage)
+        handleOfflineLoad(requireContext()) {
+            viewModel.listGroups(isConnectedPage)
+        }
     }
 
     companion object {

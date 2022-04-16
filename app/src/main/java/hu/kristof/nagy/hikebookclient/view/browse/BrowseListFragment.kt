@@ -12,8 +12,9 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseListBinding
-import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseViewModel
 
 /**
@@ -38,7 +39,9 @@ class BrowseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: BrowseViewModel by viewModels()
-        viewModel.listRoutes()
+        handleOfflineLoad(requireContext()) {
+            viewModel.listRoutes()
+        }
         setupAdapter(viewModel)
     }
 

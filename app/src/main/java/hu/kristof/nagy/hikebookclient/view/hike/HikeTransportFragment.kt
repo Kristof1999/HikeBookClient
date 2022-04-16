@@ -17,6 +17,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeTransportBinding
 import hu.kristof.nagy.hikebookclient.util.MapFragment
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeTransportViewModel
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
@@ -45,8 +46,11 @@ class HikeTransportFragment : MapFragment() {
 
         val viewModel: HikeTransportViewModel by viewModels()
         val args: HikeTransportFragmentArgs by navArgs()
+
         val roadManager = OSRMRoadManager(context, BuildConfig.APPLICATION_ID)
-        viewModel.getRoad(args, roadManager)
+        handleOfflineLoad(requireContext()) {
+            viewModel.getRoad(args, roadManager)
+        }
 
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.roadRes.observe(viewLifecycleOwner) { road ->

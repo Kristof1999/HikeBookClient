@@ -17,6 +17,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.AddFromMyMapDialogBinding
 import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.groups.AddFromMyMapViewModel
 
 @AndroidEntryPoint
@@ -46,7 +47,9 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
             //       OR try to make it work with its own viewLifecycleOwner
             binding.lifecycleOwner = parentFragment?.viewLifecycleOwner
             viewModel.routes.observe(requireParentFragment().viewLifecycleOwner, observer)
-            viewModel.loadRoutesForLoggedInUser()
+            handleOfflineLoad(requireContext()) {
+                viewModel.loadRoutesForLoggedInUser()
+            }
 
             builder.setView(binding.root)
                 .setPositiveButton("OK") { _, _ ->

@@ -61,6 +61,8 @@
     <string name="not_last_point_delete_error_msg">Csak a legutóbb felvett pontot lehet törölni.</string>
     <string name="name_exists_error_msg">Ez a név már foglalt.</string>
     <string name="login_fail_msg">Vagy a név, vagy a jelszó hibás.</string>
+    <string name="offline_once_error_msg">Ehhez a funkcióhoz internetkapcsolat szükséges.</string>
+    <string name="offline_load_error_msg">A legfrisebb adatok betöltéséhez internetkapcsolat szükséges.</string>
 
     <!-- Hike -->
     <string name="transport_types_spinner_description">Travel types</string>

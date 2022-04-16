@@ -37,6 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentStartBinding
 import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
 
 /**
@@ -57,6 +59,7 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.startRegistrationButton.setOnClickListener {
             it.findNavController()
                 .navigate(R.id.action_startFragment_to_registrationFragment)
@@ -70,7 +73,7 @@ class StartFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         val loginViewModel: LoginViewModel by viewModels()
         binding.loginButton.setOnClickListener {
-            onLogin(it, binding, loginViewModel)
+            onLogin(binding, loginViewModel)
         }
         loginViewModel.loginRes.observe(viewLifecycleOwner) { loginRes ->
             onLoginRes(loginRes)
@@ -78,16 +81,15 @@ class StartFragment : Fragment() {
     }
 
     private fun onLogin(
-        view: View,
         binding: FragmentStartBinding,
         loginViewModel: LoginViewModel
     ) {
         val name = binding.nameEditText.text.toString()
         val pswd = binding.passwordEditText.text.toString()
-        try {
-            loginViewModel.onLogin(UserAuth(name, pswd))
-        } catch (e: IllegalArgumentException) {
-            Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        catchAndShowIllegalStateAndArgument(requireContext()) {
+            handleOffline(requireContext()) {
+                loginViewModel.onLogin(UserAuth(name, pswd))
+            }
         }
     }
 

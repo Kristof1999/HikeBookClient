@@ -76,12 +76,14 @@ class HikeFragment : MapFragment() {
         val args: HikeFragmentArgs by navArgs()
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModel.loadUserRoute(args.routeName)
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
                 myGeofence(fusedLocationProviderClient, myLocationMarker, userRoute, args, viewModel)
                 mapCustomization(userRoute)
             }
+        }
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadUserRoute(args.routeName)
         }
 
         binding.hikeFinishButton.setOnLongClickListener {
@@ -145,19 +147,23 @@ class HikeFragment : MapFragment() {
         }
 
         binding.hikeFinishButton.setOnClickListener {
-            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
-                findNavController().navigate(
-                    R.id.action_hikeFragment_to_myMapFragment
-                )
+            handleOffline(requireContext()) {
+                if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
+                    findNavController().navigate(
+                        R.id.action_hikeFragment_to_myMapFragment
+                    )
+                }
             }
         }
 
         binding.hikeBackwardsPlanTransportButton.setOnClickListener {
-            if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
-                val isForward = false
-                val directions = HikeFragmentDirections
-                    .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
-                findNavController().navigate(directions)
+            handleOffline(requireContext()) {
+                if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
+                    val isForward = false
+                    val directions = HikeFragmentDirections
+                        .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
+                    findNavController().navigate(directions)
+                }
             }
         }
     }
@@ -199,7 +205,8 @@ class HikeFragment : MapFragment() {
     }
 
     private fun mapCustomization(route: Route) {
-        map.overlays.add(route.toPolyline())
+        val polyline = route.toPolyline()
+        map.overlays.add(polyline)
 
         FolderOverlay().also { folderOverlay ->
             for (p in route.points) {
@@ -216,9 +223,8 @@ class HikeFragment : MapFragment() {
         addCircleToMap(route.points.first().toGeoPoint())
         addCircleToMap(route.points.last().toGeoPoint())
 
-        map.setMapCenterOnPolylineStart(route.toPolyline())
-        val controller = map.controller
-        controller.setZoom(18.0)
+        map.setMapCenterOnPolylineStart(polyline)
+        map.setZoomForPolyline(polyline)
         map.addCopyRightOverlay()
     }
 

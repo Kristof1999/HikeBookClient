@@ -175,7 +175,7 @@
     </fragment>
     <fragment
         android:id="@+id/hikePlanDateFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanDateFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanStartFragment"
         android:label="HikePlanDateFragment" >
         <action
             android:id="@+id/action_hikePlanDateFragment_to_hikePlanTransportFragment"

@@ -35,6 +35,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRegistrationBinding
 import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.RegistrationViewModel
 
 /**
@@ -60,7 +62,7 @@ class RegistrationFragment : Fragment() {
 
         val registrationViewModel : RegistrationViewModel by viewModels()
         binding.registerButton.setOnClickListener {
-            onRegister(it, binding, registrationViewModel)
+            onRegister(binding, registrationViewModel)
         }
 
         registrationViewModel.registrationRes.observe(viewLifecycleOwner) { registrationRes ->
@@ -69,16 +71,15 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun onRegister(
-        view: View,
         binding: FragmentRegistrationBinding,
         registrationViewModel: RegistrationViewModel
     ) {
         val name = binding.registerNameEditText.text.toString()
         val pswd = binding.registerPasswordEditText.text.toString()
-        try {
-            registrationViewModel.onRegister(UserAuth(name, pswd))
-        } catch (e: IllegalArgumentException) {
-            Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+        catchAndShowIllegalStateAndArgument(requireContext()) {
+            handleOffline(requireContext()) {
+                registrationViewModel.onRegister(UserAuth(name, pswd))
+            }
         }
     }
 

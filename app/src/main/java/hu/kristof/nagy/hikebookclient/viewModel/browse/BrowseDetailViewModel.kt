@@ -36,6 +36,7 @@ class BrowseDetailViewModel @Inject constructor(
         get() = _addRes
 
     fun loadDetails(userName: String, routeName: String) {
+        // TODO: use repository
         viewModelScope.launch {
             _route.value = handleRequest {
                 service.loadUserRoute(userName, routeName)

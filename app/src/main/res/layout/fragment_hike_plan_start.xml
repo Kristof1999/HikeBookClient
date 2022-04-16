@@ -9,10 +9,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.hike.HikePlanDateFragment">
+        tools:context=".view.hike.HikePlanStartFragment">
 
         <Button
-            android:id="@+id/hikePlanDateDatePickerButton"
+            android:id="@+id/hikePlanStartDatePickerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -23,17 +23,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/hikePlanDateTw"
+            android:id="@+id/hikePlanStartTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hikePlanDateDatePickerButton" />
+            app:layout_constraintTop_toBottomOf="@+id/hikePlanStartDatePickerButton" />
 
         <Button
-            android:id="@+id/hikePlanDateHikeStartButton"
+            android:id="@+id/hikePlanStartHikeStartButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -44,7 +44,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/hikePlanDateTransportPlanButton"
+            android:id="@+id/hikePlanStartTransportPlanButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -55,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
-            android:id="@+id/hikePlanDateTimePickerButton"
+            android:id="@+id/hikePlanStartTimePickerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

@@ -15,7 +15,7 @@ fun <P : Route> routeLoaded(route: LiveData<Result<P>>): Boolean {
     }
 }
 
-fun handleIllegalStateAndArgument(context: Context?, f: () -> Unit) {
+fun catchAndShowIllegalStateAndArgument(context: Context?, f: () -> Unit) {
     try {
         f.invoke()
     } catch (e: IllegalStateException) {

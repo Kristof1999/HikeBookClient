@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -53,12 +52,15 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
 
         val args: RouteCreateFragmentArgs by navArgs()
-        binding.routeCreateCreateButton.setOnClickListener {
-            onRouteCreate(args, viewModel)
-        }
+
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
             onRouteCreateResult(it, args)
+        }
+        binding.routeCreateCreateButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                onRouteCreate(args, viewModel)
+            }
         }
 
         MapUtils.setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
@@ -74,14 +76,12 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onRouteCreate(args: RouteCreateFragmentArgs, viewModel: RouteCreateViewModel) {
-        try {
+        catchAndShowIllegalStateAndArgument(requireContext()) {
             viewModel.onRouteCreate(
                 args,
                 binding.routeCreateRouteNameEditText.text.toString(),
                 binding.routeCreateHikeDescriptionEditText.text.toString()
             )
-        } catch (e: IllegalArgumentException) {
-            Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
         }
     }
 

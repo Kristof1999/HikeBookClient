@@ -18,9 +18,12 @@ class GroupsViewModel @Inject constructor(
     val createRes: LiveData<Result<Boolean>>
         get() = _createRes
 
+    var createFinished = true
+
     fun createGroup(name: String) {
         check(name)
 
+        createFinished = false
         viewModelScope.launch {
             repository.createGroup(name).collect { res ->
                 _createRes.value = res

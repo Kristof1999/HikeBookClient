@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,10 +14,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.util.MapFragment
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseDetailViewModel
@@ -50,7 +46,11 @@ class BrowseDetailFragment : MapFragment() {
         val args: BrowseDetailFragmentArgs by navArgs()
 
         val viewModel: BrowseDetailViewModel by viewModels()
-        viewModel.loadDetails(args.userName, args.routeName)
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadDetails(args.userName, args.routeName)
+            // TODO: add listener for when the device is online, we load the details
+        }
+
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->
@@ -81,10 +81,10 @@ class BrowseDetailFragment : MapFragment() {
         viewModel: BrowseDetailViewModel,
         args: BrowseDetailFragmentArgs
     ) {
-        try {
-            viewModel.addToMyMap(args.routeName)
-        } catch (e: IllegalStateException) {
-            Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
+        catchAndShowIllegalStateAndArgument(requireContext()) {
+            handleOffline(requireContext()) {
+                viewModel.addToMyMap(args.routeName)
+            }
         }
     }
 
@@ -99,10 +99,11 @@ class BrowseDetailFragment : MapFragment() {
     }
 
     private fun initMap() {
-        map = binding.browseDetailMap
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.setStartZoomAndCenter()
-        map.addCopyRightOverlay()
+        map = binding.browseDetailMap.apply {
+            setTileSource(TileSourceFactory.MAPNIK)
+            setStartZoomAndCenter()
+            addCopyRightOverlay()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -30,22 +30,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
-import hu.kristof.nagy.hikebookclient.view.hike.TimePickerFragment
-import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapListViewModel
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapDetailViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
-import java.util.*
 
 /**
  * A Fragment to list the routes of the logged in user.
  */
+@AndroidEntryPoint
 class MyMapListFragment : Fragment() {
     private lateinit var binding: FragmentMyMapListBinding
 
@@ -69,40 +69,53 @@ class MyMapListFragment : Fragment() {
         }
 
         val myMapViewModel: MyMapViewModel by activityViewModels()
-        val myMapListViewModel: MyMapListViewModel by viewModels()
-        setupAdapter(myMapListViewModel, myMapViewModel)
+        val myMapDetailViewModel: MyMapDetailViewModel by viewModels()
+
+        setupRecyclerView(myMapDetailViewModel, myMapViewModel)
+
         binding.lifecycleOwner = viewLifecycleOwner
-        myMapListViewModel.deleteRes.observe(viewLifecycleOwner) {
-            onDeleteResult(myMapViewModel, myMapListViewModel, it)
+        myMapDetailViewModel.deleteRes.observe(viewLifecycleOwner) {
+            onDeleteResult(myMapViewModel, myMapDetailViewModel, it)
         }
-        myMapListViewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
-            if (!myMapListViewModel.groupHikeCreationFinished) {
-                handleResult(context, res) { groupHikeCreateRes ->
-                    showGenericErrorOr(context, groupHikeCreateRes, "A csoportos túra létrehozása sikeres!")
-                }
-                myMapListViewModel.groupHikeCreationFinished = true
+        myMapDetailViewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
+            onGroupHikeCreateResult(myMapDetailViewModel, res)
+        }
+    }
+
+    private fun onGroupHikeCreateResult(
+        myMapDetailViewModel: MyMapDetailViewModel,
+        res: Result<Boolean>
+    ) {
+        if (!myMapDetailViewModel.groupHikeCreationFinished) {
+            handleResult(context, res) { groupHikeCreateRes ->
+                showGenericErrorOr(
+                    context,
+                    groupHikeCreateRes,
+                    "A csoportos túra létrehozása sikeres!"
+                )
             }
+            myMapDetailViewModel.groupHikeCreationFinished = true
         }
     }
 
     private fun onDeleteResult(
         myMapViewModel: MyMapViewModel,
-        myMapListViewModel: MyMapListViewModel,
+        myMapDetailViewModel: MyMapDetailViewModel,
         res: Result<Boolean>
     ) {
-        if (!myMapListViewModel.deleteFinished) {
+        if (!myMapDetailViewModel.deleteFinished) {
             handleResult(context, res) { deleteRes ->
                 showGenericErrorOr(context, deleteRes) {
                     Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
                     myMapViewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
                 }
             }
-            myMapListViewModel.deleteFinished = true
+            myMapDetailViewModel.deleteFinished = true
         }
     }
 
-    private fun setupAdapter(
-        myMapListViewModel: MyMapListViewModel,
+    private fun setupRecyclerView(
+        myMapDetailViewModel: MyMapDetailViewModel,
         myMapViewModel: MyMapViewModel
     ) {
         val adapter = MyMapListAdapter(
@@ -113,17 +126,19 @@ class MyMapListFragment : Fragment() {
                     findNavController().navigate(action)
                 },
                 deleteListener = { routeName ->
-                    myMapListViewModel.deleteRoute(routeName)
+                    handleOffline(requireContext()) {
+                        myMapDetailViewModel.deleteRoute(routeName)
+                    }
                 },
                 printListener = { routeName ->
-                    val action = MyMapListFragmentDirections
+                    val directions = MyMapListFragmentDirections
                         .actionMyMapListFragmentToMyMapDetailFragment(routeName)
-                    findNavController().navigate(action)
+                    findNavController().navigate(directions)
                 },
                 detailNavListener = { routeName ->
-                    val action = MyMapListFragmentDirections
+                    val directions = MyMapListFragmentDirections
                         .actionMyMapListFragmentToMyMapDetailFragment(routeName)
-                    findNavController().navigate(action)
+                    findNavController().navigate(directions)
                 },
                 hikePlanListener = { routeName ->
                     val directions = MyMapListFragmentDirections
@@ -131,40 +146,9 @@ class MyMapListFragment : Fragment() {
                     findNavController().navigate(directions)
                 },
                 groupHikeCreateListener = { routeName ->
-                    val dateTime = Calendar.getInstance().apply { clear() }
-
-                    // note to reader: read this block in reverse order
-                    // as that is the way in which the dialogs will be shown to the user
-                    val groupHikeCreateDialog = TextDialogFragment.instanceOf(
-                        R.string.group_hike_create_text, R.string.groups_create_dialog_hint_text
-                    )
-                    groupHikeCreateDialog.text.observe(viewLifecycleOwner) { name ->
-                        try {
-                            myMapListViewModel.createGroupHike(dateTime, routeName, name)
-                        } catch (e: IllegalArgumentException) {
-                            Toast.makeText(context, e.message!!, Toast.LENGTH_LONG).show()
-                        }
-                    }
-
-                    val timeDialog = TimePickerFragment()
-                    timeDialog.timeRes.observe(viewLifecycleOwner) { timeRes ->
-                        dateTime.set(Calendar.HOUR_OF_DAY, timeRes.get(Calendar.HOUR_OF_DAY))
-                        dateTime.set(Calendar.MINUTE, timeRes.get(Calendar.MINUTE))
-
-                        groupHikeCreateDialog.show(parentFragmentManager, "group hike name")
-                    }
-
-                    val dateDialog = DatePickerFragment()
-                    binding.lifecycleOwner = viewLifecycleOwner
-                    dateDialog.dateRes.observe(viewLifecycleOwner) { dateRes ->
-                        dateTime.set(Calendar.YEAR, dateRes.get(Calendar.YEAR))
-                        dateTime.set(Calendar.MONTH, dateRes.get(Calendar.MONTH))
-                        dateTime.set(Calendar.DAY_OF_MONTH, dateRes.get(Calendar.DAY_OF_MONTH))
-
-                        timeDialog.show(parentFragmentManager, "group hike time")
-                    }
-
-                    dateDialog.show(parentFragmentManager, "group hike date")
+                    val directions = MyMapListFragmentDirections
+                        .actionMyMapListFragmentToMyMapDetailFragment(routeName)
+                    findNavController().navigate(directions)
                 }
             )
         )

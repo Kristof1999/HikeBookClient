@@ -61,9 +61,10 @@ class GroupHikeDetailFragment : MapFragment() {
 
             map.invalidate()
         }
-        viewModel.loadRoute(args.groupHikeName)
-
-        setupRecyclerView(viewModel, args)
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoute(args.groupHikeName)
+            setupRecyclerView(viewModel, args)
+        }
 
         initMap()
     }
@@ -110,10 +111,10 @@ class GroupHikeDetailFragment : MapFragment() {
 
     private fun setupAddToMyMap(viewModel: GroupHikeDetailViewModel) {
         binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
-            try {
-                viewModel.addToMyMap()
-            } catch (e: IllegalStateException) {
-                Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+            catchAndShowIllegalStateAndArgument(requireContext()) {
+                handleOffline(requireContext()) {
+                    viewModel.addToMyMap()
+                }
             }
         }
         viewModel.addToMyMapRes.observe(viewLifecycleOwner) { res ->

@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -56,8 +55,8 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
         val args: RouteEditFragmentArgs by navArgs()
         val viewModel: RouteEditViewModel by viewModels()
+
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.loadRoute(args)
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->
                 showRoutePointsOnMap(viewModel, route.points)
@@ -65,13 +64,20 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
                 showRoutePolylineOnMap(route)
             }
         }
-
-        binding.routeEditEditButton.setOnClickListener {
-            onRouteEdit(viewModel)
+        handleOfflineLoad(requireContext()) {
+            // TODO: add listener for when online to load the route
+            // and prevent editing to attempt to edit a null route
+            // in the case when loading failed due to beign offline
+            viewModel.loadRoute(args)
         }
 
         viewModel.routeEditRes.observe(viewLifecycleOwner) {
             onRouteEditResult(it, args)
+        }
+        binding.routeEditEditButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                onRouteEdit(viewModel)
+            }
         }
 
         MapUtils.setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
@@ -94,16 +100,10 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
     private fun onRouteEdit(
         viewModel: RouteEditViewModel
-    ) {
-        try {
-            val newRouteName = binding.routeEditRouteNameEditText.text.toString()
-            val newHikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
-            viewModel.onRouteEdit(newRouteName, newHikeDescription)
-        } catch (e: IllegalArgumentException) {
-            Toast.makeText(context, e.message!!, Toast.LENGTH_SHORT).show()
-        } catch (e: IllegalStateException) {
-            Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
-        }
+    ) = catchAndShowIllegalStateAndArgument(requireContext()) {
+        val newRouteName = binding.routeEditRouteNameEditText.text.toString()
+        val newHikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
+        viewModel.onRouteEdit(newRouteName, newHikeDescription)
     }
 
     private fun onRouteEditResult(res: Result<Boolean>, args: RouteEditFragmentArgs) {

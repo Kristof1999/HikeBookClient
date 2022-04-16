@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
 
@@ -36,24 +37,12 @@ class GroupHikeListFragment : Fragment() {
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
         val viewModel: GroupHikeListViewModel by viewModels()
-        viewModel.listGroupHikes(isConnectedPage)
 
-        val adapter = GroupHikeListAdapter(isConnectedPage,
-            GroupHikeClickListener(
-            generalConnectListener = { groupHikeName, dateTime ->
-                viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime)
-            },
-            detailNavListener = { groupHikeName, dateTime ->
-                val directions = GroupHikeFragmentDirections
-                    .actionGroupHikeFragmentToGroupHikeDetailFragment(groupHikeName, isConnectedPage, dateTime)
-                findNavController().navigate(directions)
-            }
-        ))
-        binding.groupHikeListRecyclerView.adapter = adapter
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.groupHikes.observe(viewLifecycleOwner) { groupHikes ->
-            adapter.submitList(groupHikes.toMutableList())
+        setupRecyclerView(isConnectedPage, viewModel)
+        handleOfflineLoad(requireContext()) {
+            viewModel.listGroupHikes(isConnectedPage)
         }
+
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
             showGenericErrorOr(context, generalConnectRes) {
                 if (isConnectedPage) {
@@ -62,6 +51,32 @@ class GroupHikeListFragment : Fragment() {
                     Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+
+    private fun setupRecyclerView(
+        isConnectedPage: Boolean,
+        viewModel: GroupHikeListViewModel
+    ) {
+        val adapter = GroupHikeListAdapter(isConnectedPage,
+            GroupHikeClickListener(
+                generalConnectListener = { groupHikeName, dateTime ->
+                    viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime)
+                },
+                detailNavListener = { groupHikeName, dateTime ->
+                    val directions = GroupHikeFragmentDirections
+                        .actionGroupHikeFragmentToGroupHikeDetailFragment(
+                            groupHikeName,
+                            isConnectedPage,
+                            dateTime
+                        )
+                    findNavController().navigate(directions)
+                }
+            ))
+        binding.groupHikeListRecyclerView.adapter = adapter
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.groupHikes.observe(viewLifecycleOwner) { groupHikes ->
+            adapter.submitList(groupHikes.toMutableList())
         }
     }
 

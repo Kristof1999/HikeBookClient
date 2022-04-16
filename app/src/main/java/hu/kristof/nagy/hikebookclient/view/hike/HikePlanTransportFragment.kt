@@ -47,7 +47,11 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         initMap()
 
         val args: HikePlanTransportFragmentArgs by navArgs()
-        viewModel.loadRoute(args.routeName)
+
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoute(args.routeName)
+        }
+
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->

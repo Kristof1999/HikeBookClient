@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMembersBinding
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMembersViewModel
 
 @AndroidEntryPoint
@@ -32,7 +33,10 @@ class GroupsDetailMembersFragment : Fragment() {
 
         val viewModel: GroupsDetailMembersViewModel by viewModels()
         val args: GroupsDetailMembersFragmentArgs by navArgs()
-        viewModel.listMembers(args.groupName)
+
+        handleOfflineLoad(requireContext()) {
+            viewModel.listMembers(args.groupName)
+        }
 
         val adapter = GroupsDetailMembersAdapter()
         binding.lifecycleOwner = viewLifecycleOwner

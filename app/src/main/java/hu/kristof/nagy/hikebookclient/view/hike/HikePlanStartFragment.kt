@@ -11,21 +11,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanDateBinding
-import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanStartBinding
+import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanDateViewModel
 import java.util.*
 
 @AndroidEntryPoint
-class HikePlanDateFragment : Fragment() {
-    private lateinit var binding: FragmentHikePlanDateBinding
+class HikePlanStartFragment : Fragment() {
+    private lateinit var binding: FragmentHikePlanStartBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_hike_plan_date, container, false
+            inflater, R.layout.fragment_hike_plan_start, container, false
         )
         return binding.root
     }
@@ -36,21 +38,23 @@ class HikePlanDateFragment : Fragment() {
         val viewModel: HikePlanDateViewModel by viewModels()
         setupForecasting(viewModel)
 
-        val args: HikePlanDateFragmentArgs by navArgs()
-        viewModel.loadRoute(args.routeName)
+        val args: HikePlanStartFragmentArgs by navArgs()
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoute(args.routeName)
+        }
 
         setClickListeners(args)
     }
 
-    private fun setClickListeners(args: HikePlanDateFragmentArgs) = with(binding) {
-        hikePlanDateTransportPlanButton.setOnClickListener {
+    private fun setClickListeners(args: HikePlanStartFragmentArgs) = with(binding) {
+        hikePlanStartTransportPlanButton.setOnClickListener {
             val isForward = true
-            val directions = HikePlanDateFragmentDirections
+            val directions = HikePlanStartFragmentDirections
                 .actionHikePlanDateFragmentToHikePlanTransportFragment(isForward, args.routeName)
             findNavController().navigate(directions)
         }
-        hikePlanDateHikeStartButton.setOnClickListener {
-            val directions = HikePlanDateFragmentDirections
+        hikePlanStartHikeStartButton.setOnClickListener {
+            val directions = HikePlanStartFragmentDirections
                 .actionHikePlanDateFragmentToHikeFragment(args.routeName)
             findNavController().navigate(directions)
         }
@@ -62,36 +66,41 @@ class HikePlanDateFragment : Fragment() {
         // TODO: refactor by using one calendar here, example: myMapList
         var date: String? = null
         var hour: Int? = null
-        val datePickerFragment = DatePickerFragment()
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val datePickerFragment = DatePickerFragment()
         datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateRes ->
             date = dateRes
             hour?.let {
-                handleIllegalStateAndArgument(context) {
+                catchAndShowIllegalStateAndArgument(context) {
                     viewModel.forecast(dateRes, it)
                 }
             }
         }
-        binding.hikePlanDateDatePickerButton.setOnClickListener {
-            datePickerFragment.show(parentFragmentManager, "datePicker")
+        binding.hikePlanStartDatePickerButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                datePickerFragment.show(parentFragmentManager, "datePicker")
+            }
         }
-        binding.hikePlanDateTimePickerButton.setOnClickListener {
-            val timePickerFragment = TimePickerFragment()
-            timePickerFragment.show(parentFragmentManager, "timePicker")
 
-            binding.lifecycleOwner = viewLifecycleOwner
-            timePickerFragment.timeRes.observe(viewLifecycleOwner) { hourRes ->
-                hour = hourRes.get(Calendar.HOUR_OF_DAY)
-                date?.let {
-                    handleIllegalStateAndArgument(context) {
-                        viewModel.forecast(it, hourRes.get(Calendar.HOUR_OF_DAY))
-                    }
+        val timePickerFragment = TimePickerFragment()
+        binding.lifecycleOwner = viewLifecycleOwner
+        timePickerFragment.timeRes.observe(viewLifecycleOwner) { hourRes ->
+            hour = hourRes.get(Calendar.HOUR_OF_DAY)
+            date?.let {
+                catchAndShowIllegalStateAndArgument(context) {
+                    viewModel.forecast(it, hourRes.get(Calendar.HOUR_OF_DAY))
                 }
             }
         }
-        binding.lifecycleOwner = viewLifecycleOwner
+        binding.hikePlanStartTimePickerButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                timePickerFragment.show(parentFragmentManager, "timePicker")
+            }
+        }
+
         viewModel.forecastRes.observe(viewLifecycleOwner) {
-            binding.hikePlanDateTw.text = it
+            binding.hikePlanStartTv.text = it
         }
     }
 }

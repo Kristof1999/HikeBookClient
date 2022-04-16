@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -14,6 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsBinding
+import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
@@ -52,8 +53,11 @@ class GroupsFragment : Fragment() {
     private fun onGroupCreateRes(viewModel: GroupsViewModel) {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.createRes.observe(viewLifecycleOwner) { res ->
-            handleResult(requireContext(), res) { createRes ->
-                showGenericErrorOr(context, createRes, "Csoport sikeresen létrehozva!")
+            if (!viewModel.createFinished) {
+                handleResult(requireContext(), res) { createRes ->
+                    showGenericErrorOr(context, createRes, "Csoport sikeresen létrehozva!")
+                }
+                viewModel.createFinished = true
             }
         }
     }
@@ -64,14 +68,14 @@ class GroupsFragment : Fragment() {
             R.string.groups_create_dialog_text, R.string.groups_create_dialog_hint_text
         )
         dialogFragment.text.observe(viewLifecycleOwner) { name ->
-            try {
+            catchAndShowIllegalStateAndArgument(requireContext()) {
                 viewModel.createGroup(name)
-            } catch (e: IllegalArgumentException) {
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
             }
         }
         binding.groupsGroupCreateButton.setOnClickListener {
-            dialogFragment.show(parentFragmentManager, "group create")
+            handleOffline(requireContext()) {
+                dialogFragment.show(parentFragmentManager, "group create")
+            }
         }
     }
 }

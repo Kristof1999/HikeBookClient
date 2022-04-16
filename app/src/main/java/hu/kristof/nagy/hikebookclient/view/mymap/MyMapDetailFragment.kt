@@ -17,14 +17,14 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapDetailBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.util.MapFragment
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
-import hu.kristof.nagy.hikebookclient.util.setMapCenterOnPolylineCenter
-import hu.kristof.nagy.hikebookclient.util.setZoomForPolyline
+import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
-import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapListViewModel
+import hu.kristof.nagy.hikebookclient.view.hike.TimePickerFragment
+import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
+import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapDetailViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import java.util.*
 
 /**
  * A Fragment to display the details of the chosen route.
@@ -48,17 +48,18 @@ class MyMapDetailFragment : MapFragment() {
         super.onViewCreated(view, savedInstanceState)
         initMap()
 
-        val viewModel: MyMapListViewModel by viewModels()
+        val viewModel: MyMapDetailViewModel by viewModels()
         binding.lifecycleOwner = viewLifecycleOwner
         val args: MyMapDetailFragmentArgs by navArgs()
 
-        viewModel.loadUserRoute(args.routeName)
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
                 adaptView(args, userRoute)
             }
         }
-
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadUserRoute(args.routeName)
+        }
 
         setClickListeners(args, viewModel)
 
@@ -80,7 +81,7 @@ class MyMapDetailFragment : MapFragment() {
 
     private fun setClickListeners(
         args: MyMapDetailFragmentArgs,
-        viewModel: MyMapListViewModel
+        viewModel: MyMapDetailViewModel
     ) = with(binding) {
         myMapDetailEditButton.setOnClickListener {
             val directions = MyMapDetailFragmentDirections
@@ -88,7 +89,9 @@ class MyMapDetailFragment : MapFragment() {
             findNavController().navigate(directions)
         }
         myMapDetailDeleteButton.setOnClickListener {
-            viewModel.deleteRoute(args.routeName)
+            handleOffline(requireContext()) {
+                viewModel.deleteRoute(args.routeName)
+            }
         }
         myMapDetailPrintButton.setOnClickListener {
             val bitmap = map.drawToBitmap()
@@ -98,6 +101,42 @@ class MyMapDetailFragment : MapFragment() {
             val directions = MyMapDetailFragmentDirections
                 .actionMyMapDetailFragmentToHikePlanDateFragment(args.routeName)
             findNavController().navigate(directions)
+        }
+        myMapDetailGroupHikeCreateButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                val dateTime = Calendar.getInstance().apply { clear() }
+
+                // note to reader: read this block in reverse order
+                // as that is the way in which the dialogs will be shown to the user
+                val groupHikeCreateDialog = TextDialogFragment.instanceOf(
+                    R.string.group_hike_create_text, R.string.groups_create_dialog_hint_text
+                )
+                groupHikeCreateDialog.text.observe(viewLifecycleOwner) { groupHikeName ->
+                    catchAndShowIllegalStateAndArgument(requireContext()) {
+                        viewModel.createGroupHike(dateTime, groupHikeName)
+                    }
+                }
+
+                val timeDialog = TimePickerFragment()
+                timeDialog.timeRes.observe(viewLifecycleOwner) { timeRes ->
+                    dateTime.set(Calendar.HOUR_OF_DAY, timeRes.get(Calendar.HOUR_OF_DAY))
+                    dateTime.set(Calendar.MINUTE, timeRes.get(Calendar.MINUTE))
+
+                    groupHikeCreateDialog.show(parentFragmentManager, "group hike name")
+                }
+
+                val dateDialog = DatePickerFragment()
+                binding.lifecycleOwner = viewLifecycleOwner
+                dateDialog.dateRes.observe(viewLifecycleOwner) { dateRes ->
+                    dateTime.set(Calendar.YEAR, dateRes.get(Calendar.YEAR))
+                    dateTime.set(Calendar.MONTH, dateRes.get(Calendar.MONTH))
+                    dateTime.set(Calendar.DAY_OF_MONTH, dateRes.get(Calendar.DAY_OF_MONTH))
+
+                    timeDialog.show(parentFragmentManager, "group hike time")
+                }
+
+                dateDialog.show(parentFragmentManager, "group hike date")
+            }
         }
     }
 

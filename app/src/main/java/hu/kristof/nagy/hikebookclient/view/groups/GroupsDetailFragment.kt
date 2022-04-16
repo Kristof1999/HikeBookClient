@@ -17,6 +17,7 @@ import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
 import hu.kristof.nagy.hikebookclient.util.Constants
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 
@@ -42,7 +43,9 @@ class GroupsDetailFragment : Fragment() {
 
         val viewModel: GroupsDetailViewModel by viewModels()
         binding.groupsDetailConnectButton.setOnClickListener {
-            viewModel.generalConnect(args.groupName, args.isConnectedPage)
+            handleOffline(requireContext()) {
+                viewModel.generalConnect(args.groupName, args.isConnectedPage)
+            }
         }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->

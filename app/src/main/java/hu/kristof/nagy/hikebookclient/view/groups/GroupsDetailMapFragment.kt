@@ -44,9 +44,12 @@ class GroupsDetailMapFragment : MapFragment() {
         }
 
         val viewModel: GroupsDetailMapViewModel by activityViewModels()
-        loadRoutesOfGroup(viewModel, groupName)
+        handleOfflineLoad(requireContext()) {
+            loadRoutesOfGroup(viewModel, groupName)
+        }
 
         addFromMyMap(viewModel, groupName)
+
 
         map.invalidate()
     }
@@ -56,16 +59,22 @@ class GroupsDetailMapFragment : MapFragment() {
         groupName: String
     ) {
         val dialog = AddFromMyMapDialogFragment()
-        binding.groupsMapAddFromMyMapButton.setOnClickListener {
-            dialog.show(parentFragmentManager, "add from my map")
-        }
         binding.lifecycleOwner = viewLifecycleOwner
         dialog.route.observe(viewLifecycleOwner) { route ->
             viewModel.onAddFromMyMap(route, groupName)
         }
+        binding.groupsMapAddFromMyMapButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                dialog.show(parentFragmentManager, "add from my map")
+            }
+        }
+
         viewModel.addFromMyMapRes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { addFromMyMapRes ->
-                showGenericErrorOr(context, addFromMyMapRes, "A felvétel sikeres!")
+            if (!viewModel.addFromMyMapFinished) {
+                handleResult(context, res) { addFromMyMapRes ->
+                    showGenericErrorOr(context, addFromMyMapRes, "A felvétel sikeres!")
+                }
+                viewModel.addFromMyMapFinished = true
             }
         }
     }

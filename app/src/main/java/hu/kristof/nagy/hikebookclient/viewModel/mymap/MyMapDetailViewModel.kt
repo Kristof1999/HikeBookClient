@@ -15,7 +15,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class MyMapListViewModel @Inject constructor(
+class MyMapDetailViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository,
     private val groupHikeRepository: GroupHikeRepository
 ) : ViewModel() {
@@ -59,7 +59,7 @@ class MyMapListViewModel @Inject constructor(
         }
     }
 
-    fun createGroupHike(dateTime: Calendar, routeName: String, groupHikeName: String) {
+    fun createGroupHike(dateTime: Calendar, groupHikeName: String) {
         if (groupHikeName.isEmpty())
             throw IllegalArgumentException("A csoportos túra neve nem lehet üres.")
         if (groupHikeName.contains("/"))
