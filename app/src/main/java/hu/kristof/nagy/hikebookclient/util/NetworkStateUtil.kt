@@ -1,3 +1,6 @@
+// based on:
+// https://developer.android.com/training/basics/network-ops/managing
+
 package hu.kristof.nagy.hikebookclient.util
 
 import android.content.Context
