@@ -54,13 +54,13 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         initMap()
 
         binding.routeCreateMarkerSpinner.onItemSelectedListener = this
-        SpinnerUtils.setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
+        setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
 
         val args: RouteCreateFragmentArgs by navArgs()
 
         setupRouteCreate(args)
 
-        MapUtils.setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
+        setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
     }
 
     private fun setupRouteCreate(args: RouteCreateFragmentArgs) {
@@ -75,9 +75,8 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        SpinnerUtils.onMarkerItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
+        onMarkerItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {

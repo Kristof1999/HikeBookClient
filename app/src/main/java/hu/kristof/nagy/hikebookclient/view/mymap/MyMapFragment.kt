@@ -56,7 +56,7 @@ class MyMapFragment : MapFragment() {
     private fun setupLoad() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
-            MapUtils.onRoutesLoad(routes, context, map)
+            onRoutesLoad(routes, context, map)
         }
         handleOfflineLoad(requireContext()) {
             viewModel.loadRoutesForLoggedInUser()

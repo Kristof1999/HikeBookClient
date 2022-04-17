@@ -61,7 +61,11 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         setupLoad(args)
 
         binding.hikePlanTransportTransportMeanSpinner.onItemSelectedListener = this
-        SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportTransportMeanSpinner)
+        setSpinnerAdapter(
+            requireContext(),
+            binding.hikePlanTransportTransportMeanSpinner,
+            R.array.transport_types
+        )
 
         binding.hikePlanTransportStartButton.setOnClickListener {
             onTransportStart(args)
@@ -133,7 +137,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         Marker(map).apply {
             position = viewModel.startPoint
             setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-            icon = MarkerUtils.getMarkerIcon(MarkerType.SET, resources)
+            icon = getMarkerIcon(MarkerType.SET, resources)
 
             viewModel.startPointChanged.observe(viewLifecycleOwner) {
                 position = viewModel.startPoint
@@ -146,7 +150,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         Marker(map).apply {
             position = viewModel.endPoint
             setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-            icon = MarkerUtils.getMarkerIcon(MarkerType.NEW, resources)
+            icon = getMarkerIcon(MarkerType.NEW, resources)
 
             viewModel.endPointChanged.observe(viewLifecycleOwner) {
                 position = viewModel.endPoint

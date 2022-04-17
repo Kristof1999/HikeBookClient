@@ -101,7 +101,7 @@ class GroupHikeDetailFragment : MapFragment() {
         for (point in route.points) {
             Marker(map).apply {
                 setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
-                icon = MarkerUtils.getMarkerIcon(point.type, resources)
+                icon = getMarkerIcon(point.type, resources)
                 title = point.title
                 position = point.toGeoPoint()
             }.also { marker ->

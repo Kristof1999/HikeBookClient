@@ -14,6 +14,10 @@ import hu.kristof.nagy.hikebookclient.R
 // request a lifecycleOwner too and only show the error message
 // once per screen and lifetime
 
+/**
+ * If the device is online, it executes the given lambda,
+ * otherwise it shows an error message.
+ */
 fun handleOffline(context: Context, f: () -> Unit) {
     if (isOnline(context)) {
         f.invoke()
@@ -26,6 +30,10 @@ fun handleOffline(context: Context, f: () -> Unit) {
     }
 }
 
+/**
+ * If the device is online, it executes the given lambda,
+ * otherwise it shows an error message.
+ */
 fun handleOfflineLoad(context: Context, f: () -> Unit) {
     if (isOnline(context)) {
         f.invoke()

@@ -234,7 +234,7 @@ class HikeFragment : MapFragment() {
                     setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
                     title = p.title
                     position = p.toGeoPoint()
-                    icon = MarkerUtils.getMarkerIcon(p.type, resources)
+                    icon = getMarkerIcon(p.type, resources)
                 })
             }
             map.overlays.add(folderOverlay)
