@@ -224,8 +224,7 @@ class HikeFragment : MapFragment() {
         addCircleToMap(route.points.last().toGeoPoint())
 
         map.setMapCenterOnPolylineStart(polyline)
-        map.setZoomForPolyline(polyline)
-        map.addCopyRightOverlay()
+        map.controller.setZoom(18.0)
     }
 
     private fun addCircleToMap(center: GeoPoint) {
