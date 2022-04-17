@@ -46,8 +46,6 @@ class RegistrationViewModel @Inject constructor(private val repository: IAuthRep
      * and attempts to register the user.
      */
     fun onRegister(user: UserAuth) {
-        AuthChecker.check(user)
-
         val password = MessageDigest.getInstance("MD5").digest(
             user.password.toByteArray()
         ).joinToString(separator = "")

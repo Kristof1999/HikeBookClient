@@ -23,6 +23,9 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
  * A Fragment to display the routes of the logged in user on a map.
+ * It has a button with which the user can
+ * create a route.
+ * With another button, the user can switch to a list view of his/her routes.
  */
 @AndroidEntryPoint
 class MyMapFragment : MapFragment() {
@@ -47,6 +50,10 @@ class MyMapFragment : MapFragment() {
 
         setClickListeners()
 
+        setupLoad()
+    }
+
+    private fun setupLoad() {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             MapUtils.onRoutesLoad(routes, context, map)

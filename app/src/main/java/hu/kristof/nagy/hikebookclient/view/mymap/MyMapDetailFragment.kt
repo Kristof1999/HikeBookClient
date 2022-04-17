@@ -28,6 +28,11 @@ import java.util.*
 
 /**
  * A Fragment to display the details of the chosen route.
+ * It displays the route on a map, and the route's name.
+ * It has several buttons:
+ * one to start hiking,
+ * with others, the user can edit/delete/print the given route,
+ * and the user can also create a group hike with another button.
  */
 @AndroidEntryPoint
 class MyMapDetailFragment : MapFragment() {
@@ -49,17 +54,9 @@ class MyMapDetailFragment : MapFragment() {
         initMap()
 
         val viewModel: MyMapDetailViewModel by viewModels()
-        binding.lifecycleOwner = viewLifecycleOwner
         val args: MyMapDetailFragmentArgs by navArgs()
 
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { userRoute ->
-                adaptView(args, userRoute)
-            }
-        }
-        handleOfflineLoad(requireContext()) {
-            viewModel.loadUserRoute(args.routeName)
-        }
+        setupLoad(viewModel, args)
 
         setClickListeners(args, viewModel)
 
@@ -68,15 +65,30 @@ class MyMapDetailFragment : MapFragment() {
         }
     }
 
+    private fun setupLoad(
+        viewModel: MyMapDetailViewModel,
+        args: MyMapDetailFragmentArgs
+    ) {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { userRoute ->
+                adaptView(args, userRoute)
+            }
+        }
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadUserRoute(args.routeName)
+        }
+    }
+
     private fun adaptView(args: MyMapDetailFragmentArgs, route: Route) {
         binding.myMapDetailRouteNameTv.text = args.routeName
         val polyline = route.toPolyline()
-        with(map) {
+        map.apply {
             setMapCenterOnPolylineCenter(polyline)
             setZoomForPolyline(polyline)
             overlays.add(polyline)
-            invalidate()
         }
+        map.invalidate()
     }
 
     private fun setClickListeners(
@@ -152,6 +164,7 @@ class MyMapDetailFragment : MapFragment() {
         map = binding.myMapDetailMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             addCopyRightOverlay()
+            setStartZoomAndCenter()
         }
     }
 

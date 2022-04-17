@@ -13,7 +13,7 @@ import androidx.lifecycle.MutableLiveData
 import java.util.*
 
 /**
- * A Fragment with which the user can choose a date.
+ * A Fragment with which the user can choose a date for the hike.
  */
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private var _dateRes = MutableLiveData<String>()

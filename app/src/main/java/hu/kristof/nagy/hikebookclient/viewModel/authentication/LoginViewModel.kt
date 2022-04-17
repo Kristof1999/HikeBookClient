@@ -47,8 +47,6 @@ class LoginViewModel @Inject constructor(private val repository: IAuthRepository
      * and attempts to log in the user.
      */
     fun onLogin(user: UserAuth) {
-        AuthChecker.check(user)
-
         val password = MessageDigest.getInstance("MD5").digest(
             user.password.toByteArray()
         ).joinToString(separator = "")

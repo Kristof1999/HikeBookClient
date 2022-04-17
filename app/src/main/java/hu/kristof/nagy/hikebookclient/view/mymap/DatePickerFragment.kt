@@ -9,6 +9,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
 
+/**
+ * A Fragment with which the user can choose a date for the group hike.
+ */
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private var _dateRes = MutableLiveData<Calendar>()
     val dateRes: LiveData<Calendar>
@@ -21,17 +24,20 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), this, year, month, day)
-        datePickerDialog.datePicker.minDate = c.timeInMillis
+        val datePickerDialog = DatePickerDialog(
+            requireContext(), this, year, month, day
+        ).apply {
+            datePicker.minDate = c.timeInMillis
+        }
         return datePickerDialog
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-       val c = Calendar.getInstance()
-        c.clear()
-        c.set(Calendar.YEAR, year)
-        c.set(Calendar.MONTH, month)
-        c.set(Calendar.DAY_OF_MONTH, day)
-        _dateRes.value = c
+       _dateRes.value = Calendar.getInstance().apply {
+           clear()
+           set(Calendar.YEAR, year)
+           set(Calendar.MONTH, month)
+           set(Calendar.DAY_OF_MONTH, day)
+       }
     }
 }

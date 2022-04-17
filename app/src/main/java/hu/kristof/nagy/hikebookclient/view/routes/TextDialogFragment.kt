@@ -14,6 +14,9 @@ import androidx.lifecycle.MutableLiveData
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.TextDialogBinding
 
+/**
+ * A Fragment to set the text of something.
+ */
 class TextDialogFragment : DialogFragment() {
     private var _text = MutableLiveData<String>()
     val text: LiveData<String>

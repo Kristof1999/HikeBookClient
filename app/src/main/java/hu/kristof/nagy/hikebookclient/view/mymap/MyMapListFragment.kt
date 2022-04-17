@@ -45,6 +45,9 @@ import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 
 /**
  * A Fragment to list the routes of the logged in user.
+ * A list item consists of the route's name, and several buttons:
+ * with some, the user can edit, delete, and print the given route,
+ * with others, the user can create a group hike, or start a simple hike.
  */
 @AndroidEntryPoint
 class MyMapListFragment : Fragment() {
@@ -74,6 +77,13 @@ class MyMapListFragment : Fragment() {
 
         setupList(myMapDetailViewModel, myMapViewModel)
 
+        setupObservers(myMapDetailViewModel, myMapViewModel)
+    }
+
+    private fun setupObservers(
+        myMapDetailViewModel: MyMapDetailViewModel,
+        myMapViewModel: MyMapViewModel
+    ) {
         binding.lifecycleOwner = viewLifecycleOwner
         myMapDetailViewModel.deleteRes.observe(viewLifecycleOwner) {
             onDeleteResult(myMapViewModel, myMapDetailViewModel, it)
@@ -121,6 +131,12 @@ class MyMapListFragment : Fragment() {
         myMapDetailViewModel: MyMapDetailViewModel,
         myMapViewModel: MyMapViewModel
     ) {
+        val gotoDetail = { routeName: String ->
+            val directions = MyMapListFragmentDirections
+                .actionMyMapListFragmentToMyMapDetailFragment(routeName)
+            findNavController().navigate(directions)
+        }
+
         val adapter = MyMapListAdapter(
             MyMapClickListener(
                 editListener = { routeName ->
@@ -134,14 +150,10 @@ class MyMapListFragment : Fragment() {
                     }
                 },
                 printListener = { routeName ->
-                    val directions = MyMapListFragmentDirections
-                        .actionMyMapListFragmentToMyMapDetailFragment(routeName)
-                    findNavController().navigate(directions)
+                    gotoDetail(routeName)
                 },
                 detailNavListener = { routeName ->
-                    val directions = MyMapListFragmentDirections
-                        .actionMyMapListFragmentToMyMapDetailFragment(routeName)
-                    findNavController().navigate(directions)
+                    gotoDetail(routeName)
                 },
                 hikePlanListener = { routeName ->
                     val directions = MyMapListFragmentDirections
@@ -149,9 +161,7 @@ class MyMapListFragment : Fragment() {
                     findNavController().navigate(directions)
                 },
                 groupHikeCreateListener = { routeName ->
-                    val directions = MyMapListFragmentDirections
-                        .actionMyMapListFragmentToMyMapDetailFragment(routeName)
-                    findNavController().navigate(directions)
+                    gotoDetail(routeName)
                 }
             )
         )

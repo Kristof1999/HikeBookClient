@@ -27,6 +27,11 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
  * A Fragment to create a route for the logged in user.
+ * The user can set the name of the route and it's description in editTexts,
+ * and points of the route on a map.
+ * The user can choose between which type of point to place next with a spinner.
+ * With a switch, the user can decide, if he/she wants to delete the last placed marker.
+ * With the create button, the user can save the route.
  */
 @AndroidEntryPoint
 class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
@@ -53,6 +58,12 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
         val args: RouteCreateFragmentArgs by navArgs()
 
+        setupRouteCreate(args)
+
+        MapUtils.setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
+    }
+
+    private fun setupRouteCreate(args: RouteCreateFragmentArgs) {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
             onRouteCreateResult(it, args)
@@ -62,8 +73,6 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
                 onRouteCreate(args, viewModel)
             }
         }
-
-        MapUtils.setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
     }
 
 

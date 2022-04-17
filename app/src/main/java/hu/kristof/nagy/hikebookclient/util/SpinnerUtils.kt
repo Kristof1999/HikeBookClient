@@ -47,13 +47,14 @@ object SpinnerUtils {
                 viewModel.markerType = MarkerType.LOOKOUT
             }
             MarkerType.TEXT.ordinal -> {
+                // TODO: after text marker is placed, switch back to new marker
                 val dialogFragment = TextDialogFragment.instanceOf(
                     R.string.marker_text_dialog_text, R.string.marker_text_dialog_hint
                 )
-                dialogFragment.show(parentFragmentManager, "text")
                 dialogFragment.text.observe(viewLifecycleOwner) {
                     viewModel.markerTitle = it
                 }
+                dialogFragment.show(parentFragmentManager, "text")
                 viewModel.markerType = MarkerType.TEXT
             }
         }

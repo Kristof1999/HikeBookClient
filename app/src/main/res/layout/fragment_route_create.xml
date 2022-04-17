@@ -13,17 +13,6 @@
         tools:context="hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragment"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/routeCreateHelpButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/help_menu"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <EditText
             android:id="@+id/routeCreateRouteNameEditText"
             android:layout_width="0dp"
@@ -35,7 +24,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/routeCreateHelpButton" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/routeCreateCreateButton"
