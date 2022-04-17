@@ -2,24 +2,18 @@ package hu.kristof.nagy.hikebookclient.model
 
 import java.security.MessageDigest
 
-data class UserAuth(
-    val name: String, val password: String,
-    private val isPasswordEncrypted: Boolean = false // TODO: change on server too
-) {
+data class UserAuth(val name: String, var password: String) {
     val avgSpeed: Double = 0.0
 
     init {
         checkName()
-        if (!isPasswordEncrypted) {
-            checkPassword()
-        }
+        checkPassword()
     }
 
-    fun encryptPassword(): UserAuth {
-        val encyptedPassword = MessageDigest.getInstance("MD5").digest(
+    fun encryptPassword() {
+        password = MessageDigest.getInstance("MD5").digest(
             password.toByteArray()
         ).joinToString(separator = "")
-        return UserAuth(name, encyptedPassword, true)
     }
 
     private fun checkName() {

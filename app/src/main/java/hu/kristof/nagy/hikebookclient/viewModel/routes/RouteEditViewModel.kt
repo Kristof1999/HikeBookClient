@@ -55,7 +55,7 @@ class RouteEditViewModel @Inject constructor(
 
     private fun loadUserRoute(routeName: String) {
         viewModelScope.launch {
-            userRouteRepository.loadUserRoute(routeName).collect {
+            userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
                 _route.value = it
             }
         }

@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
-import hu.kristof.nagy.hikebookclient.util.routeLoaded
+import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
@@ -43,7 +43,7 @@ class MyMapDetailViewModel @Inject constructor(
 
     fun loadUserRoute(routeName: String) {
         viewModelScope.launch {
-            userRepository.loadUserRoute(routeName).collect {
+            userRepository.loadUserRouteOfLoggedInUser(routeName).collect {
                 _route.value = it
             }
         }
@@ -65,7 +65,7 @@ class MyMapDetailViewModel @Inject constructor(
         if (groupHikeName.contains("/"))
             throw IllegalArgumentException("A csoportos túra név nem tartalmazhat / jelet.")
 
-        if (routeLoaded(_route)) {
+        if (checkAndHandleRouteLoad(_route)) {
             viewModelScope.launch {
                 val route = _route.value!!.getOrNull()!!
                 groupHikeCreationFinished = false

@@ -2,14 +2,19 @@ package hu.kristof.nagy.hikebookclient.util
 
 import android.content.Context
 import android.widget.Toast
-import androidx.lifecycle.LiveData
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 
-fun <P : Route> routeLoaded(route: LiveData<Result<P>>): Boolean {
-    if (route.value == null) {
-        throw IllegalStateException("Az útvonal még nem töltődött be! Kérem, várjon.")
-    } else if (route.value!!.isFailure) {
+fun <P : Route> checkAndHandleRouteLoad(routeRes: Result<P>): Boolean {
+    if (routeRes.isFailure) {
         throw IllegalStateException("Valami hiba történt.")
+    } else {
+        return checkAndHandleRouteLoad(routeRes.getOrNull())
+    }
+}
+
+fun <P : Route?> checkAndHandleRouteLoad(route: P): Boolean {
+    if (route == null) {
+        throw IllegalStateException("Az útvonal még nem töltődött be! Kérem, várjon.")
     } else {
         return true
     }

@@ -8,8 +8,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailListBinding
@@ -17,6 +19,7 @@ import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
+import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailListViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 
 /**
@@ -25,6 +28,7 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
  * one to edit and one to delete the given route, and
  * one to add the route to the user's map.
  */
+@AndroidEntryPoint
 class GroupsDetailListFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailListBinding
 
@@ -42,52 +46,55 @@ class GroupsDetailListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args: GroupsDetailListFragmentArgs by navArgs()
-        val viewModel: GroupsDetailMapViewModel by activityViewModels()
+        val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
+        val listViewModel: GroupsDetailListViewModel by viewModels()
 
-        val adapter = initAdapter(viewModel, args)
+        val adapter = initAdapter(mapViewModel, listViewModel, args)
         binding.groupsDetailListRecyclerView.adapter = adapter
 
-        observeViewModel(viewModel, adapter, args)
+        observeViewModels(mapViewModel, listViewModel, adapter, args)
     }
 
-    private fun observeViewModel(
-        viewModel: GroupsDetailMapViewModel,
+    private fun observeViewModels(
+        mapViewModel: GroupsDetailMapViewModel,
+        listViewModel: GroupsDetailListViewModel,
         adapter: GroupsDetailListAdapter,
         args: GroupsDetailListFragmentArgs
     ) {
         binding.lifecycleOwner = viewLifecycleOwner
-        with(viewModel) {
-            routes.observe(viewLifecycleOwner) { res ->
-                handleResult(context, res) { routes ->
-                    adapter.submitList(routes.map { it.routeName }.toMutableList())
-                }
+        mapViewModel.routes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { routes ->
+                adapter.submitList(routes.map { it.routeName }.toMutableList())
             }
+        }
+        with(listViewModel) {
             deleteRes.observe(viewLifecycleOwner) { res ->
-                if (!viewModel.deleteFinished) {
+                if (!listViewModel.deleteFinished) {
                     handleResult(context, res) { deleteRes ->
                         showGenericErrorOr(context, deleteRes) {
                             Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
                             handleOfflineLoad(requireContext()) {
-                                viewModel.loadRoutesOfGroup(args.groupName) // refresh
+                                mapViewModel.loadRoutesOfGroup(args.groupName) // refresh
                             }
                         }
                     }
-                    viewModel.deleteFinished = true
+                    listViewModel.deleteFinished = true
                 }
             }
             addToMyMapRes.observe(viewLifecycleOwner) { res ->
-                if (!viewModel.addToMyMapFinished) {
+                if (!listViewModel.addToMyMapFinished) {
                     handleResult(context, res) { addToMyMapRes ->
                         showGenericErrorOr(context, addToMyMapRes, "A hozzáadás sikeres!")
                     }
-                    viewModel.addToMyMapFinished = true
+                    listViewModel.addToMyMapFinished = true
                 }
             }
         }
     }
 
     private fun initAdapter(
-        viewModel: GroupsDetailMapViewModel,
+        mapViewModel: GroupsDetailMapViewModel,
+        listViewModel: GroupsDetailListViewModel,
         args: GroupsDetailListFragmentArgs
     ) = GroupsDetailListAdapter(GroupsDetailListClickListener(
         editListener = { routeName ->
@@ -97,12 +104,13 @@ class GroupsDetailListFragment : Fragment() {
         },
         deleteListener = { routeName ->
             handleOffline(requireContext()) {
-                viewModel.onDelete(args.groupName, routeName)
+                listViewModel.onDelete(args.groupName, routeName)
             }
         },
         addToMyMapListener = { routeName ->
             handleOffline(requireContext()) {
-                viewModel.onAddToMyMap(routeName)
+                val route = mapViewModel.getRoute(routeName)
+                listViewModel.onAddToMyMap(route)
             }
         }
     ), args.isConnectedPage)

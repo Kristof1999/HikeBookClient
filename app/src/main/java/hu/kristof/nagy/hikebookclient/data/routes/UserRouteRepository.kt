@@ -26,13 +26,24 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
-    override suspend fun loadUserRoute(routeName: String): Flow<Result<UserRoute>> {
+    override suspend fun loadUserRouteOfLoggedInUser(
+        routeName: String
+    ): Flow<Result<UserRoute>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             handleRequest {
                 service.loadUserRoute(userName!!, routeName)
             }
+        }
+    }
+
+    suspend fun loadUserRouteOfUser(
+        userName: String,
+        routeName: String
+    ): Result<UserRoute> {
+        return handleRequest {
+            service.loadUserRoute(userName, routeName);
         }
     }
 

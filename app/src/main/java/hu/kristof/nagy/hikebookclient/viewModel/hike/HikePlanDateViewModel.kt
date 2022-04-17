@@ -10,11 +10,16 @@ import hu.kristof.nagy.hikebookclient.data.WeatherRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.weather.WeatherResponse
-import hu.kristof.nagy.hikebookclient.util.routeLoaded
+import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to forecast the weather
+ * for the chosen date and time, and
+ * helps to load the route chosen for hiking.
+ */
 @HiltViewModel
 class HikePlanDateViewModel @Inject constructor(
     private val repository: WeatherRepository,
@@ -31,15 +36,23 @@ class HikePlanDateViewModel @Inject constructor(
 
     fun loadRoute(routeName: String) {
         viewModelScope.launch {
-            userRouteRepository.loadUserRoute(routeName).collect {
+            userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
                 _route.value = it
             }
         }
     }
 
+    /**
+     * Checks whether the route has loaded yet.
+     * If it has not, then it throws the appropriate exceptions.
+     * If it has, then it calls the data layer 3 times to
+     * get weather forecast for the start, middle, and end
+     * of the hike route with 3 hour intervals.
+     * It then notifies the view layer of the result.
+     */
     // TODO: test -> edge cases
     fun forecast(date: String, hour: Int) {
-        if (routeLoaded(_route)) {
+        if (checkAndHandleRouteLoad(_route.value!!)) {
             val points = _route.value!!.getOrNull()!!.points
 
             // TODO: cache result -> 10 min window

@@ -28,30 +28,30 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
 import javax.inject.Inject
 
 /**
- * Encapsulates the registration flow, and provides a way for the ui/view layer
- * to get notified of the result of the registration attempt.
+ * A ViewModel that helps to register the user.
  */
 @HiltViewModel
-class RegistrationViewModel @Inject constructor(private val repository: IAuthRepository) : ViewModel() {
+class RegistrationViewModel @Inject constructor(
+    private val repository: IAuthRepository
+    ) : ViewModel() {
     private var _registrationRes = MutableLiveData<Boolean>()
     val registrationRes : LiveData<Boolean>
         get() = _registrationRes
 
     /**
-     * Performs checks on the given user, encodes its password,
-     * and attempts to register the user.
+     * Calls the data layer to register the user,
+     * after encrypting the user's password,
+     * and notifies the view layer of the result.
+     * @param user the user to register
      */
     fun onRegister(user: UserAuth) {
-        val password = MessageDigest.getInstance("MD5").digest(
-            user.password.toByteArray()
-        ).joinToString(separator = "")
-
         viewModelScope.launch{
-            _registrationRes.value = repository.register(UserAuth(user.name, password))
+            _registrationRes.value = repository.register(
+                user.apply { encryptPassword() }
+            )
         }
     }
 }

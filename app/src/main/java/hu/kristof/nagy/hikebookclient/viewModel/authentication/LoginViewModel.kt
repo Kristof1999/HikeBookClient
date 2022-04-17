@@ -29,30 +29,30 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
 import hu.kristof.nagy.hikebookclient.model.UserAuth
 import kotlinx.coroutines.launch
-import java.security.MessageDigest
 import javax.inject.Inject
 
 /**
- * Encapsulates the login flow, and provides a way for the ui/view layer
- * to get notified of the result of the login attempt.
+ * A ViewModel that helps to log in the user.
  */
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: IAuthRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val repository: IAuthRepository
+    ) : ViewModel() {
     private var _loginRes = MutableLiveData<Boolean>()
     val loginRes : LiveData<Boolean>
         get() = _loginRes
 
     /**
-     * Performs check on the given user, encodes its password,
-     * and attempts to log in the user.
+     * Calls the data layer to log in the user,
+     * after encrypting the user's password,
+     * and notifies the view layer of the result.
+     * @param user the user to log in
      */
     fun onLogin(user: UserAuth) {
-        val password = MessageDigest.getInstance("MD5").digest(
-            user.password.toByteArray()
-        ).joinToString(separator = "")
-
         viewModelScope.launch {
-            _loginRes.value = repository.login(UserAuth(user.name, password))
+            _loginRes.value = repository.login(
+                user.apply { encryptPassword() }
+            )
         }
     }
 }

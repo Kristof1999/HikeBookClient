@@ -64,6 +64,9 @@ class GroupHikeListFragment : Fragment() {
                     } else {
                         Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT).show()
                     }
+                    handleOfflineLoad(requireContext()) {
+                        viewModel.listGroupHikes(isConnectedPage)
+                    }
                 }
                 viewModel.generalConnectFinished = true
             }

@@ -10,15 +10,14 @@ import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to list all the user routes.
+ */
 @HiltViewModel
 class BrowseViewModel @Inject constructor(
     private val service: Service
     ) : ViewModel() {
-
     private var _routes = MutableLiveData<List<BrowseListItem>>()
-    /**
-     * List of all the routes.
-     */
     val routes: LiveData<List<BrowseListItem>>
         get() = _routes
 

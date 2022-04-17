@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -18,7 +19,7 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
- * A Fragment which displays the routes of a group on a map.
+ * A MapFragment which displays the routes of a group on a map.
  * It has 2 buttons:
  * one to create a route for the group, and
  * one to add a route to the group from the user's map.
@@ -67,7 +68,10 @@ class GroupsDetailMapFragment : MapFragment() {
         viewModel.addFromMyMapRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.addFromMyMapFinished) {
                 handleResult(context, res) { addFromMyMapRes ->
-                    showGenericErrorOr(context, addFromMyMapRes, "A felvétel sikeres!")
+                    showGenericErrorOr(context, addFromMyMapRes) {
+                        Toast.makeText(context, "A felvétel sikeres!", Toast.LENGTH_SHORT).show()
+                        viewModel.loadRoutesOfGroup(groupName)
+                    }
                 }
                 viewModel.addFromMyMapFinished = true
             }

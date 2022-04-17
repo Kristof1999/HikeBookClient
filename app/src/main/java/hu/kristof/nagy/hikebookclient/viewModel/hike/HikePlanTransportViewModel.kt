@@ -54,7 +54,7 @@ class HikePlanTransportViewModel @Inject constructor(
 
     fun loadRoute(routeName: String) {
         viewModelScope.launch {
-            userRouteRepository.loadUserRoute(routeName).collect {
+            userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
                 _route.value = it
             }
         }

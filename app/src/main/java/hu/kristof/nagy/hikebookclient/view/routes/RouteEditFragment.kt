@@ -27,7 +27,7 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
 /**
- * A Fragment to edit the chosen route.
+ * A MapFragment to edit the chosen route.
  * The user can change the name of the route and it's description in editTexts,
  * and change the points of the route on a map.
  * The user can choose between which type of point to place next with a spinner.

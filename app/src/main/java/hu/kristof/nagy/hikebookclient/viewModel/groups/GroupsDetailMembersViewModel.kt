@@ -9,6 +9,9 @@ import hu.kristof.nagy.hikebookclient.di.Service
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to list the members of the given group.
+ */
 @HiltViewModel
 class GroupsDetailMembersViewModel @Inject constructor(
     private val service: Service

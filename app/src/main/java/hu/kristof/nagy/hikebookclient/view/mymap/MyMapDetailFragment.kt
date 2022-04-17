@@ -27,7 +27,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import java.util.*
 
 /**
- * A Fragment to display the details of the chosen route.
+ * A MapFragment to display the details of the chosen route.
  * It displays the route on a map, and the route's name.
  * It has several buttons:
  * one to start hiking,

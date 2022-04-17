@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to create groups.
+ */
 @HiltViewModel
 class GroupsViewModel @Inject constructor(
     private val repository: GroupsRepository
@@ -20,6 +23,14 @@ class GroupsViewModel @Inject constructor(
 
     var createFinished = true
 
+    /**
+     * Checks if the given group name is not empty,
+     * and does not contain the / symbol.
+     * If the name is not ok, then it throws the appropriate exceptions.
+     * If the name is ok, then it calls the data layer to create the group,
+     * and notifies the view layer of the result.
+     * @throws IllegalArgumentException if the group name is not ok
+     */
     fun createGroup(name: String) {
         check(name)
 
@@ -31,7 +42,7 @@ class GroupsViewModel @Inject constructor(
         }
     }
 
-    fun check(name: String) {
+    private fun check(name: String) {
         if (name.isEmpty())
             throw IllegalArgumentException("A név nem lehet üres.")
         if (name.contains("/"))

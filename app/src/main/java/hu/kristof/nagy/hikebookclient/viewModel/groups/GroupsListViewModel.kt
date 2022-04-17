@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps the user to
+ * join/leave a given group, and
+ * helps with listing the groups.
+ */
 @HiltViewModel
 class GroupsListViewModel @Inject constructor(
     private val repository: GroupsRepository

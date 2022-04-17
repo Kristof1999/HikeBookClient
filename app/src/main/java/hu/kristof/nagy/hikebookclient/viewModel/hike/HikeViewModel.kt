@@ -26,7 +26,7 @@ class HikeViewModel @Inject constructor(
 
     fun loadUserRoute(routeName: String) {
         viewModelScope.launch {
-            userRouteRepository.loadUserRoute(routeName).collect {
+            userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
                 _route.value = it
             }
         }

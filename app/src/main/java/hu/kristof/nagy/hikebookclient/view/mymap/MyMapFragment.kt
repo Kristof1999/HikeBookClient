@@ -22,7 +22,7 @@ import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
- * A Fragment to display the routes of the logged in user on a map.
+ * A MapFragment to display the routes of the logged in user on a map.
  * It has a button with which the user can
  * create a route.
  * With another button, the user can switch to a list view of his/her routes.

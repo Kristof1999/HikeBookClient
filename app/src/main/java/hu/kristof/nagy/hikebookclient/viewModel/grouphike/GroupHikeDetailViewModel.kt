@@ -9,10 +9,16 @@ import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to load the chosen group hike's route,
+ * list participants, handle joining/leaving the group hike,
+ * and helps to add the group hike's route to the user's map.
+ */
 @HiltViewModel
 class GroupHikeDetailViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository,
@@ -56,18 +62,24 @@ class GroupHikeDetailViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Checks if the route has loaded.
+     * If it has not, then it throws the appropriate exceptions.
+     * If it has, then it calls the data layer to create
+     * the loaded route for the logged in user,
+     * and notifies the view layer of the result.
+     * @throws IllegalStateException if the route has not loaded yet
+     */
     fun addToMyMap() {
-        if (_route.value == null) {
-            throw IllegalStateException("Az útvonal még nem töltődött be! Kérem, várjon.");
-        } else {
+        if (checkAndHandleRouteLoad(_route.value)) {
             viewModelScope.launch {
                 addToMyMapFinished = false
                 val route = _route.value!!
                 userRouteRepository
                     .createUserRoute(route.routeName, route.points, route.description)
                     .collect {
-                    _addToMyMapRes.value = it
-                }
+                        _addToMyMapRes.value = it
+                    }
             }
         }
     }

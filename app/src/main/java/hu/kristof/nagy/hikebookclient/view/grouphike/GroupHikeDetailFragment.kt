@@ -24,8 +24,8 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 /**
- * A Fragment that displays the details of a group hike list item.
- * It display's the route on a map, the group hike's name,
+ * A MapFragment that displays the details of a group hike list item.
+ * It displays the route on a map, the group hike's name,
  * the route's description, the list of participants.
  * It has a button with which the user can join or leave the group hike,
  * and another button to add the given route to his/her map.

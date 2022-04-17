@@ -27,7 +27,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.Marker
 
 /**
- * A Fragment to display the planned route on a map.
+ * A MapFragment to display the planned route on a map.
  * It has a button to stop travelling, and start hiking
  * or go back to my map screen.
  */

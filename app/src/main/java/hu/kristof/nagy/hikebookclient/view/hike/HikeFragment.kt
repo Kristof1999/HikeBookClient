@@ -41,7 +41,7 @@ import org.osmdroid.views.overlay.Polyline
 import java.util.*
 
 /**
- * A Fragment to help the user with hiking.
+ * A MapFragment to help the user with hiking.
  * It displays the route on a map, and uses GPS to locate the device.
  * It has several buttons:
  * one shows the device's last known location,

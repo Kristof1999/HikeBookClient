@@ -27,7 +27,7 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 /**
- * A Fragment to plan transportation between 2 points with a given transport mean.
+ * A MapFragment to plan transportation between 2 points with a given transport mean.
  * It displays a map with 3 markers:
  * one marker is fixed, and shows the start/end of the hike,
  * and the other 2 markers show the start and end points of the planned route.

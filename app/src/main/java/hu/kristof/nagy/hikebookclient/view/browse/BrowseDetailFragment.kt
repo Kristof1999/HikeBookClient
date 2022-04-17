@@ -23,7 +23,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.Polyline
 
 /**
- * A Fragment that displays the details of a browse list item.
+ * A MapFragment that displays the details of a browse list item.
  * It shows the route on a map, and
  * displays the route's name, the corresponding user name,
  * and the route's description.

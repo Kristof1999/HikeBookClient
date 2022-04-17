@@ -12,6 +12,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to list group hikes,
+ * and join/leave a group hike.
+ */
 @HiltViewModel
 class GroupHikeListViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository
@@ -39,8 +43,6 @@ class GroupHikeListViewModel @Inject constructor(
         viewModelScope.launch {
             groupHikeRepository.generalConnect(groupHikeName, isConnectedPage, dateTime).collect {
                 _generalConnectRes.value = it
-                if (it) // refresh if successful
-                    listGroupHikes(isConnectedPage)
             }
         }
     }

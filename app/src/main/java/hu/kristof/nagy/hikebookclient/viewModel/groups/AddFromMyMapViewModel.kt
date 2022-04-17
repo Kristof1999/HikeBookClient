@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to list the user's
+ * route names.
+ */
 @HiltViewModel
 class AddFromMyMapViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository
