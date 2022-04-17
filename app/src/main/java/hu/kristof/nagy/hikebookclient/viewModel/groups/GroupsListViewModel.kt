@@ -22,7 +22,10 @@ class GroupsListViewModel @Inject constructor(
     val generalConnectRes: LiveData<Boolean>
         get() = _generalConnectRes
 
+    var generalConnectFinished = true
+
     fun generalConnect(groupName: String, isConnectedPage: Boolean) {
+        generalConnectFinished = false
         viewModelScope.launch {
             repository.generalConnect(groupName, isConnectedPage).collect { res ->
                 _generalConnectRes.value = res

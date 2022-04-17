@@ -10,6 +10,9 @@ import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHelpBinding
 
+/**
+ * A Fragment which displays help information for a given page.
+ */
 class HelpFragment : Fragment() {
     private lateinit var binding: FragmentHelpBinding
 

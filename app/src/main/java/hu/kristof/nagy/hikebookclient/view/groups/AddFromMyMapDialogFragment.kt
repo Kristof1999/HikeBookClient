@@ -20,6 +20,10 @@ import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.groups.AddFromMyMapViewModel
 
+/**
+ * A Fragment to add a route from my map to group map.
+ * It displays the list of routes available on the user's map.
+ */
 @AndroidEntryPoint
 class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: AddFromMyMapDialogBinding

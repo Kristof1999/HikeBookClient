@@ -14,6 +14,10 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMembersBin
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMembersViewModel
 
+/**
+ * A Fragment which displays the list of members of the given group.
+ * A list item consists of a member's name.
+ */
 @AndroidEntryPoint
 class GroupsDetailMembersFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailMembersBinding
@@ -34,10 +38,13 @@ class GroupsDetailMembersFragment : Fragment() {
         val viewModel: GroupsDetailMembersViewModel by viewModels()
         val args: GroupsDetailMembersFragmentArgs by navArgs()
 
+        setupList(viewModel)
         handleOfflineLoad(requireContext()) {
             viewModel.listMembers(args.groupName)
         }
+    }
 
+    private fun setupList(viewModel: GroupsDetailMembersViewModel) {
         val adapter = GroupsDetailMembersAdapter()
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.members.observe(viewLifecycleOwner) { members ->

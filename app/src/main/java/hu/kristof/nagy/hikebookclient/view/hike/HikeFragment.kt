@@ -40,6 +40,16 @@ import org.osmdroid.views.overlay.Polygon
 import org.osmdroid.views.overlay.Polyline
 import java.util.*
 
+/**
+ * A Fragment to help the user with hiking.
+ * It displays the route on a map, and uses GPS to locate the device.
+ * It has several buttons:
+ * one shows the device's last known location,
+ * one shows a message which tells the user how can he/she hike while offline,
+ * then there are 2 buttons to track progress,
+ * and one button with which the user
+ * can start to plan the the way home.
+ */
 @AndroidEntryPoint
 class HikeFragment : MapFragment() {
     private lateinit var binding: FragmentHikeBinding
@@ -59,12 +69,7 @@ class HikeFragment : MapFragment() {
 
         initMap()
 
-        val myLocationMarker = Marker(map)
-        myLocationMarker.icon = AppCompatResources.getDrawable(
-            requireContext(),
-            org.osmdroid.bonuspack.R.drawable.person
-        )
-        map.overlays.add(myLocationMarker)
+        val myLocationMarker = makeMyLocationMarker()
 
         val fusedLocationProviderClient = LocationServices
             .getFusedLocationProviderClient(requireContext())
@@ -74,8 +79,8 @@ class HikeFragment : MapFragment() {
 
         val viewModel: HikeViewModel by viewModels()
         val args: HikeFragmentArgs by navArgs()
-        binding.lifecycleOwner = viewLifecycleOwner
 
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
                 myGeofence(fusedLocationProviderClient, myLocationMarker, userRoute, args, viewModel)
@@ -86,19 +91,7 @@ class HikeFragment : MapFragment() {
             viewModel.loadUserRoute(args.routeName)
         }
 
-        binding.hikeFinishButton.setOnLongClickListener {
-            findNavController().navigate(
-                R.id.action_hikeFragment_to_myMapFragment
-            )
-            return@setOnLongClickListener true
-        }
-        binding.hikeBackwardsPlanTransportButton.setOnLongClickListener {
-            val isForward = false
-            val directions = HikeFragmentDirections
-                .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
-            findNavController().navigate(directions)
-            return@setOnLongClickListener true
-        }
+        setupLongClickListeners(args)
 
         binding.hikeOfflineButton.setOnClickListener {
             AlertDialog.Builder(requireContext())
@@ -107,6 +100,33 @@ class HikeFragment : MapFragment() {
         }
 
         map.invalidate()
+    }
+
+    private fun setupLongClickListeners(args: HikeFragmentArgs) {
+        with(binding) {
+            hikeFinishButton.setOnLongClickListener {
+                findNavController().navigate(
+                    R.id.action_hikeFragment_to_myMapFragment
+                )
+                return@setOnLongClickListener true
+            }
+            hikeBackwardsPlanTransportButton.setOnLongClickListener {
+                val isForward = false
+                val directions = HikeFragmentDirections
+                    .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
+                findNavController().navigate(directions)
+                return@setOnLongClickListener true
+            }
+        }
+    }
+
+    private fun makeMyLocationMarker() = Marker(map).apply {
+        icon = AppCompatResources.getDrawable(
+            requireContext(),
+            org.osmdroid.bonuspack.R.drawable.person
+        )
+    }.also { myLocationMarker ->
+        map.overlays.add(myLocationMarker)
     }
 
     private fun initMap() {

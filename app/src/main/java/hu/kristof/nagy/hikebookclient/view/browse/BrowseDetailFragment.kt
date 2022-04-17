@@ -27,8 +27,8 @@ import org.osmdroid.views.overlay.Polyline
  * It shows the route on a map, and
  * displays the route's name, the corresponding user name,
  * and the route's description.
- * Has a button, with which
- * the user can add the current route to his/her map.
+ * Has a button, with which the user can
+ * add the current route to his/her map.
  */
 @AndroidEntryPoint
 class BrowseDetailFragment : MapFragment() {

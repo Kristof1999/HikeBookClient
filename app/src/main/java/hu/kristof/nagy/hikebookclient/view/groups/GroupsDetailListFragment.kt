@@ -19,6 +19,12 @@ import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 
+/**
+ * A Fragment to display the routes of a group in a list.
+ * A list item consists of the route's name, and 3 buttons:
+ * one to edit and one to delete the given route, and
+ * one to add the route to the user's map.
+ */
 class GroupsDetailListFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailListBinding
 

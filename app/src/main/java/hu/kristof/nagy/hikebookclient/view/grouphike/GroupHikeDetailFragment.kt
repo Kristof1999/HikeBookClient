@@ -25,6 +25,10 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 /**
  * A Fragment that displays the details of a group hike list item.
+ * It display's the route on a map, the group hike's name,
+ * the route's description, the list of participants.
+ * It has a button with which the user can join or leave the group hike,
+ * and another button to add the given route to his/her map.
  */
 @AndroidEntryPoint
 class GroupHikeDetailFragment : MapFragment() {
@@ -47,12 +51,20 @@ class GroupHikeDetailFragment : MapFragment() {
         adaptView(args)
 
         val viewModel: GroupHikeDetailViewModel by viewModels()
-        binding.lifecycleOwner = viewLifecycleOwner
 
         setupGeneralConnect(viewModel, args)
 
         setupAddToMyMap(viewModel)
 
+        setupLoad(viewModel, args)
+
+        initMap()
+    }
+
+    private fun setupLoad(
+        viewModel: GroupHikeDetailViewModel,
+        args: GroupHikeDetailFragmentArgs
+    ) {
         viewModel.route.observe(viewLifecycleOwner) { route ->
             showRoutePolylineOnMap(route)
 
@@ -64,12 +76,10 @@ class GroupHikeDetailFragment : MapFragment() {
 
             map.invalidate()
         }
+        setupList(viewModel, args)
         handleOfflineLoad(requireContext()) {
             viewModel.loadRoute(args.groupHikeName)
-            setupRecyclerView(viewModel, args)
         }
-
-        initMap()
     }
 
     private fun closeInfoWindows() {
@@ -113,13 +123,7 @@ class GroupHikeDetailFragment : MapFragment() {
     }
 
     private fun setupAddToMyMap(viewModel: GroupHikeDetailViewModel) {
-        binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
-            catchAndShowIllegalStateAndArgument(requireContext()) {
-                handleOffline(requireContext()) {
-                    viewModel.addToMyMap()
-                }
-            }
-        }
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.addToMyMapRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.addToMyMapFinished) {
                 handleResult(context, res) { addToMyMapRes ->
@@ -128,15 +132,21 @@ class GroupHikeDetailFragment : MapFragment() {
                 viewModel.addToMyMapFinished = true
             }
         }
+        binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                catchAndShowIllegalStateAndArgument(requireContext()) {
+                    viewModel.addToMyMap()
+                }
+            }
+        }
+
     }
 
     private fun setupGeneralConnect(
         viewModel: GroupHikeDetailViewModel,
         args: GroupHikeDetailFragmentArgs
     ) {
-        binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
-            viewModel.generalConnect(args.groupHikeName, args.isConnectedPage, args.dateTime)
-        }
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
             showGenericErrorOr(context, generalConnectRes) {
                 findNavController().navigate(
@@ -144,13 +154,19 @@ class GroupHikeDetailFragment : MapFragment() {
                 )
             }
         }
+        binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                viewModel.generalConnect(args.groupHikeName, args.isConnectedPage, args.dateTime)
+            }
+        }
     }
 
-    private fun setupRecyclerView(
+    private fun setupList(
         viewModel: GroupHikeDetailViewModel,
         args: GroupHikeDetailFragmentArgs
     ) {
         val adapter = GroupHikeDetailParticipantsListAdapter()
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.participants.observe(viewLifecycleOwner) { participants ->
             adapter.submitList(participants.toMutableList())
         }
@@ -166,7 +182,7 @@ class GroupHikeDetailFragment : MapFragment() {
         }
     }
 
-    private fun adaptView(args: GroupHikeDetailFragmentArgs) = binding.apply {
+    private fun adaptView(args: GroupHikeDetailFragmentArgs) = with(binding) {
         groupHikeDetailNameTv.text = args.groupHikeName
         groupHikeDetailGeneralConnectButton.apply {
             if (args.isConnectedPage) {

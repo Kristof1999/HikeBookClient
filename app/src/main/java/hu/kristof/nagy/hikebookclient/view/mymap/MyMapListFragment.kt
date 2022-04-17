@@ -72,7 +72,7 @@ class MyMapListFragment : Fragment() {
         val myMapViewModel: MyMapViewModel by activityViewModels()
         val myMapDetailViewModel: MyMapDetailViewModel by viewModels()
 
-        setupRecyclerView(myMapDetailViewModel, myMapViewModel)
+        setupList(myMapDetailViewModel, myMapViewModel)
 
         binding.lifecycleOwner = viewLifecycleOwner
         myMapDetailViewModel.deleteRes.observe(viewLifecycleOwner) {
@@ -117,7 +117,7 @@ class MyMapListFragment : Fragment() {
         }
     }
 
-    private fun setupRecyclerView(
+    private fun setupList(
         myMapDetailViewModel: MyMapDetailViewModel,
         myMapViewModel: MyMapViewModel
     ) {

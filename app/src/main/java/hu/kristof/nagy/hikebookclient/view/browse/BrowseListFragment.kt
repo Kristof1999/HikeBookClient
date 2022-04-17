@@ -19,6 +19,7 @@ import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseViewModel
 
 /**
  * A Fragment to display a list of routes for browsing.
+ * A list item consists of the route's name and the corresponding user's name.
  */
 @AndroidEntryPoint
 class BrowseListFragment : Fragment() {
@@ -40,14 +41,13 @@ class BrowseListFragment : Fragment() {
 
         val viewModel: BrowseViewModel by viewModels()
 
+        setupList(viewModel)
         handleOfflineLoad(requireContext()) {
             viewModel.listRoutes()
         }
-
-        setupRecyclerView(viewModel)
     }
 
-    private fun setupRecyclerView(viewModel: BrowseViewModel) {
+    private fun setupList(viewModel: BrowseViewModel) {
         val adapter = BrowseListAdapter(BrowseClickListener { userName, routeName ->
             val action = BrowseListFragmentDirections
                 .actionBrowseListFragmentToBrowseDetailFragment(userName, routeName)

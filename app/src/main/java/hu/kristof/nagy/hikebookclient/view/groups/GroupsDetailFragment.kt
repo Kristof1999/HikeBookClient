@@ -21,6 +21,11 @@ import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 
+/**
+ * A Fragment that displays the details of the group.
+ * It displays the name of the group.
+ * It has a button, with which the user can join or leave the group.
+ */
 @AndroidEntryPoint
 class GroupsDetailFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailBinding
@@ -42,19 +47,8 @@ class GroupsDetailFragment : Fragment() {
         adaptView(args)
 
         val viewModel: GroupsDetailViewModel by viewModels()
-        binding.groupsDetailConnectButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                viewModel.generalConnect(args.groupName, args.isConnectedPage)
-            }
-        }
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            showGenericErrorOr(context, generalConnectRes) {
-                findNavController(requireActivity(), R.id.navHostFragment).navigate(
-                    R.id.action_groupsDetailFragment_to_groupsFragment
-                )
-            }
-        }
+
+        setupGeneralConnect(viewModel, args)
 
         val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
 
@@ -68,6 +62,25 @@ class GroupsDetailFragment : Fragment() {
         val bottomNav = binding.groupsDetailBottomNav
         bottomNav.setOnItemSelectedListener { menuItem ->
             return@setOnItemSelectedListener setupBottomNav(menuItem, navController, bundle, args)
+        }
+    }
+
+    private fun setupGeneralConnect(
+        viewModel: GroupsDetailViewModel,
+        args: GroupsDetailFragmentArgs
+    ) {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
+            showGenericErrorOr(context, generalConnectRes) {
+                findNavController(requireActivity(), R.id.navHostFragment).navigate(
+                    R.id.action_groupsDetailFragment_to_groupsFragment
+                )
+            }
+        }
+        binding.groupsDetailConnectButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                viewModel.generalConnect(args.groupName, args.isConnectedPage)
+            }
         }
     }
 

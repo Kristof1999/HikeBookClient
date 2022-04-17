@@ -12,6 +12,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
 
+/**
+ * A Fragment with which the user can choose a date.
+ */
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
     private var _dateRes = MutableLiveData<String>()
     val dateRes: LiveData<String>
@@ -24,7 +27,7 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
         val month = c.get(Calendar.MONTH)
         val day = c.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog =  DatePickerDialog(requireContext(), this, year, month, day)
+        val datePickerDialog = DatePickerDialog(requireContext(), this, year, month, day)
         datePickerDialog.datePicker.minDate = c.timeInMillis
         c.add(Calendar.DAY_OF_MONTH, 5)
         datePickerDialog.datePicker.maxDate = c.timeInMillis

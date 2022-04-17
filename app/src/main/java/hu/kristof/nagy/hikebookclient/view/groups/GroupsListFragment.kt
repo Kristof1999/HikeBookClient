@@ -18,6 +18,11 @@ import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsListViewModel
 
+/**
+ * A Fragment which displays the list of groups.
+ * A list item consists of a group' name, and a button.
+ * With this button, the user can join or leave the group.
+ */
 @AndroidEntryPoint
 class GroupsListFragment : Fragment() {
     private lateinit var binding: FragmentGroupsListBinding
@@ -38,25 +43,29 @@ class GroupsListFragment : Fragment() {
 
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
-        setupRecyclerView(isConnectedPage)
+        setupList(isConnectedPage)
 
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             onGeneralConnectRes(res, isConnectedPage)
         }
     }
 
     private fun onGeneralConnectRes(res: Boolean, isConnectedPage: Boolean) {
-        showGenericErrorOr(context, res) {
-            if (isConnectedPage) {
-                Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG)
-                    .show()
-            } else {
-                Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
+        if (!viewModel.generalConnectFinished) {
+            showGenericErrorOr(context, res) {
+                if (isConnectedPage) {
+                    Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
+                }
             }
+            viewModel.generalConnectFinished = true
         }
     }
 
-    private fun setupRecyclerView(isConnectedPage: Boolean) {
+    private fun setupList(isConnectedPage: Boolean) {
         val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner

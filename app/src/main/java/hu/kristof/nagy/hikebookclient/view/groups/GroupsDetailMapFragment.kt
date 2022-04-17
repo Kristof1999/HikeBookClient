@@ -17,6 +17,12 @@ import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
+/**
+ * A Fragment which displays the routes of a group on a map.
+ * It has 2 buttons:
+ * one to create a route for the group, and
+ * one to add a route to the group from the user's map.
+ */
 @AndroidEntryPoint
 class GroupsDetailMapFragment : MapFragment() {
     private lateinit var binding: FragmentGroupsDetailMapBinding
@@ -45,30 +51,19 @@ class GroupsDetailMapFragment : MapFragment() {
 
         val viewModel: GroupsDetailMapViewModel by activityViewModels()
         handleOfflineLoad(requireContext()) {
-            loadRoutesOfGroup(viewModel, groupName)
+            setupLoad(viewModel, groupName)
         }
 
-        addFromMyMap(viewModel, groupName)
-
+        setupAddFromMyMap(viewModel, groupName)
 
         map.invalidate()
     }
 
-    private fun addFromMyMap(
+    private fun setupAddFromMyMap(
         viewModel: GroupsDetailMapViewModel,
         groupName: String
     ) {
-        val dialog = AddFromMyMapDialogFragment()
         binding.lifecycleOwner = viewLifecycleOwner
-        dialog.route.observe(viewLifecycleOwner) { route ->
-            viewModel.onAddFromMyMap(route, groupName)
-        }
-        binding.groupsMapAddFromMyMapButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                dialog.show(parentFragmentManager, "add from my map")
-            }
-        }
-
         viewModel.addFromMyMapRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.addFromMyMapFinished) {
                 handleResult(context, res) { addFromMyMapRes ->
@@ -77,17 +72,27 @@ class GroupsDetailMapFragment : MapFragment() {
                 viewModel.addFromMyMapFinished = true
             }
         }
+
+        val dialog = AddFromMyMapDialogFragment()
+        dialog.route.observe(viewLifecycleOwner) { route ->
+            viewModel.onAddFromMyMap(route, groupName)
+        }
+        binding.groupsMapAddFromMyMapButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                dialog.show(parentFragmentManager, "add from my map")
+            }
+        }
     }
 
-    private fun loadRoutesOfGroup(
+    private fun setupLoad(
         viewModel: GroupsDetailMapViewModel,
         groupName: String
     ) {
-        viewModel.loadRoutesOfGroup(groupName)
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             MapUtils.onRoutesLoad(routes, context, map)
         }
+        viewModel.loadRoutesOfGroup(groupName)
     }
 
     private fun onRouteCreate(groupName: String) {

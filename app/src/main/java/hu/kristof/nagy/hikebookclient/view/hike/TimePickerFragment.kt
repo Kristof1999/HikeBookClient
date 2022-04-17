@@ -13,6 +13,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
 
+/**
+ * A Fragment with which the user can choose a time.
+ */
 class TimePickerFragment : DialogFragment(), TimePickerDialog.OnTimeSetListener {
     private var _timeRes = MutableLiveData<Calendar>()
     val timeRes: LiveData<Calendar>

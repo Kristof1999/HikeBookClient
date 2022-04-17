@@ -11,6 +11,11 @@ import com.google.android.material.tabs.TabLayout
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeBinding
 
+/**
+ * A Fragment which displays 2 tabs:
+ * a list of group hikes which the user has not joined,
+ * and a list which the user has joined
+ */
 class GroupHikeFragment : Fragment() {
     private lateinit var binding: FragmentGroupHikeBinding
 

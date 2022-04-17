@@ -13,10 +13,18 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
 
+/**
+ * A Fragment to display a list of group hikes.
+ * A list item consists of
+ * the group hike's name, date, and
+ * it also has a button with which the user
+ * can join or leave the given group hike.
+ */
 @AndroidEntryPoint
 class GroupHikeListFragment : Fragment() {
     private lateinit var binding: FragmentGroupHikeListBinding
@@ -38,30 +46,50 @@ class GroupHikeListFragment : Fragment() {
 
         val viewModel: GroupHikeListViewModel by viewModels()
 
-        setupRecyclerView(isConnectedPage, viewModel)
-        handleOfflineLoad(requireContext()) {
-            viewModel.listGroupHikes(isConnectedPage)
-        }
+        setupLoad(isConnectedPage, viewModel)
 
+        handleGeneralConnect(viewModel, isConnectedPage)
+    }
+
+    private fun handleGeneralConnect(
+        viewModel: GroupHikeListViewModel,
+        isConnectedPage: Boolean
+    ) {
+        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            showGenericErrorOr(context, generalConnectRes) {
-                if (isConnectedPage) {
-                    Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+            if (!viewModel.generalConnectFinished) {
+                showGenericErrorOr(context, generalConnectRes) {
+                    if (isConnectedPage) {
+                        Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+                    }
                 }
+                viewModel.generalConnectFinished = true
             }
         }
     }
 
-    private fun setupRecyclerView(
+    private fun setupLoad(
+        isConnectedPage: Boolean,
+        viewModel: GroupHikeListViewModel
+    ) {
+        setupList(isConnectedPage, viewModel)
+        handleOfflineLoad(requireContext()) {
+            viewModel.listGroupHikes(isConnectedPage)
+        }
+    }
+
+    private fun setupList(
         isConnectedPage: Boolean,
         viewModel: GroupHikeListViewModel
     ) {
         val adapter = GroupHikeListAdapter(isConnectedPage,
             GroupHikeClickListener(
                 generalConnectListener = { groupHikeName, dateTime ->
-                    viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime)
+                    handleOffline(requireContext()) {
+                        viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime)
+                    }
                 },
                 detailNavListener = { groupHikeName, dateTime ->
                     val directions = GroupHikeFragmentDirections

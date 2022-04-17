@@ -24,6 +24,8 @@ class GroupHikeListViewModel @Inject constructor(
     val generalConnectRes: LiveData<Boolean>
         get() = _generalConnectRes
 
+    var generalConnectFinished = true
+
     fun listGroupHikes(isConnectedPage: Boolean) {
         viewModelScope.launch {
             groupHikeRepository.listGroupHikes(isConnectedPage).collect {
@@ -33,6 +35,7 @@ class GroupHikeListViewModel @Inject constructor(
     }
 
     fun generalConnect(groupHikeName: String, isConnectedPage: Boolean, dateTime: DateTime) {
+        generalConnectFinished = false
         viewModelScope.launch {
             groupHikeRepository.generalConnect(groupHikeName, isConnectedPage, dateTime).collect {
                 _generalConnectRes.value = it

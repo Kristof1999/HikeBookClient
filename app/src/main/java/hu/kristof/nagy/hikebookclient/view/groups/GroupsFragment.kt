@@ -19,6 +19,12 @@ import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
 
+/**
+ * A Fragment that has 2 tabs:
+ * one to display a list of groups which the user has not joined,
+ * and one which the user has joined.
+ * It has a button with which the user can create a group.
+ */
 @AndroidEntryPoint
 class GroupsFragment : Fragment() {
     private lateinit var binding: FragmentGroupsBinding
@@ -46,11 +52,12 @@ class GroupsFragment : Fragment() {
         val viewModel: GroupsViewModel by viewModels()
 
         setupGroupCreation(viewModel)
-
-        onGroupCreateRes(viewModel)
     }
 
-    private fun onGroupCreateRes(viewModel: GroupsViewModel) {
+    private fun setupGroupCreation(viewModel: GroupsViewModel) {
+        val dialogFragment = TextDialogFragment.instanceOf(
+            R.string.groups_create_dialog_text, R.string.groups_create_dialog_hint_text
+        )
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.createRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.createFinished) {
@@ -60,13 +67,7 @@ class GroupsFragment : Fragment() {
                 viewModel.createFinished = true
             }
         }
-    }
 
-    private fun setupGroupCreation(viewModel: GroupsViewModel) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        val dialogFragment = TextDialogFragment.instanceOf(
-            R.string.groups_create_dialog_text, R.string.groups_create_dialog_hint_text
-        )
         dialogFragment.text.observe(viewLifecycleOwner) { name ->
             catchAndShowIllegalStateAndArgument(requireContext()) {
                 viewModel.createGroup(name)
