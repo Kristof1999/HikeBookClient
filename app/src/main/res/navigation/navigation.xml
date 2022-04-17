@@ -83,7 +83,7 @@
     <fragment
         android:id="@+id/browseListFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.browse.BrowseListFragment"
-        android:label="BrowseListFragment" >
+        android:label="@string/browse_title_text" >
         <action
             android:id="@+id/action_browseListFragment_to_browseDetailFragment"
             app:destination="@id/browseDetailFragment" />
@@ -91,7 +91,7 @@
     <fragment
         android:id="@+id/browseDetailFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.browse.BrowseDetailFragment"
-        android:label="BrowseDetailFragment" >
+        android:label="@string/browse_detail_title_text" >
         <action
             android:id="@+id/action_browseDetailFragment_to_browseListFragment"
             app:destination="@id/browseListFragment" />
@@ -105,7 +105,7 @@
     <fragment
         android:id="@+id/myMapDetailFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.mymap.MyMapDetailFragment"
-        android:label="MyMapDetailFragment" >
+        android:label="@string/my_map_detail_title" >
         <action
             android:id="@+id/action_myMapDetailFragment_to_myMapListFragment"
             app:destination="@id/myMapListFragment"
@@ -136,7 +136,7 @@
     <fragment
         android:id="@+id/hikePlanTransportFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanTransportFragment"
-        android:label="HikePlanFragment" >
+        android:label="@string/hike_plan_transport_title" >
         <action
             android:id="@+id/action_hikePlanFragment_to_hikeTransportFragment"
             app:destination="@id/hikeTransportFragment" />
@@ -150,7 +150,7 @@
     <fragment
         android:id="@+id/hikeTransportFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikeTransportFragment"
-        android:label="HikeTransportFragment" >
+        android:label="@string/hike_transport_title" >
         <argument
             android:name="startPoint"
             app:argType="hu.kristof.nagy.hikebookclient.model.Point" />
@@ -176,7 +176,7 @@
     <fragment
         android:id="@+id/hikePlanDateFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikePlanStartFragment"
-        android:label="HikePlanDateFragment" >
+        android:label="@string/hike_plan_date_title" >
         <action
             android:id="@+id/action_hikePlanDateFragment_to_hikePlanTransportFragment"
             app:destination="@id/hikePlanTransportFragment" />
@@ -190,7 +190,7 @@
     <fragment
         android:id="@+id/hikeFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.hike.HikeFragment"
-        android:label="fragment_hike"
+        android:label="@string/hike_title"
         tools:layout="@layout/fragment_hike" >
         <action
             android:id="@+id/action_hikeFragment_to_myMapFragment"
@@ -207,7 +207,7 @@
     <fragment
         android:id="@+id/groupsFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsFragment"
-        android:label="GroupsFragment" >
+        android:label="@string/groups_title" >
         <action
             android:id="@+id/action_groupsFragment_to_groupsDetailFragment"
             app:destination="@id/groupsDetailFragment" />
@@ -215,7 +215,7 @@
     <fragment
         android:id="@+id/groupsDetailFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailFragment"
-        android:label="GroupsDetailFragment" >
+        android:label="@string/groups_detail_title" >
         <argument
             android:name="groupName"
             app:argType="string" />
@@ -237,7 +237,7 @@
     <fragment
         android:id="@+id/groupsDetailMapFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMapFragment"
-        android:label="GroupsDetailMapFragment" >
+        android:label="@string/groups_detail_title" >
         <action
             android:id="@+id/action_groupsDetailMapFragment_to_routeCreateFragment"
             app:destination="@id/routeCreateFragment" />
@@ -245,7 +245,7 @@
     <fragment
         android:id="@+id/groupHikeFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.grouphike.GroupHikeFragment"
-        android:label="GroupHikeFragment" >
+        android:label="@string/group_hike_title" >
         <action
             android:id="@+id/action_groupHikeFragment_to_groupHikeDetailFragment"
             app:destination="@id/groupHikeDetailFragment" />
@@ -253,7 +253,7 @@
     <fragment
         android:id="@+id/groupHikeDetailFragment"
         android:name="hu.kristof.nagy.hikebookclient.view.grouphike.GroupHikeDetailFragment"
-        android:label="GroupHikeDetailFragment" >
+        android:label="@string/group_hike_detail_title" >
         <argument
             android:name="groupHikeName"
             app:argType="string" />

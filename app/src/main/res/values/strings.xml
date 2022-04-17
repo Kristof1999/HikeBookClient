@@ -36,6 +36,7 @@
     <string name="edit_image_description">Edit the given route</string>
     <string name="route_create_title">Útvonal Létrehozás</string>
     <string name="route_edit_title">Útvonal Szerkesztés</string>
+    <string name="my_map_detail_title">Saját térkép: részletek</string>
     <string name="delete_image_description">Delete the given route</string>
     <string name="marker_spinner_description">marker picker</string>
     <string name="hike_description_hint">Túra leírás, részletek, megjegyzések</string>
@@ -54,6 +55,8 @@
     <string name="route_add_image_description">Add the given route to your map</string>
     <string name="browse_hike_detail_description">Felhasználói név:%1$s\nÚtvonal név: %2$s\n%3$s</string>
     <string name="add_to_my_map_text">Hozzáadás a saját térképhez</string>
+    <string name="browse_title_text">Böngészés</string>
+    <string name="browse_detail_title_text">Böngészés: részletek</string>
 
     <!-- In code usage -->
     <string name="generic_error_msg_with_hint">Valamilyen hiba lépett fel, további információkért tekintse meg a súgót.</string>
@@ -65,6 +68,10 @@
     <string name="offline_load_error_msg">A legfrisebb adatok betöltéséhez internetkapcsolat szükséges.</string>
 
     <!-- Hike -->
+    <string name="hike_plan_date_title">Dátum és Idő Tervezés</string>
+    <string name="hike_plan_transport_title">Útazás Tervezés</string>
+    <string name="hike_transport_title">Útazás</string>
+    <string name="hike_title">Túra</string>
     <string name="transport_types_spinner_description">Travel types</string>
     <string name="date_picker_button_text">Dátum\nKiválasztása</string>
     <string name="time_picker_button_text">Idő\nKiválasztása</string>
@@ -89,6 +96,8 @@
     </string-array>
 
     <!-- Groups -->
+    <string name="groups_title">Csoportok</string>
+    <string name="groups_detail_title">Csoportok: részletek</string>
     <string name="tab_connected_text">Csatlakozott</string>
     <string name="tab_unconnected_text">Nem Csatlakozott</string>
     <string name="tab_description_text">Tabs for navigating between connected and unconnected group lists</string>
@@ -103,6 +112,8 @@
     <string name="add_from_my_map_spinner_description">Pick route from your map to add to group map</string>
 
     <!-- GroupHike -->
+    <string name="group_hike_title">Csoportos Túra</string>
+    <string name="group_hike_detail_title">Csoportos Túra: részletek</string>
     <string name="group_hike_tab_description_text">Tabs for navigating between connected and unconnected group hike lists</string>
     <string name="group_hike_create_dialog_text">Add meg a csoprotos túra nevét:</string>
     <string name="group_hike_create_dialog_hint_text">Csoportos túra név</string>
