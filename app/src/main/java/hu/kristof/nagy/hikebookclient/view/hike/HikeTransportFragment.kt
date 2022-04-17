@@ -26,6 +26,11 @@ import org.osmdroid.bonuspack.routing.RoadManager
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.Marker
 
+/**
+ * A Fragment to display the planned route on a map.
+ * It has a button to stop travelling, and start hiking
+ * or go back to my map screen.
+ */
 class HikeTransportFragment : MapFragment() {
     private lateinit var binding: FragmentHikeTransportBinding
 
@@ -48,14 +53,7 @@ class HikeTransportFragment : MapFragment() {
         val args: HikeTransportFragmentArgs by navArgs()
 
         val roadManager = OSRMRoadManager(context, BuildConfig.APPLICATION_ID)
-        handleOfflineLoad(requireContext()) {
-            viewModel.getRoad(args, roadManager)
-        }
-
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.roadRes.observe(viewLifecycleOwner) { road ->
-            onRoadResult(road)
-        }
+        setupLoad(viewModel, args, roadManager)
 
         binding.hikeTransportFinishButton.setOnClickListener {
             if (args.isForward) {
@@ -67,6 +65,20 @@ class HikeTransportFragment : MapFragment() {
                     R.id.action_hikeTransportFragment_to_myMapFragment
                 )
             }
+        }
+    }
+
+    private fun setupLoad(
+        viewModel: HikeTransportViewModel,
+        args: HikeTransportFragmentArgs,
+        roadManager: OSRMRoadManager
+    ) {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.roadRes.observe(viewLifecycleOwner) { road ->
+            onRoadResult(road)
+        }
+        handleOfflineLoad(requireContext()) {
+            viewModel.getRoad(args, roadManager)
         }
     }
 

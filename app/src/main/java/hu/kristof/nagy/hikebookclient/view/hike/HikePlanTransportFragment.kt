@@ -26,6 +26,16 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
+/**
+ * A Fragment to plan transportation between 2 points with a given transport mean.
+ * It displays a map with 3 markers:
+ * one marker is fixed, and shows the start/end of the hike,
+ * and the other 2 markers show the start and end points of the planned route.
+ * It has 2 switches, with which the user can set which marker he/she would like to move.
+ * It has a spinner, from which the user can choose
+ * with which transport mean he/she would like to travel.
+ * It has a button to start travelling.
+ */
 @AndroidEntryPoint
 class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanTransportBinding
@@ -48,16 +58,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
         val args: HikePlanTransportFragmentArgs by navArgs()
 
-        handleOfflineLoad(requireContext()) {
-            viewModel.loadRoute(args.routeName)
-        }
-
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { route ->
-                adaptView(args, route)
-            }
-        }
+        setupLoad(args)
 
         binding.hikePlanTransportTransportMeanSpinner.onItemSelectedListener = this
         SpinnerUtils.setTransportSpinnerAdapter(requireContext(), binding.hikePlanTransportTransportMeanSpinner)
@@ -73,6 +74,18 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         addMapEventsOverlay()
 
         map.invalidate()
+    }
+
+    private fun setupLoad(args: HikePlanTransportFragmentArgs) {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                adaptView(args, route)
+            }
+        }
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoute(args.routeName)
+        }
     }
 
     private fun adaptView(args: HikePlanTransportFragmentArgs, route: Route) {

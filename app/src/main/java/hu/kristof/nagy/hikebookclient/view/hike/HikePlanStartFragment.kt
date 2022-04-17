@@ -18,6 +18,13 @@ import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanDateViewModel
 import java.util.*
 
+/**
+ * A Fragment to start planning the hike.
+ * The user can choose the date and time of the hike,
+ * and get a weather forecast.
+ * The user can choose to plan his/her way to the start point of the hike,
+ * or start hiking immediately.
+ */
 @AndroidEntryPoint
 class HikePlanStartFragment : Fragment() {
     private lateinit var binding: FragmentHikePlanStartBinding
@@ -63,7 +70,6 @@ class HikePlanStartFragment : Fragment() {
     private fun setupForecasting(
         viewModel: HikePlanDateViewModel
     ) {
-        // TODO: refactor by using one calendar here, example: myMapList
         var date: String? = null
         var hour: Int? = null
         binding.lifecycleOwner = viewLifecycleOwner
