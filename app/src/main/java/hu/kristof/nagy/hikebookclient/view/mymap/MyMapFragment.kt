@@ -27,6 +27,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 @AndroidEntryPoint
 class MyMapFragment : MapFragment() {
     private lateinit var binding: FragmentMyMapBinding
+    private val viewModel: MyMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,18 +47,16 @@ class MyMapFragment : MapFragment() {
 
         setClickListeners()
 
-        val viewModel: MyMapViewModel by activityViewModels()
-
-        handleOfflineLoad(requireContext()) {
-            viewModel.loadRoutesForLoggedInUser()
-        }
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             MapUtils.onRoutesLoad(routes, context, map)
         }
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoutesForLoggedInUser()
+        }
     }
 
-    private fun setClickListeners() = binding.apply {
+    private fun setClickListeners() = with(binding) {
         switchToMyMapListButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_myMapFragment_to_myMapListFragment

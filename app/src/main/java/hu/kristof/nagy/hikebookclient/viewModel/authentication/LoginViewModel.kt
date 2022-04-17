@@ -49,7 +49,6 @@ class LoginViewModel @Inject constructor(private val repository: IAuthRepository
     fun onLogin(user: UserAuth) {
         AuthChecker.check(user)
 
-        // TODO: check if internet is available -> ACCESS_NETWORK_STATE
         val password = MessageDigest.getInstance("MD5").digest(
             user.password.toByteArray()
         ).joinToString(separator = "")

@@ -117,6 +117,7 @@ object MapUtils {
         map: MapView
     ) {
         handleResult(context, res) { routes ->
+            map.overlays.clear()
             val folderOverlay = FolderOverlay()
             routes.forEach { route ->
                 val polyline = route.toPolyline()

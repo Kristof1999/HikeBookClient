@@ -36,6 +36,7 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -107,7 +108,9 @@ class MyMapListFragment : Fragment() {
             handleResult(context, res) { deleteRes ->
                 showGenericErrorOr(context, deleteRes) {
                     Toast.makeText(context, "A törlés sikeres.", Toast.LENGTH_SHORT).show()
-                    myMapViewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
+                    handleOfflineLoad(requireContext()) {
+                        myMapViewModel.loadRoutesForLoggedInUser() // this refreshes the list and also the routes on the map
+                    }
                 }
             }
             myMapDetailViewModel.deleteFinished = true
