@@ -58,15 +58,19 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = viewLifecycleOwner
 
         val registrationViewModel : RegistrationViewModel by viewModels()
-        binding.registerButton.setOnClickListener {
-            onRegister(binding, registrationViewModel)
-        }
 
+        setupRegistration(registrationViewModel)
+    }
+
+    private fun setupRegistration(registrationViewModel: RegistrationViewModel) {
+        binding.lifecycleOwner = viewLifecycleOwner
         registrationViewModel.registrationRes.observe(viewLifecycleOwner) { registrationRes ->
             onRegistrationRes(registrationRes)
+        }
+        binding.registerButton.setOnClickListener {
+            onRegister(binding, registrationViewModel)
         }
     }
 

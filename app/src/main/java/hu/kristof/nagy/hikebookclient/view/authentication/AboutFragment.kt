@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import hu.kristof.nagy.hikebookclient.R
 
+/**
+ * A Fragment which shows information about the application.
+ */
 class AboutFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

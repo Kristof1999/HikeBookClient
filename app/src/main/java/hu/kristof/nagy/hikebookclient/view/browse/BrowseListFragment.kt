@@ -39,13 +39,15 @@ class BrowseListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewModel: BrowseViewModel by viewModels()
+
         handleOfflineLoad(requireContext()) {
             viewModel.listRoutes()
         }
-        setupAdapter(viewModel)
+
+        setupRecyclerView(viewModel)
     }
 
-    private fun setupAdapter(viewModel: BrowseViewModel) {
+    private fun setupRecyclerView(viewModel: BrowseViewModel) {
         val adapter = BrowseListAdapter(BrowseClickListener { userName, routeName ->
             val action = BrowseListFragmentDirections
                 .actionBrowseListFragmentToBrowseDetailFragment(userName, routeName)

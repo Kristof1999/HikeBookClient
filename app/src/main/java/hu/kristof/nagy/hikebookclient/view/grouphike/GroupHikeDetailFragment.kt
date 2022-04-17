@@ -23,6 +23,9 @@ import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.infowindow.InfoWindow
 
+/**
+ * A Fragment that displays the details of a group hike list item.
+ */
 @AndroidEntryPoint
 class GroupHikeDetailFragment : MapFragment() {
     private lateinit var binding: FragmentGroupHikeDetailBinding

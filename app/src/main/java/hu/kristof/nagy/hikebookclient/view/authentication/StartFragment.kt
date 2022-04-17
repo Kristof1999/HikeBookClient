@@ -31,7 +31,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
@@ -60,23 +59,33 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.startRegistrationButton.setOnClickListener {
-            it.findNavController()
-                .navigate(R.id.action_startFragment_to_registrationFragment)
-        }
-        binding.aboutPageButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_startFragment_to_aboutFragment
-            )
-        }
+        setClickListeners()
 
-        binding.lifecycleOwner = viewLifecycleOwner
         val loginViewModel: LoginViewModel by viewModels()
+
+        setupLogin(loginViewModel)
+    }
+
+    private fun setupLogin(loginViewModel: LoginViewModel) {
+        binding.lifecycleOwner = viewLifecycleOwner
+        loginViewModel.loginRes.observe(viewLifecycleOwner) { loginRes ->
+            onLoginRes(loginRes)
+        }
         binding.loginButton.setOnClickListener {
             onLogin(binding, loginViewModel)
         }
-        loginViewModel.loginRes.observe(viewLifecycleOwner) { loginRes ->
-            onLoginRes(loginRes)
+    }
+
+    private fun setClickListeners() = with(binding) {
+        startRegistrationButton.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_startFragment_to_registrationFragment
+            )
+        }
+        aboutPageButton.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_startFragment_to_aboutFragment
+            )
         }
     }
 
@@ -95,7 +104,7 @@ class StartFragment : Fragment() {
 
     private fun onLoginRes(loginRes: Boolean) {
         if (loginRes) {
-            this.findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_startFragment_to_mainActivity
             )
         } else {

@@ -14,6 +14,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -22,7 +23,12 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.Polyline
 
 /**
- * A Fragment to display the details of a route while browsing.
+ * A Fragment that displays the details of a browse list item.
+ * It shows the route on a map, and
+ * displays the route's name, the corresponding user name,
+ * and the route's description.
+ * Has a button, with which
+ * the user can add the current route to his/her map.
  */
 @AndroidEntryPoint
 class BrowseDetailFragment : MapFragment() {
@@ -46,27 +52,51 @@ class BrowseDetailFragment : MapFragment() {
         val args: BrowseDetailFragmentArgs by navArgs()
 
         val viewModel: BrowseDetailViewModel by viewModels()
-        handleOfflineLoad(requireContext()) {
-            viewModel.loadDetails(args.userName, args.routeName)
-            // TODO: add listener for when the device is online, we load the details
-        }
 
+        setupLoad(viewModel, args)
+
+        setupAddToMyMap(viewModel, args)
+    }
+
+    private fun setupAddToMyMap(
+        viewModel: BrowseDetailViewModel,
+        args: BrowseDetailFragmentArgs
+    ) {
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { route ->
-                onPointsLoad(route.points)
-                binding.browseDetailHikeDescriptionTv.text =
-                    getString(R.string.browse_hike_detail_description,
-                        args.userName, args.routeName, route.description
-                    )
-            }
+        viewModel.addRes.observe(viewLifecycleOwner) {
+            onAddResult(it)
         }
         binding.browseDetailAddToMyMapButton.setOnClickListener {
             onAddToMyMap(viewModel, args)
         }
-        viewModel.addRes.observe(viewLifecycleOwner) {
-            onAddResult(it)
+    }
+
+    private fun setupLoad(
+        viewModel: BrowseDetailViewModel,
+        args: BrowseDetailFragmentArgs
+    ) {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                onPointsLoad(route.points)
+                adaptView(args, route)
+            }
         }
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadDetails(args.userName, args.routeName)
+            // TODO: add listener for when the device is online, we load the details
+        }
+    }
+
+    private fun adaptView(
+        args: BrowseDetailFragmentArgs,
+        route: UserRoute
+    ) {
+        binding.browseDetailHikeDescriptionTv.text =
+            getString(
+                R.string.browse_hike_detail_description,
+                args.userName, args.routeName, route.description
+            )
     }
 
     private fun onAddResult(res: Result<Boolean>) {
@@ -80,22 +110,22 @@ class BrowseDetailFragment : MapFragment() {
     private fun onAddToMyMap(
         viewModel: BrowseDetailViewModel,
         args: BrowseDetailFragmentArgs
-    ) {
-        catchAndShowIllegalStateAndArgument(requireContext()) {
-            handleOffline(requireContext()) {
-                viewModel.addToMyMap(args.routeName)
-            }
+    ) = catchAndShowIllegalStateAndArgument(requireContext()) {
+        handleOffline(requireContext()) {
+            viewModel.addToMyMap(args.routeName)
         }
     }
 
-    private fun onPointsLoad(points: List<Point>) {
-        val polyline = Polyline()
-        polyline.setPoints(points.map { point ->
+    private fun onPointsLoad(points: List<Point>) = Polyline().apply {
+        setPoints(points.map { point ->
             point.toGeoPoint()
         })
-        map.setMapCenterOnPolylineCenter(polyline)
-        map.overlays.add(polyline)
-        map.invalidate()
+    }.also { polyline ->
+        with(map) {
+            setMapCenterOnPolylineCenter(polyline)
+            overlays.add(polyline)
+            invalidate()
+        }
     }
 
     private fun initMap() {
