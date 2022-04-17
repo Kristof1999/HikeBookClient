@@ -13,27 +13,37 @@ import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.Road
 import org.osmdroid.util.GeoPoint
 
+/**
+ * A ViewModel that plans the route
+ * between the provided 2 points.
+ */
 class HikeTransportViewModel : ViewModel() {
-
     private var _roadRes = MutableLiveData<Road>()
     val roadRes: LiveData<Road>
         get() = _roadRes
 
     fun getRoad(args: HikeTransportFragmentArgs, roadManager: OSRMRoadManager) {
-        when (args.transportType) {
-            TransportType.CAR -> roadManager.setMean(OSRMRoadManager.MEAN_BY_CAR)
-            TransportType.BICYCLE -> roadManager.setMean(OSRMRoadManager.MEAN_BY_BIKE)
-        }
-
-        val wayPoints = ArrayList<GeoPoint>()
-        wayPoints.add(args.startPoint.toGeoPoint())
-        wayPoints.add(args.endPoint.toGeoPoint())
+        setMean(args, roadManager)
 
         val deferred = viewModelScope.async(Dispatchers.IO) {
-             roadManager.getRoad(wayPoints)
+            val wayPoints = ArrayList<GeoPoint>().apply {
+                add(args.startPoint.toGeoPoint())
+                add(args.endPoint.toGeoPoint())
+            }
+            roadManager.getRoad(wayPoints)
         }
         viewModelScope.launch {
             _roadRes.value = deferred.await()
+        }
+    }
+
+    private fun setMean(
+        args: HikeTransportFragmentArgs,
+        roadManager: OSRMRoadManager
+    ) {
+        when (args.transportType) {
+            TransportType.CAR -> roadManager.setMean(OSRMRoadManager.MEAN_BY_CAR)
+            TransportType.BICYCLE -> roadManager.setMean(OSRMRoadManager.MEAN_BY_BIKE)
         }
     }
 }

@@ -15,6 +15,10 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * Helps to load the route chosen for hiking,
+ * and helps with computing and updating the user's average speed.
+ */
 @HiltViewModel
 class HikeViewModel @Inject constructor(
     private val service: Service,

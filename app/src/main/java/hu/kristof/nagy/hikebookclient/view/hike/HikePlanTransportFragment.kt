@@ -158,22 +158,22 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     }
 
     private fun handleStartAndEndSwitches() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.apply {
+            setStartNext.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportStartSwitch.isChecked = it
+            }
+            setEndNext.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportEndSwitch.isChecked = it
+            }
+        }
+
         binding.apply {
             hikePlanTransportStartSwitch.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.setStartTo(isChecked)
             }
             hikePlanTransportEndSwitch.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.setEndTo(isChecked)
-            }
-        }
-
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.apply {
-            switchOffStart.observe(viewLifecycleOwner) {
-                binding.hikePlanTransportStartSwitch.isChecked = false
-            }
-            switchOffEnd.observe(viewLifecycleOwner) {
-                binding.hikePlanTransportEndSwitch.isChecked = false
             }
         }
     }

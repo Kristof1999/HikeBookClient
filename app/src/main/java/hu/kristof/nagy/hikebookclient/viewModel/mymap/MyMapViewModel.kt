@@ -11,15 +11,15 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to load all the routes a user has.
+ */
 @HiltViewModel
 class MyMapViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository
     ) : ViewModel() {
 
     private var _routes = MutableLiveData<Result<List<UserRoute>>>()
-    /**
-     * List of the logged in user's routes.
-     */
     val routes: LiveData<Result<List<UserRoute>>>
         get() = _routes
 

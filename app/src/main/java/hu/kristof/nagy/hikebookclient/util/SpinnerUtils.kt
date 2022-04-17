@@ -11,6 +11,7 @@ import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 
 object SpinnerUtils {
+
     fun setTransportSpinnerAdapter(context: Context, spinner: Spinner) {
         setSpinnerAdatper(context, spinner, R.array.transport_types)
     }

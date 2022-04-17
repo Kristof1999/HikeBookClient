@@ -14,6 +14,11 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to load the chosen route,
+ * and helps with deleting the chosen route,
+ * and helps with creating a group hike.
+ */
 @HiltViewModel
 class MyMapDetailViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository,
@@ -23,15 +28,9 @@ class MyMapDetailViewModel @Inject constructor(
     val route: LiveData<Result<UserRoute>>
         get() = _route
 
-    /**
-     * Variable indicating that the deletion has finished.
-     */
     var deleteFinished = true
 
     private var _deleteRes = MutableLiveData<Result<Boolean>>()
-    /**
-     * Result of deletion attempt.
-     */
     val deleteRes: LiveData<Result<Boolean>>
         get() = _deleteRes
 
@@ -59,13 +58,22 @@ class MyMapDetailViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Checks if the group hike name is not empty,
+     * and does not contain a / symbol.
+     * If the name is ok, then it checks if the route is loaded.
+     * It it's loaded, then it calls the data layer to create the group hike,
+     * and notifies the view layer of the result.
+     * @throws IllegalStateException if the route has not loaded yet
+     * @throws IllegalArgumentException if the name is not ok
+     */
     fun createGroupHike(dateTime: Calendar, groupHikeName: String) {
         if (groupHikeName.isEmpty())
             throw IllegalArgumentException("A csoportos túra neve nem lehet üres.")
         if (groupHikeName.contains("/"))
             throw IllegalArgumentException("A csoportos túra név nem tartalmazhat / jelet.")
 
-        if (checkAndHandleRouteLoad(_route)) {
+        if (checkAndHandleRouteLoad(_route.value!!)) {
             viewModelScope.launch {
                 val route = _route.value!!.getOrNull()!!
                 groupHikeCreationFinished = false

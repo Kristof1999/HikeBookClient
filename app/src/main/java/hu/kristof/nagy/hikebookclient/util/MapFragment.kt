@@ -7,6 +7,10 @@ import hu.kristof.nagy.hikebookclient.BuildConfig
 import org.osmdroid.config.Configuration
 import org.osmdroid.views.MapView
 
+/**
+ * A Fragment that has a map, and manages it's lifecycle.
+ * It also sets the userAgentValue for the map.
+ */
 open class MapFragment : Fragment() {
     protected lateinit var map: MapView
 

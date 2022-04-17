@@ -44,11 +44,11 @@ class HikePlanDateViewModel @Inject constructor(
 
     /**
      * Checks whether the route has loaded yet.
-     * If it has not, then it throws the appropriate exceptions.
      * If it has, then it calls the data layer 3 times to
      * get weather forecast for the start, middle, and end
      * of the hike route with 3 hour intervals.
      * It then notifies the view layer of the result.
+     * @throws IllegalStateException if the route has not loaded yet
      */
     // TODO: test -> edge cases
     fun forecast(date: String, hour: Int) {

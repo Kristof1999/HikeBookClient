@@ -12,6 +12,11 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polyline
 
+/**
+ * A ViewModel that helps to
+ * set, drag, and delete
+ * a marker on the map.
+ */
 abstract class RouteViewModel : ViewModel() {
     protected abstract val markers: ArrayList<MyMarker>
     protected abstract val polylines: ArrayList<Polyline>

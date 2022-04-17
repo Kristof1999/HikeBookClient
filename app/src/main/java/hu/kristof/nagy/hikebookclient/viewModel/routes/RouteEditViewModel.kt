@@ -10,12 +10,17 @@ import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.routes.*
+import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import hu.kristof.nagy.hikebookclient.view.routes.RouteEditFragmentArgs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
 import javax.inject.Inject
 
+/**
+ * A RouteViewModel that helps to load the route chosen for editing,
+ * and helps to save the changes made to either a user or a group route.
+ */
 @HiltViewModel
 class RouteEditViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository,
@@ -29,9 +34,6 @@ class RouteEditViewModel @Inject constructor(
         get() = _route
 
     private var _routeEditRes = MutableLiveData<Result<Boolean>>()
-    /**
-     * Result of route edit attempt.
-     */
     val routeEditRes: LiveData<Result<Boolean>>
         get() = _routeEditRes
 
@@ -61,27 +63,27 @@ class RouteEditViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Checks if the route has loaded yet.
+     * If the route has loaded, then it calls the data layer
+     * to save the changes, and notifies the view layer of the result.
+     * @throws IllegalStateException if the route has not loaded yet
+     */
     fun onRouteEdit(
         routeName: String,
         hikeDescription: String
     ) {
-        if (_route.value == null) {
-            throw IllegalStateException("Az útvonal még nem töltődött be! Kérem, várjon.")
-        } else {
-            if (_route.value!!.isFailure) {
-                throw IllegalStateException("Valami hiba történt.")
-            } else {
-                val oldRoute = _route.value!!.getOrNull()!!
+        if (checkAndHandleRouteLoad(_route.value!!)) {
+            val oldRoute = _route.value!!.getOrNull()!!
 
-                val points = markers.map {
-                    Point.from(it)
-                }
+            val points = markers.map {
+                Point.from(it)
+            }
 
-                when (oldRoute) {
-                    is UserRoute -> onUserRouteEdit(oldRoute, routeName, hikeDescription, points)
-                    is GroupRoute -> onGroupRouteEdit(oldRoute, routeName, hikeDescription, points)
-                    else -> throw IllegalArgumentException("Unkown route type: $oldRoute")
-                }
+            when (oldRoute) {
+                is UserRoute -> onUserRouteEdit(oldRoute, routeName, hikeDescription, points)
+                is GroupRoute -> onGroupRouteEdit(oldRoute, routeName, hikeDescription, points)
+                else -> throw IllegalArgumentException("Unkown route type: $oldRoute")
             }
         }
     }

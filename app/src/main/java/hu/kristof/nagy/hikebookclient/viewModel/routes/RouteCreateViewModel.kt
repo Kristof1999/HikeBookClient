@@ -34,6 +34,9 @@ import kotlinx.coroutines.launch
 import org.osmdroid.views.overlay.Polyline
 import javax.inject.Inject
 
+/**
+ * A RouteViewModel that helps with saving the created route.
+ */
 @HiltViewModel
 class RouteCreateViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository,
@@ -43,9 +46,6 @@ class RouteCreateViewModel @Inject constructor(
     override val polylines = ArrayList<Polyline>()
 
     private var _routeCreateRes = MutableLiveData<Result<Boolean>>()
-    /**
-     * Result of route creation attempt.
-     */
     val routeCreateRes: LiveData<Result<Boolean>>
         get() = _routeCreateRes
 
@@ -65,11 +65,6 @@ class RouteCreateViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Creates the route for the logged in user.
-     * @param routeName name of the created route
-     * @throws IllegalArgumentException if the route has an illegal name, or it has less than 2 points
-     */
     private fun onUserRouteCreate(
         routeName: String,
         hikeDescription: String,

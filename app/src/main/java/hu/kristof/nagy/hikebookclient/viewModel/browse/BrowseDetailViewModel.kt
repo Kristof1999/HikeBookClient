@@ -38,7 +38,6 @@ class BrowseDetailViewModel @Inject constructor(
      * Before calling the data layer to
      * create the chosen route for the logged in user,
      * it checks whether the chosen route has been loaded.
-     * If it has not, it throws the appropriate exceptions.
      * If the route has been loaded, then it calls the data layer,
      * and notifies the view layer of the result.
      * @throws IllegalStateException if the route has not loaded yet

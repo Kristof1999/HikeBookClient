@@ -14,6 +14,13 @@ import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
 
+/**
+ * A ViewModel that helps to load the route chosen for hiking,
+ * and helps with setting the start and end points of
+ * the route to the hike route.
+ *
+ * Ensures that we can't set the start and end points at the same time.
+ */
 @HiltViewModel
 class HikePlanTransportViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository
@@ -31,22 +38,13 @@ class HikePlanTransportViewModel @Inject constructor(
     val endPointChanged: LiveData<Boolean>
         get() = _endPointChanged
 
-    private var _switchOffStart = MutableLiveData(false)
-    val switchOffStart: LiveData<Boolean>
-        get() = _switchOffStart
+    private var _setStartNext = MutableLiveData(false)
+    val setStartNext: LiveData<Boolean>
+        get() = _setStartNext
 
-    private var _switchOffEnd = MutableLiveData(false)
-    val switchOffEnd: LiveData<Boolean>
-        get() = _switchOffEnd
-
-    /**
-     * Indicates if we want to put the start point on the map.
-     */
-    private var isStart = false
-    /**
-     * Indicates if we want to put the destination point on the map.
-     */
-    private var isEnd = false
+    private var _setEndNext = MutableLiveData(false)
+    val setEndNext: LiveData<Boolean>
+        get() = _setEndNext
 
     private var _route = MutableLiveData<Result<Route>>()
     val route: LiveData<Result<Route>>
@@ -61,32 +59,34 @@ class HikePlanTransportViewModel @Inject constructor(
     }
 
     fun setStartTo(value: Boolean) {
-        if (value && isEnd) {
-            isStart = value
-            _switchOffEnd.value = !_switchOffEnd.value!!
-        } else {
-            isStart = value
+        _setStartNext.value = value
+        if (shoudSetBoth()) {
+            _setEndNext.value = false
         }
     }
 
     fun setEndTo(value: Boolean) {
-        if (value && isStart) {
-            isEnd = value
-            _switchOffStart.value = !_switchOffStart.value!!
-        } else {
-            isEnd = value
+        _setEndNext.value = value
+        if (shoudSetBoth()) {
+            _setStartNext.value = false
         }
     }
 
     fun onSingleTap(p: GeoPoint) {
-        if (isStart) {
+        if (_setStartNext.value!!) {
             startPoint = p
-            _startPointChanged.value = !_startPointChanged.value!!
+            notifyViewWith(_startPointChanged)
         }
 
-        if(isEnd) {
+        if(_setEndNext.value!!) {
             endPoint = p
-            _endPointChanged.value = !_endPointChanged.value!!
+            notifyViewWith(_endPointChanged)
         }
+    }
+
+    private fun shoudSetBoth(): Boolean = _setEndNext.value!! && _setStartNext.value!!
+
+    private fun notifyViewWith(liveData: MutableLiveData<Boolean>) {
+        liveData.value = !liveData.value!!
     }
 }

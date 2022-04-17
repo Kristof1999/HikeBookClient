@@ -4,6 +4,10 @@ import android.content.Context
 import android.widget.Toast
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 
+/**
+ * Checks if the route has been loaded.
+ * @throws IllegalStateException if the route has been not loaded
+ */
 fun <P : Route> checkAndHandleRouteLoad(routeRes: Result<P>): Boolean {
     if (routeRes.isFailure) {
         throw IllegalStateException("Valami hiba történt.")
@@ -12,6 +16,10 @@ fun <P : Route> checkAndHandleRouteLoad(routeRes: Result<P>): Boolean {
     }
 }
 
+/**
+ * Checks if the route has been loaded.
+ * @throws IllegalStateException if the route has been not loaded
+ */
 fun <P : Route?> checkAndHandleRouteLoad(route: P): Boolean {
     if (route == null) {
         throw IllegalStateException("Az útvonal még nem töltődött be! Kérem, várjon.")
