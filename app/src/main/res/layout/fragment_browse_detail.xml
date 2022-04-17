@@ -5,19 +5,19 @@
     <data>
 
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="hu.kristof.nagy.hikebookclient.view.browse.BrowseDetailFragment">
+        tools:context="hu.kristof.nagy.hikebookclient.view.browse.BrowseDetailFragment"
+        android:orientation="vertical" >
 
         <ScrollView
             android:id="@+id/browseDetailScrollView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1" >
 
             <TextView
                 android:id="@+id/browseDetailHikeDescriptionTv"
@@ -29,27 +29,19 @@
 
         <org.osmdroid.views.MapView
             android:id="@+id/browseDetailMap"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/browseDetailAddToMyMapButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/browseDetailScrollView"
-            app:layout_constraintVertical_bias="0.0" />
+            android:layout_weight="3" />
 
         <Button
             android:id="@+id/browseDetailAddToMyMapButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp"
             android:text="@string/add_to_my_map_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:icon="@drawable/add_to_my_map_image"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
