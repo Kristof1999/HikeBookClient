@@ -32,7 +32,7 @@ class GroupsListViewModel @Inject constructor(
     fun generalConnect(groupName: String, isConnectedPage: Boolean) {
         generalConnectFinished = false
         viewModelScope.launch {
-            repository.generalConnect(groupName, isConnectedPage).collect { res ->
+            repository.generalConnectForLoggedInUser(groupName, isConnectedPage).collect { res ->
                 _generalConnectRes.value = res
             }
         }
@@ -40,7 +40,7 @@ class GroupsListViewModel @Inject constructor(
 
     fun listGroups(isConnectedPage: Boolean) {
         viewModelScope.launch {
-            repository.listGroups(isConnectedPage).collect { groupsRes ->
+            repository.listGroupsForLoggedInUser(isConnectedPage).collect { groupsRes ->
                 _groups.value = groupsRes
             }
         }

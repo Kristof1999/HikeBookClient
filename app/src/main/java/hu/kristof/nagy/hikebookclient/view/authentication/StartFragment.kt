@@ -35,7 +35,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.FragmentStartBinding
-import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.model.User
 import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
@@ -97,7 +97,7 @@ class StartFragment : Fragment() {
         val pswd = binding.passwordEditText.text.toString()
         catchAndShowIllegalStateAndArgument(requireContext()) {
             handleOffline(requireContext()) {
-                loginViewModel.onLogin(UserAuth(name, pswd))
+                loginViewModel.onLogin(User(name, pswd))
             }
         }
     }

@@ -32,7 +32,7 @@ class GroupHikeListViewModel @Inject constructor(
 
     fun listGroupHikes(isConnectedPage: Boolean) {
         viewModelScope.launch {
-            groupHikeRepository.listGroupHikes(isConnectedPage).collect {
+            groupHikeRepository.listGroupHikesForLoggedInUser(isConnectedPage).collect {
                 _groupHikes.value = it
             }
         }
@@ -41,7 +41,7 @@ class GroupHikeListViewModel @Inject constructor(
     fun generalConnect(groupHikeName: String, isConnectedPage: Boolean, dateTime: DateTime) {
         generalConnectFinished = false
         viewModelScope.launch {
-            groupHikeRepository.generalConnect(groupHikeName, isConnectedPage, dateTime).collect {
+            groupHikeRepository.generalConnectForLoggedInUser(groupHikeName, isConnectedPage, dateTime).collect {
                 _generalConnectRes.value = it
             }
         }

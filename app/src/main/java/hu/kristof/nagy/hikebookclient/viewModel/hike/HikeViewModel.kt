@@ -37,7 +37,7 @@ class HikeViewModel @Inject constructor(
     }
 
     fun computeAndUpdateAvgSpeed(route: UserRoute, startTime: Long, finishTime: Long) {
-        val distance: Double = route.toPolyline().distance - 2 * Constants.GEOFENCE_RADIUS_IN_METERS
+        val distance: Double = route.getDistance() - 2 * Constants.GEOFENCE_RADIUS_IN_METERS
         val timeInMillis: Long = finishTime - startTime
         val millisecondsInHour: Float = Calendar.MILLISECONDS_IN_DAY / 24f
         val timeInHour: Float = timeInMillis / ( millisecondsInHour )

@@ -37,9 +37,6 @@ interface UserRouteService {
         @Body editedUserRoute: EditedUserRoute
     ): Boolean
 
-    /**
-     * Lists all the routes' name and associated user name.
-     */
     @GET("users/routes/")
     suspend fun listUserRoutes(): List<BrowseListItem>
 }

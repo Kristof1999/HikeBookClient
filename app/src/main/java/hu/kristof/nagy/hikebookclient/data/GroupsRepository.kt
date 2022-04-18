@@ -9,11 +9,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/**
+ * A Repository that helps to create groups,
+ * list and join/leave them.
+ */
 class GroupsRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
 ) {
-    suspend fun listGroups(
+    suspend fun listGroupsForLoggedInUser(
         isConnectedPage: Boolean
     ): Flow<List<String>> {
         return dataStore.data.map {
@@ -23,7 +27,7 @@ class GroupsRepository @Inject constructor(
         }
     }
 
-    suspend fun createGroup(groupName: String): Flow<Result<Boolean>> {
+    suspend fun createGroupForLoggedInUser(groupName: String): Flow<Result<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -33,7 +37,7 @@ class GroupsRepository @Inject constructor(
         }
     }
 
-    suspend fun generalConnect(groupName: String, isConnectedPage: Boolean): Flow<Boolean> {
+    suspend fun generalConnectForLoggedInUser(groupName: String, isConnectedPage: Boolean): Flow<Boolean> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->

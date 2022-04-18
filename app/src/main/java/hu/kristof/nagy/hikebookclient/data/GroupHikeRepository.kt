@@ -14,11 +14,17 @@ import kotlinx.coroutines.flow.map
 import java.util.*
 import javax.inject.Inject
 
+/**
+ * A Repository that helps to list group hikes,
+ * create and join/leave them, and helps with
+ * loading the route associated with the given group hike,
+ * and helps to list the participants of a group hike.
+ */
 class GroupHikeRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
 ) {
-    suspend fun listGroupHikes(
+    suspend fun listGroupHikesForLoggedInUser(
         isConnectedPage: Boolean
     ): Flow<List<GroupHikeListHelper>> {
         return dataStore.data.map {
@@ -28,7 +34,7 @@ class GroupHikeRepository @Inject constructor(
         }
     }
 
-    suspend fun createGroupHike(
+    suspend fun createGroupHikeForLoggedInUser(
         groupHikeName: String,
         dateTime: Calendar,
         route: Route
@@ -54,7 +60,7 @@ class GroupHikeRepository @Inject constructor(
         return service.listParticipants(groupHikeName)
     }
 
-    suspend fun generalConnect(
+    suspend fun generalConnectForLoggedInUser(
         groupHikeName: String,
         isConnectedPage: Boolean,
         dateTime: DateTime
@@ -65,6 +71,4 @@ class GroupHikeRepository @Inject constructor(
             service.generalGroupHikeConnect(groupHikeName, userName!!, isConnectedPage, dateTime)
         }
     }
-
-
 }

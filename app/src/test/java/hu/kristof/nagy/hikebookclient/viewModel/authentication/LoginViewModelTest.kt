@@ -20,7 +20,7 @@
 package hu.kristof.nagy.hikebookclient.viewModel.authentication
 
 import hu.kristof.nagy.hikebookclient.data.DummyAuthRepository
-import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.model.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -53,49 +53,49 @@ class LoginViewModelTest {
 
     @Test
     fun testEmptyNameOrPassword() {
-        var user = UserAuth("", "")
+        var user = User("", "")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("", "password")
+        user = User("", "password")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("name", "")
+        user = User("name", "")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("", "pass")
+        user = User("", "pass")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("user", "password")
+        user = User("user", "password")
         loginViewModel.onLogin(user)
         loginViewModel.loginRes.value?.let { assertTrue(it) }
     }
 
     @Test
     fun testIllegalName(){
-        var user = UserAuth("/", "password")
+        var user = User("/", "password")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("  /", "password")
+        user = User("  /", "password")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("user/1", "password")
+        user = User("user/1", "password")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("///", "password")
+        user = User("///", "password")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
@@ -103,32 +103,32 @@ class LoginViewModelTest {
 
     @Test
     fun testPasswordLength() {
-        var user = UserAuth("user", "p")
+        var user = User("user", "p")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("user", "pa")
+        user = User("user", "pa")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("user", "pas")
+        user = User("user", "pas")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("user", "pass")
+        user = User("user", "pass")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("user", "passw")
+        user = User("user", "passw")
         assertThrows(
             IllegalArgumentException::class.java
         ) { loginViewModel.onLogin(user) }
 
-        user = UserAuth("user", "passwo")
+        user = User("user", "passwo")
         loginViewModel.onLogin(user)
         loginViewModel.loginRes.value?.let { assertTrue(it) }
     }

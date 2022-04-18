@@ -1,8 +1,19 @@
 package hu.kristof.nagy.hikebookclient.data
 
-import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.model.User
 
+/**
+ * A Repository that helps to register and log in an user.
+ */
 interface IAuthRepository {
-    suspend fun register(user: UserAuth): Boolean
-    suspend fun login(user: UserAuth): Boolean
+    /**
+     * Helps to register the user.
+     * @return true if registration was successful
+     */
+    suspend fun register(user: User): Boolean
+    /**
+     * Helps to log in the user.
+     * @return true if logging in was successful
+     */
+    suspend fun login(user: User): Boolean
 }

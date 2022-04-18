@@ -7,6 +7,11 @@ import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
 import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
 import javax.inject.Inject
 
+/**
+ * A Repository that helps to
+ * load, delete, create, and edit
+ * group routes.
+ */
 class GroupRouteRepository  @Inject constructor(
     private val service: Service
 ) {

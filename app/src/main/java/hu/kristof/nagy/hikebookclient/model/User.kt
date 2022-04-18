@@ -2,7 +2,7 @@ package hu.kristof.nagy.hikebookclient.model
 
 import java.security.MessageDigest
 
-data class UserAuth(val name: String, var password: String) {
+data class User(val name: String, var password: String) {
     val avgSpeed: Double = 0.0
 
     init {

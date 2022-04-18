@@ -24,7 +24,7 @@ class GroupsDetailViewModel @Inject constructor(
 
     fun generalConnect(groupName: String, isConnectedPage: Boolean) {
         viewModelScope.launch {
-            repository.generalConnect(groupName, isConnectedPage).collect { res ->
+            repository.generalConnectForLoggedInUser(groupName, isConnectedPage).collect { res ->
                 _generalConnectRes.value = res
             }
         }

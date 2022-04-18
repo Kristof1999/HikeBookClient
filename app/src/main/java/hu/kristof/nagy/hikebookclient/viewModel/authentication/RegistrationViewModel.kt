@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
-import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.model.User
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -47,7 +47,7 @@ class RegistrationViewModel @Inject constructor(
      * and notifies the view layer of the result.
      * @param user the user to register
      */
-    fun onRegister(user: UserAuth) {
+    fun onRegister(user: User) {
         viewModelScope.launch{
             _registrationRes.value = repository.register(
                 user.apply { encryptPassword() }

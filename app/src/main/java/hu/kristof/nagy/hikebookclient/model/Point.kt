@@ -5,6 +5,9 @@ import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import kotlinx.parcelize.Parcelize
 import org.osmdroid.util.GeoPoint
 
+/**
+ * A Parcelable class representing a point on a map with a type and a title.
+ */
 @Parcelize
 data class Point(val latitude: Double, val longitude: Double, val type: MarkerType, val title: String)
     : Parcelable {

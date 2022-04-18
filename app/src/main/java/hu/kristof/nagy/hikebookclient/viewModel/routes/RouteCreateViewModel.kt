@@ -71,7 +71,7 @@ class RouteCreateViewModel @Inject constructor(
         points: List<Point>
     ) {
         viewModelScope.launch {
-            userRouteRepository.createUserRoute(routeName, points, hikeDescription)
+            userRouteRepository.createUserRouteForLoggedInUser(routeName, points, hikeDescription)
                 .collect { res ->
                     _routeCreateRes.value = res
                 }

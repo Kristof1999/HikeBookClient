@@ -36,7 +36,7 @@ class GroupsViewModel @Inject constructor(
 
         createFinished = false
         viewModelScope.launch {
-            repository.createGroup(name).collect { res ->
+            repository.createGroupForLoggedInUser(name).collect { res ->
                 _createRes.value = res
             }
         }

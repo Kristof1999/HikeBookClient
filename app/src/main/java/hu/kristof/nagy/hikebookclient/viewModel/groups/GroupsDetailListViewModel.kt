@@ -36,7 +36,7 @@ class GroupsDetailListViewModel @Inject constructor(
     fun onAddToMyMap(route: Route) {
         addToMyMapFinished = false
         viewModelScope.launch {
-            userRouteRepository.createUserRoute(
+            userRouteRepository.createUserRouteForLoggedInUser(
                 route.routeName, route.points, route.description
             ).collect { res ->
                 _addToMyMapRes.value = res

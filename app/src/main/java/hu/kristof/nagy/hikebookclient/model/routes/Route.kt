@@ -20,17 +20,17 @@
 
 package hu.kristof.nagy.hikebookclient.model.routes
 
-import android.os.Parcelable
 import hu.kristof.nagy.hikebookclient.model.Point
-import kotlinx.parcelize.Parcelize
 import org.osmdroid.views.overlay.Polyline
 
-@Parcelize
+/**
+ * A Class representing a route: points with a name and a description.
+ */
 open class Route(
     open val routeName: String,
     open val points: List<Point>,
     open val description: String
-    ) : Parcelable {
+    ) {
 
     fun toPolyline(): Polyline {
         val polyline = Polyline()
@@ -40,8 +40,11 @@ open class Route(
         return polyline
     }
 
-    fun getLength() = toPolyline().distance
+    fun getDistance() = toPolyline().distance
 
+    /**
+     * @throws IllegalArgumentException if the route name does not pass the checks
+     */
     protected fun checkRouteName(routeName: String) {
         if (routeName.isEmpty())
             throw IllegalArgumentException("Az útvonal név nem lehet üres.")
@@ -49,6 +52,9 @@ open class Route(
             throw IllegalArgumentException("Az útvonal név nem tartalmazhat / jelet.")
     }
 
+    /**
+     * @throws IllegalArgumentException if points does not pass the checks
+     */
     protected fun checkPointSize(points: List<Point>) {
         if (points.size < 2)
             throw IllegalArgumentException("Az útvonalnak legalább 2 pontból kell állnia.")

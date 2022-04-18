@@ -56,7 +56,7 @@ class GroupHikeDetailViewModel @Inject constructor(
 
     fun generalConnect(groupHikeName: String, isConnectedPage: Boolean, dateTime: DateTime) {
         viewModelScope.launch {
-            groupHikeRepository.generalConnect(groupHikeName, isConnectedPage, dateTime).collect {
+            groupHikeRepository.generalConnectForLoggedInUser(groupHikeName, isConnectedPage, dateTime).collect {
                 _generalConnectRes.value = it
             }
         }
@@ -76,7 +76,7 @@ class GroupHikeDetailViewModel @Inject constructor(
                 addToMyMapFinished = false
                 val route = _route.value!!
                 userRouteRepository
-                    .createUserRoute(route.routeName, route.points, route.description)
+                    .createUserRouteForLoggedInUser(route.routeName, route.points, route.description)
                     .collect {
                         _addToMyMapRes.value = it
                     }

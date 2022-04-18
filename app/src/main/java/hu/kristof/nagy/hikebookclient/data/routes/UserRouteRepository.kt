@@ -16,7 +16,7 @@ class UserRouteRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : IUserRouteRepository {
-    override suspend fun loadUserRoutes(): Flow<Result<List<UserRoute>>> {
+    override suspend fun loadUserRoutesOfLoggedInUser(): Flow<Result<List<UserRoute>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -47,7 +47,7 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
-    override suspend fun deleteUserRoute(routeName: String): Flow<Result<Boolean>> {
+    override suspend fun deleteUserRouteOfLoggedInUser(routeName: String): Flow<Result<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -57,7 +57,7 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
-    override suspend fun createUserRoute(
+    override suspend fun createUserRouteForLoggedInUser(
         routeName: String,
         points: List<Point>,
         hikeDescription: String

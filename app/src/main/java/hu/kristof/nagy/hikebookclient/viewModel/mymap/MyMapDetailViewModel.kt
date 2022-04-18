@@ -51,7 +51,7 @@ class MyMapDetailViewModel @Inject constructor(
     fun deleteRoute(routeName: String) {
         deleteFinished = false
         viewModelScope.launch {
-            userRepository.deleteUserRoute(routeName)
+            userRepository.deleteUserRouteOfLoggedInUser(routeName)
                 .collect { res ->
                     _deleteRes.value = res
                 }
@@ -77,7 +77,7 @@ class MyMapDetailViewModel @Inject constructor(
             viewModelScope.launch {
                 val route = _route.value!!.getOrNull()!!
                 groupHikeCreationFinished = false
-                groupHikeRepository.createGroupHike(groupHikeName, dateTime, route).collect {
+                groupHikeRepository.createGroupHikeForLoggedInUser(groupHikeName, dateTime, route).collect {
                     _groupHikeCreateRes.value = it
                 }
             }

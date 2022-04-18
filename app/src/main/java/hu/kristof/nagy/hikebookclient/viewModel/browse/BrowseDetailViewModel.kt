@@ -48,7 +48,7 @@ class BrowseDetailViewModel @Inject constructor(
                 val points = _route.value!!.getOrNull()!!.points
                 val description = _route.value!!.getOrNull()!!.description
                 userRouteRepository
-                    .createUserRoute(routeName, points, description)
+                    .createUserRouteForLoggedInUser(routeName, points, description)
                     .collect {
                     _addRes.value = it
                 }

@@ -27,7 +27,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
-import hu.kristof.nagy.hikebookclient.model.UserAuth
+import hu.kristof.nagy.hikebookclient.model.User
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -48,7 +48,7 @@ class LoginViewModel @Inject constructor(
      * and notifies the view layer of the result.
      * @param user the user to log in
      */
-    fun onLogin(user: UserAuth) {
+    fun onLogin(user: User) {
         viewModelScope.launch {
             _loginRes.value = repository.login(
                 user.apply { encryptPassword() }

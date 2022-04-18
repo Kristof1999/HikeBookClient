@@ -5,11 +5,16 @@ import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * A Repository that helps with
+ * loading, creating, editing, and deleting
+ * user routes.
+ */
 interface IUserRouteRepository {
-    suspend fun loadUserRoutes(): Flow<Result<List<UserRoute>>>
+    suspend fun loadUserRoutesOfLoggedInUser(): Flow<Result<List<UserRoute>>>
     suspend fun loadUserRouteOfLoggedInUser(routeName: String): Flow<Result<UserRoute>>
-    suspend fun deleteUserRoute(routeName: String): Flow<Result<Boolean>>
-    suspend fun createUserRoute(
+    suspend fun deleteUserRouteOfLoggedInUser(routeName: String): Flow<Result<Boolean>>
+    suspend fun createUserRouteForLoggedInUser(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
