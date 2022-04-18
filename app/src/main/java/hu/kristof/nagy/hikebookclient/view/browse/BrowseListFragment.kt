@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseListBinding
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
@@ -55,8 +56,10 @@ class BrowseListFragment : Fragment() {
         })
         binding.browseRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routes.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+        viewModel.routes.observe(viewLifecycleOwner) { res ->
+            handleResult(requireContext(), res) { list ->
+                adapter.submitList(list.toMutableList())
+            }
         }
     }
 

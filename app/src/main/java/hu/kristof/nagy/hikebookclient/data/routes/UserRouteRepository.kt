@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
@@ -34,6 +35,16 @@ class UserRouteRepository @Inject constructor(
         }.map { userName ->
             handleRequest {
                 service.loadUserRoute(userName!!, routeName)
+            }
+        }
+    }
+
+    override suspend fun listUserRoutesForLoggedInUser(): Flow<Result<List<BrowseListItem>>> {
+        return dataStore.data.map {
+            it[Constants.DATA_STORE_USER_NAME]
+        }.map { userName ->
+            handleRequest {
+                service.listUserRoutes(userName!!)
             }
         }
     }

@@ -37,6 +37,8 @@ interface UserRouteService {
         @Body editedUserRoute: EditedUserRoute
     ): Boolean
 
-    @GET("users/routes/")
-    suspend fun listUserRoutes(): List<BrowseListItem>
+    @GET("users/routes/browse/{userName}")
+    suspend fun listUserRoutes(
+        @Path("userName") userName: String
+    ): List<BrowseListItem>
 }
