@@ -55,7 +55,6 @@ class HikePlanDateViewModel @Inject constructor(
         if (checkAndHandleRouteLoad(_route.value!!)) {
             val points = _route.value!!.getOrNull()!!.points
 
-            // TODO: cache result -> 10 min window
             viewModelScope.launch {
                 var res = ""
 

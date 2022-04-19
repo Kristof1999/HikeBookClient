@@ -2,6 +2,8 @@ package hu.kristof.nagy.hikebookclient.viewModel.routes
 
 import android.content.res.Resources
 import android.graphics.drawable.Drawable
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
@@ -20,6 +22,10 @@ import org.osmdroid.views.overlay.Polyline
 abstract class RouteViewModel : ViewModel() {
     protected abstract val markers: MutableList<MyMarker>
     protected abstract val polylines: MutableList<Polyline>
+
+    private var _setSpinnerToDefault = MutableLiveData(true)
+    val setSpinnerToDefault: LiveData<Boolean>
+        get() = _setSpinnerToDefault
 
     var markerType: MarkerType = MarkerType.NEW
     /**
@@ -72,6 +78,10 @@ abstract class RouteViewModel : ViewModel() {
         }
 
         markerTitle = ""
+        if (markerType == MarkerType.TEXT) {
+            markerType = MarkerType.NEW
+            _setSpinnerToDefault.value = !_setSpinnerToDefault.value!!
+        }
     }
 
     /**

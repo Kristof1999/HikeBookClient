@@ -191,8 +191,6 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
             viewModel.endPoint.latitude, viewModel.endPoint.longitude,
             MarkerType.NEW, ""
         )
-        // TODO: implement public transport
-        // starting point: https://menetrend.app/data-sources
         val transportType = viewModel.transportType
         val directions = HikePlanTransportFragmentDirections
             .actionHikePlanFragmentToHikeTransportFragment(

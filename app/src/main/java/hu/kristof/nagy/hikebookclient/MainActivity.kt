@@ -44,8 +44,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // TODO: implement the other options
-        // ids must match: in navigation fragment/activity id == menuItem id
         val navController = findNavController(R.id.navHostFragment)
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }

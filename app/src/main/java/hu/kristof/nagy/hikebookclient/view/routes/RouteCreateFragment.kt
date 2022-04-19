@@ -53,14 +53,22 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         super.onViewCreated(view, savedInstanceState)
         initMap()
 
-        binding.routeCreateMarkerSpinner.onItemSelectedListener = this
-        setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
+        setupSpinner()
 
         val args: RouteCreateFragmentArgs by navArgs()
 
         setupRouteCreate(args)
 
         setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
+    }
+
+    private fun setupSpinner() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.setSpinnerToDefault.observe(viewLifecycleOwner) {
+            binding.routeCreateMarkerSpinner.setSelection(0)
+        }
+        binding.routeCreateMarkerSpinner.onItemSelectedListener = this
+        setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
     }
 
     private fun setupRouteCreate(args: RouteCreateFragmentArgs) {

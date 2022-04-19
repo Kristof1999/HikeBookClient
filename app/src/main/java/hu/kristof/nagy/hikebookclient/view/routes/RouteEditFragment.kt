@@ -55,8 +55,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
         initMap()
 
-        binding.routeEditSpinner.onItemSelectedListener = this
-        setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
+        setupSpinner()
 
         val args: RouteEditFragmentArgs by navArgs()
         val viewModel: RouteEditViewModel by viewModels()
@@ -86,6 +85,15 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         }
 
         setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
+    }
+
+    private fun setupSpinner() {
+        binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.setSpinnerToDefault.observe(viewLifecycleOwner) {
+            binding.routeEditSpinner.setSelection(0)
+        }
+        binding.routeEditSpinner.onItemSelectedListener = this
+        setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
     }
 
     private fun adaptView(route: Route) {
