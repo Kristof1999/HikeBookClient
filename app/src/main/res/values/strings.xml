@@ -152,15 +152,17 @@
     </string>
 
     <string name="help_my_map_list">
-        "Ezen a lapon a saját útvonalaidat láthatod lista formájában."
+        "Ezen a lapon a saját útvonalaidat láthatod lista formájában. "
         "Egy listaelem az útvonal nevéből, valamint néhány gombból áll.\n"
 
-        "Ha egy adott nevű útvonalra böksz, akkor egy térképen is megtekintheted azt."
-        "Ha az útvonal nevétől jobb első gombra böksz, akkor az adott útvonalat szerkesztheted."
+        "Ha egy adott nevű útvonalra böksz, akkor egy térképen is megtekintheted azt. "
+        "Ha az útvonal nevétől jobb első gombra böksz, akkor az adott útvonalat szerkesztheted. "
         "Ettől jobbra levő gombbal a részletes oldalra kerülsz, "
-        "ahol a képernyő alján levő nyomtatás gombbal kinyomtathatod az adott útvonalat."
-        "A sorban legutolsó gombbal az útvonalat törölheted a saját térképedről, valamint a listádból."
-        "A csoportos túra létrehozása gombbal pedig létrehozhatsz csoportos túrákat.\n"
+        "ahol a képernyő alján levő nyomtatás gombbal kinyomtathatod az adott útvonalat. "
+        "A sorban legutolsó gombbal az útvonalat törölheted a saját térképedről, valamint a listádból. "
+        "A csoportos túra létrehozása gombbal a részletes nézetben elkezdhetsz "
+        "egy csoportos túrát létrehozni.\n"
+
         "Ha az útvonalakat térképen szeretnéd megtekinteni, akkor "
         "nyomd meg az 'Átváltás Térkép Nézetre' gombot."
     </string>
@@ -261,5 +263,56 @@
         "Ezen a lapon a kiválasztott útvonalat tekinthetjük meg egy térképen."
         "Fent egy szöveges mező mutatja az út és a felhasználó nevét, valamint a túra leírását."
         "A lap alján levő gombbal hozzáadhatjuk a térképünkhöz az útvonalat."
+    </string>
+
+    <string name="help_group_hike_detail">
+        "Ezen a lapon egy csoportos túra részleteit láthatod."
+        "Legfelül látható a csoportos túra neve."
+        "Ez alatt az útvonalhoz kapcsolódó megjegyzések, túraleírás olvasható."
+        "Ez alatt egy térképen a csoportos túra útvonala látható."
+        "Ez alatt a résztvevők felhasználó nevei olvashatóak.\n"
+
+        "A lap alján levő gomb egyikével csatlakozhatunk egy csoportos túrához, "
+        "de akár el is hagyhatjuk. A 'Hozzáadás a saját térképhez' című gombbal "
+        "a csoportos túra útvonalát hozzáadhatjuk a saját térképünkhöz."
+    </string>
+
+    <string name="help_group_hike">
+        "Ezen a lapon a csoportos túrák listáját láthatod. "
+        "Egy lista elem a csoportos túra nevéből és dátum-idő párosából áll. "
+        "A lista elemeknél szereplő gombbal csatlakozhatunk "
+        "egy csoportos túrához, vagy éppen elhagyhatjuk azt. "
+        "Ha nem a gombra bökünk, akkor a részletes nézetet tekinthetjük meg."
+    </string>
+
+    <string name="help_groups">
+        "Ezen a lapon a csoportok listáját láthatod. "
+        "Egy lista elem a csoport nevéből áll. "
+        "A lista elemeknél szereplő gombbal csatlakozhatunk "
+        "egy csoporthoz, vagy épeen elhagyhatjuk azt. "
+        "A 'Csoport létrehozása' című gombbal csoportokat hozhatunk létre."
+        "Ekkor a csoport nevét kell megadnunk."
+    </string>
+
+    <string name="help_groups_detail_map">
+        "Ezen a lapon a csoport útvonalait láthatod egy térképen. "
+        "Legfelül olvasható a csoport neve. Legalul egy gombbal csatlakozhatunk "
+        "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n"
+
+        "A plusz jelű gombra bökvén létrehozhatunk útvonalakat a csoportnak. "
+        "A térkép alatt levő 'Saját térképről felvétel' című gombbal "
+        "a saját térképünkről vehetünk fel útvonalakat a csoporthoz. "
+        "Ekkor egy útvonal nevét kell kiválasztanunk. "
+    </string>
+
+    <string name="help_groups_detail_list">
+        "Ezen a lapon a csoport útvonalait láthatod egy térképen. "
+        "Legfelül olvasható a csoport neve. Legalul egy gombbal csatlakozhatunk "
+        "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n"
+
+        "Egy lista elem az útvonal nevéből, valamint néhány gombból áll. "
+        "A ceruza képpel rendelkező gombbal elkezdheted az adott útvonal szerkesztését. "
+        "A kuka képpel rendelkező gombbal pedig törölheted az adott útvonalat. "
+
     </string>
 </resources>
