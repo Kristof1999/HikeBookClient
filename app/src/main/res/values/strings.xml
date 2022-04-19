@@ -306,13 +306,93 @@
     </string>
 
     <string name="help_groups_detail_list">
-        "Ezen a lapon a csoport útvonalait láthatod egy térképen. "
+        "Ezen a lapon a csoport útvonalait láthatod egy listában. "
         "Legfelül olvasható a csoport neve. Legalul egy gombbal csatlakozhatunk "
         "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n"
 
         "Egy lista elem az útvonal nevéből, valamint néhány gombból áll. "
         "A ceruza képpel rendelkező gombbal elkezdheted az adott útvonal szerkesztését. "
         "A kuka képpel rendelkező gombbal pedig törölheted az adott útvonalat. "
+        "A 'Hozzáadás a saját térképhez című gombbal' az adott útvonalat "
+        "hozzáadhatod a saját térképedhez. "
+    </string>
 
+    <string name="help_groups_detail_members">
+        "Ezen a lapon a csoport tagjainak a felhasználó neveit láthatod egy listában. "
+        "Legfelül olvasható a csoport neve. Legalul egy gombbal csatlakozhatunk "
+        "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n"
+    </string>
+
+    <string name="help_hike_plan_start">
+        "Ezen a lapon a túra időpontját válaszhatjuk ki és kaphatunk időjárás előrejelzést. \n"
+
+        "Ha mind a dátumot, mind az időt beállítottuk, akkor a képernyő közepén "
+        "fog megjelenni a túra kezdeténél, középnél, és a végénél egy-egy időjárás előrejelzés "
+        "3 órás időközökkel.\n"
+
+        "A lap alján található gombokkal elkezdhetjük az utazást tervezni, vagy "
+        "egyből a túrázásra ugorhatunk."
+    </string>
+
+    <string name="help_hike_plan_transport">
+        "Ezen a lapon a túrához vezető utat, vagy "
+        "éppen a visszautat tervezhetjük meg. \n"
+
+        "A képernyő tetején található kapcsolókkal beállíthatjuk, "
+        "hogy következőleg mely pontot szeretnénk mozdítani. "
+        "A kezdő- és végállomások módosításához az adott kapcsolót kell "
+        "felkapcsolni, és a térképen egy adott helyre bökni. "
+        "A kezdőállomástól a végállomásig fogunk kapni útvonal ajánlást "
+        "a következő lapon, ha az oldal ajlán levő gombra bökünk.\n"
+
+        "A képernyő közepén található térképen egy egyedi kinézetű "
+        "pont fogja mutatni a túra kezdetét/végét, attól függően, hogy "
+        "melyik irányt tervezzük éppen. \n"
+
+        "A térkép alatt levő választóból választhatjuk ki, "
+        "hogy milyen közlekedési eszközzel szeretnénk menni. "
+        "Ekkor a következő oldalon levő útvonal ajánlás "
+        "ehhez fog alkalmazkodni. "
+    </string>
+
+    <string name="help_hike_transport">
+        "Ezen a lapon láthatjuk az előbbi oldalon elhelyezett "
+        "kezdő- és végállomások közötti útvonal ajánlást. \n"
+
+        "Pontok jelzik, hogy egy adott helyen merre kell menni. "
+        "Az ilyen pontra rábökve, olvashatjuk, hogy merre menjünk tovább. \n"
+
+        "A lap alján levő gombbal elkezdhetjük a túrát, vagy "
+        "éppen befejezhetjük a vezetést, és visszatérhetünk a saját térkép oldalra."
+    </string>
+
+    <string name="help_hike">
+        "Ezen a lapon a túra teljesítéséhez kaphatunk segítséget.\n"
+
+        "Ha offline szeretnénk túrázni, akkor a lap tetején lévő gomb "
+        "tájékoztatni fog az ehhez szükséges előkészületekről. \n"
+
+        "A 'Túra kezdése' és befejezése című gombokkal mérhetjük a teljesítésünket. "
+        "Ha a térképen látható körökön belül vagyunk, és a megfelelő "
+        "gombra bökünk, akkor egy felugró üzenet fog tájékoztatni, hogy"
+        "a pontérintés sikeres volt, vagy esetleg még nem vagyunk elég közel az adott ponthoz.\n"
+
+        "A 'Hazaút tervezése' című gombra bökve, elkezdhetjük a visszaút tervezését, "
+        "feltéve, hogy elég közel vagyunk a célhoz. Ha nem vagyunk közel a célhoz, de "
+        "akkor is be szeretnénk fejezni a túrát, akkor ehhez hosszan nyomjuk meg a gombot. "
+        "Szintén, ha a 'Túra befejezése' című gombot hosszan nyomjuk meg, akkor "
+        "a saját térkép képernyőre kerülünk vissza, anélkül, hogy a teljesítményünk "
+        "elmentésre került volna. \n"
+
+        "A képernyő közepén látható térképen a túra útvonala látható. "
+        "Az egyes pontokra bökve, elolvashatjuk az adott ponthoz "
+        "társított írást, feltéve, hogy írtak hozzá. Ha nincs semmi rendelve, "
+        "akkor egy üres buborék fog megjelenni a pont felett. \n"
+
+        "A képernyő jobb alsó sarkában levő kör alakú, képpel ellátott gombbal "
+        "a saját pozíciónkat tudjuk behatárolni a térképen. Ehhez GPS kapcsolat "
+        "szükséges. A 'Túra kezdése' és befejezése című gombokhoz is GPS "
+        "kapcsolat szükséges. A térképen megjelenő kis ember fogja mutatni "
+        "a pillanatnyilag legjobb becslést az eszköz legutóbbi helyzetére. "
     </string>
 </resources>
