@@ -5,6 +5,7 @@ package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
@@ -19,6 +20,8 @@ import hu.kristof.nagy.hikebookclient.util.MapFragment
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeTransportViewModel
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.Road
@@ -41,6 +44,7 @@ class HikeTransportFragment : MapFragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_hike_transport, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -111,6 +115,17 @@ class HikeTransportFragment : MapFragment() {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()
             addCopyRightOverlay()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.HIKE_TRANSPORT
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 }

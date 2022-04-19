@@ -177,8 +177,8 @@ class MyMapListFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
      if (item.itemId == R.id.helpMenuItem) {
         val requestType = HelpRequestType.MY_MAP_LIST
-        val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
-        findNavController().navigate(action)
+        val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+        findNavController().navigate(directions)
         true
     } else {
         super.onOptionsItemSelected(item)

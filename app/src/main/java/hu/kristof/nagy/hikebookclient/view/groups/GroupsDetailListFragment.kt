@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.view.groups
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -19,6 +20,8 @@ import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailListViewModel
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 
@@ -39,6 +42,7 @@ class GroupsDetailListFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_groups_detail_list, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -114,4 +118,15 @@ class GroupsDetailListFragment : Fragment() {
             }
         }
     ), args.isConnectedPage)
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.GROUPS_DETAIL_LIST
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
 }

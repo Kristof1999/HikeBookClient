@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.view.grouphike
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -15,6 +16,8 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeDetailBinding
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeDetailViewModel
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -41,6 +44,7 @@ class GroupHikeDetailFragment : MapFragment() {
         binding = DataBindingUtil.inflate(
             layoutInflater, R.layout.fragment_group_hike_detail, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -190,6 +194,17 @@ class GroupHikeDetailFragment : MapFragment() {
             } else {
                 text = "Csatlakozás"
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.GROUP_HIKE_DETAIL
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 }

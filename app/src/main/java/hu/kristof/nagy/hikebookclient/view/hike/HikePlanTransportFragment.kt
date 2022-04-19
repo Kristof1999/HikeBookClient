@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -17,6 +18,8 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanTransportBindi
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
 import org.osmdroid.events.MapEventsReceiver
@@ -48,6 +51,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_hike_plan_transport, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -220,5 +224,16 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // keep type as is
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.HIKE_PLAN_TRANSPORT
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
     }
 }

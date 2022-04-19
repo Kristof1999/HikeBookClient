@@ -139,8 +139,8 @@ class BrowseDetailFragment : MapFragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.helpMenuItem) {
             val requestType = HelpRequestType.BROWSE_DETAIL
-            val action = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
-            findNavController().navigate(action)
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(directions)
             true
         } else {
             super.onOptionsItemSelected(item)

@@ -11,6 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -31,6 +32,8 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -61,6 +64,7 @@ class HikeFragment : MapFragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_hike, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -347,6 +351,17 @@ class HikeFragment : MapFragment() {
             requireContext(),
             permission
         ) == PackageManager.PERMISSION_GRANTED
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.HIKE
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
+        }
+    }
 
     companion object {
         private const val TAG = "HikeFragment"

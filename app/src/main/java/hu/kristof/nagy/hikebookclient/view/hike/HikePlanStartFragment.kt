@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.view.hike
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -15,6 +16,8 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentHikePlanStartBinding
 import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanDateViewModel
 import java.util.*
 
@@ -36,6 +39,7 @@ class HikePlanStartFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_hike_plan_start, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -107,6 +111,17 @@ class HikePlanStartFragment : Fragment() {
 
         viewModel.forecastRes.observe(viewLifecycleOwner) {
             binding.hikePlanStartTv.text = it
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.HIKE_PLAN_START
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 }

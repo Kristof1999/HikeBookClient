@@ -2,11 +2,13 @@ package hu.kristof.nagy.hikebookclient.view.groups
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +18,8 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsBinding
 import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
 
@@ -42,6 +46,8 @@ class GroupsFragment : Fragment() {
         viewPager.adapter = sectionsPagerAdapter
         val tabs: TabLayout = binding.groupsTabLayout
         tabs.setupWithViewPager(viewPager)
+
+        setHasOptionsMenu(true)
 
         return binding.root
     }
@@ -77,6 +83,17 @@ class GroupsFragment : Fragment() {
             handleOffline(requireContext()) {
                 dialogFragment.show(parentFragmentManager, "group create")
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.GROUPS
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController().navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 }

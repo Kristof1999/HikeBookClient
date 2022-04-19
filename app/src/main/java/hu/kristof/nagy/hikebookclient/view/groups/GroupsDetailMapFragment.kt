@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.view.groups
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -15,6 +16,8 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMapBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
@@ -35,6 +38,7 @@ class GroupsDetailMapFragment : MapFragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_groups_detail_map, container, false
         )
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -118,6 +122,17 @@ class GroupsDetailMapFragment : MapFragment() {
         map = binding.groupsMapMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.helpMenuItem) {
+            val requestType = HelpRequestType.GROUPS_DETAIL_MAP
+            val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
+            findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 }
