@@ -11,12 +11,12 @@ import javax.inject.Inject
  */
 class WeatherRepository @Inject constructor(
     val service: WeatherService
-) {
+) : IWeatherRepository {
     /**
      * Sets some constants for the call to the service.
      * @return the result of the forecast for the given coordinate
      */
-    suspend fun forecast(lat: Double, lon: Double): WeatherResponse {
+    override suspend fun forecast(lat: Double, lon: Double): WeatherResponse {
         return service.forecast(
             lat, lon, Constants.METRIC_UNIT,
             Constants.LANGUAGE, BuildConfig.WEATHER_API_KEY

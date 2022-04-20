@@ -1,13 +1,12 @@
 package hu.kristof.nagy.hikebookclient.viewModel.hike
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.WeatherRepository
-import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.IWeatherRepository
+import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.weather.WeatherResponse
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
@@ -22,8 +21,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HikePlanDateViewModel @Inject constructor(
-    private val repository: WeatherRepository,
-    private val userRouteRepository: UserRouteRepository
+    private val repository: IWeatherRepository,
+    private val userRouteRepository: IUserRouteRepository
     ) : ViewModel() {
 
     private var _forecastRes = MutableLiveData<String>()
@@ -60,8 +59,8 @@ class HikePlanDateViewModel @Inject constructor(
                 val idxStart = repository.forecast(
                     points.first().latitude, points.first().longitude,
                 ).let { startPointResponse ->
-                    val dayStartIdx = findDate(date, startPointResponse)
-                    val idxStart = findHour(hour, startPointResponse, dayStartIdx)
+                    val dayStartIdx = DateHourIdxFinder.findDateIdx(date, startPointResponse)
+                    val idxStart = DateHourIdxFinder.findHourIdx(hour, startPointResponse, dayStartIdx)
                     res += "Túra kezdetén:\n\n" + mapResponse(startPointResponse, idxStart)
                     idxStart
                 }
@@ -88,31 +87,6 @@ class HikePlanDateViewModel @Inject constructor(
                 _forecastRes.value = res
             }
         }
-    }
-
-    private fun findHour(hour: Int, response: WeatherResponse, dayStartIdx: Int): Int {
-        Log.i("HikePlanDateViewModel", (0..7).toString())
-        for (i in 0..7) {
-            val hourResponse = response?.list?.get(dayStartIdx + i)?.dtTxt?.substring(11, 13)!!.toInt()
-            val nextHourResponse = response?.list?.get(dayStartIdx + i + 1)?.dtTxt?.substring(11, 13)!!.toInt()
-            Log.i("HikePlanDateViewModel", hourResponse.toString())
-            if (hour in hourResponse..nextHourResponse) {
-                // which hourResponse is hour closer to?
-                if (hour - hourResponse < nextHourResponse - hour)
-                    return dayStartIdx + i
-                else
-                    return dayStartIdx + i + 1
-            }
-        }
-        throw IndexOutOfBoundsException("$hour cannot be found in the weather response: $response")
-    }
-
-    private fun findDate(date: String, response: WeatherResponse): Int {
-        for (i in response?.list?.indices!!) {
-            if (response?.list?.get(i)?.dtTxt?.substring(0, 10) == date)
-                return i
-        }
-        throw IndexOutOfBoundsException("$date cannot be found in the weather response: $response")
     }
 
     private fun mapResponse(response: WeatherResponse, idx: Int): String {
