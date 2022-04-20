@@ -38,20 +38,19 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     }
 
     override fun onDateSet(view: DatePicker, year: Int, month: Int, day: Int) {
-        _dateRes.apply {
-            if (month < 10) {
-                if (day < 10) {
-                    value = "$year-0${month + 1}-0$day"
-                } else {
-                    value = "$year-0${month + 1}-$day"
-                }
-            } else {
-                if (day < 10) {
-                    value = "$year-${month + 1}-0$day"
-                } else {
-                    value = "$year-${month + 1}-$day"
-                }
-            }
+        val yearStr = "$year"
+        val monthStr = month.let { month ->
+            if (month < 10)
+                "0${month + 1}"
+            else
+                "${month + 1}"
         }
+        val dayStr = day.let { day ->
+            if (day < 10)
+                "0$day"
+            else
+                "$day"
+        }
+        _dateRes.value = "$yearStr-$monthStr-$dayStr"
     }
 }
