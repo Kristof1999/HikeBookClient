@@ -50,7 +50,6 @@ class HikePlanDateViewModel @Inject constructor(
      * It then notifies the view layer of the result.
      * @throws IllegalStateException if the route has not loaded yet
      */
-    // TODO: test -> edge cases
     fun forecast(date: String, hour: Int) {
         if (checkAndHandleRouteLoad(_route.value!!)) {
             val points = _route.value!!.getOrNull()!!.points
@@ -58,28 +57,33 @@ class HikePlanDateViewModel @Inject constructor(
             viewModelScope.launch {
                 var res = ""
 
-                val responseStart = repository.forecast(
+                val idxStart = repository.forecast(
                     points.first().latitude, points.first().longitude,
-                )
-                val dayStartIdx = findDate(date, responseStart)
-                val idxStart = findHour(hour, responseStart, dayStartIdx)
-                res += "Túra kezdetén:\n\n" + mapResponse(responseStart, idxStart)
+                ).let { startPointResponse ->
+                    val dayStartIdx = findDate(date, startPointResponse)
+                    val idxStart = findHour(hour, startPointResponse, dayStartIdx)
+                    res += "Túra kezdetén:\n\n" + mapResponse(startPointResponse, idxStart)
+                    idxStart
+                }
 
                 val pointsMiddle = points.size/2
-                val responseMiddle = repository.forecast(
+                val idxMiddle = repository.forecast(
                     points[pointsMiddle].latitude, points[pointsMiddle].longitude,
-                )
-                // could be a 6h increment if we made the
-                // first call at 9:59 and the second at
-                // 10:01, because see api specifications
-                val idxMiddle = idxStart + 1 // 3h increment
-                res += "Túra felénél:\n\n" + mapResponse(responseMiddle, idxMiddle)
+                ).let { middlePointResponse ->
+                    // could be a 6h increment if we made the
+                    // first call at 9:59 and the second at
+                    // 10:01, because see api specifications
+                    val idxMiddle = idxStart + 1 // 3h increment
+                    res += "Túra felénél:\n\n" + mapResponse(middlePointResponse, idxMiddle)
+                    idxMiddle
+                }
 
-                val responseEnd = repository.forecast(
+                repository.forecast(
                     points.last().latitude, points.last().longitude,
-                )
-                val idxEnd = idxMiddle + 1 // 3h increment
-                res += "Túra végénél:\n\n" + mapResponse(responseEnd, idxEnd)
+                ).let { endPointResponse ->
+                    val idxEnd = idxMiddle + 1 // 3h increment
+                    res += "Túra végénél:\n\n" + mapResponse(endPointResponse, idxEnd)
+                }
 
                 _forecastRes.value = res
             }
@@ -100,25 +104,21 @@ class HikePlanDateViewModel @Inject constructor(
                     return dayStartIdx + i + 1
             }
         }
-        throw IndexOutOfBoundsException("$hour cannot be found in the weather response.")
+        throw IndexOutOfBoundsException("$hour cannot be found in the weather response: $response")
     }
 
     private fun findDate(date: String, response: WeatherResponse): Int {
-        // TODO: make it more optimized:
-        // search for the end of the current day, and then calculate
-        // how much we have to go for the chosen date -> 3h intervals!
         for (i in response?.list?.indices!!) {
             if (response?.list?.get(i)?.dtTxt?.substring(0, 10) == date)
                 return i
         }
-        throw IndexOutOfBoundsException("$date cannot be found in the weather response.")
+        throw IndexOutOfBoundsException("$date cannot be found in the weather response: $response")
     }
 
     private fun mapResponse(response: WeatherResponse, idx: Int): String {
         val cityName = response.city?.name
         val dateTime = response.list?.get(idx)?.dtTxt
         val temp = response.list?.get(idx)?.main?.feelsLike
-        // TODO: see if there is more than one description
         val description = response.list?.get(idx)?.weather?.get(0)?.description
         val rainPrecent = response.list?.get(idx)?.pop
         val windSpeed = response.list?.get(idx)?.wind?.speed
