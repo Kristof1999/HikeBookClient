@@ -6,7 +6,8 @@ import hu.kristof.nagy.hikebookclient.model.routes.Route
 
 /**
  * Checks if the route has been loaded.
- * @throws IllegalStateException if the route has been not loaded
+ * @throws IllegalStateException if the route has not been loaded
+ * @return true if the route has loaded
  */
 fun <P : Route> checkAndHandleRouteLoad(routeRes: Result<P>): Boolean {
     if (routeRes.isFailure) {
@@ -18,7 +19,8 @@ fun <P : Route> checkAndHandleRouteLoad(routeRes: Result<P>): Boolean {
 
 /**
  * Checks if the route has been loaded.
- * @throws IllegalStateException if the route has been not loaded
+ * @throws IllegalStateException if the route has not been loaded
+ * @return true if the route has loaded
  */
 fun <P : Route?> checkAndHandleRouteLoad(route: P): Boolean {
     if (route == null) {

@@ -211,7 +211,7 @@ class HikeFragment : MapFragment() {
         ) {
             Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
             val finishTime = Calendar.getInstance().timeInMillis
-            viewModel.computeAndUpdateAvgSpeed(route, startTime, finishTime)
+            viewModel.computeAndUpdateAvgSpeed(startTime, finishTime)
             return true
         } else {
             Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)

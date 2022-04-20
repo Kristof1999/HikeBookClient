@@ -21,6 +21,7 @@
 package hu.kristof.nagy.hikebookclient.model.routes
 
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.util.Constants
 import org.osmdroid.views.overlay.Polyline
 
 /**
@@ -45,7 +46,18 @@ open class Route(
         return polyline
     }
 
-    fun getDistance() = toPolyline().distance
+    /**
+     * Computes the average speed in km/h on this route on the given time interval
+     */
+    fun computeAvgSpeed(startTime: Long, finishTime: Long): Double {
+        val distance: Double = toPolyline().distance - 2 * Constants.GEOFENCE_RADIUS_IN_METERS
+        val distanceInKm: Double = distance / 1000
+        val timeInMillis: Long = finishTime - startTime
+        val millisecondsInSecond = 1000
+        val millisecondsInHour = millisecondsInSecond * 60 * 60
+        val timeInHour = timeInMillis / ( millisecondsInHour )
+        return distanceInKm / timeInHour
+    }
 
     /**
      * @throws IllegalArgumentException if the route name does not pass the checks
