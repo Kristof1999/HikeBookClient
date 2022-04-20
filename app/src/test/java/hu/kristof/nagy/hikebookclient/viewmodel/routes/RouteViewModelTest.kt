@@ -1,12 +1,15 @@
 package hu.kristof.nagy.hikebookclient.viewmodel.routes
 
 import android.graphics.drawable.Drawable
+import androidx.test.core.app.ApplicationProvider
+import hu.kristof.nagy.hikebookclient.HikeBookApp
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,6 +21,7 @@ import org.mockito.kotlin.mock
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
+import org.osmdroid.views.overlay.Polyline
 
 @RunWith(MockitoJUnitRunner::class)
 class RouteViewModelTest {
@@ -133,5 +137,61 @@ class RouteViewModelTest {
 
         assertThat(viewModel.markers[0].type, equalTo(marker1Type))
         assertThat(viewModel.markers[1].type, equalTo(MarkerType.SET))
+    }
+
+    @Test
+    fun `delete marker`() {
+        val markerTitle = "marker"
+        val marker = mock<Marker>()
+        val resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
+        viewModel.markers.add(MyMarker(marker, MarkerType.NEW, markerTitle))
+
+        viewModel.onDelete(resources, marker)
+
+        assertEquals(0, viewModel.markers.size)
+    }
+
+    @Test
+    fun `delete polyline`() {
+        val resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
+        val marker1 = mock<Marker>()
+        val marker2 = mock<Marker>()
+        viewModel.markers.add(MyMarker(marker1, MarkerType.SET, ""))
+        viewModel.markers.add(MyMarker(marker2, MarkerType.NEW, ""))
+        val polyline = Polyline()
+        polyline.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
+        viewModel.polylines.add(polyline)
+
+        viewModel.onDelete(resources, marker2)
+
+        assertEquals(0, viewModel.polylines.size)
+    }
+
+    @Test
+    fun `marker type changed after delete`() {
+        val resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
+        val marker1 = mock<Marker>()
+        val myMarker1 = MyMarker(marker1, MarkerType.CASTLE, "")
+        val marker2 = mock<Marker>()
+        val myMarker2 = MyMarker(marker2, MarkerType.SET, "")
+        val marker3 = mock<Marker>()
+        val myMarker3 = MyMarker(marker3, MarkerType.NEW, "")
+        viewModel.markers.add(myMarker1)
+        viewModel.markers.add(myMarker2)
+        viewModel.markers.add(myMarker3)
+        val polyline1 = Polyline()
+        polyline1.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
+        viewModel.polylines.add(polyline1)
+        val polyline2 = Polyline()
+        polyline2.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
+        viewModel.polylines.add(polyline2)
+
+        viewModel.onDelete(resources, marker3)
+
+        Assert.assertEquals(MarkerType.NEW, viewModel.markers[1].type)
+
+        viewModel.onDelete(resources, marker2)
+
+        Assert.assertEquals(MarkerType.CASTLE, viewModel.markers[0].type)
     }
 }
