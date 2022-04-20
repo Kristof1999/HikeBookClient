@@ -27,7 +27,7 @@ class DateHourIdxFinderTest {
 
         val idx = DateHourIdxFinder.findDateIdx(date, response)
 
-        assertEquals(8 * 5, idx)
+        assertEquals(8 * 4 + 4, idx)
     }
 
     @Test
@@ -36,7 +36,7 @@ class DateHourIdxFinderTest {
 
         val idx = DateHourIdxFinder.findDateIdx(date, response)
 
-        assertEquals(8 * 2, idx)
+        assertEquals(8 + 4, idx)
     }
 
     @Test
@@ -95,21 +95,15 @@ class DateHourIdxFinderTest {
     @Test
     fun `illegal hour`() {
         val hour = -1
-        val hour2 = 10
-        val hour3 = 15
+        val hour2 = 25
         val date = "2022-04-20"
-        val date2 = "2022-04-25"
         val dateIdx = DateHourIdxFinder.findDateIdx(date, response)
-        val date2Idx = DateHourIdxFinder.findDateIdx(date2, response)
 
         assertThrows(IndexOutOfBoundsException::class.java) {
             DateHourIdxFinder.findHourIdx(hour, response, dateIdx)
         }
         assertThrows(IndexOutOfBoundsException::class.java) {
             DateHourIdxFinder.findHourIdx(hour2, response, dateIdx)
-        }
-        assertThrows(IndexOutOfBoundsException::class.java) {
-            DateHourIdxFinder.findHourIdx(hour3, response, date2Idx)
         }
     }
 
@@ -127,9 +121,19 @@ class DateHourIdxFinderTest {
             set(Calendar.HOUR_OF_DAY, startDtTxt.substring(11, 11 + 2).toInt())
         }
         val dateTimeList = ArrayList<Calendar>()
+        dateTimeList.add(c)
         for (i in IntRange(0, responseLength)) {
-            dateTimeList.add(c)
-            c.roll(Calendar.HOUR_OF_DAY, hourInterval)
+            val newCalendar = Calendar.getInstance().apply {
+                clear()
+                dateTimeList.last().let { prevCalendar ->
+                    set(Calendar.YEAR, prevCalendar.get(Calendar.YEAR))
+                    set(Calendar.MONTH, prevCalendar.get(Calendar.MONTH))
+                    set(Calendar.DAY_OF_MONTH, prevCalendar.get(Calendar.DAY_OF_MONTH))
+                    set(Calendar.HOUR_OF_DAY, prevCalendar.get(Calendar.HOUR_OF_DAY))
+                }
+                add(Calendar.HOUR_OF_DAY, hourInterval)
+            }
+            dateTimeList.add(newCalendar)
         }
 
         val dtTxtList = dateTimeList.map { dateTime ->
