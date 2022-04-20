@@ -1,48 +1,42 @@
-// based on:
-// https://developer.android.com/training/testing/local-tests
-// http://hamcrest.org/JavaHamcrest/tutorial
-
-package hu.kristof.nagy.hikebookclient.util
+package hu.kristof.nagy.hikebookclient.viewmodel.routes
 
 import android.graphics.drawable.Drawable
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
+import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.mock
+import org.mockito.Mockito
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
-import org.osmdroid.views.overlay.Polyline
 
 @RunWith(MockitoJUnitRunner::class)
-class MapUtilsTest {
+class RouteViewModelTest {
     @Mock
     private lateinit var markerIcon: Drawable
 
     @Mock
     private lateinit var setMarkerIcon: Drawable
 
-    private lateinit var markers: ArrayList<MyMarker>
-    private lateinit var polylines: ArrayList<Polyline>
     private lateinit var overlays: MutableList<Overlay>
 
+    private lateinit var viewModel: DummyRouteViewModel
+
     @Before
-    fun setUp() {
-        markers = ArrayList()
-        polylines = ArrayList()
+    internal fun setUp() {
+        viewModel = DummyRouteViewModel()
         overlays = ArrayList()
-        markerIcon = mock(Drawable::class.java)
-        setMarkerIcon = mock(Drawable::class.java)
+        markerIcon = Mockito.mock(Drawable::class.java)
+        setMarkerIcon = Mockito.mock(Drawable::class.java)
     }
 
     /**
@@ -50,22 +44,22 @@ class MapUtilsTest {
      * added to the appropriate containers.
      */
     @Test
-    fun testOneAdd() {
+    fun `first marker add`() {
         val newMarker = mock<Marker>()
         val newMarkerType = MarkerType.NEW
         val newMarkerTitle = ""
 
-        MapUtils.onSingleTapLogicHandler(
-            newMarker, newMarkerType, newMarkerTitle,
+        viewModel.onSingleTap(
+            newMarker,
             GeoPoint(0.0, 0.0),
             markerIcon, setMarkerIcon,
-            overlays, markers, polylines
+            overlays
         )
 
         val myNewMarker = MyMarker(newMarker, newMarkerType, newMarkerTitle)
-        assertThat(markers, hasItem(myNewMarker))
+        assertThat(viewModel.markers, hasItem(myNewMarker))
         assertThat(overlays, hasItem(newMarker))
-        assertEquals(polylines.size, 0)
+        assertEquals(viewModel.polylines.size, 0)
     }
 
     /**
@@ -74,35 +68,31 @@ class MapUtilsTest {
      * that it connects the last 2 markers.
      */
     @Test
-    fun testPolyline() {
+    fun `test polyline add and connect`() {
         val markerPoint = GeoPoint(0.0, 0.0)
         val marker = mock<Marker> {
             on { position } doReturn markerPoint
         }
-        val markerType = MarkerType.NEW
-        val markerTitle = ""
         val newMarkerPoint = GeoPoint(1.0, 1.0)
         val newMarker = mock<Marker> {
             on { position } doReturn newMarkerPoint
         }
-        val newMarkerType = MarkerType.NEW
-        val newMarkerTitle = ""
 
-        MapUtils.onSingleTapLogicHandler(
-            marker, markerType, markerTitle,
+        viewModel.onSingleTap(
+            marker,
             markerPoint,
             markerIcon, setMarkerIcon,
-            overlays, markers, polylines
+            overlays
         )
-        MapUtils.onSingleTapLogicHandler(
-            newMarker, newMarkerType, newMarkerTitle,
+        viewModel.onSingleTap(
+            newMarker,
             newMarkerPoint,
             markerIcon, setMarkerIcon,
-            overlays, markers, polylines
+            overlays
         )
 
-        assertThat(polylines.first().actualPoints[0], equalTo(markerPoint))
-        assertThat(polylines.first().actualPoints[1], equalTo(newMarkerPoint))
+        assertThat(viewModel.polylines.first().actualPoints[0], equalTo(markerPoint))
+        assertThat(viewModel.polylines.first().actualPoints[1], equalTo(newMarkerPoint))
     }
 
     /**
@@ -110,7 +100,7 @@ class MapUtilsTest {
      * if it's type was NEW.
      */
     @Test
-    fun testChangePrev() {
+    fun `prev marker type changed`() {
         val p = GeoPoint(0.0, 0.0)
         val marker1 = mock<Marker> {
             on { position } doReturn p
@@ -119,29 +109,29 @@ class MapUtilsTest {
         val marker2 = mock<Marker> {
             on { position } doReturn p
         }
-        val marker2Type = MarkerType.NEW
         val marker3 = mock<Marker> {
             on { position } doReturn p
         }
-        val marker3Type = MarkerType.NEW
 
-        MapUtils.onSingleTapLogicHandler(
-            marker1, marker1Type, "",
+        viewModel.markerType = marker1Type
+        viewModel.onSingleTap(
+            marker1,
             p, markerIcon, setMarkerIcon,
-            overlays, markers, polylines
+            overlays
         )
-        MapUtils.onSingleTapLogicHandler(
-            marker2, marker2Type, "",
+        viewModel.markerType = MarkerType.NEW
+        viewModel.onSingleTap(
+            marker2,
             p, markerIcon, setMarkerIcon,
-            overlays, markers, polylines
+            overlays
         )
-        MapUtils.onSingleTapLogicHandler(
-            marker3, marker3Type, "",
+        viewModel.onSingleTap(
+            marker3,
             p, markerIcon, setMarkerIcon,
-            overlays, markers, polylines
+            overlays
         )
 
-        assertThat(markers[0].type, equalTo(marker1Type))
-        assertThat(markers[1].type, equalTo(MarkerType.SET))
+        assertThat(viewModel.markers[0].type, equalTo(marker1Type))
+        assertThat(viewModel.markers[1].type, equalTo(MarkerType.SET))
     }
 }
