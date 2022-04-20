@@ -1,12 +1,10 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
-import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hu.kristof.nagy.hikebookclient.model.MyMarker
-import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.view.routes.customize
 import org.osmdroid.util.GeoPoint
@@ -153,18 +151,20 @@ abstract class RouteViewModel : ViewModel() {
     /**
      * Deletes the last marker, updates it's neighbors icon and type if needed,
      * and also removes the polyline connecting the last two markers.
+     * @param markerIcon icon to set for the last marker after deletion,
+     *                   if the last marker's type was SET
      * @param marker marker to be deleted
      * @return true if marker was the last marker in markers
      */
     fun onDelete(
-        resources: Resources,
+        markerIcon: Drawable,
         marker: Marker
     ): Boolean {
         if (markers.last().marker == marker) {
             markers.removeLast()
             if (markers.isNotEmpty()) {
                 if (markers.last().type == MarkerType.SET) {
-                    markers.last().marker.icon = getMarkerIcon(MarkerType.NEW, resources)
+                    markers.last().marker.icon = markerIcon
                     markers[markers.size - 1] = MyMarker(
                         markers.last().marker, MarkerType.NEW, markers.last().title
                     )

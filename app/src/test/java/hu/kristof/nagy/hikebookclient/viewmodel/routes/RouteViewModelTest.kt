@@ -1,15 +1,12 @@
 package hu.kristof.nagy.hikebookclient.viewmodel.routes
 
 import android.graphics.drawable.Drawable
-import androidx.test.core.app.ApplicationProvider
-import hu.kristof.nagy.hikebookclient.HikeBookApp
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.hasItem
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -143,17 +140,15 @@ class RouteViewModelTest {
     fun `delete marker`() {
         val markerTitle = "marker"
         val marker = mock<Marker>()
-        val resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
         viewModel.markers.add(MyMarker(marker, MarkerType.NEW, markerTitle))
 
-        viewModel.onDelete(resources, marker)
+        viewModel.onDelete(markerIcon, marker)
 
         assertEquals(0, viewModel.markers.size)
     }
 
     @Test
     fun `delete polyline`() {
-        val resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
         val marker1 = mock<Marker>()
         val marker2 = mock<Marker>()
         viewModel.markers.add(MyMarker(marker1, MarkerType.SET, ""))
@@ -162,14 +157,13 @@ class RouteViewModelTest {
         polyline.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         viewModel.polylines.add(polyline)
 
-        viewModel.onDelete(resources, marker2)
+        viewModel.onDelete(markerIcon, marker2)
 
         assertEquals(0, viewModel.polylines.size)
     }
 
     @Test
     fun `marker type changed after delete`() {
-        val resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
         val marker1 = mock<Marker>()
         val myMarker1 = MyMarker(marker1, MarkerType.CASTLE, "")
         val marker2 = mock<Marker>()
@@ -186,12 +180,12 @@ class RouteViewModelTest {
         polyline2.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         viewModel.polylines.add(polyline2)
 
-        viewModel.onDelete(resources, marker3)
+        viewModel.onDelete(markerIcon, marker3)
 
-        Assert.assertEquals(MarkerType.NEW, viewModel.markers[1].type)
+        assertEquals(MarkerType.NEW, viewModel.markers[1].type)
 
-        viewModel.onDelete(resources, marker2)
+        viewModel.onDelete(markerIcon, marker2)
 
-        Assert.assertEquals(MarkerType.CASTLE, viewModel.markers[0].type)
+        assertEquals(MarkerType.CASTLE, viewModel.markers[0].type)
     }
 }
