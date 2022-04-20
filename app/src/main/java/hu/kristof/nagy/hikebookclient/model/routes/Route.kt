@@ -32,6 +32,11 @@ open class Route(
     open val description: String
     ) {
 
+    init {
+        routeName?.let { checkRouteName(it) }
+        points?.let { checkPointSize(it) }
+    }
+
     fun toPolyline(): Polyline {
         val polyline = Polyline()
         polyline.setPoints(points.map {

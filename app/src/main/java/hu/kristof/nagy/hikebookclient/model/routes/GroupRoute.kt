@@ -12,7 +12,17 @@ data class GroupRoute(
     override val description: String
 ) : Route(routeName, points, description) {
     init {
+        checkGroupName(groupName)
         checkRouteName(routeName)
         checkPointSize(points)
+    }
+
+    companion object {
+        fun checkGroupName(groupName: String) {
+            if (groupName.isEmpty())
+                throw IllegalArgumentException("A név nem lehet üres.")
+            if (groupName.contains("/"))
+                throw IllegalArgumentException("A név nem tartalmazhat / jelet.")
+        }
     }
 }

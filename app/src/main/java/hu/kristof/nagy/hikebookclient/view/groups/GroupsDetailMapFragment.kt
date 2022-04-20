@@ -98,7 +98,7 @@ class GroupsDetailMapFragment : MapFragment() {
     ) {
         binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
-            onRoutesLoad(routes, context, map)
+            map.onRoutesLoad(routes, context)
         }
         viewModel.loadRoutesOfGroup(groupName)
     }

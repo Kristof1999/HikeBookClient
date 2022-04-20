@@ -6,7 +6,7 @@ data class User(val name: String, var password: String) {
     val avgSpeed: Double = 0.0
 
     init {
-        checkName()
+        checkName(name)
         checkPassword()
     }
 
@@ -16,18 +16,23 @@ data class User(val name: String, var password: String) {
         ).joinToString(separator = "")
     }
 
-    private fun checkName() {
-        if (name.isEmpty() || password.isEmpty()) {
-            throw IllegalArgumentException("A név és a jelszó mezők nem lehetnek üresek.")
+    private fun checkPassword() {
+        if (password.isEmpty()) {
+            throw IllegalArgumentException("A jelszó nem lehet üres.")
         }
-        if (name.contains("/")) {
-            throw IllegalArgumentException("A név nem tartalmazhat / jelet.")
+        if (password.length < 6) {
+            throw IllegalArgumentException("A jelszónak legalább 6 karakterből kell állnia.")
         }
     }
 
-    private fun checkPassword() {
-        if (password.length < 6) {
-            throw IllegalArgumentException("A jelszónak legalább 6 karakterből kell állnia.")
+    companion object {
+        fun checkName(name: String) {
+            if (name.isEmpty()) {
+                throw IllegalArgumentException("A név nem lehet üres.")
+            }
+            if (name.contains("/")) {
+                throw IllegalArgumentException("A név nem tartalmazhat / jelet.")
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupsRepository
+import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class GroupsViewModel @Inject constructor(
      * @throws IllegalArgumentException if the group name is not ok
      */
     fun createGroup(name: String) {
-        check(name)
+        GroupRoute.checkGroupName(name)
 
         createFinished = false
         viewModelScope.launch {
@@ -40,12 +41,5 @@ class GroupsViewModel @Inject constructor(
                 _createRes.value = res
             }
         }
-    }
-
-    private fun check(name: String) {
-        if (name.isEmpty())
-            throw IllegalArgumentException("A név nem lehet üres.")
-        if (name.contains("/"))
-            throw IllegalArgumentException("A név nem tartalmazhat / jelet.")
     }
 }

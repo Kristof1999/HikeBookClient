@@ -9,13 +9,12 @@ import org.osmdroid.views.overlay.CopyrightOverlay
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polyline
 
-fun onRoutesLoad(
+fun MapView.onRoutesLoad(
     res: Result<List<Route>>,
-    context: Context?,
-    map: MapView
+    context: Context?
 ) {
     handleResult(context, res) { routes ->
-        map.overlays.clear()
+        overlays.clear()
         val folderOverlay = FolderOverlay()
         routes.forEach { route ->
             val polyline = route.toPolyline()
@@ -25,8 +24,8 @@ fun onRoutesLoad(
                 return@setOnClickListener true
             }
         }
-        map.overlays.add(folderOverlay)
-        map.invalidate()
+        overlays.add(folderOverlay)
+        invalidate()
     }
 }
 
