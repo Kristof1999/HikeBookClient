@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import kotlinx.coroutines.launch
@@ -23,8 +24,8 @@ class GroupsDetailMapViewModel @Inject constructor(
     val routes: LiveData<Result<List<GroupRoute>>>
         get() = _routes
 
-    private var _addFromMyMapRes = MutableLiveData<Result<Boolean>>()
-    val addFromMyMapRes: LiveData<Result<Boolean>>
+    private var _addFromMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
+    val addFromMyMapRes: LiveData<ResponseResult<Boolean>>
         get() = _addFromMyMapRes
 
     var addFromMyMapFinished = true

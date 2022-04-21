@@ -6,6 +6,7 @@ import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
@@ -72,14 +73,12 @@ class UserRouteRepository @Inject constructor(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
-    ): Flow<Result<Boolean>> {
+    ): Flow<ResponseResult<Boolean>> {
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
-            handleRequest {
-                service.createUserRoute(userName, userRoute.routeName, userRoute)
-            }
+            service.createUserRoute(userName, userRoute.routeName, userRoute)
         }
     }
 

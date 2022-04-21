@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
@@ -24,8 +25,8 @@ class BrowseDetailViewModel @Inject constructor(
     val route: LiveData<Result<UserRoute>>
         get() = _route
 
-    private var _addRes = MutableLiveData<Result<Boolean>>()
-    val addRes: LiveData<Result<Boolean>>
+    private var _addRes = MutableLiveData<ResponseResult<Boolean>>()
+    val addRes: LiveData<ResponseResult<Boolean>>
         get() = _addRes
 
     fun loadDetails(userName: String, routeName: String) {

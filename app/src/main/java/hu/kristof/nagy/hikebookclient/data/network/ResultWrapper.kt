@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.data.network
 
 import android.content.Context
 import android.widget.Toast
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import retrofit2.HttpException
 
 /**
@@ -34,4 +35,11 @@ fun <T: Any> handleResult(context: Context?, res: Result<T>, f: (T) -> Unit) {
         f.invoke(res.getOrNull()!!)
     else if(res.exceptionOrNull()!! is IllegalArgumentException)
         Toast.makeText(context, res.exceptionOrNull()!!.message, Toast.LENGTH_LONG).show()
+}
+
+fun <T: Any> handleResult(context: Context?, res: ResponseResult<T>, f: (T) -> Unit) {
+    if (res.isSuccess!!)
+        f.invoke(res.successResult!!)
+    else
+        Toast.makeText(context, res.failMessage!!, Toast.LENGTH_LONG).show()
 }

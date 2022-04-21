@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.data.routes
 import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
 import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
 import javax.inject.Inject
@@ -38,12 +39,10 @@ class GroupRouteRepository  @Inject constructor(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
-    ): Result<Boolean> {
-        return handleRequest {
-            service.createGroupRoute(groupName, routeName,
-                GroupRoute(groupName, routeName, points, hikeDescription)
-            )
-        }
+    ): ResponseResult<Boolean> {
+        return service.createGroupRoute(groupName, routeName,
+            GroupRoute(groupName, routeName, points, hikeDescription)
+        )
     }
 
     suspend fun editGroupRoute(editedGroupRoute: EditedGroupRoute): Result<Boolean> {

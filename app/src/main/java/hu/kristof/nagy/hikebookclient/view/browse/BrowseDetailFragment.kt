@@ -14,6 +14,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
@@ -99,7 +100,7 @@ class BrowseDetailFragment : MapFragment() {
             )
     }
 
-    private fun onAddResult(res: Result<Boolean>) {
+    private fun onAddResult(res: ResponseResult<Boolean>) {
         handleResult(context, res) {
             findNavController().navigate(
                 R.id.action_browseDetailFragment_to_browseListFragment

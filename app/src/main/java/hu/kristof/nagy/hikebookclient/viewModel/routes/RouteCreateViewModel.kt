@@ -27,6 +27,7 @@ import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragmentArgs
 import kotlinx.coroutines.flow.collect
@@ -45,8 +46,8 @@ class RouteCreateViewModel @Inject constructor(
     override val markers = ArrayList<MyMarker>()
     override val polylines = ArrayList<Polyline>()
 
-    private var _routeCreateRes = MutableLiveData<Result<Boolean>>()
-    val routeCreateRes: LiveData<Result<Boolean>>
+    private var _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
+    val routeCreateRes: LiveData<ResponseResult<Boolean>>
         get() = _routeCreateRes
 
     fun onRouteCreate(

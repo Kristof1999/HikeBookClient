@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteCreateBinding
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
@@ -102,7 +103,7 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onRouteCreateResult(
-        res: Result<Boolean>,
+        res: ResponseResult<Boolean>,
         args: RouteCreateFragmentArgs
     ) {
         handleResult(context, res) {

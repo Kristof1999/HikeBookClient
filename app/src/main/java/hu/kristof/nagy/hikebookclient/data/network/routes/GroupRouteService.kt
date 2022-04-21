@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.data.network.routes
 
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
 import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
 import retrofit2.http.*
@@ -10,7 +11,7 @@ interface GroupRouteService {
         @Path("groupName") groupName: String,
         @Path("routeName") routeName: String,
         @Body groupRoute: GroupRoute
-    ): Boolean
+    ): ResponseResult<Boolean>
 
     @GET("groups/routes/{groupName}")
     suspend fun loadGroupRoutes(

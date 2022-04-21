@@ -1,6 +1,7 @@
 package hu.kristof.nagy.hikebookclient.data.network.routes
 
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import retrofit2.http.*
@@ -11,7 +12,7 @@ interface UserRouteService {
         @Path("userName") userName: String,
         @Path("routeName") routeName: String,
         @Body userRoute: UserRoute
-    ): Boolean
+    ): ResponseResult<Boolean>
 
     @GET("users/routes/{userName}")
     suspend fun loadUserRoutes(
