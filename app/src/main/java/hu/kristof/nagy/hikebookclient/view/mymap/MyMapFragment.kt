@@ -60,9 +60,6 @@ class MyMapFragment : MapFragment() {
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             map.onRoutesLoad(routes as ResponseResult<List<Route>>, context)
         }
-        handleOfflineLoad(requireContext()) {
-            viewModel.loadRoutesForLoggedInUser()
-        }
     }
 
     private fun setClickListeners() = with(binding) {
@@ -84,6 +81,13 @@ class MyMapFragment : MapFragment() {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()
             addCopyRightOverlay()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoutesForLoggedInUser()
         }
     }
 

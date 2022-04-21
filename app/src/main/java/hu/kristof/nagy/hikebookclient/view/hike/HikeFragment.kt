@@ -136,6 +136,7 @@ class HikeFragment : MapFragment() {
     private fun initMap() {
         map = binding.hikeMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
+            setStartZoomAndCenter()
             addCopyRightOverlay()
         }
     }

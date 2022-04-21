@@ -53,6 +53,7 @@ import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 @AndroidEntryPoint
 class MyMapListFragment : Fragment() {
     private lateinit var binding: FragmentMyMapListBinding
+    private val myMapViewModel: MyMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +74,6 @@ class MyMapListFragment : Fragment() {
             )
         }
 
-        val myMapViewModel: MyMapViewModel by activityViewModels()
         val myMapDetailViewModel: MyMapDetailViewModel by viewModels()
 
         setupList(myMapDetailViewModel, myMapViewModel)
@@ -172,6 +172,13 @@ class MyMapListFragment : Fragment() {
             handleResult(context, res) {
                 adapter.submitList(it.toMutableList().map { it.routeName })
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handleOfflineLoad(requireContext()) {
+            myMapViewModel.loadRoutesForLoggedInUser()
         }
     }
 

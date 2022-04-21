@@ -97,8 +97,7 @@ class HikeTransportFragment : MapFragment() {
             Marker(map).apply {
                 position = node.mLocation
                 icon = nodeIcon
-                title = "Step $i"
-                snippet = node.mInstructions
+                title = "$i. lépés"
                 subDescription =
                     Road.getLengthDurationText(requireContext(), node.mLength, node.mDuration)
             }.also { nodeMarker ->
