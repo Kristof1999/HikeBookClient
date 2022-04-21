@@ -56,23 +56,22 @@ class HikePlanDateViewModel @Inject constructor(
             viewModelScope.launch {
                 var res = ""
 
-                val idxStart = repository.forecast(
+                val dateStartIdx = repository.forecast(
                     points.first().latitude, points.first().longitude,
                 ).let { startPointResponse ->
-                    val dayStartIdx = DateHourIdxFinder.findDateIdx(date, startPointResponse)
-                    val idxStart = DateHourIdxFinder.findHourIdx(hour, startPointResponse, dayStartIdx)
+                    val dateStartIdx = DateHourIdxFinder.findDateIdx(date, startPointResponse)
+                    val idxStart = DateHourIdxFinder
+                        .findHourIdx(hour, startPointResponse, dateStartIdx)
                     res += "Túra kezdetén:\n\n" + mapResponse(startPointResponse, idxStart)
-                    idxStart
+                    dateStartIdx
                 }
 
                 val pointsMiddle = points.size/2
-                val idxMiddle = repository.forecast(
+                repository.forecast(
                     points[pointsMiddle].latitude, points[pointsMiddle].longitude,
                 ).let { middlePointResponse ->
-                    // could be a 6h increment if we made the
-                    // first call at 9:59 and the second at
-                    // 10:01, because see api specifications
-                    val idxMiddle = idxStart + 1 // 3h increment
+                    val idxMiddle = DateHourIdxFinder
+                        .findHourIdx(hour + 3, middlePointResponse, dateStartIdx)
                     res += "Túra felénél:\n\n" + mapResponse(middlePointResponse, idxMiddle)
                     idxMiddle
                 }
@@ -80,7 +79,8 @@ class HikePlanDateViewModel @Inject constructor(
                 repository.forecast(
                     points.last().latitude, points.last().longitude,
                 ).let { endPointResponse ->
-                    val idxEnd = idxMiddle + 1 // 3h increment
+                    val idxEnd = DateHourIdxFinder
+                        .findHourIdx(hour + 6, endPointResponse, dateStartIdx)
                     res += "Túra végénél:\n\n" + mapResponse(endPointResponse, idxEnd)
                 }
 
