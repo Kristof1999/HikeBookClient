@@ -33,8 +33,8 @@ fun onMarkerItemSelected(
             val dialogFragment = TextDialogFragment.instanceOf(
                 R.string.marker_text_dialog_text, R.string.marker_text_dialog_hint
             )
-            dialogFragment.text.observe(viewLifecycleOwner) {
-                viewModel.markerTitle = it
+            dialogFragment.text.observe(viewLifecycleOwner) { title ->
+                viewModel.markerTitle = title
             }
             dialogFragment.show(parentFragmentManager, "text")
             viewModel.markerType = MarkerType.TEXT

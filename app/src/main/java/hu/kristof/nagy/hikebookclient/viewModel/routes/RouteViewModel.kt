@@ -48,6 +48,13 @@ abstract class RouteViewModel : ViewModel() {
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
     ) {
+        // handle text dialog cancel
+        if (markerType == MarkerType.TEXT && markerTitle.isEmpty()) {
+            _setSpinnerToDefault.value = !_setSpinnerToDefault.value!!
+            markerType = MarkerType.NEW
+            // TODO: change icon too
+        }
+
         // add new marker
         newMarker.customize(markerTitle, markerIcon, p!!)
         MyMarker(newMarker, markerType, markerTitle).also { myMarker ->
