@@ -38,7 +38,7 @@ fun <T: Any> handleResult(context: Context?, res: Result<T>, f: (T) -> Unit) {
 }
 
 fun <T: Any> handleResult(context: Context?, res: ResponseResult<T>, f: (T) -> Unit) {
-    if (res.isSuccess!!)
+    if (res.isSuccess)
         f.invoke(res.successResult!!)
     else
         Toast.makeText(context, res.failMessage!!, Toast.LENGTH_LONG).show()

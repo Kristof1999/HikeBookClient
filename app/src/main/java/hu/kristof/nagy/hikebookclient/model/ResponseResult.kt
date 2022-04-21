@@ -1,7 +1,10 @@
 package hu.kristof.nagy.hikebookclient.model
 
+import com.squareup.moshi.Json
+
 data class ResponseResult<T>(
-    val isSuccess: Boolean?,
+    @Json(name = "isSuccess")
+    val isSuccess: Boolean,
     val failMessage: String?,
     val successResult: T?
 )
