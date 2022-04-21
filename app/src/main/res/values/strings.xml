@@ -328,7 +328,8 @@
 
         "Ha mind a dátumot, mind az időt beállítottuk, akkor a képernyő közepén "
         "fog megjelenni a túra kezdeténél, középnél, és a végénél egy-egy időjárás előrejelzés "
-        "3 órás időközökkel.\n"
+        "3 órás időközökkel. Azonban, ha az utolsó elérhető napot választjuk ki, "
+        "akkor meglehet, hogy nem lesz 3 órás időköz. \n"
 
         "A lap alján található gombokkal elkezdhetjük az utazást tervezni, vagy "
         "egyből a túrázásra ugorhatunk."
