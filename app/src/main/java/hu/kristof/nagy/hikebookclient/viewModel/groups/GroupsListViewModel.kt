@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupsRepository
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,12 +20,12 @@ import javax.inject.Inject
 class GroupsListViewModel @Inject constructor(
     private val repository: GroupsRepository
 ) : ViewModel() {
-    private var _groups = MutableLiveData<List<String>>()
-    val groups: LiveData<List<String>>
+    private var _groups = MutableLiveData<ResponseResult<List<String>>>()
+    val groups: LiveData<ResponseResult<List<String>>>
         get() = _groups
 
-    private var _generalConnectRes = MutableLiveData<Boolean>()
-    val generalConnectRes: LiveData<Boolean>
+    private var _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
+    val generalConnectRes: LiveData<ResponseResult<Boolean>>
         get() = _generalConnectRes
 
     var generalConnectFinished = true

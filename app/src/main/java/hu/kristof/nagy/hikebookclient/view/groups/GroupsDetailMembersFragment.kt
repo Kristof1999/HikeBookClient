@@ -12,6 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMembersBinding
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
@@ -52,8 +53,10 @@ class GroupsDetailMembersFragment : Fragment() {
     private fun setupList(viewModel: GroupsDetailMembersViewModel) {
         val adapter = GroupsDetailMembersAdapter()
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.members.observe(viewLifecycleOwner) { members ->
-            adapter.submitList(members.toMutableList())
+        viewModel.members.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { members ->
+                adapter.submitList(members.toMutableList())
+            }
         }
         binding.groupsDetailMembersRecyclerView.adapter = adapter
     }

@@ -28,8 +28,8 @@ class GroupsDetailListViewModel @Inject constructor(
 
     var addToMyMapFinished = true
 
-    private var _deleteRes = MutableLiveData<Result<Boolean>>()
-    val deleteRes: LiveData<Result<Boolean>>
+    private var _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
+    val deleteRes: LiveData<ResponseResult<Boolean>>
         get() = _deleteRes
 
     var deleteFinished = true

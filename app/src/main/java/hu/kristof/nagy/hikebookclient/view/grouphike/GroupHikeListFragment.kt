@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
@@ -56,19 +57,21 @@ class GroupHikeListFragment : Fragment() {
         isConnectedPage: Boolean
     ) {
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            if (!viewModel.generalConnectFinished) {
-                showGenericErrorOr(context, generalConnectRes) {
-                    if (isConnectedPage) {
-                        Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { generalConnectRes ->
+                if (!viewModel.generalConnectFinished) {
+                    showGenericErrorOr(context, generalConnectRes) {
+                        if (isConnectedPage) {
+                            Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+                        }
+                        handleOfflineLoad(requireContext()) {
+                            viewModel.listGroupHikes(isConnectedPage)
+                        }
                     }
-                    handleOfflineLoad(requireContext()) {
-                        viewModel.listGroupHikes(isConnectedPage)
-                    }
+                    viewModel.generalConnectFinished = true
                 }
-                viewModel.generalConnectFinished = true
             }
         }
     }
@@ -106,8 +109,10 @@ class GroupHikeListFragment : Fragment() {
             ))
         binding.groupHikeListRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.groupHikes.observe(viewLifecycleOwner) { groupHikes ->
-            adapter.submitList(groupHikes.toMutableList())
+        viewModel.groupHikes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { groupHikes ->
+                adapter.submitList(groupHikes.toMutableList())
+            }
         }
     }
 

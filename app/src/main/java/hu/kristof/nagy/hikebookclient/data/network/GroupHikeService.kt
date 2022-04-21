@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.data.network
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeCreateHelper
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -13,19 +14,19 @@ interface GroupHikeService {
     suspend fun listGroupHikes(
         @Path("userName") userName: String,
         @Path("isConnectedPage") isConnectedPage: Boolean
-    ): List<GroupHikeListHelper>
+    ): ResponseResult<List<GroupHikeListHelper>>
 
     @PUT("groupHike/{userName}/{groupHikeName}")
     suspend fun createGroupHike(
         @Path("userName") userName: String,
         @Path("groupHikeName") groupHikeName: String,
         @Body helper: GroupHikeCreateHelper
-    ): Boolean
+    ): ResponseResult<Boolean>
 
     @GET("groupHike/{groupHikeName}")
     suspend fun listParticipants(
         @Path("groupHikeName") groupHikeName: String
-    ): List<String>
+    ): ResponseResult<List<String>>
 
     @PUT("groupHike/{groupHikeName}/{userName}/{isConnectedPage}")
     suspend fun generalGroupHikeConnect(
@@ -33,5 +34,5 @@ interface GroupHikeService {
         @Path("userName") userName: String,
         @Path("isConnectedPage") isConnectedPage: Boolean,
         @Body dateTime: DateTime
-    ): Boolean
+    ): ResponseResult<Boolean>
 }

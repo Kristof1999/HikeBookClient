@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.Flow
  * user routes.
  */
 interface IUserRouteRepository {
-    suspend fun loadUserRoutesOfLoggedInUser(): Flow<Result<List<UserRoute>>>
-    suspend fun loadUserRouteOfLoggedInUser(routeName: String): Flow<Result<UserRoute>>
-    suspend fun listUserRoutesForLoggedInUser(): Flow<Result<List<BrowseListItem>>>
-    suspend fun deleteUserRouteOfLoggedInUser(routeName: String): Flow<Result<Boolean>>
+    suspend fun loadUserRoutesOfLoggedInUser(): Flow<ResponseResult<List<UserRoute>>>
+    suspend fun loadUserRouteOfLoggedInUser(routeName: String): Flow<ResponseResult<UserRoute>>
+    suspend fun listUserRoutesForLoggedInUser(): Flow<ResponseResult<List<BrowseListItem>>>
+    suspend fun deleteUserRouteOfLoggedInUser(routeName: String): Flow<ResponseResult<Boolean>>
     suspend fun createUserRouteForLoggedInUser(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
     ): Flow<ResponseResult<Boolean>>
-    suspend fun editUserRoute(editedUserRoute: EditedUserRoute): Result<Boolean>
+    suspend fun editUserRoute(editedUserRoute: EditedUserRoute): ResponseResult<Boolean>
 }

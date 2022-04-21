@@ -16,7 +16,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.AddFromMyMapDialogBinding
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
+import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.groups.AddFromMyMapViewModel
 
@@ -44,26 +47,20 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
             )
 
             binding.addFromMyMapDialogSpinner.onItemSelectedListener = this
-            // TODO: when testing this, place big emphasis on lifecycle
-            //       related concerns as this observer is different from usual,
-            //       namely, it uses the parent fragment's viewLifecycleOwner
-            //       instead of its own
-            //       OR try to make it work with its own viewLifecycleOwner
-            binding.lifecycleOwner = parentFragment?.viewLifecycleOwner
-            viewModel.routes.observe(requireParentFragment().viewLifecycleOwner, observer)
-            handleOfflineLoad(requireContext()) {
-                viewModel.loadRoutesForLoggedInUser()
-            }
+
+            setupLoad()
 
             builder.setView(binding.root)
                 .setPositiveButton("OK") { _, _ ->
-                    if (chosenPos == 0) {
-                        Toast.makeText(
-                            requireContext(), "Kérem, hogy válasszon útvonalat!", Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        // we subtract 1 because we have added a filler string to the start of objects
-                        _route.value = viewModel.routes.value!!.getOrNull()!!.get(chosenPos - 1)
+                    if (checkAndHandleRouteLoad(_route.value!!)) {
+                        if (chosenPos == 0) {
+                            Toast.makeText(
+                                requireContext(), "Kérem, hogy válasszon útvonalat!", Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            // we subtract 1 because we have added a filler string to the start of objects
+                            _route.value = viewModel.routes.value!!.successResult!!.get(chosenPos - 1)
+                        }
                     }
                 }
                 .setNegativeButton("Mégse") { _, _ ->
@@ -73,13 +70,26 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
+    private fun setupLoad() {
+        // TODO: when testing this, place big emphasis on lifecycle
+        //       related concerns as this observer is different from usual,
+        //       namely, it uses the parent fragment's viewLifecycleOwner
+        //       instead of its own
+        //       OR try to make it work with its own viewLifecycleOwner
+        binding.lifecycleOwner = parentFragment?.viewLifecycleOwner
+        viewModel.routes.observe(requireParentFragment().viewLifecycleOwner, observer)
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoutesForLoggedInUser()
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
 
         viewModel.routes.removeObserver(observer)
     }
 
-    private val observer = { res: Result<List<Route>> ->
+    private val observer = { res: ResponseResult<List<UserRoute>> ->
         handleResult(context, res) { routes ->
             val routeNames = routes.map { it.routeName }
             val objects = mutableListOf("Válassz útvonalat")

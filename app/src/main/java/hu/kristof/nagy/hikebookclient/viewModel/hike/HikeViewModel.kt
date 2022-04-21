@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
@@ -23,8 +24,8 @@ class HikeViewModel @Inject constructor(
     private val service: Service,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private var _route = MutableLiveData<Result<UserRoute>>()
-    val route: LiveData<Result<UserRoute>>
+    private var _route = MutableLiveData<ResponseResult<UserRoute>>()
+    val route: LiveData<ResponseResult<UserRoute>>
         get() = _route
 
     fun loadUserRoute(routeName: String) {
@@ -37,7 +38,7 @@ class HikeViewModel @Inject constructor(
 
     fun computeAndUpdateAvgSpeed(startTime: Long, finishTime: Long) {
         if (checkAndHandleRouteLoad(_route.value!!)) {
-            val route = _route.value!!.getOrNull()!!
+            val route = _route.value!!.successResult!!
             val avgSpeed = route.computeAvgSpeed(startTime, finishTime)
 
             if (avgSpeed < 0) {

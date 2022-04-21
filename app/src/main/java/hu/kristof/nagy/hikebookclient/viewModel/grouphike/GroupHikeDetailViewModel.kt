@@ -25,16 +25,16 @@ class GroupHikeDetailViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private var _route = MutableLiveData<Route>()
-    val route: LiveData<Route>
+    private var _route = MutableLiveData<ResponseResult<Route>>()
+    val route: LiveData<ResponseResult<Route>>
         get() = _route
 
-    private var _participants = MutableLiveData<List<String>>()
-    val participants: LiveData<List<String>>
+    private var _participants = MutableLiveData<ResponseResult<List<String>>>()
+    val participants: LiveData<ResponseResult<List<String>>>
         get() = _participants
 
-    private var _generalConnectRes = MutableLiveData<Boolean>()
-    val generalConnectRes: LiveData<Boolean>
+    private var _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
+    val generalConnectRes: LiveData<ResponseResult<Boolean>>
         get() = _generalConnectRes
 
     private var _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
@@ -72,10 +72,10 @@ class GroupHikeDetailViewModel @Inject constructor(
      * @throws IllegalStateException if the route has not loaded yet
      */
     fun addToMyMap() {
-        if (checkAndHandleRouteLoad(_route.value)) {
+        if (checkAndHandleRouteLoad(_route.value!!)) {
             viewModelScope.launch {
                 addToMyMapFinished = false
-                val route = _route.value!!
+                val route = _route.value!!.successResult!!
                 userRouteRepository
                     .createUserRouteForLoggedInUser(route.routeName, route.points, route.description)
                     .collect {

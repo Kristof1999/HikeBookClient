@@ -34,6 +34,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentStartBinding
 import hu.kristof.nagy.hikebookclient.model.User
 import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
@@ -68,8 +69,10 @@ class StartFragment : Fragment() {
 
     private fun setupLogin(loginViewModel: LoginViewModel) {
         binding.lifecycleOwner = viewLifecycleOwner
-        loginViewModel.loginRes.observe(viewLifecycleOwner) { loginRes ->
-            onLoginRes(loginRes)
+        loginViewModel.loginRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { loginRes ->
+                onLoginRes(loginRes)
+            }
         }
         binding.loginButton.setOnClickListener {
             onLogin(binding, loginViewModel)

@@ -33,6 +33,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRegistrationBinding
 import hu.kristof.nagy.hikebookclient.model.User
 import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
@@ -66,8 +67,10 @@ class RegistrationFragment : Fragment() {
 
     private fun setupRegistration(registrationViewModel: RegistrationViewModel) {
         binding.lifecycleOwner = viewLifecycleOwner
-        registrationViewModel.registrationRes.observe(viewLifecycleOwner) { registrationRes ->
-            onRegistrationRes(registrationRes)
+        registrationViewModel.registrationRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { registrationRes ->
+                onRegistrationRes(registrationRes)
+            }
         }
         binding.registerButton.setOnClickListener {
             onRegister(binding, registrationViewModel)

@@ -69,16 +69,18 @@ class GroupHikeDetailFragment : MapFragment() {
         viewModel: GroupHikeDetailViewModel,
         args: GroupHikeDetailFragmentArgs
     ) {
-        viewModel.route.observe(viewLifecycleOwner) { route ->
-            showRoutePolylineOnMap(route)
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                showRoutePolylineOnMap(route)
 
-            showRoutePointsOnMap(route)
+                showRoutePointsOnMap(route)
 
-            closeInfoWindows()
+                closeInfoWindows()
 
-            binding.groupHikeDetailDescriptionTv.text = route.description
+                binding.groupHikeDetailDescriptionTv.text = route.description
 
-            map.invalidate()
+                map.invalidate()
+            }
         }
         setupList(viewModel, args)
         handleOfflineLoad(requireContext()) {
@@ -151,11 +153,13 @@ class GroupHikeDetailFragment : MapFragment() {
         args: GroupHikeDetailFragmentArgs
     ) {
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            showGenericErrorOr(context, generalConnectRes) {
-                findNavController().navigate(
-                    R.id.action_groupHikeDetailFragment_to_groupHikeFragment
-                )
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { generalConnectRes ->
+                showGenericErrorOr(context, generalConnectRes) {
+                    findNavController().navigate(
+                        R.id.action_groupHikeDetailFragment_to_groupHikeFragment
+                    )
+                }
             }
         }
         binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
@@ -171,8 +175,10 @@ class GroupHikeDetailFragment : MapFragment() {
     ) {
         val adapter = GroupHikeDetailParticipantsListAdapter()
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.participants.observe(viewLifecycleOwner) { participants ->
-            adapter.submitList(participants.toMutableList())
+        viewModel.participants.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { participants ->
+                adapter.submitList(participants.toMutableList())
+            }
         }
         binding.groupHikeDetailRecyclerView.adapter = adapter
         viewModel.listParticipants(args.groupHikeName)

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,8 +17,8 @@ import javax.inject.Inject
 class GroupsDetailMembersViewModel @Inject constructor(
     private val service: Service
     ) : ViewModel() {
-    private var _members = MutableLiveData<List<String>>()
-    val members: LiveData<List<String>>
+    private var _members = MutableLiveData<ResponseResult<List<String>>>()
+    val members: LiveData<ResponseResult<List<String>>>
         get() = _members
 
     fun listMembers(groupName: String) {

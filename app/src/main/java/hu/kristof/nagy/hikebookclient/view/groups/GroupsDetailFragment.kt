@@ -15,6 +15,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.handleOffline
@@ -70,11 +71,13 @@ class GroupsDetailFragment : Fragment() {
         args: GroupsDetailFragmentArgs
     ) {
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { generalConnectRes ->
-            showGenericErrorOr(context, generalConnectRes) {
-                findNavController(requireActivity(), R.id.navHostFragment).navigate(
-                    R.id.action_groupsDetailFragment_to_groupsFragment
-                )
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { generalConnectRes ->
+                showGenericErrorOr(context, generalConnectRes) {
+                    findNavController(requireActivity(), R.id.navHostFragment).navigate(
+                        R.id.action_groupsDetailFragment_to_groupsFragment
+                    )
+                }
             }
         }
         binding.groupsDetailConnectButton.setOnClickListener {

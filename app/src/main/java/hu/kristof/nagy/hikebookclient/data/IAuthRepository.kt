@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.data
 
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.User
 
 /**
@@ -10,10 +11,10 @@ interface IAuthRepository {
      * Helps to register the user.
      * @return true if registration was successful
      */
-    suspend fun register(user: User): Boolean
+    suspend fun register(user: User): ResponseResult<Boolean>
     /**
      * Helps to log in the user.
      * @return true if logging in was successful
      */
-    suspend fun login(user: User): Boolean
+    suspend fun login(user: User): ResponseResult<Boolean>
 }

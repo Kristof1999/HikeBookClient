@@ -12,7 +12,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
@@ -51,17 +53,19 @@ class GroupsListFragment : Fragment() {
         }
     }
 
-    private fun onGeneralConnectRes(res: Boolean, isConnectedPage: Boolean) {
+    private fun onGeneralConnectRes(res: ResponseResult<Boolean>, isConnectedPage: Boolean) {
         if (!viewModel.generalConnectFinished) {
-            showGenericErrorOr(context, res) {
-                if (isConnectedPage) {
-                    Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG)
-                        .show()
-                } else {
-                    Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
+            handleResult(context, res) { generalConnectRes ->
+                showGenericErrorOr(context, generalConnectRes) {
+                    if (isConnectedPage) {
+                        Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG)
+                            .show()
+                    } else {
+                        Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
+                    }
                 }
+                viewModel.generalConnectFinished = true
             }
-            viewModel.generalConnectFinished = true
         }
     }
 
@@ -69,8 +73,10 @@ class GroupsListFragment : Fragment() {
         val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.groups.observe(viewLifecycleOwner) { groupNames ->
-            adapter.submitList(groupNames.toMutableList())
+        viewModel.groups.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { groupNames ->
+                adapter.submitList(groupNames.toMutableList())
+            }
         }
     }
 

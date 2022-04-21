@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
@@ -24,18 +25,18 @@ class MyMapDetailViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository,
     private val groupHikeRepository: GroupHikeRepository
 ) : ViewModel() {
-    private var _route = MutableLiveData<Result<UserRoute>>()
-    val route: LiveData<Result<UserRoute>>
+    private var _route = MutableLiveData<ResponseResult<UserRoute>>()
+    val route: LiveData<ResponseResult<UserRoute>>
         get() = _route
 
     var deleteFinished = true
 
-    private var _deleteRes = MutableLiveData<Result<Boolean>>()
-    val deleteRes: LiveData<Result<Boolean>>
+    private var _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
+    val deleteRes: LiveData<ResponseResult<Boolean>>
         get() = _deleteRes
 
-    private var _groupHikeCreateRes = MutableLiveData<Result<Boolean>>()
-    val groupHikeCreateRes: LiveData<Result<Boolean>>
+    private var _groupHikeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
+    val groupHikeCreateRes: LiveData<ResponseResult<Boolean>>
         get() = _groupHikeCreateRes
 
     var groupHikeCreationFinished = true
@@ -75,7 +76,7 @@ class MyMapDetailViewModel @Inject constructor(
 
         if (checkAndHandleRouteLoad(_route.value!!)) {
             viewModelScope.launch {
-                val route = _route.value!!.getOrNull()!!
+                val route = _route.value!!.successResult!!
                 groupHikeCreationFinished = false
                 groupHikeRepository.createGroupHikeForLoggedInUser(groupHikeName, dateTime, route).collect {
                     _groupHikeCreateRes.value = it

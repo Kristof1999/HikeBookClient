@@ -1,6 +1,5 @@
 package hu.kristof.nagy.hikebookclient.data.routes
 
-import hu.kristof.nagy.hikebookclient.data.network.handleRequest
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
@@ -16,23 +15,18 @@ import javax.inject.Inject
 class GroupRouteRepository  @Inject constructor(
     private val service: Service
 ) {
-    suspend fun loadGroupRoutes(groupName: String): Result<List<GroupRoute>> {
-        return handleRequest {
-            service.loadGroupRoutes(groupName)
-        }
+    suspend fun loadGroupRoutes(groupName: String): ResponseResult<List<GroupRoute>> {
+        return service.loadGroupRoutes(groupName)
     }
 
-    suspend fun loadGroupRoute(groupName: String, routeName: String): Result<GroupRoute> {
-        return handleRequest {
-            service.loadGroupRoute(groupName, routeName)
-        }
+    suspend fun loadGroupRoute(groupName: String, routeName: String): ResponseResult<GroupRoute> {
+        return service.loadGroupRoute(groupName, routeName)
     }
 
-    suspend fun deleteGroupRoute(groupName: String, routeName: String): Result<Boolean> {
-        return handleRequest {
-            service.deleteGroupRoute(groupName, routeName)
-        }
+    suspend fun deleteGroupRoute(groupName: String, routeName: String): ResponseResult<Boolean> {
+        return service.deleteGroupRoute(groupName, routeName)
     }
+
 
     suspend fun createGroupRoute(
         groupName: String,
@@ -45,12 +39,11 @@ class GroupRouteRepository  @Inject constructor(
         )
     }
 
-    suspend fun editGroupRoute(editedGroupRoute: EditedGroupRoute): Result<Boolean> {
-        return handleRequest {
-            service.editGroupRoute(
+    suspend fun editGroupRoute(editedGroupRoute: EditedGroupRoute): ResponseResult<Boolean> {
+        return service.editGroupRoute(
                 editedGroupRoute.newGroupRoute.groupName,
                 editedGroupRoute.oldGroupRoute.routeName,
                 editedGroupRoute)
-        }
+
     }
 }

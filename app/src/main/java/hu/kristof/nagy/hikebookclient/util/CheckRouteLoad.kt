@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.util
 
 import android.content.Context
 import android.widget.Toast
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 
 /**
@@ -9,11 +10,11 @@ import hu.kristof.nagy.hikebookclient.model.routes.Route
  * @throws IllegalStateException if the route has not been loaded
  * @return true if the route has loaded
  */
-fun <P : Route> checkAndHandleRouteLoad(routeRes: Result<P>): Boolean {
-    if (routeRes.isFailure) {
+fun <P : Route> checkAndHandleRouteLoad(routeRes: ResponseResult<P>): Boolean {
+    if (!routeRes.isSuccess) {
         throw IllegalStateException("Valami hiba történt.")
     } else {
-        return checkAndHandleRouteLoad(routeRes.getOrNull())
+        return checkAndHandleRouteLoad(routeRes.successResult)
     }
 }
 

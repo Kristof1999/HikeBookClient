@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupsRepository
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -18,8 +19,8 @@ import javax.inject.Inject
 class GroupsViewModel @Inject constructor(
     private val repository: GroupsRepository
     ): ViewModel() {
-    private var _createRes = MutableLiveData<Result<Boolean>>()
-    val createRes: LiveData<Result<Boolean>>
+    private var _createRes = MutableLiveData<ResponseResult<Boolean>>()
+    val createRes: LiveData<ResponseResult<Boolean>>
         get() = _createRes
 
     var createFinished = true

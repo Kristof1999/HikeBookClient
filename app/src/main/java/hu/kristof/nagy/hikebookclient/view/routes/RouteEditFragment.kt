@@ -16,6 +16,7 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
@@ -119,7 +120,7 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         viewModel.onRouteEdit(newRouteName, newHikeDescription)
     }
 
-    private fun onRouteEditResult(res: Result<Boolean>, args: RouteEditFragmentArgs) {
+    private fun onRouteEditResult(res: ResponseResult<Boolean>, args: RouteEditFragmentArgs) {
         handleResult(context, res) {
             when (args.routeType) {
                 RouteType.USER -> findNavController().navigate(

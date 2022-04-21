@@ -21,8 +21,8 @@ import javax.inject.Inject
 class BrowseDetailViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository
     ) : ViewModel() {
-    private var _route = MutableLiveData<Result<UserRoute>>()
-    val route: LiveData<Result<UserRoute>>
+    private var _route = MutableLiveData<ResponseResult<UserRoute>>()
+    val route: LiveData<ResponseResult<UserRoute>>
         get() = _route
 
     private var _addRes = MutableLiveData<ResponseResult<Boolean>>()
@@ -46,8 +46,8 @@ class BrowseDetailViewModel @Inject constructor(
     fun addToMyMap(routeName: String) {
         viewModelScope.launch {
             if (checkAndHandleRouteLoad(_route.value!!)) {
-                val points = _route.value!!.getOrNull()!!.points
-                val description = _route.value!!.getOrNull()!!.description
+                val points = _route.value!!.successResult!!.points
+                val description = _route.value!!.successResult!!.description
                 userRouteRepository
                     .createUserRouteForLoggedInUser(routeName, points, description)
                     .collect {

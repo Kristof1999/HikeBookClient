@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IWeatherRepository
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.weather.WeatherResponse
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
@@ -29,14 +30,14 @@ class HikePlanDateViewModel @Inject constructor(
     val forecastRes: LiveData<String>
         get() = _forecastRes
 
-    private var _route = MutableLiveData<Result<Route>>()
-    val route: LiveData<Result<Route>>
+    private var _route = MutableLiveData<ResponseResult<Route>>()
+    val route: LiveData<ResponseResult<Route>>
         get() = _route
 
     fun loadRoute(routeName: String) {
         viewModelScope.launch {
             userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
-                _route.value = it
+                _route.value = it as ResponseResult<Route>
             }
         }
     }
@@ -51,7 +52,7 @@ class HikePlanDateViewModel @Inject constructor(
      */
     fun forecast(date: String, hour: Int) {
         if (checkAndHandleRouteLoad(_route.value!!)) {
-            val points = _route.value!!.getOrNull()!!.points
+            val points = _route.value!!.successResult!!.points
 
             viewModelScope.launch {
                 var res = ""

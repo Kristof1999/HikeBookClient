@@ -8,6 +8,7 @@ import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.routes.*
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
@@ -29,12 +30,12 @@ class RouteEditViewModel @Inject constructor(
     override lateinit var markers: ArrayList<MyMarker>
     override lateinit var polylines: ArrayList<Polyline>
 
-    private var _route = MutableLiveData<Result<Route>>()
-    val route: LiveData<Result<Route>>
+    private var _route = MutableLiveData<ResponseResult<Route>>()
+    val route: LiveData<ResponseResult<Route>>
         get() = _route
 
-    private var _routeEditRes = MutableLiveData<Result<Boolean>>()
-    val routeEditRes: LiveData<Result<Boolean>>
+    private var _routeEditRes = MutableLiveData<ResponseResult<Boolean>>()
+    val routeEditRes: LiveData<ResponseResult<Boolean>>
         get() = _routeEditRes
 
     fun setup(markers: ArrayList<MyMarker>, polylines: ArrayList<Polyline>) {
@@ -51,14 +52,14 @@ class RouteEditViewModel @Inject constructor(
 
     private fun loadGroupRoute(routeName: String, groupName: String) {
         viewModelScope.launch {
-            _route.value = groupRouteRepository.loadGroupRoute(groupName, routeName)
+            _route.value = groupRouteRepository.loadGroupRoute(groupName, routeName) as ResponseResult<Route>
         }
     }
 
     private fun loadUserRoute(routeName: String) {
         viewModelScope.launch {
             userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
-                _route.value = it
+                _route.value = it as ResponseResult<Route>
             }
         }
     }
@@ -74,7 +75,7 @@ class RouteEditViewModel @Inject constructor(
         hikeDescription: String
     ) {
         if (checkAndHandleRouteLoad(_route.value!!)) {
-            val oldRoute = _route.value!!.getOrNull()!!
+            val oldRoute = _route.value!!.successResult!!
 
             val points = markers.map {
                 Point.from(it)

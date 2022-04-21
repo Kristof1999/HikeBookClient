@@ -34,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
@@ -95,7 +96,7 @@ class MyMapListFragment : Fragment() {
 
     private fun onGroupHikeCreateResult(
         myMapDetailViewModel: MyMapDetailViewModel,
-        res: Result<Boolean>
+        res: ResponseResult<Boolean>
     ) {
         if (!myMapDetailViewModel.groupHikeCreationFinished) {
             handleResult(context, res) { groupHikeCreateRes ->
@@ -112,7 +113,7 @@ class MyMapListFragment : Fragment() {
     private fun onDeleteResult(
         myMapViewModel: MyMapViewModel,
         myMapDetailViewModel: MyMapDetailViewModel,
-        res: Result<Boolean>
+        res: ResponseResult<Boolean>
     ) {
         if (!myMapDetailViewModel.deleteFinished) {
             handleResult(context, res) { deleteRes ->

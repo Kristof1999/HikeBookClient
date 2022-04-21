@@ -16,24 +16,24 @@ interface GroupRouteService {
     @GET("groups/routes/{groupName}")
     suspend fun loadGroupRoutes(
         @Path("groupName") groupName: String
-    ): List<GroupRoute>
+    ): ResponseResult<List<GroupRoute>>
 
     @GET("groups/routes/{groupName}/{routeName}")
     suspend fun loadGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") routeName: String
-    ): GroupRoute
+    ): ResponseResult<GroupRoute>
 
     @DELETE("groups/routes/{groupName}/{routeName}")
     suspend fun deleteGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") routeName: String
-    ): Boolean
+    ): ResponseResult<Boolean>
 
     @PUT("groups/routes/edit/{groupName}/{routeName}")
     suspend fun editGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") oldRouteName: String,
         @Body editedGroupRoute: EditedGroupRoute
-    ): Boolean
+    ): ResponseResult<Boolean>
 }

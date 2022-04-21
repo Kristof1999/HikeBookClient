@@ -20,8 +20,8 @@ import javax.inject.Inject
 class GroupsDetailMapViewModel @Inject constructor(
     private val groupRouteRepository: GroupRouteRepository
     ) : ViewModel() {
-    private var _routes = MutableLiveData<Result<List<GroupRoute>>>()
-    val routes: LiveData<Result<List<GroupRoute>>>
+    private var _routes = MutableLiveData<ResponseResult<List<GroupRoute>>>()
+    val routes: LiveData<ResponseResult<List<GroupRoute>>>
         get() = _routes
 
     private var _addFromMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
@@ -57,7 +57,7 @@ class GroupsDetailMapViewModel @Inject constructor(
      * Gives back the route with the given route name.
      */
     fun getRoute(routeName: String): Route {
-        return _routes.value!!.getOrNull()!!.filter { route ->
+        return _routes.value!!.successResult!!.filter { route ->
             route.routeName == routeName
         }[0]
     }
