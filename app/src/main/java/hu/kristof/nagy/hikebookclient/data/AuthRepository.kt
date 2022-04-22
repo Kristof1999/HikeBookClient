@@ -20,33 +20,33 @@ class AuthRepository @Inject constructor(
 
     override suspend fun register(user: User): ResponseResult<Boolean> {
         val responseResult = service.register(user)
-        if (responseResult.isSuccess) {
+        return if (responseResult.isSuccess) {
             if (responseResult.successResult!!) {
                 dataStore.edit { data ->
                     data[Constants.DATA_STORE_USER_NAME] = user.name
                 }
-                return ResponseResult(true, null, true)
+                ResponseResult(true, null, true)
             } else {
-                return ResponseResult(true, null, false)
+                ResponseResult(true, null, false)
             }
         } else {
-            return responseResult
+            responseResult
         }
     }
 
     override suspend fun login(user: User): ResponseResult<Boolean> {
         val responseResult = service.login(user)
-        if (responseResult.isSuccess) {
+        return if (responseResult.isSuccess) {
             if(responseResult.successResult!!) {
                 dataStore.edit { data ->
                     data[Constants.DATA_STORE_USER_NAME] = user.name
                 }
-                return ResponseResult(true, null, true)
+                ResponseResult(true, null, true)
             } else {
-                return ResponseResult(true, null, false)
+                ResponseResult(true, null, false)
             }
         } else {
-            return responseResult
+            responseResult
         }
     }
 }

@@ -108,7 +108,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/myMapDetailMap"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/hike_image"
-            android:contentDescription="@string/hike_image_description" />
+            android:contentDescription="@string/hike_image_description"
+            android:focusable="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

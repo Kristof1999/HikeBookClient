@@ -204,7 +204,7 @@ class HikeFragment : MapFragment() {
         val currentPosition = myLocationMarker.position
         val endPosition = route.points.last().toGeoPoint()
 
-        if (isPointInCircle(
+        return if (isPointInCircle(
                 currentPosition,
                 endPosition,
                 Constants.GEOFENCE_RADIUS_IN_METERS
@@ -213,11 +213,11 @@ class HikeFragment : MapFragment() {
             Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
             val finishTime = Calendar.getInstance().timeInMillis
             viewModel.computeAndUpdateAvgSpeed(startTime, finishTime)
-            return true
+            true
         } else {
             Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)
                 .show()
-            return false
+            false
         }
     }
 

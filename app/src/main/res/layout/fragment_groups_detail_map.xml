@@ -21,7 +21,8 @@
             android:contentDescription="@string/create_route_image_description"
             android:src="@drawable/create_image"
             app:layout_constraintBottom_toTopOf="@+id/groupsMapAddFromMyMapButton"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            android:focusable="true" />
 
         <org.osmdroid.views.MapView
             android:id="@+id/groupsMapMap"

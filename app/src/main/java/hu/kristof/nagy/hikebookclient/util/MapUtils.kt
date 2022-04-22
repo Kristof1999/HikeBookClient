@@ -31,7 +31,7 @@ fun MapView.onRoutesLoad(
 }
 
 fun MapView.setMapCenterOnPolylineStart(polyline: Polyline) {
-    val start = polyline.actualPoints.get(0)
+    val start = polyline.actualPoints[0]
     val mapController = controller
     mapController.setCenter(start)
 }
@@ -56,7 +56,7 @@ fun MapView.setZoomForPolyline(polyline: Polyline) {
     mapController.setZoom(zoomLevel)
 }
 
-fun MapView.setStartZoomAndCenter() = controller.apply {
+fun MapView.setStartZoomAndCenter() = with(controller) {
     setZoom(Constants.START_ZOOM)
     setCenter(Constants.START_POINT)
 }

@@ -61,7 +61,7 @@ abstract class RouteViewModel : ViewModel() {
             refreshPrevPolyline(markers.size - 1, markers, polylines)
         } else {
             val idx = markers.indexOf(
-                markers.filter { it.marker == marker }.get(0)
+                markers.filter { it.marker == marker }[0]
             )
             refreshPrevPolyline(idx, markers, polylines)
             refreshNextPolyline(idx, markers, polylines)
@@ -106,7 +106,7 @@ abstract class RouteViewModel : ViewModel() {
             polylines.last().isVisible = false
         } else {
             val idx = markers.indexOf(
-                markers.filter { it.marker == marker }.get(0)
+                markers.filter { it.marker == marker }[0]
             )
             polylines[idx - 1].isVisible = false
             polylines[idx].isVisible = false

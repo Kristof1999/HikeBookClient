@@ -44,7 +44,6 @@ private fun onSingleTapViewHandler(
         return true
 
     val newMarker = Marker(map)
-    // TODO: try to move logic to viewmodel
     val markerIcon =
         if (viewModel.markerType == MarkerType.TEXT &&
             viewModel.markerTitle.isEmpty()) {

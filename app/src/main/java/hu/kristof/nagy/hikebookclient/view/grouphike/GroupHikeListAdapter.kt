@@ -33,10 +33,10 @@ class GroupHikeListAdapter(
             binding.dateTimeObj = helper.dateTime
             binding.clickListener = clickListener
             binding.groupHikeListItemGeneralConnectButton.apply {
-                if (isConnectedPage) {
-                    text = "Elhagyás"
+                text = if (isConnectedPage) {
+                    "Elhagyás"
                 } else {
-                    text = "Csatlakozás"
+                    "Csatlakozás"
                 }
             }
         }

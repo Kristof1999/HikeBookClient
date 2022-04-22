@@ -105,7 +105,7 @@ class HikeTransportFragment : MapFragment() {
             }
         }
 
-        map.getOverlays().add(roadOverlay)
+        map.overlays.add(roadOverlay)
         map.invalidate()
     }
 

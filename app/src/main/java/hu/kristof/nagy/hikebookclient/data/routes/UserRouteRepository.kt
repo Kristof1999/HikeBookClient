@@ -48,7 +48,7 @@ class UserRouteRepository @Inject constructor(
         userName: String,
         routeName: String
     ): ResponseResult<UserRoute> {
-        return service.loadUserRoute(userName, routeName);
+        return service.loadUserRoute(userName, routeName)
     }
 
     override suspend fun deleteUserRouteOfLoggedInUser(

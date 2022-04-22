@@ -59,7 +59,7 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
                             ).show()
                         } else {
                             // we subtract 1 because we have added a filler string to the start of objects
-                            _route.value = viewModel.routes.value!!.successResult!!.get(chosenPos - 1)
+                            _route.value = viewModel.routes.value!!.successResult!![chosenPos - 1]
                         }
                     }
                 }

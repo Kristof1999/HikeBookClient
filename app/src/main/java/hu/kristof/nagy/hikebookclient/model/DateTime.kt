@@ -9,6 +9,6 @@ data class DateTime(
     val hourOfDay: Int, val minute: Int
 ) : Parcelable {
     override fun toString(): String {
-        return "$year-$month-$dayOfMonth, $hourOfDay:$minute";
+        return "$year-$month-$dayOfMonth, $hourOfDay:$minute"
     }
 }
