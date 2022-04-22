@@ -44,7 +44,14 @@ private fun onSingleTapViewHandler(
         return true
 
     val newMarker = Marker(map)
-    val markerIcon = getMarkerIcon(viewModel.markerType, context.resources)
+    // TODO: try to move logic to viewmodel
+    val markerIcon =
+        if (viewModel.markerType == MarkerType.TEXT &&
+            viewModel.markerTitle.isEmpty()) {
+            getMarkerIcon(MarkerType.NEW, context.resources)
+        } else {
+            getMarkerIcon(viewModel.markerType, context.resources)
+        }
     val setMarkerIcon = getMarkerIcon(MarkerType.SET, context.resources)
     viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
     newMarker.setListeners(context, map, deleteSwitch, viewModel)

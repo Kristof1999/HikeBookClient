@@ -22,6 +22,7 @@ import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
+import hu.kristof.nagy.hikebookclient.viewModel.routes.OnSingleTapHandlerTextMarkerTypeDecorator
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteEditViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.Marker
@@ -90,7 +91,8 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
     private fun setupSpinner() {
         binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.setSpinnerToDefault.observe(viewLifecycleOwner) {
+        OnSingleTapHandlerTextMarkerTypeDecorator
+            .setSpinnerToDefault.observe(viewLifecycleOwner) {
             binding.routeEditSpinner.setSelection(0)
         }
         binding.routeEditSpinner.onItemSelectedListener = this

@@ -1,12 +1,9 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
 import android.graphics.drawable.Drawable
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
-import hu.kristof.nagy.hikebookclient.view.routes.customize
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
@@ -21,16 +18,10 @@ abstract class RouteViewModel : ViewModel() {
     protected abstract val markers: MutableList<MyMarker>
     protected abstract val polylines: MutableList<Polyline>
 
-    private var _setSpinnerToDefault = MutableLiveData(true)
-    val setSpinnerToDefault: LiveData<Boolean>
-        get() = _setSpinnerToDefault
+    var markerType = MarkerType.NEW
+    var markerTitle = ""
 
-    var markerType: MarkerType = MarkerType.NEW
-    /**
-     * Single use title. After usage for one marker, it will be reset to empty string.
-     */
-    var markerTitle: String = ""
-
+    // TODO: update javadoc
     /**
      * Customizes the newly added marker.
      * Polylines are used to connect the new marker with the previous one.
@@ -48,45 +39,20 @@ abstract class RouteViewModel : ViewModel() {
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>
     ) {
-        // handle text dialog cancel
-        if (markerType == MarkerType.TEXT && markerTitle.isEmpty()) {
-            _setSpinnerToDefault.value = !_setSpinnerToDefault.value!!
-            markerType = MarkerType.NEW
-            // TODO: change icon too
-        }
+       val handler = when (markerType) {
+           MarkerType.TEXT -> OnSingleTapHandlerTextMarkerTypeDecorator(
+               OnSingleTapHandler()
+           )
+           else -> OnSingleTapHandler()
+       }
 
-        // add new marker
-        newMarker.customize(markerTitle, markerIcon, p!!)
-        MyMarker(newMarker, markerType, markerTitle).also { myMarker ->
-            markers.add(myMarker)
-        }
-        overlays.add(newMarker)
-
-        if (markers.size > 1) {
-            // change previous marker's icon and type if it was new
-            val prevMarker = markers[markers.size - 2].marker
-            val prevMarkerType = markers[markers.size - 2].type
-            if (prevMarkerType == MarkerType.NEW) {
-                prevMarker.icon = setMarkerIcon
-                markers[markers.size - 2] = MyMarker(prevMarker, MarkerType.SET, "")
-            }
-
-            // connect the new point with the previous one
-            Polyline().apply {
-                setPoints(listOf(
-                    prevMarker.position, newMarker.position
-                ))
-            }.also { polyline ->
-                polylines.add(polyline)
-                overlays.add(polyline)
-            }
-        }
+       handler.handle(
+           newMarker, markerType, markerTitle,
+           p, markerIcon, setMarkerIcon, overlays,
+           markers, polylines
+       )
 
         markerTitle = ""
-        if (markerType == MarkerType.TEXT) {
-            markerType = MarkerType.NEW
-            _setSpinnerToDefault.value = !_setSpinnerToDefault.value!!
-        }
     }
 
     /**
