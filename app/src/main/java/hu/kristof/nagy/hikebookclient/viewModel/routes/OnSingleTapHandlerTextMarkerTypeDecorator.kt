@@ -11,7 +11,7 @@ import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polyline
 
 class OnSingleTapHandlerTextMarkerTypeDecorator(
-    private val onSingleTapHandler: IOnSingleTapHandler
+    onSingleTapHandler: IOnSingleTapHandler
 ) : OnSingleTapHandlerDecorator(onSingleTapHandler) {
     override fun handle(
         newMarker: Marker,

@@ -21,16 +21,8 @@ abstract class RouteViewModel : ViewModel() {
     var markerType = MarkerType.NEW
     var markerTitle = ""
 
-    // TODO: update javadoc
     /**
-     * Customizes the newly added marker.
-     * Polylines are used to connect the new marker with the previous one.
-     * @param newMarker the new marker to customize and add to map
-     * @param newMarkerType the type of the new marker
-     * @param p the point where the new marker should be added
-     * @param markerIcon icon of new markers
-     * @param setMarkerIcon icon of set (not new, previously added) markers
-     * @param overlays overlays of the map for which to add the new markers and polylines
+     * Handles single tap, and resets marker's title to empty.
      */
     fun onSingleTap(
         newMarker: Marker,
