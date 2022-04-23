@@ -44,7 +44,7 @@ class RouteCreateViewModel @Inject constructor(
     private val groupRouteRepository: GroupRouteRepository
     ) : RouteViewModel() {
     override val _markers = MutableLiveData(mutableListOf<MyMarker>())
-    override val _polylines = MutableLiveData(mutableListOf<Polyline>())
+    override val polylines = mutableListOf<Polyline>()
 
     private val _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
     val routeCreateRes: LiveData<ResponseResult<Boolean>>

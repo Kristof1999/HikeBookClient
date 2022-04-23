@@ -49,12 +49,15 @@ class RouteEditFragment : RouteFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+
         binding = DataBindingUtil.inflate<FragmentRouteEditBinding>(
             inflater, R.layout.fragment_route_edit, container, false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
         }
 
+        initMap()
         setupObservers()
 
         setHasOptionsMenu(true)
@@ -67,6 +70,7 @@ class RouteEditFragment : RouteFragment() {
                 handleResult(context, res) { route ->
                     showRoutePointsAndPolylinesOnMap(viewModel, route.points)
                     adaptView(route)
+                    setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
                 }
             }
             routeEditRes.observe(viewLifecycleOwner) {
@@ -82,8 +86,6 @@ class RouteEditFragment : RouteFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initMap()
-
         setupSpinner()
 
         handleOfflineLoad(requireContext()) {
@@ -98,8 +100,6 @@ class RouteEditFragment : RouteFragment() {
                 onRouteEdit(viewModel)
             }
         }
-
-        setMapClickListeners(requireContext(), map, binding.routeEditDeleteSwitch, viewModel)
     }
 
     private fun setupSpinner() {
@@ -159,34 +159,22 @@ class RouteEditFragment : RouteFragment() {
             val marker = Marker(map)
             val markerType = point.type
             val myMarker = MyMarker(marker, markerType, point.title)
-            marker.customize(
-                myMarker.title,
-                getMarkerIcon(markerType, resources),
-                point.toGeoPoint()
-            )
-            marker.setListeners(
-                requireContext(), map, binding.routeEditDeleteSwitch, viewModel
-            )
             myMarker
         }
 
         makeMyMarker(points.first()).let { myFirstMarker ->
-            map.overlays.add(myFirstMarker.marker)
             markers.add(myFirstMarker)
         }
         for (point in points.subList(1, points.size)) {
             makeMyMarker(point).let { myMarker ->
-                map.overlays.add(myMarker.marker)
                 markers.add(myMarker)
             }
 
             makePolylineFromLastTwo(markers).let { polyline ->
-                map.overlays.add(polyline)
                 polylines.add(polyline)
             }
         }
 
-        map.invalidate()
         viewModel.setup(markers, polylines)
     }
 

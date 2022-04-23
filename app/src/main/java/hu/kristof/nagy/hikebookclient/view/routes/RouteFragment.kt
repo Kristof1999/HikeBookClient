@@ -23,41 +23,44 @@ abstract class RouteFragment : MapFragment(), AdapterView.OnItemSelectedListener
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         viewModel.markers.observe(viewLifecycleOwner) { markers ->
-            val makeMyMarker = { point: Point ->
+            val makeMarker = { point: Point ->
                 val marker = Marker(map)
-                val markerType = point.type
-                val myMarker = MyMarker(marker, markerType, point.title)
                 marker.customize(
-                    myMarker.title,
-                    getMarkerIcon(markerType, resources),
+                    point.title,
+                    getMarkerIcon(point.type, resources),
                     point.toGeoPoint()
                 )
                 marker.setListeners(
                     requireContext(), map, switch, viewModel
                 )
-                myMarker
+                marker
             }
 
             val points = markers.map { Point.from(it) }
-            makeMyMarker(points.first()).let { myFirstMarker ->
-                map.overlays.add(myFirstMarker.marker)
-            }
-            for (point in points.subList(1, points.size)) {
-                makeMyMarker(point).let { myMarker ->
-                    map.overlays.add(myMarker.marker)
+
+            if (points.isEmpty()) {
+                return@observe
+            } else {
+                makeMarker(points.first()).let { firstMarker ->
+                    map.overlays.add(firstMarker)
                 }
 
-                makePolylineFromLastTwo(markers).let { polyline ->
-                    map.overlays.add(polyline)
-                }
-            }
+                for (point in points.subList(1, points.size)) {
+                    makeMarker(point).let { marker ->
+                        map.overlays.add(marker)
+                    }
 
-            map.invalidate()
+                    makePolylineFromLastTwo(markers).let { polyline ->
+                        map.overlays.add(polyline)
+                    }
+                }
+
+                map.invalidate()
+            }
         }
 
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return null
     }
 
     protected fun makePolylineFromLastTwo(

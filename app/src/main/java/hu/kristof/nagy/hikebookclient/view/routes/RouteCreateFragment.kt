@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,7 +20,10 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteCreateBinding
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.OnSingleTapHandlerTextMarkerTypeDecorator
@@ -36,15 +39,20 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
  * With the create button, the user can save the route.
  */
 @AndroidEntryPoint
-class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
+class RouteCreateFragment : RouteFragment() {
     private lateinit var binding: FragmentRouteCreateBinding
-    private val viewModel: RouteCreateViewModel by viewModels()
+    override val viewModel: RouteCreateViewModel by viewModels()
+    override val switch: SwitchCompat by lazy {
+        binding.routeCreateDeleteSwitch
+    }
     private val args: RouteCreateFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
+
         binding = DataBindingUtil.inflate<FragmentRouteCreateBinding>(
             inflater, R.layout.fragment_route_create, container, false
         ).apply {
@@ -89,14 +97,6 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
                 onRouteCreate(args, viewModel)
             }
         }
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        onMarkerItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        // keep type as is
     }
 
     private fun onRouteCreate(args: RouteCreateFragmentArgs, viewModel: RouteCreateViewModel) {

@@ -18,11 +18,9 @@ import org.osmdroid.views.overlay.Polyline
  */
 abstract class RouteViewModel : ViewModel() {
     protected abstract val _markers: MutableLiveData<MutableList<MyMarker>>
-    protected abstract val _polylines: MutableLiveData<MutableList<Polyline>>
+    protected abstract val polylines: MutableList<Polyline>
     val markers: LiveData<MutableList<MyMarker>>
         get() = _markers
-    val polylines: LiveData<MutableList<Polyline>>
-        get() = _polylines
 
     var markerType = MarkerType.NEW
     var markerTitle = ""
@@ -47,7 +45,7 @@ abstract class RouteViewModel : ViewModel() {
        handler.handle(
            newMarker, markerType, markerTitle,
            p, markerIcon, setMarkerIcon, overlays,
-           _markers.value!!, _polylines.value!!
+           _markers.value!!, polylines
        )
 
         markerTitle = ""
@@ -62,15 +60,15 @@ abstract class RouteViewModel : ViewModel() {
             return
 
         if (_markers.value!!.first().marker == marker) {
-            refreshNextPolyline(0, _markers.value!!, _polylines.value!!)
+            refreshNextPolyline(0, _markers.value!!, polylines)
         } else if (_markers.value!!.last().marker == marker) {
-            refreshPrevPolyline(_markers.value!!.size - 1, _markers.value!!, _polylines.value!!)
+            refreshPrevPolyline(_markers.value!!.size - 1, _markers.value!!, polylines)
         } else {
             val idx = _markers.value!!.indexOf(
                 _markers.value!!.filter { it.marker == marker }[0]
             )
-            refreshPrevPolyline(idx, _markers.value!!, _polylines.value!!)
-            refreshNextPolyline(idx, _markers.value!!, _polylines.value!!)
+            refreshPrevPolyline(idx, _markers.value!!, polylines)
+            refreshNextPolyline(idx, _markers.value!!, polylines)
         }
     }
 
@@ -107,15 +105,15 @@ abstract class RouteViewModel : ViewModel() {
             return
 
         if (_markers.value!!.first().marker == marker) {
-            _polylines.value!!.first().isVisible = false
+            polylines.first().isVisible = false
         } else if (_markers.value!!.last().marker == marker) {
-            _polylines.value!!.last().isVisible = false
+            polylines.last().isVisible = false
         } else {
             val idx = _markers.value!!.indexOf(
                 _markers.value!!.filter { it.marker == marker }[0]
             )
-            _polylines.value!![idx - 1].isVisible = false
-            _polylines.value!![idx].isVisible = false
+            polylines[idx - 1].isVisible = false
+            polylines[idx].isVisible = false
         }
     }
 
@@ -140,8 +138,8 @@ abstract class RouteViewModel : ViewModel() {
                         _markers.value!!.last().marker, MarkerType.NEW, _markers.value!!.last().title
                     )
                 }
-                _polylines.value!!.last().isVisible = false
-                _polylines.value!!.removeLast()
+                polylines.last().isVisible = false
+                polylines.removeLast()
             }
             return true
         } else {
