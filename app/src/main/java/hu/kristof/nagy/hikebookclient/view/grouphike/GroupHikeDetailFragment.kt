@@ -36,16 +36,44 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
 @AndroidEntryPoint
 class GroupHikeDetailFragment : MapFragment() {
     private lateinit var binding: FragmentGroupHikeDetailBinding
+    private val viewModel: GroupHikeDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupHikeDetailBinding>(
             layoutInflater, R.layout.fragment_group_hike_detail, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObservers()
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupObservers() {
+        with(viewModel) {
+            addToMyMapRes.observe(viewLifecycleOwner) { res ->
+                if (!viewModel.addToMyMapFinished) {
+                    handleResult(context, res) { addToMyMapRes ->
+                        showGenericErrorOr(context, addToMyMapRes, "A felvétel sikeres!")
+                    }
+                    viewModel.addToMyMapFinished = true
+                }
+            }
+            generalConnectRes.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { generalConnectRes ->
+                    showGenericErrorOr(context, generalConnectRes) {
+                        findNavController().navigate(
+                            R.id.action_groupHikeDetailFragment_to_groupHikeFragment
+                        )
+                    }
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,8 +81,6 @@ class GroupHikeDetailFragment : MapFragment() {
 
         val args: GroupHikeDetailFragmentArgs by navArgs()
         adaptView(args)
-
-        val viewModel: GroupHikeDetailViewModel by viewModels()
 
         setupGeneralConnect(viewModel, args)
 
@@ -127,15 +153,6 @@ class GroupHikeDetailFragment : MapFragment() {
     }
 
     private fun setupAddToMyMap(viewModel: GroupHikeDetailViewModel) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.addToMyMapRes.observe(viewLifecycleOwner) { res ->
-            if (!viewModel.addToMyMapFinished) {
-                handleResult(context, res) { addToMyMapRes ->
-                    showGenericErrorOr(context, addToMyMapRes, "A felvétel sikeres!")
-                }
-                viewModel.addToMyMapFinished = true
-            }
-        }
         binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
             handleOffline(requireContext()) {
                 catchAndShowIllegalStateAndArgument(requireContext()) {
@@ -143,23 +160,12 @@ class GroupHikeDetailFragment : MapFragment() {
                 }
             }
         }
-
     }
 
     private fun setupGeneralConnect(
         viewModel: GroupHikeDetailViewModel,
         args: GroupHikeDetailFragmentArgs
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { generalConnectRes ->
-                showGenericErrorOr(context, generalConnectRes) {
-                    findNavController().navigate(
-                        R.id.action_groupHikeDetailFragment_to_groupHikeFragment
-                    )
-                }
-            }
-        }
         binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
             handleOffline(requireContext()) {
                 viewModel.generalConnect(args.groupHikeName, args.isConnectedPage, args.dateTime)

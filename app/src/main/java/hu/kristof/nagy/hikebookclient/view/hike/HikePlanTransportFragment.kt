@@ -43,24 +43,44 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
 class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentHikePlanTransportBinding
     private val viewModel: HikePlanTransportViewModel by viewModels()
+    private val args: HikePlanTransportFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentHikePlanTransportBinding>(
             inflater, R.layout.fragment_hike_plan_transport, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObservers()
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupObservers() {
+        viewModel.apply {
+            route.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { route ->
+                    adaptView(args, route)
+                }
+            }
+            setStartNext.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportStartSwitch.isChecked = it
+            }
+            setEndNext.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportEndSwitch.isChecked = it
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initMap()
-
-        val args: HikePlanTransportFragmentArgs by navArgs()
 
         setupLoad(args)
 
@@ -85,12 +105,6 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     }
 
     private fun setupLoad(args: HikePlanTransportFragmentArgs) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { route ->
-                adaptView(args, route)
-            }
-        }
         handleOfflineLoad(requireContext()) {
             viewModel.loadRoute(args.routeName)
         }
@@ -105,7 +119,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
                 icon = AppCompatResources.getDrawable(
                     requireContext(), org.osmdroid.library.R.drawable.marker_default
                 )
-            }.also { hikeStartMarker ->
+            }.let { hikeStartMarker ->
                 map.overlays.add(hikeStartMarker)
             }
         } else {
@@ -116,7 +130,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
                 icon = AppCompatResources.getDrawable(
                     requireContext(), org.osmdroid.library.R.drawable.marker_default
                 )
-            }.also { hikeEndMarker ->
+            }.let { hikeEndMarker ->
                 map.overlays.add(hikeEndMarker)
             }
         }
@@ -147,7 +161,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
                 position = viewModel.startPoint
                 map.invalidate()
             }
-        }.also { startMarker ->
+        }.let { startMarker ->
             map.overlays.add(startMarker)
         }
 
@@ -160,22 +174,12 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
                 position = viewModel.endPoint
                 map.invalidate()
             }
-        }.also { endMarker ->
+        }.let { endMarker ->
             map.overlays.add(endMarker)
         }
     }
 
     private fun handleStartAndEndSwitches() {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.apply {
-            setStartNext.observe(viewLifecycleOwner) {
-                binding.hikePlanTransportStartSwitch.isChecked = it
-            }
-            setEndNext.observe(viewLifecycleOwner) {
-                binding.hikePlanTransportEndSwitch.isChecked = it
-            }
-        }
-
         binding.apply {
             hikePlanTransportStartSwitch.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.setStartTo(isChecked)

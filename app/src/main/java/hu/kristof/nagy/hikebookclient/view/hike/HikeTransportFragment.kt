@@ -36,16 +36,28 @@ import org.osmdroid.views.overlay.Marker
  */
 class HikeTransportFragment : MapFragment() {
     private lateinit var binding: FragmentHikeTransportBinding
+    private val viewModel: HikeTransportViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentHikeTransportBinding>(
             inflater, R.layout.fragment_hike_transport, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObserver()
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupObserver() {
+        viewModel.roadRes.observe(viewLifecycleOwner) { road ->
+            onRoadResult(road)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,7 +65,6 @@ class HikeTransportFragment : MapFragment() {
 
         initMap()
 
-        val viewModel: HikeTransportViewModel by viewModels()
         val args: HikeTransportFragmentArgs by navArgs()
 
         val roadManager = OSRMRoadManager(context, BuildConfig.APPLICATION_ID)
@@ -77,10 +88,6 @@ class HikeTransportFragment : MapFragment() {
         args: HikeTransportFragmentArgs,
         roadManager: OSRMRoadManager
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.roadRes.observe(viewLifecycleOwner) { road ->
-            onRoadResult(road)
-        }
         handleOfflineLoad(requireContext()) {
             viewModel.getRoad(args, roadManager)
         }
@@ -100,7 +107,7 @@ class HikeTransportFragment : MapFragment() {
                 title = "$i. lépés"
                 subDescription =
                     Road.getLengthDurationText(requireContext(), node.mLength, node.mDuration)
-            }.also { nodeMarker ->
+            }.let { nodeMarker ->
                 map.overlays.add(nodeMarker)
             }
         }

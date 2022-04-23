@@ -38,14 +38,25 @@ import java.util.*
 @AndroidEntryPoint
 class MyMapDetailFragment : MapFragment() {
     private lateinit var binding: FragmentMyMapDetailBinding
+    private val viewModel: MyMapDetailViewModel by viewModels()
+    private val args: MyMapDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentMyMapDetailBinding>(
             inflater, R.layout.fragment_my_map_detail, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { userRoute ->
+                adaptView(args, userRoute)
+            }
+        }
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -53,9 +64,6 @@ class MyMapDetailFragment : MapFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMap()
-
-        val viewModel: MyMapDetailViewModel by viewModels()
-        val args: MyMapDetailFragmentArgs by navArgs()
 
         setupLoad(viewModel, args)
 
@@ -70,12 +78,6 @@ class MyMapDetailFragment : MapFragment() {
         viewModel: MyMapDetailViewModel,
         args: MyMapDetailFragmentArgs
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { userRoute ->
-                adaptView(args, userRoute)
-            }
-        }
         handleOfflineLoad(requireContext()) {
             viewModel.loadUserRoute(args.routeName)
         }

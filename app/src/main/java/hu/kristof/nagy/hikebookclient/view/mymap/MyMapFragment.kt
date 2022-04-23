@@ -38,11 +38,22 @@ class MyMapFragment : MapFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentMyMapBinding>(
             inflater, R.layout.fragment_my_map, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObserver()
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupObserver() {
+        viewModel.routes.observe(viewLifecycleOwner) { routes ->
+            map.onRoutesLoad(routes as ResponseResult<List<Route>>, context)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,15 +62,6 @@ class MyMapFragment : MapFragment() {
         initMap()
 
         setClickListeners()
-
-        setupLoad()
-    }
-
-    private fun setupLoad() {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routes.observe(viewLifecycleOwner) { routes ->
-            map.onRoutesLoad(routes as ResponseResult<List<Route>>, context)
-        }
     }
 
     private fun setClickListeners() = with(binding) {

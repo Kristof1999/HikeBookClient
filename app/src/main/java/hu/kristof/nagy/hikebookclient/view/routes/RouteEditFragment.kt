@@ -40,16 +40,39 @@ import org.osmdroid.views.overlay.Polyline
 class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentRouteEditBinding
     private val viewModel: RouteEditViewModel by viewModels()
+    private val args: RouteEditFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentRouteEditBinding>(
             inflater, R.layout.fragment_route_edit, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObservers()
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupObservers() {
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                showRoutePointsOnMap(viewModel, route.points)
+                adaptView(route)
+                showRoutePolylineOnMap(route)
+            }
+        }
+        viewModel.routeEditRes.observe(viewLifecycleOwner) {
+            onRouteEditResult(it, args)
+        }
+        OnSingleTapHandlerTextMarkerTypeDecorator
+            .setSpinnerToDefault.observe(viewLifecycleOwner) {
+                binding.routeEditSpinner.setSelection(0)
+            }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,17 +82,6 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
         setupSpinner()
 
-        val args: RouteEditFragmentArgs by navArgs()
-        val viewModel: RouteEditViewModel by viewModels()
-
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { route ->
-                showRoutePointsOnMap(viewModel, route.points)
-                adaptView(route)
-                showRoutePolylineOnMap(route)
-            }
-        }
         handleOfflineLoad(requireContext()) {
             // TODO: add listener for when online to load the route
             // and prevent editing to attempt to edit a null route
@@ -77,9 +89,6 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
             viewModel.loadRoute(args)
         }
 
-        viewModel.routeEditRes.observe(viewLifecycleOwner) {
-            onRouteEditResult(it, args)
-        }
         binding.routeEditEditButton.setOnClickListener {
             handleOffline(requireContext()) {
                 onRouteEdit(viewModel)
@@ -90,11 +99,6 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupSpinner() {
-        binding.lifecycleOwner = viewLifecycleOwner
-        OnSingleTapHandlerTextMarkerTypeDecorator
-            .setSpinnerToDefault.observe(viewLifecycleOwner) {
-            binding.routeEditSpinner.setSelection(0)
-        }
         binding.routeEditSpinner.onItemSelectedListener = this
         setMarkerSpinnerAdapter(requireContext(), binding.routeEditSpinner)
     }

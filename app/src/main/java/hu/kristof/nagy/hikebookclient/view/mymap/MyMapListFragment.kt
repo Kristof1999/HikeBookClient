@@ -54,14 +54,20 @@ import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
 class MyMapListFragment : Fragment() {
     private lateinit var binding: FragmentMyMapListBinding
     private val myMapViewModel: MyMapViewModel by activityViewModels()
+    private val myMapDetailViewModel: MyMapDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentMyMapListBinding>(
             inflater, R.layout.fragment_my_map_list, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObservers(myMapDetailViewModel, myMapViewModel)
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -74,18 +80,13 @@ class MyMapListFragment : Fragment() {
             )
         }
 
-        val myMapDetailViewModel: MyMapDetailViewModel by viewModels()
-
         setupList(myMapDetailViewModel, myMapViewModel)
-
-        setupObservers(myMapDetailViewModel, myMapViewModel)
     }
 
     private fun setupObservers(
         myMapDetailViewModel: MyMapDetailViewModel,
         myMapViewModel: MyMapViewModel
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
         myMapDetailViewModel.deleteRes.observe(viewLifecycleOwner) {
             onDeleteResult(myMapViewModel, myMapDetailViewModel, it)
         }
@@ -167,7 +168,6 @@ class MyMapListFragment : Fragment() {
             )
         )
         binding.myMapRecyclerView.adapter = adapter
-        binding.lifecycleOwner = viewLifecycleOwner
         myMapViewModel.routes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) {
                 adapter.submitList(it.toMutableList().map { it.routeName })

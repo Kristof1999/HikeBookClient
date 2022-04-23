@@ -29,38 +29,23 @@ import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
 @AndroidEntryPoint
 class GroupHikeListFragment : Fragment() {
     private lateinit var binding: FragmentGroupHikeListBinding
+    private val viewModel: GroupHikeListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupHikeListBinding>(
             inflater, R.layout.fragment_group_hike_list, container, false
-        )
-        return binding.root
-    }
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
-
-        val viewModel: GroupHikeListViewModel by viewModels()
-
-        setupLoad(isConnectedPage, viewModel)
-
-        handleGeneralConnect(viewModel, isConnectedPage)
-    }
-
-    private fun handleGeneralConnect(
-        viewModel: GroupHikeListViewModel,
-        isConnectedPage: Boolean
-    ) {
-        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { generalConnectRes ->
                 if (!viewModel.generalConnectFinished) {
                     showGenericErrorOr(context, generalConnectRes) {
+                        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
                         if (isConnectedPage) {
                             Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT).show()
                         } else {
@@ -74,6 +59,16 @@ class GroupHikeListFragment : Fragment() {
                 }
             }
         }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+
+        setupLoad(isConnectedPage, viewModel)
     }
 
     private fun setupLoad(
@@ -108,7 +103,6 @@ class GroupHikeListFragment : Fragment() {
                 }
             ))
         binding.groupHikeListRecyclerView.adapter = adapter
-        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.groupHikes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { groupHikes ->
                 adapter.submitList(groupHikes.toMutableList())

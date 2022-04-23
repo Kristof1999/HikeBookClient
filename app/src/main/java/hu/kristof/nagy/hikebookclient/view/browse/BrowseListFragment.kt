@@ -30,9 +30,11 @@ class BrowseListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentBrowseListBinding>(
             inflater, R.layout.fragment_browse_list, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -55,7 +57,6 @@ class BrowseListFragment : Fragment() {
             findNavController().navigate(action)
         })
         binding.browseRecyclerView.adapter = adapter
-        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.routes.observe(viewLifecycleOwner) { res ->
             handleResult(requireContext(), res) { list ->
                 adapter.submitList(list.toMutableList())

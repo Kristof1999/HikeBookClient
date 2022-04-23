@@ -34,23 +34,28 @@ class GroupsListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupsListBinding>(
             inflater, R.layout.fragment_groups_list, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObserver()
+
         return binding.root
+    }
+
+    private fun setupObserver() {
+        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            onGeneralConnectRes(res, isConnectedPage)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
-
-        setupList(isConnectedPage)
-
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
-            onGeneralConnectRes(res, isConnectedPage)
-        }
+        setupList()
     }
 
     private fun onGeneralConnectRes(res: ResponseResult<Boolean>, isConnectedPage: Boolean) {
@@ -69,7 +74,8 @@ class GroupsListFragment : Fragment() {
         }
     }
 
-    private fun setupList(isConnectedPage: Boolean) {
+    private fun setupList() {
+        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
         val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter
         binding.lifecycleOwner = viewLifecycleOwner

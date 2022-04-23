@@ -32,16 +32,42 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 @AndroidEntryPoint
 class GroupsDetailMapFragment : MapFragment() {
     private lateinit var binding: FragmentGroupsDetailMapBinding
+    private val viewModel: GroupsDetailMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupsDetailMapBinding>(
             inflater, R.layout.fragment_groups_detail_map, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObservers()
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupObservers() {
+        viewModel.apply {
+            addFromMyMapRes.observe(viewLifecycleOwner) { res ->
+                if (!viewModel.addFromMyMapFinished) {
+                    handleResult(context, res) { addFromMyMapRes ->
+                        showGenericErrorOr(context, addFromMyMapRes) {
+                            val groupName = arguments?.getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
+                            Toast.makeText(context, "A felvétel sikeres!", Toast.LENGTH_SHORT).show()
+                            viewModel.loadRoutesOfGroup(groupName)
+                        }
+                    }
+                    viewModel.addFromMyMapFinished = true
+                }
+            }
+            routes.observe(viewLifecycleOwner) { routes ->
+                map.onRoutesLoad(routes as ResponseResult<List<Route>>, context)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,9 +82,8 @@ class GroupsDetailMapFragment : MapFragment() {
             onRouteCreate(groupName)
         }
 
-        val viewModel: GroupsDetailMapViewModel by activityViewModels()
         handleOfflineLoad(requireContext()) {
-            setupLoad(viewModel, groupName)
+            viewModel.loadRoutesOfGroup(groupName)
         }
 
         setupAddFromMyMap(viewModel, groupName)
@@ -70,19 +95,6 @@ class GroupsDetailMapFragment : MapFragment() {
         viewModel: GroupsDetailMapViewModel,
         groupName: String
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.addFromMyMapRes.observe(viewLifecycleOwner) { res ->
-            if (!viewModel.addFromMyMapFinished) {
-                handleResult(context, res) { addFromMyMapRes ->
-                    showGenericErrorOr(context, addFromMyMapRes) {
-                        Toast.makeText(context, "A felvétel sikeres!", Toast.LENGTH_SHORT).show()
-                        viewModel.loadRoutesOfGroup(groupName)
-                    }
-                }
-                viewModel.addFromMyMapFinished = true
-            }
-        }
-
         val dialog = AddFromMyMapDialogFragment()
         dialog.route.observe(viewLifecycleOwner) { route ->
             viewModel.onAddFromMyMap(route, groupName)
@@ -92,17 +104,6 @@ class GroupsDetailMapFragment : MapFragment() {
                 dialog.show(parentFragmentManager, "add from my map")
             }
         }
-    }
-
-    private fun setupLoad(
-        viewModel: GroupsDetailMapViewModel,
-        groupName: String
-    ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routes.observe(viewLifecycleOwner) { routes ->
-            map.onRoutesLoad(routes as ResponseResult<List<Route>>, context)
-        }
-        viewModel.loadRoutesOfGroup(groupName)
     }
 
     private fun onRouteCreate(groupName: String) {
@@ -124,6 +125,7 @@ class GroupsDetailMapFragment : MapFragment() {
         map = binding.groupsMapMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()
+            addCopyRightOverlay()
         }
     }
 

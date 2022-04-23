@@ -39,16 +39,32 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: FragmentRouteCreateBinding
     private val viewModel: RouteCreateViewModel by viewModels()
+    private val args: RouteCreateFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentRouteCreateBinding>(
             inflater, R.layout.fragment_route_create, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObservers()
+
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupObservers() {
+        OnSingleTapHandlerTextMarkerTypeDecorator
+            .setSpinnerToDefault.observe(viewLifecycleOwner) {
+                binding.routeCreateMarkerSpinner.setSelection(0)
+            }
+        viewModel.routeCreateRes.observe(viewLifecycleOwner) {
+            onRouteCreateResult(it, args)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,28 +73,17 @@ class RouteCreateFragment : MapFragment(), AdapterView.OnItemSelectedListener {
 
         setupSpinner()
 
-        val args: RouteCreateFragmentArgs by navArgs()
-
         setupRouteCreate(args)
 
         setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
     }
 
     private fun setupSpinner() {
-        binding.lifecycleOwner = viewLifecycleOwner
-        OnSingleTapHandlerTextMarkerTypeDecorator
-            .setSpinnerToDefault.observe(viewLifecycleOwner) {
-            binding.routeCreateMarkerSpinner.setSelection(0)
-        }
         binding.routeCreateMarkerSpinner.onItemSelectedListener = this
         setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
     }
 
     private fun setupRouteCreate(args: RouteCreateFragmentArgs) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.routeCreateRes.observe(viewLifecycleOwner) {
-            onRouteCreateResult(it, args)
-        }
         binding.routeCreateCreateButton.setOnClickListener {
             handleOffline(requireContext()) {
                 onRouteCreate(args, viewModel)

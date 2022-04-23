@@ -61,9 +61,11 @@ class HikeFragment : MapFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentHikeBinding>(
             inflater, R.layout.fragment_hike, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -84,7 +86,6 @@ class HikeFragment : MapFragment() {
         val viewModel: HikeViewModel by viewModels()
         val args: HikeFragmentArgs by navArgs()
 
-        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
                 myGeofence(fusedLocationProviderClient, myLocationMarker, userRoute, args, viewModel)

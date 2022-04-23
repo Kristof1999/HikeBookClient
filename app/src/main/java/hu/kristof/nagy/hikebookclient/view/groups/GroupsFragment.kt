@@ -32,14 +32,19 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
 @AndroidEntryPoint
 class GroupsFragment : Fragment() {
     private lateinit var binding: FragmentGroupsBinding
+    private val viewModel: GroupsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupsBinding>(
             inflater, R.layout.fragment_groups, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObserver()
 
         val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
         val viewPager: ViewPager = binding.groupsViewPager
@@ -52,19 +57,7 @@ class GroupsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val viewModel: GroupsViewModel by viewModels()
-
-        setupGroupCreation(viewModel)
-    }
-
-    private fun setupGroupCreation(viewModel: GroupsViewModel) {
-        val dialogFragment = TextDialogFragment.instanceOf(
-            R.string.groups_create_dialog_text, R.string.groups_create_dialog_hint_text
-        )
-        binding.lifecycleOwner = viewLifecycleOwner
+    private fun setupObserver() {
         viewModel.createRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.createFinished) {
                 handleResult(requireContext(), res) { createRes ->
@@ -73,7 +66,18 @@ class GroupsFragment : Fragment() {
                 viewModel.createFinished = true
             }
         }
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupGroupCreation(viewModel)
+    }
+
+    private fun setupGroupCreation(viewModel: GroupsViewModel) {
+        val dialogFragment = TextDialogFragment.instanceOf(
+            R.string.groups_create_dialog_text, R.string.groups_create_dialog_hint_text
+        )
         dialogFragment.text.observe(viewLifecycleOwner) { name ->
             catchAndShowIllegalStateAndArgument(requireContext()) {
                 viewModel.createGroup(name)

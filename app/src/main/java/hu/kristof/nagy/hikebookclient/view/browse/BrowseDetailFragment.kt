@@ -34,14 +34,29 @@ import org.osmdroid.views.overlay.Polyline
 @AndroidEntryPoint
 class BrowseDetailFragment : MapFragment() {
     private lateinit var binding: FragmentBrowseDetailBinding
+    private val viewModel: BrowseDetailViewModel by viewModels()
+    private val args: BrowseDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentBrowseDetailBinding>(
             inflater, R.layout.fragment_browse_detail, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        viewModel.addRes.observe(viewLifecycleOwner) {
+            onAddResult(it)
+        }
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { route ->
+                onPointsLoad(route.points)
+                adaptView(args, route)
+            }
+        }
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -49,10 +64,6 @@ class BrowseDetailFragment : MapFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initMap()
-
-        val args: BrowseDetailFragmentArgs by navArgs()
-
-        val viewModel: BrowseDetailViewModel by viewModels()
 
         setupLoad(viewModel, args)
 
@@ -63,10 +74,6 @@ class BrowseDetailFragment : MapFragment() {
         viewModel: BrowseDetailViewModel,
         args: BrowseDetailFragmentArgs
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.addRes.observe(viewLifecycleOwner) {
-            onAddResult(it)
-        }
         binding.browseDetailAddToMyMapButton.setOnClickListener {
             onAddToMyMap(viewModel, args)
         }
@@ -76,13 +83,6 @@ class BrowseDetailFragment : MapFragment() {
         viewModel: BrowseDetailViewModel,
         args: BrowseDetailFragmentArgs
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { route ->
-                onPointsLoad(route.points)
-                adaptView(args, route)
-            }
-        }
         handleOfflineLoad(requireContext()) {
             viewModel.loadDetails(args.userName, args.routeName)
             // TODO: add listener for when the device is online, we load the details

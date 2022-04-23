@@ -31,14 +31,22 @@ import java.util.*
 @AndroidEntryPoint
 class HikePlanStartFragment : Fragment() {
     private lateinit var binding: FragmentHikePlanStartBinding
+    private val viewModel: HikePlanDateViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentHikePlanStartBinding>(
             inflater, R.layout.fragment_hike_plan_start, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        viewModel.forecastRes.observe(viewLifecycleOwner) {
+            binding.hikePlanStartTv.text = it
+        }
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -46,7 +54,6 @@ class HikePlanStartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val viewModel: HikePlanDateViewModel by viewModels()
         setupForecasting(viewModel)
 
         val args: HikePlanStartFragmentArgs by navArgs()
@@ -76,7 +83,6 @@ class HikePlanStartFragment : Fragment() {
     ) {
         var date: String? = null
         var hour: Int? = null
-        binding.lifecycleOwner = viewLifecycleOwner
 
         val datePickerFragment = DatePickerFragment()
         datePickerFragment.dateRes.observe(viewLifecycleOwner) { dateRes ->
@@ -94,7 +100,6 @@ class HikePlanStartFragment : Fragment() {
         }
 
         val timePickerFragment = TimePickerFragment()
-        binding.lifecycleOwner = viewLifecycleOwner
         timePickerFragment.timeRes.observe(viewLifecycleOwner) { hourRes ->
             hour = hourRes.get(Calendar.HOUR_OF_DAY)
             date?.let {
@@ -107,10 +112,6 @@ class HikePlanStartFragment : Fragment() {
             handleOffline(requireContext()) {
                 timePickerFragment.show(parentFragmentManager, "timePicker")
             }
-        }
-
-        viewModel.forecastRes.observe(viewLifecycleOwner) {
-            binding.hikePlanStartTv.text = it
         }
     }
 

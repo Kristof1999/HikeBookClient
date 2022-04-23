@@ -34,43 +34,27 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 @AndroidEntryPoint
 class GroupsDetailListFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailListBinding
+    private val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
+    private val listViewModel: GroupsDetailListViewModel by viewModels()
+    private val args: GroupsDetailListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupsDetailListBinding>(
             inflater, R.layout.fragment_groups_detail_list, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        setupObservers()
+
         setHasOptionsMenu(true)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val args: GroupsDetailListFragmentArgs by navArgs()
-        val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
-        val listViewModel: GroupsDetailListViewModel by viewModels()
-
-        val adapter = initAdapter(mapViewModel, listViewModel, args)
-        binding.groupsDetailListRecyclerView.adapter = adapter
-
-        observeViewModels(mapViewModel, listViewModel, adapter, args)
-    }
-
-    private fun observeViewModels(
-        mapViewModel: GroupsDetailMapViewModel,
-        listViewModel: GroupsDetailListViewModel,
-        adapter: GroupsDetailListAdapter,
-        args: GroupsDetailListFragmentArgs
-    ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        mapViewModel.routes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { routes ->
-                adapter.submitList(routes.map { it.routeName }.toMutableList())
-            }
-        }
+    private fun setupObservers() {
         with(listViewModel) {
             deleteRes.observe(viewLifecycleOwner) { res ->
                 if (!listViewModel.deleteFinished) {
@@ -92,6 +76,18 @@ class GroupsDetailListFragment : Fragment() {
                     }
                     listViewModel.addToMyMapFinished = true
                 }
+            }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val adapter = initAdapter(mapViewModel, listViewModel, args)
+        binding.groupsDetailListRecyclerView.adapter = adapter
+        mapViewModel.routes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { routes ->
+                adapter.submitList(routes.map { it.routeName }.toMutableList())
             }
         }
     }

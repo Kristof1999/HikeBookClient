@@ -30,14 +30,28 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 @AndroidEntryPoint
 class GroupsDetailFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailBinding
+    private val viewModel: GroupsDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupsDetailBinding>(
             inflater, R.layout.fragment_groups_detail, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
+
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { generalConnectRes ->
+                showGenericErrorOr(context, generalConnectRes) {
+                    findNavController(requireActivity(), R.id.navHostFragment).navigate(
+                        R.id.action_groupsDetailFragment_to_groupsFragment
+                    )
+                }
+            }
+        }
+
         return binding.root
     }
 
@@ -46,8 +60,6 @@ class GroupsDetailFragment : Fragment() {
 
         val args: GroupsDetailFragmentArgs by navArgs()
         adaptView(args)
-
-        val viewModel: GroupsDetailViewModel by viewModels()
 
         setupGeneralConnect(viewModel, args)
 
@@ -70,16 +82,6 @@ class GroupsDetailFragment : Fragment() {
         viewModel: GroupsDetailViewModel,
         args: GroupsDetailFragmentArgs
     ) {
-        binding.lifecycleOwner = viewLifecycleOwner
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { generalConnectRes ->
-                showGenericErrorOr(context, generalConnectRes) {
-                    findNavController(requireActivity(), R.id.navHostFragment).navigate(
-                        R.id.action_groupsDetailFragment_to_groupsFragment
-                    )
-                }
-            }
-        }
         binding.groupsDetailConnectButton.setOnClickListener {
             handleOffline(requireContext()) {
                 viewModel.generalConnect(args.groupName, args.isConnectedPage)
@@ -115,10 +117,12 @@ class GroupsDetailFragment : Fragment() {
 
     private fun adaptView(args: GroupsDetailFragmentArgs) {
         binding.groupsDetailGroupNameTv.text = args.groupName
-        if (args.isConnectedPage) {
-            binding.groupsDetailConnectButton.text = "Elhagyás"
-        } else {
-            binding.groupsDetailConnectButton.text = "Csatlakozás"
+        binding.groupsDetailConnectButton.apply {
+            if (args.isConnectedPage) {
+                text = "Elhagyás"
+            } else {
+                text = "Csatlakozás"
+            }
         }
     }
 }

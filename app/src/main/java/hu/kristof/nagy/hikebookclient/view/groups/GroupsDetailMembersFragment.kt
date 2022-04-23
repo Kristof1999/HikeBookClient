@@ -31,9 +31,11 @@ class GroupsDetailMembersFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentGroupsDetailMembersBinding>(
             inflater, R.layout.fragment_groups_detail_members, container, false
-        )
+        ).apply {
+            lifecycleOwner = viewLifecycleOwner
+        }
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -52,7 +54,6 @@ class GroupsDetailMembersFragment : Fragment() {
 
     private fun setupList(viewModel: GroupsDetailMembersViewModel) {
         val adapter = GroupsDetailMembersAdapter()
-        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.members.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { members ->
                 adapter.submitList(members.toMutableList())
