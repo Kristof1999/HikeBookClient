@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -37,9 +37,12 @@ import org.osmdroid.views.overlay.Polyline
  * With the save button, the user can save the route.
  */
 @AndroidEntryPoint
-class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
+class RouteEditFragment : RouteFragment() {
     private lateinit var binding: FragmentRouteEditBinding
-    private val viewModel: RouteEditViewModel by viewModels()
+    override val viewModel: RouteEditViewModel by viewModels()
+    override val switch: SwitchCompat by lazy {
+        binding.routeEditDeleteSwitch
+    }
     private val args: RouteEditFragmentArgs by navArgs()
 
     override fun onCreateView(
@@ -59,15 +62,16 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupObservers() {
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { route ->
-                showRoutePointsOnMap(viewModel, route.points)
-                adaptView(route)
-                showRoutePolylineOnMap(route)
+        with(viewModel) {
+            route.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { route ->
+                    showRoutePointsAndPolylinesOnMap(viewModel, route.points)
+                    adaptView(route)
+                }
             }
-        }
-        viewModel.routeEditRes.observe(viewLifecycleOwner) {
-            onRouteEditResult(it, args)
+            routeEditRes.observe(viewLifecycleOwner) {
+                onRouteEditResult(it, args)
+            }
         }
         OnSingleTapHandlerTextMarkerTypeDecorator
             .setSpinnerToDefault.observe(viewLifecycleOwner) {
@@ -110,14 +114,6 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        onMarkerItemSelected(pos, viewModel, parentFragmentManager, viewLifecycleOwner)
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-        // keep type as is
-    }
-
     private fun onRouteEdit(
         viewModel: RouteEditViewModel
     ) = catchAndShowIllegalStateAndArgument(requireContext()) {
@@ -152,18 +148,12 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun showRoutePolylineOnMap(route: Route) {
-        val polyline = route.toPolyline()
-        map.setMapCenterOnPolylineCenter(polyline)
-        map.setZoomForPolyline(polyline)
-    }
-
-    private fun showRoutePointsOnMap(
+    private fun showRoutePointsAndPolylinesOnMap(
         viewModel: RouteEditViewModel,
         points: List<Point>
     ) {
-        val markers = ArrayList<MyMarker>()
-        val polylines = ArrayList<Polyline>()
+        val markers = mutableListOf<MyMarker>()
+        val polylines = mutableListOf<Polyline>()
 
         val makeMyMarker = { point: Point ->
             val marker = Marker(map)
@@ -180,17 +170,17 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
             myMarker
         }
 
-        makeMyMarker(points.first()).also { myFirstMarker ->
+        makeMyMarker(points.first()).let { myFirstMarker ->
             map.overlays.add(myFirstMarker.marker)
             markers.add(myFirstMarker)
         }
         for (point in points.subList(1, points.size)) {
-            makeMyMarker(point).also { myMarker ->
+            makeMyMarker(point).let { myMarker ->
                 map.overlays.add(myMarker.marker)
                 markers.add(myMarker)
             }
 
-            makePolylineFromLastTwo(markers).also { polyline ->
+            makePolylineFromLastTwo(markers).let { polyline ->
                 map.overlays.add(polyline)
                 polylines.add(polyline)
             }
@@ -209,14 +199,5 @@ class RouteEditFragment : MapFragment(), AdapterView.OnItemSelectedListener {
         } else {
             super.onOptionsItemSelected(item)
         }
-    }
-
-    private fun makePolylineFromLastTwo(
-        markers: List<MyMarker>
-    ): Polyline = Polyline().apply {
-        setPoints(listOf(
-            markers[markers.size - 2].marker.position,
-            markers[markers.size - 1].marker.position
-        ))
     }
 }
