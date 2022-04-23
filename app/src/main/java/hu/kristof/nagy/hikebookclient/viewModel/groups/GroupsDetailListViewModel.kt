@@ -22,13 +22,13 @@ class GroupsDetailListViewModel @Inject constructor(
     private val groupRouteRepository: GroupRouteRepository,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private var _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
     val addToMyMapRes: LiveData<ResponseResult<Boolean>>
         get() = _addToMyMapRes
 
     var addToMyMapFinished = true
 
-    private var _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
     val deleteRes: LiveData<ResponseResult<Boolean>>
         get() = _deleteRes
 

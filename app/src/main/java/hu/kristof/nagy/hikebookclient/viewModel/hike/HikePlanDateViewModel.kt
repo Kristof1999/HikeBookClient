@@ -26,11 +26,11 @@ class HikePlanDateViewModel @Inject constructor(
     private val userRouteRepository: IUserRouteRepository
     ) : ViewModel() {
 
-    private var _forecastRes = MutableLiveData<String>()
+    private val _forecastRes = MutableLiveData<String>()
     val forecastRes: LiveData<String>
         get() = _forecastRes
 
-    private var _route = MutableLiveData<ResponseResult<Route>>()
+    private val _route = MutableLiveData<ResponseResult<Route>>()
     val route: LiveData<ResponseResult<Route>>
         get() = _route
 

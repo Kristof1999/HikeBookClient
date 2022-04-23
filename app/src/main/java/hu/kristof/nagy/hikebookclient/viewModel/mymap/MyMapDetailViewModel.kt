@@ -25,17 +25,17 @@ class MyMapDetailViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository,
     private val groupHikeRepository: GroupHikeRepository
 ) : ViewModel() {
-    private var _route = MutableLiveData<ResponseResult<UserRoute>>()
+    private val _route = MutableLiveData<ResponseResult<UserRoute>>()
     val route: LiveData<ResponseResult<UserRoute>>
         get() = _route
 
     var deleteFinished = true
 
-    private var _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
     val deleteRes: LiveData<ResponseResult<Boolean>>
         get() = _deleteRes
 
-    private var _groupHikeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _groupHikeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
     val groupHikeCreateRes: LiveData<ResponseResult<Boolean>>
         get() = _groupHikeCreateRes
 

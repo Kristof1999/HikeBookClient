@@ -17,7 +17,7 @@ import javax.inject.Inject
 class GroupsDetailMembersViewModel @Inject constructor(
     private val service: Service
     ) : ViewModel() {
-    private var _members = MutableLiveData<ResponseResult<List<String>>>()
+    private val _members = MutableLiveData<ResponseResult<List<String>>>()
     val members: LiveData<ResponseResult<List<String>>>
         get() = _members
 

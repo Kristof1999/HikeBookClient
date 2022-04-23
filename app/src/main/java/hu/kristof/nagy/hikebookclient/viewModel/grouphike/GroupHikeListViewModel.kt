@@ -21,11 +21,11 @@ import javax.inject.Inject
 class GroupHikeListViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository
 ) : ViewModel() {
-    private var _groupHikes = MutableLiveData<ResponseResult<List<GroupHikeListHelper>>>()
+    private val _groupHikes = MutableLiveData<ResponseResult<List<GroupHikeListHelper>>>()
     val groupHikes: LiveData<ResponseResult<List<GroupHikeListHelper>>>
         get() = _groupHikes
 
-    private var _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
     val generalConnectRes: LiveData<ResponseResult<Boolean>>
         get() = _generalConnectRes
 

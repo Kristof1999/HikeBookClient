@@ -19,7 +19,7 @@ import javax.inject.Inject
 class GroupsDetailViewModel @Inject constructor(
     private val repository: GroupsRepository
 )  : ViewModel() {
-    private var _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
     val generalConnectRes: LiveData<ResponseResult<Boolean>>
         get() = _generalConnectRes
 

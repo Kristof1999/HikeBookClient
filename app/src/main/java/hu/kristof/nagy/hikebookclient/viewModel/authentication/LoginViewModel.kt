@@ -39,7 +39,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val repository: IAuthRepository
     ) : ViewModel() {
-    private var _loginRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _loginRes = MutableLiveData<ResponseResult<Boolean>>()
     val loginRes : LiveData<ResponseResult<Boolean>>
         get() = _loginRes
 

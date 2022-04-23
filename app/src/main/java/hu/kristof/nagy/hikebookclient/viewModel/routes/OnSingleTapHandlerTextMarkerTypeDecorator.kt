@@ -40,7 +40,7 @@ class OnSingleTapHandlerTextMarkerTypeDecorator(
     }
 
     companion object {
-        private var _setSpinnerToDefault = MutableLiveData(true)
+        private val _setSpinnerToDefault = MutableLiveData(true)
         val setSpinnerToDefault: LiveData<Boolean>
             get() = _setSpinnerToDefault
     }

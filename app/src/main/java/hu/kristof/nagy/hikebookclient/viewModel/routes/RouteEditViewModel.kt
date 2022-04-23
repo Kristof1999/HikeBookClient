@@ -30,11 +30,11 @@ class RouteEditViewModel @Inject constructor(
     override lateinit var markers: ArrayList<MyMarker>
     override lateinit var polylines: ArrayList<Polyline>
 
-    private var _route = MutableLiveData<ResponseResult<Route>>()
+    private val _route = MutableLiveData<ResponseResult<Route>>()
     val route: LiveData<ResponseResult<Route>>
         get() = _route
 
-    private var _routeEditRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _routeEditRes = MutableLiveData<ResponseResult<Boolean>>()
     val routeEditRes: LiveData<ResponseResult<Boolean>>
         get() = _routeEditRes
 

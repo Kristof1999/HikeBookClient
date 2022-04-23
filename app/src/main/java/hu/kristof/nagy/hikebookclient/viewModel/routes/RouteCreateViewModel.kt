@@ -46,7 +46,7 @@ class RouteCreateViewModel @Inject constructor(
     override val markers = ArrayList<MyMarker>()
     override val polylines = ArrayList<Polyline>()
 
-    private var _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
     val routeCreateRes: LiveData<ResponseResult<Boolean>>
         get() = _routeCreateRes
 

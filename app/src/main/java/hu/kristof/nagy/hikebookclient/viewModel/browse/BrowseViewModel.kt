@@ -19,7 +19,7 @@ import javax.inject.Inject
 class BrowseViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository
     ) : ViewModel() {
-    private var _routes = MutableLiveData<ResponseResult<List<BrowseListItem>>>()
+    private val _routes = MutableLiveData<ResponseResult<List<BrowseListItem>>>()
     val routes: LiveData<ResponseResult<List<BrowseListItem>>>
         get() = _routes
 

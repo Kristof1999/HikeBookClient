@@ -20,7 +20,7 @@ import javax.inject.Inject
 class AddFromMyMapViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository
     ) : ViewModel() {
-    private var _routes = MutableLiveData<ResponseResult<List<UserRoute>>>()
+    private val _routes = MutableLiveData<ResponseResult<List<UserRoute>>>()
     val routes: LiveData<ResponseResult<List<UserRoute>>>
         get() = _routes
 

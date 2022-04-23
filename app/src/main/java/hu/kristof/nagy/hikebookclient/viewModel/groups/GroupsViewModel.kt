@@ -19,7 +19,7 @@ import javax.inject.Inject
 class GroupsViewModel @Inject constructor(
     private val repository: GroupsRepository
     ): ViewModel() {
-    private var _createRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _createRes = MutableLiveData<ResponseResult<Boolean>>()
     val createRes: LiveData<ResponseResult<Boolean>>
         get() = _createRes
 

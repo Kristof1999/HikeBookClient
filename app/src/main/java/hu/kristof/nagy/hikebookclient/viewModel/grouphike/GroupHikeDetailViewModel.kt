@@ -25,19 +25,19 @@ class GroupHikeDetailViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private var _route = MutableLiveData<ResponseResult<Route>>()
+    private val _route = MutableLiveData<ResponseResult<Route>>()
     val route: LiveData<ResponseResult<Route>>
         get() = _route
 
-    private var _participants = MutableLiveData<ResponseResult<List<String>>>()
+    private val _participants = MutableLiveData<ResponseResult<List<String>>>()
     val participants: LiveData<ResponseResult<List<String>>>
         get() = _participants
 
-    private var _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
     val generalConnectRes: LiveData<ResponseResult<Boolean>>
         get() = _generalConnectRes
 
-    private var _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
     val addToMyMapRes: LiveData<ResponseResult<Boolean>>
         get() = _addToMyMapRes
 

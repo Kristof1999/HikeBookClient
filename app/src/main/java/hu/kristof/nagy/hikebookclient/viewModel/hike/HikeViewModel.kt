@@ -24,7 +24,7 @@ class HikeViewModel @Inject constructor(
     private val service: Service,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private var _route = MutableLiveData<ResponseResult<UserRoute>>()
+    private val _route = MutableLiveData<ResponseResult<UserRoute>>()
     val route: LiveData<ResponseResult<UserRoute>>
         get() = _route
 

@@ -21,11 +21,11 @@ import javax.inject.Inject
 class BrowseDetailViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository
     ) : ViewModel() {
-    private var _route = MutableLiveData<ResponseResult<UserRoute>>()
+    private val _route = MutableLiveData<ResponseResult<UserRoute>>()
     val route: LiveData<ResponseResult<UserRoute>>
         get() = _route
 
-    private var _addRes = MutableLiveData<ResponseResult<Boolean>>()
+    private val _addRes = MutableLiveData<ResponseResult<Boolean>>()
     val addRes: LiveData<ResponseResult<Boolean>>
         get() = _addRes
 

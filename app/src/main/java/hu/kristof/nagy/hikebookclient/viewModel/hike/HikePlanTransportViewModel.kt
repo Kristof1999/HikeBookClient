@@ -31,23 +31,23 @@ class HikePlanTransportViewModel @Inject constructor(
     var startPoint: GeoPoint = Constants.START_POINT
     var endPoint: GeoPoint = Constants.START_POINT
 
-    private var _startPointChanged = MutableLiveData(false)
+    private val _startPointChanged = MutableLiveData(false)
     val startPointChanged: LiveData<Boolean>
         get() = _startPointChanged
 
-    private var _endPointChanged = MutableLiveData(false)
+    private val _endPointChanged = MutableLiveData(false)
     val endPointChanged: LiveData<Boolean>
         get() = _endPointChanged
 
-    private var _setStartNext = MutableLiveData(false)
+    private val _setStartNext = MutableLiveData(false)
     val setStartNext: LiveData<Boolean>
         get() = _setStartNext
 
-    private var _setEndNext = MutableLiveData(false)
+    private val _setEndNext = MutableLiveData(false)
     val setEndNext: LiveData<Boolean>
         get() = _setEndNext
 
-    private var _route = MutableLiveData<ResponseResult<Route>>()
+    private val _route = MutableLiveData<ResponseResult<Route>>()
     val route: LiveData<ResponseResult<Route>>
         get() = _route
 

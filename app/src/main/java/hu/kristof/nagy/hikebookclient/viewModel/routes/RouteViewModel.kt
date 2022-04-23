@@ -15,6 +15,7 @@ import org.osmdroid.views.overlay.Polyline
  * a marker on the map.
  */
 abstract class RouteViewModel : ViewModel() {
+    // TODO: place them in liveData
     protected abstract val markers: MutableList<MyMarker>
     protected abstract val polylines: MutableList<Polyline>
 

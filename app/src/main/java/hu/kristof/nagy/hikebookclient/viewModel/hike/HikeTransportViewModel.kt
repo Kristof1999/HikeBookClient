@@ -18,7 +18,7 @@ import org.osmdroid.util.GeoPoint
  * between the provided 2 points.
  */
 class HikeTransportViewModel : ViewModel() {
-    private var _roadRes = MutableLiveData<Road>()
+    private val _roadRes = MutableLiveData<Road>()
     val roadRes: LiveData<Road>
         get() = _roadRes
 
