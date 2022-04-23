@@ -88,19 +88,17 @@ class GroupHikeDetailFragment : MapFragment() {
         }
     }
 
-    private fun closeInfoWindows() {
-        MapEventsOverlay(object : MapEventsReceiver {
-            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
-                InfoWindow.closeAllInfoWindowsOn(map)
-                return true
-            }
-
-            override fun longPressHelper(p: GeoPoint?): Boolean {
-                return true
-            }
-        }).also { mapEventsOverlay ->
-            map.overlays.add(0, mapEventsOverlay)
+    private fun closeInfoWindows() = MapEventsOverlay(object : MapEventsReceiver {
+        override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+            InfoWindow.closeAllInfoWindowsOn(map)
+            return true
         }
+
+        override fun longPressHelper(p: GeoPoint?): Boolean {
+            return true
+        }
+    }).let { mapEventsOverlay ->
+        map.overlays.add(0, mapEventsOverlay)
     }
 
     private fun showRoutePointsOnMap(route: Route) {
@@ -110,7 +108,7 @@ class GroupHikeDetailFragment : MapFragment() {
                 icon = getMarkerIcon(point.type, resources)
                 title = point.title
                 position = point.toGeoPoint()
-            }.also { marker ->
+            }.let { marker ->
                 map.overlays.add(marker)
             }
         }
@@ -122,7 +120,7 @@ class GroupHikeDetailFragment : MapFragment() {
                 Toast.makeText(context, route.routeName, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener true
             }
-        }.also { polyline ->
+        }.let { polyline ->
             map.overlays.add(polyline)
             map.setMapCenterOnPolylineCenter(polyline)
         }
