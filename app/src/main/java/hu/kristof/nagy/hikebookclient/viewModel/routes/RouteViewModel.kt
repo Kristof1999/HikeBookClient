@@ -15,8 +15,8 @@ import org.osmdroid.views.overlay.Polyline
  * a marker on the map.
  */
 abstract class RouteViewModel : ViewModel() {
-    protected abstract val _markers: MutableList<MyMarker>
-    protected abstract val _polylines: MutableList<Polyline>
+    protected val _markers = mutableListOf<MyMarker>()
+    protected val _polylines = mutableListOf<Polyline>()
     val markers: List<MyMarker>
         get() = _markers
     val polylines: List<Polyline>

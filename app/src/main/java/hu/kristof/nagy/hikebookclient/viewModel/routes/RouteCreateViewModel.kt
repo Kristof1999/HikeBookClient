@@ -25,14 +25,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragmentArgs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.osmdroid.views.overlay.Polyline
 import javax.inject.Inject
 
 /**
@@ -43,8 +41,6 @@ class RouteCreateViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository,
     private val groupRouteRepository: GroupRouteRepository
     ) : RouteViewModel() {
-    override val _markers = mutableListOf<MyMarker>()
-    override val _polylines = mutableListOf<Polyline>()
 
     private val _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
     val routeCreateRes: LiveData<ResponseResult<Boolean>>
