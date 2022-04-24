@@ -15,6 +15,7 @@ fun MapView.onRoutesLoad(
     context: Context?
 ) {
     handleResult(context, res) { routes ->
+        val copyrightOverlay = overlays.removeFirst()
         overlays.clear()
         val folderOverlay = FolderOverlay()
         routes.forEach { route ->
@@ -26,6 +27,7 @@ fun MapView.onRoutesLoad(
             }
         }
         overlays.add(folderOverlay)
+        overlays.add(copyrightOverlay)
         invalidate()
     }
 }
