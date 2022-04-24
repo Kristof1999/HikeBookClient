@@ -6,8 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.appcompat.widget.SwitchCompat
+import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.MapFragment
+import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
+import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
+import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.views.overlay.Marker
 
 /**
  * A MapFragment that keeps the view up to date regarding the markers
@@ -23,24 +29,32 @@ abstract class RouteFragment : MapFragment(), AdapterView.OnItemSelectedListener
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (map.overlays.isEmpty()) {
-            setMapClickListeners(requireContext(), map, switch, viewModel)
-        } else {
-            val eventsOverlay = map.overlays.removeFirst()
-            map.overlays.clear()
-            map.overlays.add(0, eventsOverlay)
 
-            val markers = viewModel.markers.map { it.marker }
-            for (marker in markers) {
-                map.overlays.add(marker)
-            }
+        map.overlays.clear()
 
-            for (polyline in viewModel.polylines) {
-                map.overlays.add(polyline)
-            }
-
-            map.invalidate()
+        val points = viewModel.markers.map { Point.from(it) }
+        for (point in points) {
+            val marker = Marker(map)
+            marker.customize(
+                point.title,
+                getMarkerIcon(point.type, resources),
+                point.toGeoPoint()
+            )
+            marker.setListeners(
+                requireContext(), map, switch, viewModel
+            )
+            map.overlays.add(marker)
         }
+
+        for (polyline in viewModel.polylines) {
+            map.overlays.add(polyline)
+        }
+
+        map.setTileSource(TileSourceFactory.MAPNIK)
+        map.addCopyRightOverlay()
+        map.setStartZoomAndCenter()
+        setMapClickListeners(requireContext(), map, switch, viewModel)
+        map.invalidate()
 
         return null
     }

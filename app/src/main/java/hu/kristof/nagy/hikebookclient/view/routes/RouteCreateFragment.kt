@@ -20,15 +20,12 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteCreateBinding
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
 import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
-import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.OnSingleTapHandlerTextMarkerTypeDecorator
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteCreateViewModel
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
  * A RouteFragment to create a route for the logged in user.
@@ -57,7 +54,7 @@ class RouteCreateFragment : RouteFragment() {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        initMap()
+        map = binding.routeCreateMap
         super.onCreateView(inflater, container, savedInstanceState)
 
         setupObservers()
@@ -125,14 +122,6 @@ class RouteCreateFragment : RouteFragment() {
                     findNavController().navigate(directions)
                 }
             }
-        }
-    }
-
-    private fun initMap() {
-        map = binding.routeCreateMap.apply {
-            setTileSource(TileSourceFactory.MAPNIK)
-            setStartZoomAndCenter()
-            addCopyRightOverlay()
         }
     }
 

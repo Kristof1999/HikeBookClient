@@ -19,12 +19,14 @@ import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.util.*
+import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
+import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.OnSingleTapHandlerTextMarkerTypeDecorator
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteEditViewModel
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polyline
 
@@ -49,15 +51,15 @@ class RouteEditFragment : RouteFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-
         binding = DataBindingUtil.inflate<FragmentRouteEditBinding>(
             inflater, R.layout.fragment_route_edit, container, false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        initMap()
+        map = binding.routeEditMap
+        super.onCreateView(inflater, container, savedInstanceState)
+
         setupObservers()
 
         setHasOptionsMenu(true)
@@ -140,14 +142,6 @@ class RouteEditFragment : RouteFragment() {
         }
     }
 
-    private fun initMap() {
-        map = binding.routeEditMap.apply {
-            setTileSource(TileSourceFactory.MAPNIK)
-            addCopyRightOverlay()
-            setStartZoomAndCenter()
-        }
-    }
-
     private fun showRoutePointsAndPolylinesOnMap(
         viewModel: RouteEditViewModel,
         points: List<Point>
@@ -171,17 +165,21 @@ class RouteEditFragment : RouteFragment() {
 
         makeMyMarker(points.first()).let { myFirstMarker ->
             markers.add(myFirstMarker)
+            map.overlays.add(myFirstMarker.marker)
         }
         for (point in points.subList(1, points.size)) {
             makeMyMarker(point).let { myMarker ->
                 markers.add(myMarker)
+                map.overlays.add(myMarker.marker)
             }
 
             makePolylineFromLastTwo(markers).let { polyline ->
                 polylines.add(polyline)
+                map.overlays.add(polyline)
             }
         }
 
+        map.invalidate()
         viewModel.setup(markers, polylines)
     }
 
