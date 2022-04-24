@@ -157,8 +157,15 @@ class RouteEditFragment : RouteFragment() {
 
         val makeMyMarker = { point: Point ->
             val marker = Marker(map)
-            val markerType = point.type
-            val myMarker = MyMarker(marker, markerType, point.title)
+            marker.customize(
+                point.title,
+                getMarkerIcon(point.type, resources),
+                point.toGeoPoint()
+            )
+            marker.setListeners(
+                requireContext(), map, switch, viewModel
+            )
+            val myMarker = MyMarker(marker, point.type, point.title)
             myMarker
         }
 
@@ -176,6 +183,15 @@ class RouteEditFragment : RouteFragment() {
         }
 
         viewModel.setup(markers, polylines)
+    }
+
+    private fun makePolylineFromLastTwo(
+        markers: List<MyMarker>
+    ): Polyline = Polyline().apply {
+        setPoints(listOf(
+            markers[markers.size - 2].marker.position,
+            markers[markers.size - 1].marker.position
+        ))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -51,13 +51,14 @@ class RouteCreateFragment : RouteFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-
         binding = DataBindingUtil.inflate<FragmentRouteCreateBinding>(
             inflater, R.layout.fragment_route_create, container, false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
         }
+
+        initMap()
+        super.onCreateView(inflater, container, savedInstanceState)
 
         setupObservers()
 
@@ -77,13 +78,10 @@ class RouteCreateFragment : RouteFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initMap()
 
         setupSpinner()
 
         setupRouteCreate(args)
-
-        setMapClickListeners(requireContext(), map, binding.routeCreateDeleteSwitch, viewModel)
     }
 
     private fun setupSpinner() {

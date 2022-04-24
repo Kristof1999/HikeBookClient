@@ -27,8 +27,8 @@ class RouteEditViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository,
     private val groupRouteRepository: GroupRouteRepository
     ) : RouteViewModel() {
-    override var _markers = MutableLiveData<MutableList<MyMarker>>()
-    override var polylines = mutableListOf<Polyline>()
+    override lateinit var _markers: MutableList<MyMarker>
+    override lateinit var _polylines: MutableList<Polyline>
 
     private val _route = MutableLiveData<ResponseResult<Route>>()
     val route: LiveData<ResponseResult<Route>>
@@ -39,8 +39,8 @@ class RouteEditViewModel @Inject constructor(
         get() = _routeEditRes
 
     fun setup(markers: MutableList<MyMarker>, polylines: MutableList<Polyline>) {
-        _markers.value = markers
-        this.polylines = polylines
+        _markers = markers
+        _polylines = polylines
     }
 
     fun loadRoute(args: RouteEditFragmentArgs) {
@@ -77,7 +77,7 @@ class RouteEditViewModel @Inject constructor(
         if (checkAndHandleRouteLoad(_route.value!!)) {
             val oldRoute = _route.value!!.successResult!!
 
-            val points = _markers.value!!.map {
+            val points = _markers.map {
                 Point.from(it)
             }
 

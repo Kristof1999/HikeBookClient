@@ -32,7 +32,7 @@ class OnSingleTapHandler : IOnSingleTapHandler {
     ) {
         // add new marker
         newMarker.customize(newMarkerTitle, markerIcon, p!!)
-        MyMarker(newMarker, newMarkerType, newMarkerTitle).also { myMarker ->
+        MyMarker(newMarker, newMarkerType, newMarkerTitle).let { myMarker ->
             markers.add(myMarker)
         }
         overlays.add(newMarker)
@@ -51,7 +51,7 @@ class OnSingleTapHandler : IOnSingleTapHandler {
                 setPoints(listOf(
                     prevMarker.position, newMarker.position
                 ))
-            }.also { polyline ->
+            }.let { polyline ->
                 polylines.add(polyline)
                 overlays.add(polyline)
             }

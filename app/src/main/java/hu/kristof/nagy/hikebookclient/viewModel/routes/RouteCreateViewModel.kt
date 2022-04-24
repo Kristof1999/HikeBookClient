@@ -43,8 +43,8 @@ class RouteCreateViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository,
     private val groupRouteRepository: GroupRouteRepository
     ) : RouteViewModel() {
-    override val _markers = MutableLiveData(mutableListOf<MyMarker>())
-    override val polylines = mutableListOf<Polyline>()
+    override val _markers = mutableListOf<MyMarker>()
+    override val _polylines = mutableListOf<Polyline>()
 
     private val _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
     val routeCreateRes: LiveData<ResponseResult<Boolean>>
@@ -55,7 +55,7 @@ class RouteCreateViewModel @Inject constructor(
         routeName: String,
         hikeDescription: String
     ) {
-        val points: List<Point> = _markers.value!!.map {
+        val points: List<Point> = _markers.map {
             Point.from(it)
         }
 
