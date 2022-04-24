@@ -58,7 +58,7 @@ class RouteViewModelTest {
         )
 
         val myNewMarker = MyMarker(newMarker, newMarkerType, newMarkerTitle)
-        assertThat(viewModel.markers, hasItem(myNewMarker))
+        assertThat(viewModel._markers, hasItem(myNewMarker))
         assertThat(overlays, hasItem(newMarker))
         assertEquals(viewModel.polylines.size, 0)
     }
@@ -132,27 +132,27 @@ class RouteViewModelTest {
             overlays
         )
 
-        assertThat(viewModel.markers[0].type, equalTo(marker1Type))
-        assertThat(viewModel.markers[1].type, equalTo(MarkerType.SET))
+        assertThat(viewModel._markers[0].type, equalTo(marker1Type))
+        assertThat(viewModel._markers[1].type, equalTo(MarkerType.SET))
     }
 
     @Test
     fun `delete marker`() {
         val markerTitle = "marker"
         val marker = mock<Marker>()
-        viewModel.markers.add(MyMarker(marker, MarkerType.NEW, markerTitle))
+        viewModel._markers.add(MyMarker(marker, MarkerType.NEW, markerTitle))
 
         viewModel.onDelete(markerIcon, marker)
 
-        assertEquals(0, viewModel.markers.size)
+        assertEquals(0, viewModel._markers.size)
     }
 
     @Test
     fun `delete polyline`() {
         val marker1 = mock<Marker>()
         val marker2 = mock<Marker>()
-        viewModel.markers.add(MyMarker(marker1, MarkerType.SET, ""))
-        viewModel.markers.add(MyMarker(marker2, MarkerType.NEW, ""))
+        viewModel._markers.add(MyMarker(marker1, MarkerType.SET, ""))
+        viewModel._markers.add(MyMarker(marker2, MarkerType.NEW, ""))
         val polyline = Polyline()
         polyline.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         viewModel.polylines.add(polyline)
@@ -170,9 +170,9 @@ class RouteViewModelTest {
         val myMarker2 = MyMarker(marker2, MarkerType.SET, "")
         val marker3 = mock<Marker>()
         val myMarker3 = MyMarker(marker3, MarkerType.NEW, "")
-        viewModel.markers.add(myMarker1)
-        viewModel.markers.add(myMarker2)
-        viewModel.markers.add(myMarker3)
+        viewModel._markers.add(myMarker1)
+        viewModel._markers.add(myMarker2)
+        viewModel._markers.add(myMarker3)
         val polyline1 = Polyline()
         polyline1.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         viewModel.polylines.add(polyline1)
@@ -182,10 +182,10 @@ class RouteViewModelTest {
 
         viewModel.onDelete(markerIcon, marker3)
 
-        assertEquals(MarkerType.NEW, viewModel.markers[1].type)
+        assertEquals(MarkerType.NEW, viewModel._markers[1].type)
 
         viewModel.onDelete(markerIcon, marker2)
 
-        assertEquals(MarkerType.CASTLE, viewModel.markers[0].type)
+        assertEquals(MarkerType.CASTLE, viewModel._markers[0].type)
     }
 }

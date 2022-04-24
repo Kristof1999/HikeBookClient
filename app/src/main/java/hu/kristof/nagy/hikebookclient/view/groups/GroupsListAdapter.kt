@@ -37,6 +37,7 @@ class GroupsListAdapter(
             } else {
                 button.text = "Csatlakozás"
             }
+            binding.executePendingBindings()
         }
 
         companion object {

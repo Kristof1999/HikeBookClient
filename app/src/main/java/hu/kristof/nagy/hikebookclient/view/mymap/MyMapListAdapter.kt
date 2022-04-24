@@ -62,6 +62,7 @@ class MyMapListAdapter(private val clickListener: MyMapClickListener)
         fun bind(routeName: String) {
             binding.routeName = routeName
             binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         companion object {

@@ -39,6 +39,7 @@ class GroupHikeListAdapter(
                     "Csatlakozás"
                 }
             }
+            binding.executePendingBindings()
         }
 
         companion object {

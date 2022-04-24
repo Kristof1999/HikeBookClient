@@ -30,6 +30,7 @@ class BrowseListAdapter(private val clickListener: BrowseClickListener)
             binding.userName = userName
             binding.routeName = routeName
             binding.clickListener = clickListener
+            binding.executePendingBindings()
         }
 
         companion object {

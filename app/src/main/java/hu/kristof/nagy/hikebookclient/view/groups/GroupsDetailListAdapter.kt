@@ -36,6 +36,7 @@ class GroupsDetailListAdapter(
                 binding.groupsDetailListItemDeleteImageButton.isVisible = false
                 binding.groupsDetailListItemEditImageButton.isVisible = false
             }
+            binding.executePendingBindings()
         }
 
         companion object {
