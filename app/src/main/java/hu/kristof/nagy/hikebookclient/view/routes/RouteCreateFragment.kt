@@ -31,7 +31,7 @@ import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteCreateViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 
 /**
- * A MapFragment to create a route for the logged in user.
+ * A RouteFragment to create a route for the logged in user.
  * The user can set the name of the route and it's description in editTexts,
  * and points of the route on a map.
  * The user can choose between which type of point to place next with a spinner.
