@@ -186,10 +186,8 @@ class RouteEditFragment : RouteFragment() {
     private fun makePolylineFromLastTwo(
         markers: List<MyMarker>
     ): Polyline = Polyline().apply {
-        setPoints(listOf(
-            markers[markers.size - 2].marker.position,
-            markers[markers.size - 1].marker.position
-        ))
+        addPoint(markers[markers.size - 2].marker.position)
+        addPoint(markers[markers.size - 1].marker.position)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

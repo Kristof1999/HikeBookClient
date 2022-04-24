@@ -48,9 +48,8 @@ class OnSingleTapHandler : IOnSingleTapHandler {
 
             // connect the new point with the previous one
             Polyline().apply {
-                setPoints(listOf(
-                    prevMarker.position, newMarker.position
-                ))
+                addPoint(prevMarker.position)
+                addPoint(newMarker.position)
             }.let { polyline ->
                 polylines.add(polyline)
                 overlays.add(polyline)
