@@ -2,6 +2,7 @@ package hu.kristof.nagy.hikebookclient.util
 
 import android.content.Context
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 
@@ -38,5 +39,18 @@ fun catchAndShowIllegalStateAndArgument(context: Context?, f: () -> Unit) {
         Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
     } catch (e: IllegalArgumentException) {
         Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
+    }
+}
+
+fun <T : Any> handleIllegalStateAndArgument(
+    data: MutableLiveData<ResponseResult<T>>,
+    f: () -> Unit
+) {
+    try {
+        f.invoke()
+    } catch (e: IllegalStateException) {
+        data.value = ResponseResult(false, e.message, null)
+    } catch (e: IllegalArgumentException) {
+        data.value = ResponseResult(false, e.message, null)
     }
 }

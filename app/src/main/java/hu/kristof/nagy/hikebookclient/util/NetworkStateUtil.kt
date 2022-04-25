@@ -8,7 +8,9 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import hu.kristof.nagy.hikebookclient.R
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 
 // TODO: avoid spamming the user:
 // request a lifecycleOwner too and only show the error message
@@ -27,6 +29,18 @@ fun handleOffline(context: Context, f: () -> Unit) {
             context.getString(R.string.offline_once_error_msg),
             Toast.LENGTH_LONG
         ).show()
+    }
+}
+
+fun <T : Any> handleOffline(
+    data: MutableLiveData<ResponseResult<T>>,
+    context: Context,
+    f: () -> Unit
+) {
+    if (isOnline(context)) {
+        f.invoke()
+    } else {
+        data.value = ResponseResult(false, context.getString(R.string.offline_once_error_msg), null)
     }
 }
 

@@ -21,6 +21,7 @@
 
 package hu.kristof.nagy.hikebookclient.viewModel.authentication
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,6 +30,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.User
+import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -43,17 +46,42 @@ class LoginViewModel @Inject constructor(
     val loginRes : LiveData<ResponseResult<Boolean>>
         get() = _loginRes
 
+    private val _name = MutableLiveData<String>()
+    val name: LiveData<String>
+        get() = _name
+
+    private val _password = MutableLiveData<String>()
+    val password: LiveData<String>
+        get() = _password
+
+    // TODO: update javadoc
     /**
      * Calls the data layer to log in the user,
      * after encrypting the user's password,
      * and notifies the view layer of the result.
      * @param user the user to log in
      */
-    fun onLogin(user: User) {
-        viewModelScope.launch {
-            _loginRes.value = repository.login(
-                user.apply { encryptPassword() }
-            )
+    fun onLogin(context: Context) {
+        if (_name.value == null) {
+            // TODO: user better model that ResponseResult
+            _loginRes.value = ResponseResult(false, "A név nem lehet üres.", null)
+        }
+        if (_password.value == null) {
+            _loginRes.value = ResponseResult(false, "A jelszó mező nem lehet üres.", null)
+        }
+        val user = User(_name.value!!, _password.value!!)
+
+        // TODO: refactor in other places too
+        handleIllegalStateAndArgument(_loginRes) {
+            handleOffline(_loginRes, context) {
+                // TODO: test if exceptions are rethrown here
+                // if not, maybe use stateFlow instead of livedata
+                viewModelScope.launch {
+                    _loginRes.value = repository.login(
+                        user.apply { encryptPassword() }
+                    )
+                }
+            }
         }
     }
 }

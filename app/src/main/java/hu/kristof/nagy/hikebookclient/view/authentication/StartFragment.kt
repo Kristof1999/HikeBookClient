@@ -35,9 +35,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentStartBinding
-import hu.kristof.nagy.hikebookclient.model.User
-import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
-import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
 
 /**
@@ -49,18 +46,21 @@ class StartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val loginViewModel: LoginViewModel by viewModels()
+
         val binding = FragmentStartBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                // TODO: try to use 2-way data binding
+                // see codelabs for more detail
+                viewModel = loginViewModel
+                context = requireContext()
+                executePendingBindings()
             }
-
-        val loginViewModel: LoginViewModel by viewModels()
 
         setupObserver(loginViewModel)
 
         setClickListeners(binding)
-
-        setupLogin(loginViewModel, binding)
 
         return binding.root
     }
@@ -70,15 +70,6 @@ class StartFragment : Fragment() {
             handleResult(context, res) { loginRes ->
                 onLoginRes(loginRes)
             }
-        }
-    }
-
-    private fun setupLogin(
-        loginViewModel: LoginViewModel,
-        binding: FragmentStartBinding
-    ) {
-        binding.loginButton.setOnClickListener {
-            onLogin(binding, loginViewModel)
         }
     }
 
@@ -92,19 +83,6 @@ class StartFragment : Fragment() {
             findNavController().navigate(
                 R.id.action_startFragment_to_aboutFragment
             )
-        }
-    }
-
-    private fun onLogin(
-        binding: FragmentStartBinding,
-        loginViewModel: LoginViewModel
-    ) {
-        val name = binding.nameEditText.text.toString()
-        val pswd = binding.passwordEditText.text.toString()
-        catchAndShowIllegalStateAndArgument(requireContext()) {
-            handleOffline(requireContext()) {
-                loginViewModel.onLogin(User(name, pswd))
-            }
         }
     }
 
