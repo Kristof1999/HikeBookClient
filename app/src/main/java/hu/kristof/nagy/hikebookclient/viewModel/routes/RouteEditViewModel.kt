@@ -6,10 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.MyMarker
-import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
-import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.model.*
 import hu.kristof.nagy.hikebookclient.model.routes.*
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import hu.kristof.nagy.hikebookclient.view.routes.RouteEditFragmentArgs
@@ -37,7 +34,9 @@ class RouteEditViewModel @Inject constructor(
 
     fun setup(markers: MutableList<MyMarker>, polylines: MutableList<Polyline>) {
         _markers.addAll(markers)
-        _polylines.addAll(polylines)
+        _myPolylines.addAll(polylines.map {
+            MyPolyline.from(it)
+        })
     }
 
     fun loadRoute(args: RouteEditFragmentArgs) {

@@ -2,12 +2,12 @@ package hu.kristof.nagy.hikebookclient.viewModel.routes
 
 import android.graphics.drawable.Drawable
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.model.MyPolyline
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.view.routes.customize
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
-import org.osmdroid.views.overlay.Polyline
 
 class OnSingleTapHandler : IOnSingleTapHandler {
     /**
@@ -28,7 +28,7 @@ class OnSingleTapHandler : IOnSingleTapHandler {
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>,
         markers: MutableList<MyMarker>,
-        polylines: MutableList<Polyline>
+        myPolylines: MutableList<MyPolyline>
     ) {
         // add new marker
         newMarker.customize(newMarkerTitle, markerIcon, p!!)
@@ -47,12 +47,11 @@ class OnSingleTapHandler : IOnSingleTapHandler {
             }
 
             // connect the new point with the previous one
-            Polyline().apply {
-                addPoint(prevMarker.position)
-                addPoint(newMarker.position)
-            }.let { polyline ->
-                polylines.add(polyline)
-                overlays.add(polyline)
+            MyPolyline.newInstance(
+                listOf(prevMarker.position, newMarker.position)
+            ).let { myPolyline ->
+                myPolylines.add(myPolyline)
+                overlays.add(myPolyline.polyline)
             }
         }
     }

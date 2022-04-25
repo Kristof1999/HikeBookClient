@@ -4,11 +4,11 @@ import android.graphics.drawable.Drawable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.model.MyPolyline
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
-import org.osmdroid.views.overlay.Polyline
 
 class OnSingleTapHandlerTextMarkerTypeDecorator(
     onSingleTapHandler: IOnSingleTapHandler
@@ -22,7 +22,7 @@ class OnSingleTapHandlerTextMarkerTypeDecorator(
         setMarkerIcon: Drawable,
         overlays: MutableList<Overlay>,
         markers: MutableList<MyMarker>,
-        polylines: MutableList<Polyline>
+        myPolylines: MutableList<MyPolyline>
     ) {
         var markerType = newMarkerType
 
@@ -33,7 +33,7 @@ class OnSingleTapHandlerTextMarkerTypeDecorator(
         super.handle(
             newMarker, markerType, newMarkerTitle,
             p, markerIcon, setMarkerIcon,
-            overlays, markers, polylines
+            overlays, markers, myPolylines
         )
 
         _setSpinnerToDefault.value = !_setSpinnerToDefault.value!!

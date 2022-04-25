@@ -3,24 +3,24 @@ package hu.kristof.nagy.hikebookclient.viewModel.routes
 import android.graphics.drawable.Drawable
 import androidx.lifecycle.ViewModel
 import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.model.MyPolyline
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
-import org.osmdroid.views.overlay.Polyline
 
 /**
  * A ViewModel that helps to
  * set, drag, and delete
  * a marker on the map.
  */
-abstract class RouteViewModel : ViewModel() {
+open class RouteViewModel : ViewModel() {
     protected val _markers = mutableListOf<MyMarker>()
-    protected val _polylines = mutableListOf<Polyline>()
+    protected val _myPolylines = mutableListOf<MyPolyline>()
     val markers: List<MyMarker>
         get() = _markers
-    val polylines: List<Polyline>
-        get() = _polylines
+    val myPolylines: List<MyPolyline>
+        get() = _myPolylines
 
     var markerType = MarkerType.NEW
     var markerTitle = ""
@@ -45,7 +45,7 @@ abstract class RouteViewModel : ViewModel() {
        handler.handle(
            newMarker, markerType, markerTitle,
            p, markerIcon, setMarkerIcon, overlays,
-           _markers, _polylines
+           _markers, _myPolylines
        )
 
         markerTitle = ""
@@ -60,23 +60,23 @@ abstract class RouteViewModel : ViewModel() {
             return
 
         if (_markers.first().marker == marker) {
-            refreshNextPolyline(0, _markers, _polylines)
+            refreshNextPolyline(0, _markers, _myPolylines)
         } else if (_markers.last().marker == marker) {
-            refreshPrevPolyline(_markers.size - 1, _markers, _polylines)
+            refreshPrevPolyline(_markers.size - 1, _markers, _myPolylines)
         } else {
             val idx = _markers.indexOf(
                 _markers.filter { it.marker == marker }[0]
             )
-            refreshPrevPolyline(idx, _markers, _polylines)
-            refreshNextPolyline(idx, _markers, _polylines)
+            refreshPrevPolyline(idx, _markers, _myPolylines)
+            refreshNextPolyline(idx, _markers, _myPolylines)
         }
     }
 
     private fun refreshPrevPolyline(
         idx: Int,
         markers: List<MyMarker>,
-        polylines: List<Polyline>
-    ) = with(polylines[idx - 1]) {
+        myPolylines: List<MyPolyline>
+    ) = with(myPolylines[idx - 1].polyline) {
         setPoints(listOf(
             markers[idx - 1].marker.position,
             markers[idx].marker.position
@@ -87,8 +87,8 @@ abstract class RouteViewModel : ViewModel() {
     private fun refreshNextPolyline(
         idx: Int,
         markers: List<MyMarker>,
-        polylines: List<Polyline>
-    ) = with(polylines[idx]) {
+        myPolylines: List<MyPolyline>
+    ) = with(myPolylines[idx].polyline) {
         setPoints(listOf(
             markers[idx].marker.position,
             markers[idx + 1].marker.position
@@ -105,15 +105,15 @@ abstract class RouteViewModel : ViewModel() {
             return
 
         if (_markers.first().marker == marker) {
-            _polylines.first().isVisible = false
+            _myPolylines.first().polyline.isVisible = false
         } else if (_markers.last().marker == marker) {
-            _polylines.last().isVisible = false
+            _myPolylines.last().polyline.isVisible = false
         } else {
             val idx = _markers.indexOf(
                 _markers.filter { it.marker == marker }[0]
             )
-            _polylines[idx - 1].isVisible = false
-            _polylines[idx].isVisible = false
+            _myPolylines[idx - 1].polyline.isVisible = false
+            _myPolylines[idx].polyline.isVisible = false
         }
     }
 
@@ -138,8 +138,8 @@ abstract class RouteViewModel : ViewModel() {
                         _markers.last().marker, MarkerType.NEW, _markers.last().title
                     )
                 }
-                _polylines.last().isVisible = false
-                _polylines.removeLast()
+                _myPolylines.last().polyline.isVisible = false
+                _myPolylines.removeLast()
             }
             return true
         } else {

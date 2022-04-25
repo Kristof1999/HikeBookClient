@@ -14,10 +14,11 @@ import hu.kristof.nagy.hikebookclient.util.setStartZoomAndCenter
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.Polyline
 
 /**
- * A MapFragment that keeps the view up to date regarding the markers
- * of the loaded route and those which have been placed so far.
+ * A MapFragment that helps to keep the view up to date
+ * even after a configuration change.
  * It also handles a switch's item selected event.
  */
 abstract class RouteFragment : MapFragment(), AdapterView.OnItemSelectedListener {
@@ -29,11 +30,10 @@ abstract class RouteFragment : MapFragment(), AdapterView.OnItemSelectedListener
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         map.overlays.clear()
 
-        val points = viewModel.markers.map { Point.from(it) }
-        for (point in points) {
+        for (myMarker in viewModel.markers) {
+            val point = Point.from(myMarker)
             val marker = Marker(map)
             marker.customize(
                 point.title,
@@ -46,7 +46,10 @@ abstract class RouteFragment : MapFragment(), AdapterView.OnItemSelectedListener
             map.overlays.add(marker)
         }
 
-        for (polyline in viewModel.polylines) {
+        for (myPolyline in viewModel.myPolylines) {
+            val polyline = Polyline().apply {
+                setPoints(myPolyline.points)
+            }
             map.overlays.add(polyline)
         }
 
