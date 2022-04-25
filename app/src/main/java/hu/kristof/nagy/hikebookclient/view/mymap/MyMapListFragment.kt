@@ -66,12 +66,6 @@ class MyMapListFragment : Fragment() {
 
         setupObservers(myMapDetailViewModel, myMapViewModel)
 
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         binding.switchToMyMapButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_myMapListFragment_to_myMapFragment
@@ -79,6 +73,9 @@ class MyMapListFragment : Fragment() {
         }
 
         setupList(myMapDetailViewModel, myMapViewModel)
+
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
     private fun setupObservers(

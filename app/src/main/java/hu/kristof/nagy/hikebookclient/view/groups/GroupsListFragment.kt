@@ -39,6 +39,8 @@ class GroupsListFragment : Fragment() {
 
         setupObserver()
 
+        setupList()
+
         return binding.root
     }
 
@@ -47,12 +49,6 @@ class GroupsListFragment : Fragment() {
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             onGeneralConnectRes(res, isConnectedPage)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupList()
     }
 
     private fun onGeneralConnectRes(res: ResponseResult<Boolean>, isConnectedPage: Boolean) {

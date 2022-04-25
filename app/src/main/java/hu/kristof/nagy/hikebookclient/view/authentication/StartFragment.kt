@@ -59,6 +59,10 @@ class StartFragment : Fragment() {
 
         setupObserver()
 
+        setClickListeners()
+
+        setupLogin(loginViewModel)
+
         return binding.root
     }
 
@@ -68,14 +72,6 @@ class StartFragment : Fragment() {
                 onLoginRes(loginRes)
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setClickListeners()
-
-        setupLogin(loginViewModel)
     }
 
     private fun setupLogin(loginViewModel: LoginViewModel) {

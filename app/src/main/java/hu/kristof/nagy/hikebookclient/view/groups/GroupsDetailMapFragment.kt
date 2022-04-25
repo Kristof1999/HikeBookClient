@@ -44,6 +44,23 @@ class GroupsDetailMapFragment : MapFragment() {
 
         setupObservers()
 
+        initMap()
+
+        val groupName = arguments?.getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
+        adaptView()
+
+        binding.groupsMapCreateRouteFab.setOnClickListener {
+            onRouteCreate(groupName)
+        }
+
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoutesOfGroup(groupName)
+        }
+
+        setupAddFromMyMap(viewModel, groupName)
+
+        map.invalidate()
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -66,27 +83,6 @@ class GroupsDetailMapFragment : MapFragment() {
                 map.onRoutesLoad(routes as ResponseResult<List<Route>>, context)
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initMap()
-
-        val groupName = arguments?.getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
-        adaptView()
-
-        binding.groupsMapCreateRouteFab.setOnClickListener {
-            onRouteCreate(groupName)
-        }
-
-        handleOfflineLoad(requireContext()) {
-            viewModel.loadRoutesOfGroup(groupName)
-        }
-
-        setupAddFromMyMap(viewModel, groupName)
-
-        map.invalidate()
     }
 
     private fun setupAddFromMyMap(

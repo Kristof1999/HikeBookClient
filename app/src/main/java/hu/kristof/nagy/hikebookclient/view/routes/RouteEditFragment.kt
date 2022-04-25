@@ -60,6 +60,21 @@ class RouteEditFragment : RouteFragment() {
 
         setupObservers()
 
+        setupSpinner()
+
+        handleOfflineLoad(requireContext()) {
+            // TODO: add listener for when online to load the route
+            // and prevent editing to attempt to edit a null route
+            // in the case when loading failed due to beign offline
+            viewModel.loadRoute(args)
+        }
+
+        binding.routeEditEditButton.setOnClickListener {
+            handleOffline(requireContext()) {
+                onRouteEdit(viewModel)
+            }
+        }
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -81,25 +96,6 @@ class RouteEditFragment : RouteFragment() {
             .setSpinnerToDefault.observe(viewLifecycleOwner) {
                 binding.routeEditSpinner.setSelection(0)
             }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupSpinner()
-
-        handleOfflineLoad(requireContext()) {
-            // TODO: add listener for when online to load the route
-            // and prevent editing to attempt to edit a null route
-            // in the case when loading failed due to beign offline
-            viewModel.loadRoute(args)
-        }
-
-        binding.routeEditEditButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                onRouteEdit(viewModel)
-            }
-        }
     }
 
     private fun setupSpinner() {

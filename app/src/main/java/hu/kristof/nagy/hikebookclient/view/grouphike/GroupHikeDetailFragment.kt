@@ -48,6 +48,17 @@ class GroupHikeDetailFragment : MapFragment() {
 
         setupObservers()
 
+        initMap()
+
+        val args: GroupHikeDetailFragmentArgs by navArgs()
+        adaptView(args)
+
+        setupGeneralConnect(viewModel, args)
+
+        setupAddToMyMap(viewModel)
+
+        setupLoad(viewModel, args)
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -72,21 +83,6 @@ class GroupHikeDetailFragment : MapFragment() {
                 }
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val args: GroupHikeDetailFragmentArgs by navArgs()
-        adaptView(args)
-
-        setupGeneralConnect(viewModel, args)
-
-        setupAddToMyMap(viewModel)
-
-        setupLoad(viewModel, args)
-
-        initMap()
     }
 
     private fun setupLoad(

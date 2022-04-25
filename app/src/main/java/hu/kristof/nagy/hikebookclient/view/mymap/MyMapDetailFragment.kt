@@ -49,24 +49,24 @@ class MyMapDetailFragment : MapFragment() {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { userRoute ->
-                adaptView(args, userRoute)
-            }
-        }
+        setupObservers()
 
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         initMap()
 
         setupLoad(viewModel, args)
 
         setClickListeners(args, viewModel)
 
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun setupObservers() {
+        viewModel.route.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { userRoute ->
+                adaptView(args, userRoute)
+            }
+        }
         viewModel.deleteRes.observe(viewLifecycleOwner) {
             onDeleteResult(it)
         }

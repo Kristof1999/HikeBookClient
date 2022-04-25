@@ -48,19 +48,6 @@ class HikeTransportFragment : MapFragment() {
 
         setupObserver()
 
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
-    private fun setupObserver() {
-        viewModel.roadRes.observe(viewLifecycleOwner) { road ->
-            onRoadResult(road)
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         initMap()
 
         val args: HikeTransportFragmentArgs by navArgs()
@@ -78,6 +65,15 @@ class HikeTransportFragment : MapFragment() {
                     R.id.action_hikeTransportFragment_to_myMapFragment
                 )
             }
+        }
+
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun setupObserver() {
+        viewModel.roadRes.observe(viewLifecycleOwner) { road ->
+            onRoadResult(road)
         }
     }
 

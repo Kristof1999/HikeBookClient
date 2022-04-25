@@ -58,6 +58,8 @@ class RegistrationFragment : Fragment() {
 
         setupObserver()
 
+        setupRegistration(registrationViewModel)
+
         return binding.root
     }
 
@@ -67,12 +69,6 @@ class RegistrationFragment : Fragment() {
                 onRegistrationRes(registrationRes)
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupRegistration(registrationViewModel)
     }
 
     private fun setupRegistration(registrationViewModel: RegistrationViewModel) {

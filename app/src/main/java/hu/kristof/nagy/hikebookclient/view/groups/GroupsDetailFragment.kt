@@ -40,15 +40,7 @@ class GroupsDetailFragment : Fragment() {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { generalConnectRes ->
-                showGenericErrorOr(context, generalConnectRes) {
-                    findNavController(requireActivity(), R.id.navHostFragment).navigate(
-                        R.id.action_groupsDetailFragment_to_groupsFragment
-                    )
-                }
-            }
-        }
+        setupObserver()
 
         return binding.root
     }
@@ -73,6 +65,18 @@ class GroupsDetailFragment : Fragment() {
         val bottomNav = binding.groupsDetailBottomNav
         bottomNav.setOnItemSelectedListener { menuItem ->
             return@setOnItemSelectedListener setupBottomNav(menuItem, navController, bundle, args)
+        }
+    }
+
+    private fun setupObserver() {
+        viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { generalConnectRes ->
+                showGenericErrorOr(context, generalConnectRes) {
+                    findNavController(requireActivity(), R.id.navHostFragment).navigate(
+                        R.id.action_groupsDetailFragment_to_groupsFragment
+                    )
+                }
+            }
         }
     }
 

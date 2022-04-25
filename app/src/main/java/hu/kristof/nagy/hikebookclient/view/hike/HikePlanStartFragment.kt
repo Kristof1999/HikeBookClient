@@ -45,13 +45,6 @@ class HikePlanStartFragment : Fragment() {
             binding.hikePlanStartTv.text = it
         }
 
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         setupForecasting(viewModel)
 
         val args: HikePlanStartFragmentArgs by navArgs()
@@ -60,6 +53,9 @@ class HikePlanStartFragment : Fragment() {
         }
 
         setClickListeners(args)
+
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
     private fun setClickListeners(args: HikePlanStartFragmentArgs) = with(binding) {

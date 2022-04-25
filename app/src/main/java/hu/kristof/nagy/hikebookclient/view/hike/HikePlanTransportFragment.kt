@@ -55,29 +55,6 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
         setupObservers()
 
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
-    private fun setupObservers() {
-        viewModel.apply {
-            route.observe(viewLifecycleOwner) { res ->
-                handleResult(context, res) { route ->
-                    adaptView(args, route)
-                }
-            }
-            setStartNext.observe(viewLifecycleOwner) {
-                binding.hikePlanTransportStartSwitch.isChecked = it
-            }
-            setEndNext.observe(viewLifecycleOwner) {
-                binding.hikePlanTransportEndSwitch.isChecked = it
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         initMap()
 
         setupLoad(args)
@@ -100,6 +77,25 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         addMapEventsOverlay()
 
         map.invalidate()
+
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun setupObservers() {
+        viewModel.apply {
+            route.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { route ->
+                    adaptView(args, route)
+                }
+            }
+            setStartNext.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportStartSwitch.isChecked = it
+            }
+            setEndNext.observe(viewLifecycleOwner) {
+                binding.hikePlanTransportEndSwitch.isChecked = it
+            }
+        }
     }
 
     private fun setupLoad(args: HikePlanTransportFragmentArgs) {

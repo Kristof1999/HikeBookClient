@@ -33,12 +33,6 @@ class BrowseListFragment : Fragment() {
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         val viewModel: BrowseViewModel by viewModels()
 
@@ -46,6 +40,9 @@ class BrowseListFragment : Fragment() {
         handleOfflineLoad(requireContext()) {
             viewModel.listRoutes()
         }
+
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
     private fun setupList(viewModel: BrowseViewModel) {

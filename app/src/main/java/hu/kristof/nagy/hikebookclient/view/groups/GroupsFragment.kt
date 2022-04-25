@@ -44,6 +44,8 @@ class GroupsFragment : Fragment() {
 
         setupObserver()
 
+        setupGroupCreation(viewModel)
+
         val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
         val viewPager: ViewPager = binding.groupsViewPager
         viewPager.adapter = sectionsPagerAdapter
@@ -64,12 +66,6 @@ class GroupsFragment : Fragment() {
                 viewModel.createFinished = true
             }
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupGroupCreation(viewModel)
     }
 
     private fun setupGroupCreation(viewModel: GroupsViewModel) {

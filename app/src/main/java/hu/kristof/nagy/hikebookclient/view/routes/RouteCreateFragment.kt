@@ -57,6 +57,10 @@ class RouteCreateFragment : RouteFragment() {
 
         setupObservers()
 
+        setupSpinner()
+
+        setupRouteCreate(args)
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -69,14 +73,6 @@ class RouteCreateFragment : RouteFragment() {
         viewModel.routeCreateRes.observe(viewLifecycleOwner) {
             onRouteCreateResult(it, args)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setupSpinner()
-
-        setupRouteCreate(args)
     }
 
     private fun setupSpinner() {

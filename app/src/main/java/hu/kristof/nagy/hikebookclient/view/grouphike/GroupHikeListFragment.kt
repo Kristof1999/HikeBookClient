@@ -38,15 +38,27 @@ class GroupHikeListFragment : Fragment() {
                 lifecycleOwner = viewLifecycleOwner
             }
 
+        setupObserver()
+
+        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+
+        setupLoad(isConnectedPage, viewModel)
+
+        return binding.root
+    }
+
+    private fun setupObserver() {
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { generalConnectRes ->
                 if (!viewModel.generalConnectFinished) {
                     showGenericErrorOr(context, generalConnectRes) {
                         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
                         if (isConnectedPage) {
-                            Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT)
+                                .show()
                         } else {
-                            Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT)
+                                .show()
                         }
                         handleOfflineLoad(requireContext()) {
                             viewModel.listGroupHikes(isConnectedPage)
@@ -56,16 +68,6 @@ class GroupHikeListFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
-
-        setupLoad(isConnectedPage, viewModel)
     }
 
     private fun setupLoad(

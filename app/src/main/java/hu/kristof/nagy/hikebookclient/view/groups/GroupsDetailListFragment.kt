@@ -48,6 +48,14 @@ class GroupsDetailListFragment : Fragment() {
 
         setupObservers()
 
+        val adapter = initAdapter(mapViewModel, listViewModel, args)
+        binding.groupsDetailListRecyclerView.adapter = adapter
+        mapViewModel.routes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) { routes ->
+                adapter.submitList(routes.map { it.routeName }.toMutableList())
+            }
+        }
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -74,18 +82,6 @@ class GroupsDetailListFragment : Fragment() {
                     }
                     listViewModel.addToMyMapFinished = true
                 }
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val adapter = initAdapter(mapViewModel, listViewModel, args)
-        binding.groupsDetailListRecyclerView.adapter = adapter
-        mapViewModel.routes.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { routes ->
-                adapter.submitList(routes.map { it.routeName }.toMutableList())
             }
         }
     }

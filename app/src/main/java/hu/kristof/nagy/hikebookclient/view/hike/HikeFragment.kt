@@ -64,12 +64,6 @@ class HikeFragment : MapFragment() {
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
-        setHasOptionsMenu(true)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
 
         initMap()
 
@@ -103,6 +97,9 @@ class HikeFragment : MapFragment() {
         }
 
         map.invalidate()
+
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
     private fun setupLongClickListeners(args: HikeFragmentArgs) {

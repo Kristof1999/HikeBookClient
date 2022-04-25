@@ -45,6 +45,19 @@ class BrowseDetailFragment : MapFragment() {
                 lifecycleOwner = viewLifecycleOwner
             }
 
+        setupObservers()
+
+        initMap()
+
+        setupLoad(viewModel, args)
+
+        setupAddToMyMap(viewModel, args)
+
+        setHasOptionsMenu(true)
+        return binding.root
+    }
+
+    private fun setupObservers() {
         viewModel.addRes.observe(viewLifecycleOwner) {
             onAddResult(it)
         }
@@ -54,18 +67,11 @@ class BrowseDetailFragment : MapFragment() {
                 adaptView(args, route)
             }
         }
-
-        setHasOptionsMenu(true)
-        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initMap()
 
-        setupLoad(viewModel, args)
-
-        setupAddToMyMap(viewModel, args)
     }
 
     private fun setupAddToMyMap(

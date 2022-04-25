@@ -44,6 +44,10 @@ class MyMapFragment : MapFragment() {
 
         setupObserver()
 
+        initMap()
+
+        setClickListeners()
+
         setHasOptionsMenu(true)
         return binding.root
     }
@@ -52,14 +56,6 @@ class MyMapFragment : MapFragment() {
         viewModel.routes.observe(viewLifecycleOwner) { routes ->
             map.onRoutesLoad(routes as ResponseResult<List<Route>>, context)
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        initMap()
-
-        setClickListeners()
     }
 
     private fun setClickListeners() = with(binding) {
