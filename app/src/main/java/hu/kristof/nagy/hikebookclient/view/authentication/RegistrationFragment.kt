@@ -44,26 +44,25 @@ import hu.kristof.nagy.hikebookclient.viewModel.authentication.RegistrationViewM
  */
 @AndroidEntryPoint
 class RegistrationFragment : Fragment() {
-    private lateinit var binding: FragmentRegistrationBinding
-    private val registrationViewModel : RegistrationViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentRegistrationBinding.inflate(inflater, container, false)
+        val binding = FragmentRegistrationBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObserver()
+        val registrationViewModel : RegistrationViewModel by viewModels()
 
-        setupRegistration(registrationViewModel)
+        setupObserver(registrationViewModel)
+
+        setupRegistration(registrationViewModel, binding)
 
         return binding.root
     }
 
-    private fun setupObserver() {
+    private fun setupObserver(registrationViewModel : RegistrationViewModel) {
         registrationViewModel.registrationRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { registrationRes ->
                 onRegistrationRes(registrationRes)
@@ -71,7 +70,10 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun setupRegistration(registrationViewModel: RegistrationViewModel) {
+    private fun setupRegistration(
+        registrationViewModel: RegistrationViewModel,
+        binding: FragmentRegistrationBinding
+    ) {
         binding.registerButton.setOnClickListener {
             onRegister(binding, registrationViewModel)
         }

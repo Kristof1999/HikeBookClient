@@ -45,28 +45,27 @@ import hu.kristof.nagy.hikebookclient.viewModel.authentication.LoginViewModel
  */
 @AndroidEntryPoint
 class StartFragment : Fragment() {
-    private lateinit var binding: FragmentStartBinding
-    private val loginViewModel: LoginViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentStartBinding.inflate(inflater, container, false)
+        val binding = FragmentStartBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObserver()
+        val loginViewModel: LoginViewModel by viewModels()
 
-        setClickListeners()
+        setupObserver(loginViewModel)
 
-        setupLogin(loginViewModel)
+        setClickListeners(binding)
+
+        setupLogin(loginViewModel, binding)
 
         return binding.root
     }
 
-    private fun setupObserver() {
+    private fun setupObserver(loginViewModel: LoginViewModel) {
         loginViewModel.loginRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { loginRes ->
                 onLoginRes(loginRes)
@@ -74,13 +73,16 @@ class StartFragment : Fragment() {
         }
     }
 
-    private fun setupLogin(loginViewModel: LoginViewModel) {
+    private fun setupLogin(
+        loginViewModel: LoginViewModel,
+        binding: FragmentStartBinding
+    ) {
         binding.loginButton.setOnClickListener {
             onLogin(binding, loginViewModel)
         }
     }
 
-    private fun setClickListeners() = with(binding) {
+    private fun setClickListeners(binding: FragmentStartBinding) = with(binding) {
         startRegistrationButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_startFragment_to_registrationFragment

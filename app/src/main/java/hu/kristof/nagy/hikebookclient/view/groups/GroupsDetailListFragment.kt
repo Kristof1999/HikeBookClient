@@ -32,21 +32,20 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
  */
 @AndroidEntryPoint
 class GroupsDetailListFragment : Fragment() {
-    private lateinit var binding: FragmentGroupsDetailListBinding
-    private val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
-    private val listViewModel: GroupsDetailListViewModel by viewModels()
-    private val args: GroupsDetailListFragmentArgs by navArgs()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupsDetailListBinding.inflate(inflater, container, false)
+        val binding = FragmentGroupsDetailListBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObservers()
+        val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
+        val listViewModel: GroupsDetailListViewModel by viewModels()
+        val args: GroupsDetailListFragmentArgs by navArgs()
+
+        setupObservers(mapViewModel, listViewModel, args)
 
         val adapter = initAdapter(mapViewModel, listViewModel, args)
         binding.groupsDetailListRecyclerView.adapter = adapter
@@ -60,7 +59,11 @@ class GroupsDetailListFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupObservers() {
+    private fun setupObservers(
+        mapViewModel: GroupsDetailMapViewModel,
+        listViewModel: GroupsDetailListViewModel,
+        args: GroupsDetailListFragmentArgs
+    ) {
         with(listViewModel) {
             deleteRes.observe(viewLifecycleOwner) { res ->
                 if (!listViewModel.deleteFinished) {

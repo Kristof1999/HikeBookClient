@@ -24,13 +24,11 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMembersViewMo
  */
 @AndroidEntryPoint
 class GroupsDetailMembersFragment : Fragment() {
-    private lateinit var binding: FragmentGroupsDetailMembersBinding
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupsDetailMembersBinding.inflate(inflater, container, false)
+        val binding = FragmentGroupsDetailMembersBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
@@ -38,7 +36,7 @@ class GroupsDetailMembersFragment : Fragment() {
         val viewModel: GroupsDetailMembersViewModel by viewModels()
         val args: GroupsDetailMembersFragmentArgs by navArgs()
 
-        setupList(viewModel)
+        setupList(viewModel, binding)
         handleOfflineLoad(requireContext()) {
             viewModel.listMembers(args.groupName)
         }
@@ -47,7 +45,10 @@ class GroupsDetailMembersFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupList(viewModel: GroupsDetailMembersViewModel) {
+    private fun setupList(
+        viewModel: GroupsDetailMembersViewModel,
+        binding: FragmentGroupsDetailMembersBinding
+    ) {
         val adapter = GroupsDetailMembersAdapter()
         viewModel.members.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { members ->

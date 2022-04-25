@@ -26,28 +26,27 @@ import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
  */
 @AndroidEntryPoint
 class GroupHikeListFragment : Fragment() {
-    private lateinit var binding: FragmentGroupHikeListBinding
-    private val viewModel: GroupHikeListViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupHikeListBinding.inflate(inflater, container, false)
+        val binding = FragmentGroupHikeListBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObserver()
+        val viewModel: GroupHikeListViewModel by viewModels()
+
+        setupObserver(viewModel)
 
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
-        setupLoad(isConnectedPage, viewModel)
+        setupLoad(isConnectedPage, viewModel, binding)
 
         return binding.root
     }
 
-    private fun setupObserver() {
+    private fun setupObserver(viewModel: GroupHikeListViewModel) {
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { generalConnectRes ->
                 if (!viewModel.generalConnectFinished) {
@@ -72,9 +71,10 @@ class GroupHikeListFragment : Fragment() {
 
     private fun setupLoad(
         isConnectedPage: Boolean,
-        viewModel: GroupHikeListViewModel
+        viewModel: GroupHikeListViewModel,
+        binding: FragmentGroupHikeListBinding
     ) {
-        setupList(isConnectedPage, viewModel)
+        setupList(isConnectedPage, viewModel, binding)
         handleOfflineLoad(requireContext()) {
             viewModel.listGroupHikes(isConnectedPage)
         }
@@ -82,7 +82,8 @@ class GroupHikeListFragment : Fragment() {
 
     private fun setupList(
         isConnectedPage: Boolean,
-        viewModel: GroupHikeListViewModel
+        viewModel: GroupHikeListViewModel,
+        binding: FragmentGroupHikeListBinding
     ) {
         val adapter = GroupHikeListAdapter(isConnectedPage,
             GroupHikeClickListener(

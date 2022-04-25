@@ -34,21 +34,20 @@ import org.osmdroid.views.overlay.Marker
  * or go back to my map screen.
  */
 class HikeTransportFragment : MapFragment() {
-    private lateinit var binding: FragmentHikeTransportBinding
-    private val viewModel: HikeTransportViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHikeTransportBinding.inflate(inflater, container, false)
+        val binding = FragmentHikeTransportBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObserver()
+        val viewModel: HikeTransportViewModel by viewModels()
 
-        initMap()
+        setupObserver(viewModel)
+
+        initMap(binding)
 
         val args: HikeTransportFragmentArgs by navArgs()
 
@@ -71,7 +70,7 @@ class HikeTransportFragment : MapFragment() {
         return binding.root
     }
 
-    private fun setupObserver() {
+    private fun setupObserver(viewModel: HikeTransportViewModel) {
         viewModel.roadRes.observe(viewLifecycleOwner) { road ->
             onRoadResult(road)
         }
@@ -110,7 +109,7 @@ class HikeTransportFragment : MapFragment() {
         map.invalidate()
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentHikeTransportBinding) {
         map = binding.hikeTransportMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()

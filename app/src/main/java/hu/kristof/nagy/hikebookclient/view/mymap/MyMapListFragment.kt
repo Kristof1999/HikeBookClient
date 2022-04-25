@@ -51,20 +51,20 @@ import hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapViewModel
  */
 @AndroidEntryPoint
 class MyMapListFragment : Fragment() {
-    private lateinit var binding: FragmentMyMapListBinding
     private val myMapViewModel: MyMapViewModel by activityViewModels()
-    private val myMapDetailViewModel: MyMapDetailViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMyMapListBinding.inflate(inflater, container, false)
+        val binding = FragmentMyMapListBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObservers(myMapDetailViewModel, myMapViewModel)
+        val myMapDetailViewModel: MyMapDetailViewModel by viewModels()
+
+        setupObservers(myMapDetailViewModel)
 
         binding.switchToMyMapButton.setOnClickListener {
             findNavController().navigate(
@@ -72,18 +72,15 @@ class MyMapListFragment : Fragment() {
             )
         }
 
-        setupList(myMapDetailViewModel, myMapViewModel)
+        setupList(myMapDetailViewModel, binding)
 
         setHasOptionsMenu(true)
         return binding.root
     }
 
-    private fun setupObservers(
-        myMapDetailViewModel: MyMapDetailViewModel,
-        myMapViewModel: MyMapViewModel
-    ) {
+    private fun setupObservers(myMapDetailViewModel: MyMapDetailViewModel) {
         myMapDetailViewModel.deleteRes.observe(viewLifecycleOwner) {
-            onDeleteResult(myMapViewModel, myMapDetailViewModel, it)
+            onDeleteResult(myMapDetailViewModel, it)
         }
         myMapDetailViewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
             onGroupHikeCreateResult(myMapDetailViewModel, res)
@@ -107,7 +104,6 @@ class MyMapListFragment : Fragment() {
     }
 
     private fun onDeleteResult(
-        myMapViewModel: MyMapViewModel,
         myMapDetailViewModel: MyMapDetailViewModel,
         res: ResponseResult<Boolean>
     ) {
@@ -126,7 +122,7 @@ class MyMapListFragment : Fragment() {
 
     private fun setupList(
         myMapDetailViewModel: MyMapDetailViewModel,
-        myMapViewModel: MyMapViewModel
+        binding: FragmentMyMapListBinding
     ) {
         val gotoDetail = { routeName: String ->
             val directions = MyMapListFragmentDirections

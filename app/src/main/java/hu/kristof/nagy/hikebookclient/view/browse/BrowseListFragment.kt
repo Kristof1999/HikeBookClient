@@ -23,20 +23,18 @@ import hu.kristof.nagy.hikebookclient.viewModel.browse.BrowseViewModel
  */
 @AndroidEntryPoint
 class BrowseListFragment : Fragment() {
-    private lateinit var binding: FragmentBrowseListBinding
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBrowseListBinding.inflate(inflater, container, false)
+        val binding = FragmentBrowseListBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
         val viewModel: BrowseViewModel by viewModels()
 
-        setupList(viewModel)
+        setupList(viewModel, binding)
         handleOfflineLoad(requireContext()) {
             viewModel.listRoutes()
         }
@@ -45,7 +43,10 @@ class BrowseListFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupList(viewModel: BrowseViewModel) {
+    private fun setupList(
+        viewModel: BrowseViewModel,
+        binding: FragmentBrowseListBinding
+    ) {
         val adapter = BrowseListAdapter(BrowseClickListener { userName, routeName ->
             val action = BrowseListFragmentDirections
                 .actionBrowseListFragmentToBrowseDetailFragment(userName, routeName)

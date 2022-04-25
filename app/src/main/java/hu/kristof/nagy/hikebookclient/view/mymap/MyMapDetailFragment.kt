@@ -36,35 +36,38 @@ import java.util.*
  */
 @AndroidEntryPoint
 class MyMapDetailFragment : MapFragment() {
-    private lateinit var binding: FragmentMyMapDetailBinding
-    private val viewModel: MyMapDetailViewModel by viewModels()
-    private val args: MyMapDetailFragmentArgs by navArgs()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMyMapDetailBinding.inflate(inflater, container, false)
+        val binding = FragmentMyMapDetailBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObservers()
+        val viewModel: MyMapDetailViewModel by viewModels()
+        val args: MyMapDetailFragmentArgs by navArgs()
 
-        initMap()
+        setupObservers(viewModel, args, binding)
+
+        initMap(binding)
 
         setupLoad(viewModel, args)
 
-        setClickListeners(args, viewModel)
+        setClickListeners(args, viewModel, binding)
 
         setHasOptionsMenu(true)
         return binding.root
     }
 
-    private fun setupObservers() {
+    private fun setupObservers(
+        viewModel: MyMapDetailViewModel,
+        args: MyMapDetailFragmentArgs,
+        binding: FragmentMyMapDetailBinding
+    ) {
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
-                adaptView(args, userRoute)
+                adaptView(args, userRoute, binding)
             }
         }
         viewModel.deleteRes.observe(viewLifecycleOwner) {
@@ -81,7 +84,11 @@ class MyMapDetailFragment : MapFragment() {
         }
     }
 
-    private fun adaptView(args: MyMapDetailFragmentArgs, route: Route) {
+    private fun adaptView(
+        args: MyMapDetailFragmentArgs,
+        route: Route,
+        binding: FragmentMyMapDetailBinding
+    ) {
         binding.myMapDetailRouteNameTv.text = args.routeName
         val polyline = route.toPolyline()
         map.apply {
@@ -94,7 +101,8 @@ class MyMapDetailFragment : MapFragment() {
 
     private fun setClickListeners(
         args: MyMapDetailFragmentArgs,
-        viewModel: MyMapDetailViewModel
+        viewModel: MyMapDetailViewModel,
+        binding: FragmentMyMapDetailBinding
     ) = with(binding) {
         myMapDetailEditButton.setOnClickListener {
             val directions = MyMapDetailFragmentDirections
@@ -161,7 +169,7 @@ class MyMapDetailFragment : MapFragment() {
         }
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentMyMapDetailBinding) {
         map = binding.myMapDetailMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             addCopyRightOverlay()

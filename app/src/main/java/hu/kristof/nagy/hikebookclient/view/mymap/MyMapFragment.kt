@@ -30,23 +30,22 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
  */
 @AndroidEntryPoint
 class MyMapFragment : MapFragment() {
-    private lateinit var binding: FragmentMyMapBinding
     private val viewModel: MyMapViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentMyMapBinding.inflate(inflater, container, false)
+        val binding = FragmentMyMapBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
         setupObserver()
 
-        initMap()
+        initMap(binding)
 
-        setClickListeners()
+        setClickListeners(binding)
 
         setHasOptionsMenu(true)
         return binding.root
@@ -58,7 +57,7 @@ class MyMapFragment : MapFragment() {
         }
     }
 
-    private fun setClickListeners() = with(binding) {
+    private fun setClickListeners(binding: FragmentMyMapBinding) = with(binding) {
         switchToMyMapListButton.setOnClickListener {
             findNavController().navigate(
                 R.id.action_myMapFragment_to_myMapListFragment
@@ -72,7 +71,7 @@ class MyMapFragment : MapFragment() {
         }
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentMyMapBinding) {
         map = binding.myMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()

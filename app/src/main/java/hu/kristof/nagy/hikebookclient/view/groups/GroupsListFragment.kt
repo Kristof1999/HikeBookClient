@@ -25,21 +25,20 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsListViewModel
  */
 @AndroidEntryPoint
 class GroupsListFragment : Fragment() {
-    private lateinit var binding: FragmentGroupsListBinding
     private val viewModel: GroupsListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupsListBinding.inflate(inflater, container, false)
+        val binding = FragmentGroupsListBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
         setupObserver()
 
-        setupList()
+        setupList(binding)
 
         return binding.root
     }
@@ -67,7 +66,7 @@ class GroupsListFragment : Fragment() {
         }
     }
 
-    private fun setupList() {
+    private fun setupList(binding: FragmentGroupsListBinding) {
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
         val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter

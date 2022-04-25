@@ -30,24 +30,23 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
  */
 @AndroidEntryPoint
 class GroupsDetailMapFragment : MapFragment() {
-    private lateinit var binding: FragmentGroupsDetailMapBinding
-    private val viewModel: GroupsDetailMapViewModel by activityViewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupsDetailMapBinding.inflate(inflater, container, false)
+        val binding = FragmentGroupsDetailMapBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObservers()
+        val viewModel: GroupsDetailMapViewModel by activityViewModels()
 
-        initMap()
+        setupObservers(viewModel)
+
+        initMap(binding)
 
         val groupName = arguments?.getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
-        adaptView()
+        adaptView(binding)
 
         binding.groupsMapCreateRouteFab.setOnClickListener {
             onRouteCreate(groupName)
@@ -57,7 +56,7 @@ class GroupsDetailMapFragment : MapFragment() {
             viewModel.loadRoutesOfGroup(groupName)
         }
 
-        setupAddFromMyMap(viewModel, groupName)
+        setupAddFromMyMap(viewModel, groupName, binding)
 
         map.invalidate()
 
@@ -65,7 +64,7 @@ class GroupsDetailMapFragment : MapFragment() {
         return binding.root
     }
 
-    private fun setupObservers() {
+    private fun setupObservers(viewModel: GroupsDetailMapViewModel) {
         viewModel.apply {
             addFromMyMapRes.observe(viewLifecycleOwner) { res ->
                 if (!viewModel.addFromMyMapFinished) {
@@ -87,7 +86,8 @@ class GroupsDetailMapFragment : MapFragment() {
 
     private fun setupAddFromMyMap(
         viewModel: GroupsDetailMapViewModel,
-        groupName: String
+        groupName: String,
+        binding: FragmentGroupsDetailMapBinding
     ) {
         val dialog = AddFromMyMapDialogFragment()
         dialog.route.observe(viewLifecycleOwner) { route ->
@@ -107,7 +107,7 @@ class GroupsDetailMapFragment : MapFragment() {
         findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
     }
 
-    private fun adaptView() {
+    private fun adaptView(binding: FragmentGroupsDetailMapBinding) {
         val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
         if (!isConnectedPage) {
             binding.groupsMapCreateRouteFab.isVisible = false
@@ -115,7 +115,7 @@ class GroupsDetailMapFragment : MapFragment() {
         }
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentGroupsDetailMapBinding) {
         map = binding.groupsMapMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()

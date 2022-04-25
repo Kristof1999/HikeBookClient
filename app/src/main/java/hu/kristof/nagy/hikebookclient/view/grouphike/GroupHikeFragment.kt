@@ -20,13 +20,11 @@ import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
  * and a list which the user has joined
  */
 class GroupHikeFragment : Fragment() {
-    private lateinit var binding: FragmentGroupHikeBinding
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupHikeBinding.inflate(inflater, container, false)
+        val binding = FragmentGroupHikeBinding.inflate(inflater, container, false)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
         val viewPager: ViewPager = binding.groupHikeViewPager

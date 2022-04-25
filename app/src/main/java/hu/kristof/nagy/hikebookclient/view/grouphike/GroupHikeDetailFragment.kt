@@ -34,36 +34,35 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
  */
 @AndroidEntryPoint
 class GroupHikeDetailFragment : MapFragment() {
-    private lateinit var binding: FragmentGroupHikeDetailBinding
-    private val viewModel: GroupHikeDetailViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupHikeDetailBinding.inflate(layoutInflater, container, false)
+        val binding = FragmentGroupHikeDetailBinding.inflate(layoutInflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObservers()
+        val viewModel: GroupHikeDetailViewModel by viewModels()
 
-        initMap()
+        setupObservers(viewModel)
+
+        initMap(binding)
 
         val args: GroupHikeDetailFragmentArgs by navArgs()
-        adaptView(args)
+        adaptView(args, binding)
 
-        setupGeneralConnect(viewModel, args)
+        setupGeneralConnect(viewModel, args, binding)
 
-        setupAddToMyMap(viewModel)
+        setupAddToMyMap(viewModel, binding)
 
-        setupLoad(viewModel, args)
+        setupLoad(viewModel, args, binding)
 
         setHasOptionsMenu(true)
         return binding.root
     }
 
-    private fun setupObservers() {
+    private fun setupObservers(viewModel: GroupHikeDetailViewModel) {
         with(viewModel) {
             addToMyMapRes.observe(viewLifecycleOwner) { res ->
                 if (!viewModel.addToMyMapFinished) {
@@ -87,7 +86,8 @@ class GroupHikeDetailFragment : MapFragment() {
 
     private fun setupLoad(
         viewModel: GroupHikeDetailViewModel,
-        args: GroupHikeDetailFragmentArgs
+        args: GroupHikeDetailFragmentArgs,
+        binding: FragmentGroupHikeDetailBinding
     ) {
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->
@@ -102,7 +102,7 @@ class GroupHikeDetailFragment : MapFragment() {
                 map.invalidate()
             }
         }
-        setupList(viewModel, args)
+        setupList(viewModel, args, binding)
         handleOfflineLoad(requireContext()) {
             viewModel.loadRoute(args.groupHikeName)
         }
@@ -146,7 +146,10 @@ class GroupHikeDetailFragment : MapFragment() {
         }
     }
 
-    private fun setupAddToMyMap(viewModel: GroupHikeDetailViewModel) {
+    private fun setupAddToMyMap(
+        viewModel: GroupHikeDetailViewModel,
+        binding: FragmentGroupHikeDetailBinding
+    ) {
         binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
             handleOffline(requireContext()) {
                 catchAndShowIllegalStateAndArgument(requireContext()) {
@@ -158,7 +161,8 @@ class GroupHikeDetailFragment : MapFragment() {
 
     private fun setupGeneralConnect(
         viewModel: GroupHikeDetailViewModel,
-        args: GroupHikeDetailFragmentArgs
+        args: GroupHikeDetailFragmentArgs,
+        binding: FragmentGroupHikeDetailBinding
     ) {
         binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
             handleOffline(requireContext()) {
@@ -169,7 +173,8 @@ class GroupHikeDetailFragment : MapFragment() {
 
     private fun setupList(
         viewModel: GroupHikeDetailViewModel,
-        args: GroupHikeDetailFragmentArgs
+        args: GroupHikeDetailFragmentArgs,
+        binding: FragmentGroupHikeDetailBinding
     ) {
         val adapter = GroupHikeDetailParticipantsListAdapter()
         binding.lifecycleOwner = viewLifecycleOwner
@@ -182,7 +187,7 @@ class GroupHikeDetailFragment : MapFragment() {
         viewModel.listParticipants(args.groupHikeName)
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentGroupHikeDetailBinding) {
         map = binding.groupHikeDetailMap.apply {
             setStartZoomAndCenter()
             setTileSource(TileSourceFactory.MAPNIK)
@@ -190,7 +195,10 @@ class GroupHikeDetailFragment : MapFragment() {
         }
     }
 
-    private fun adaptView(args: GroupHikeDetailFragmentArgs) = with(binding) {
+    private fun adaptView(
+        args: GroupHikeDetailFragmentArgs,
+        binding: FragmentGroupHikeDetailBinding
+    ) = with(binding) {
         groupHikeDetailNameTv.text = args.groupHikeName
         groupHikeDetailGeneralConnectButton.apply {
             text = if (args.isConnectedPage) {

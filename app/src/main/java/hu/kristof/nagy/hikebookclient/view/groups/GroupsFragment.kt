@@ -30,21 +30,20 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
  */
 @AndroidEntryPoint
 class GroupsFragment : Fragment() {
-    private lateinit var binding: FragmentGroupsBinding
-    private val viewModel: GroupsViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupsBinding.inflate(inflater, container, false)
+        val binding = FragmentGroupsBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObserver()
+        val viewModel: GroupsViewModel by viewModels()
 
-        setupGroupCreation(viewModel)
+        setupObserver(viewModel)
+
+        setupGroupCreation(viewModel, binding)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
         val viewPager: ViewPager = binding.groupsViewPager
@@ -57,7 +56,7 @@ class GroupsFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupObserver() {
+    private fun setupObserver(viewModel: GroupsViewModel) {
         viewModel.createRes.observe(viewLifecycleOwner) { res ->
             if (!viewModel.createFinished) {
                 handleResult(requireContext(), res) { createRes ->
@@ -68,7 +67,10 @@ class GroupsFragment : Fragment() {
         }
     }
 
-    private fun setupGroupCreation(viewModel: GroupsViewModel) {
+    private fun setupGroupCreation(
+        viewModel: GroupsViewModel,
+        binding: FragmentGroupsBinding
+    ) {
         val dialogFragment = TextDialogFragment.instanceOf(
             R.string.groups_create_dialog_text, R.string.groups_create_dialog_hint_text
         )

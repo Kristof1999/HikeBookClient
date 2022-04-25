@@ -29,36 +29,38 @@ import java.util.*
  */
 @AndroidEntryPoint
 class HikePlanStartFragment : Fragment() {
-    private lateinit var binding: FragmentHikePlanStartBinding
-    private val viewModel: HikePlanDateViewModel by viewModels()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHikePlanStartBinding.inflate(inflater, container, false)
+        val binding = FragmentHikePlanStartBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
+
+        val viewModel: HikePlanDateViewModel by viewModels()
 
         viewModel.forecastRes.observe(viewLifecycleOwner) {
             binding.hikePlanStartTv.text = it
         }
 
-        setupForecasting(viewModel)
+        setupForecasting(viewModel, binding)
 
         val args: HikePlanStartFragmentArgs by navArgs()
         handleOfflineLoad(requireContext()) {
             viewModel.loadRoute(args.routeName)
         }
 
-        setClickListeners(args)
+        setClickListeners(args, binding)
 
         setHasOptionsMenu(true)
         return binding.root
     }
 
-    private fun setClickListeners(args: HikePlanStartFragmentArgs) = with(binding) {
+    private fun setClickListeners(
+        args: HikePlanStartFragmentArgs,
+        binding: FragmentHikePlanStartBinding
+    ) = with(binding) {
         hikePlanStartTransportPlanButton.setOnClickListener {
             val isForward = true
             val directions = HikePlanStartFragmentDirections
@@ -73,7 +75,8 @@ class HikePlanStartFragment : Fragment() {
     }
 
     private fun setupForecasting(
-        viewModel: HikePlanDateViewModel
+        viewModel: HikePlanDateViewModel,
+        binding: FragmentHikePlanStartBinding
     ) {
         var date: String? = null
         var hour: Int? = null

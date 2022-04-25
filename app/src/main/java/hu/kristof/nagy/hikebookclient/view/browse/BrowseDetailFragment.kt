@@ -32,51 +32,50 @@ import org.osmdroid.views.overlay.Polyline
  */
 @AndroidEntryPoint
 class BrowseDetailFragment : MapFragment() {
-    private lateinit var binding: FragmentBrowseDetailBinding
-    private val viewModel: BrowseDetailViewModel by viewModels()
-    private val args: BrowseDetailFragmentArgs by navArgs()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentBrowseDetailBinding.inflate(inflater, container, false)
+        val binding = FragmentBrowseDetailBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObservers()
+        val viewModel: BrowseDetailViewModel by viewModels()
+        val args: BrowseDetailFragmentArgs by navArgs()
 
-        initMap()
+        setupObservers(viewModel, args, binding)
+
+        initMap(binding)
 
         setupLoad(viewModel, args)
 
-        setupAddToMyMap(viewModel, args)
+        setupAddToMyMap(viewModel, args, binding)
 
         setHasOptionsMenu(true)
         return binding.root
     }
 
-    private fun setupObservers() {
+    private fun setupObservers(
+        viewModel: BrowseDetailViewModel,
+        args: BrowseDetailFragmentArgs,
+        binding: FragmentBrowseDetailBinding
+    ) {
         viewModel.addRes.observe(viewLifecycleOwner) {
             onAddResult(it)
         }
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->
                 onPointsLoad(route.points)
-                adaptView(args, route)
+                adaptView(args, route, binding)
             }
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
     private fun setupAddToMyMap(
         viewModel: BrowseDetailViewModel,
-        args: BrowseDetailFragmentArgs
+        args: BrowseDetailFragmentArgs,
+        binding: FragmentBrowseDetailBinding
     ) {
         binding.browseDetailAddToMyMapButton.setOnClickListener {
             onAddToMyMap(viewModel, args)
@@ -95,7 +94,8 @@ class BrowseDetailFragment : MapFragment() {
 
     private fun adaptView(
         args: BrowseDetailFragmentArgs,
-        route: UserRoute
+        route: UserRoute,
+        binding: FragmentBrowseDetailBinding
     ) {
         binding.browseDetailHikeDescriptionTv.text =
             getString(
@@ -133,7 +133,7 @@ class BrowseDetailFragment : MapFragment() {
         }
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentBrowseDetailBinding) {
         map = binding.browseDetailMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()

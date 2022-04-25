@@ -54,18 +54,16 @@ import java.util.*
  */
 @AndroidEntryPoint
 class HikeFragment : MapFragment() {
-    private lateinit var binding: FragmentHikeBinding
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHikeBinding.inflate(inflater, container, false)
+        val binding = FragmentHikeBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        initMap()
+        initMap(binding)
 
         val myLocationMarker = makeMyLocationMarker()
 
@@ -80,7 +78,10 @@ class HikeFragment : MapFragment() {
 
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
-                myGeofence(fusedLocationProviderClient, myLocationMarker, userRoute, args, viewModel)
+                myGeofence(
+                    fusedLocationProviderClient, myLocationMarker,
+                    userRoute, args, viewModel, binding
+                )
                 mapCustomization(userRoute)
             }
         }
@@ -88,7 +89,7 @@ class HikeFragment : MapFragment() {
             viewModel.loadUserRoute(args.routeName)
         }
 
-        setupLongClickListeners(args)
+        setupLongClickListeners(args, binding)
 
         binding.hikeOfflineButton.setOnClickListener {
             AlertDialog.Builder(requireContext())
@@ -102,7 +103,10 @@ class HikeFragment : MapFragment() {
         return binding.root
     }
 
-    private fun setupLongClickListeners(args: HikeFragmentArgs) {
+    private fun setupLongClickListeners(
+        args: HikeFragmentArgs,
+        binding: FragmentHikeBinding
+    ) {
         with(binding) {
             hikeFinishButton.setOnLongClickListener {
                 findNavController().navigate(
@@ -129,7 +133,7 @@ class HikeFragment : MapFragment() {
         map.overlays.add(myLocationMarker)
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentHikeBinding) {
         map = binding.hikeMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()
@@ -142,7 +146,8 @@ class HikeFragment : MapFragment() {
         myLocationMarker: Marker,
         route: UserRoute,
         args: HikeFragmentArgs,
-        viewModel: HikeViewModel
+        viewModel: HikeViewModel,
+        binding: FragmentHikeBinding
     ) {
         var startTime = 0L
         binding.hikeStartButton.setOnClickListener {

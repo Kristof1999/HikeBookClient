@@ -40,22 +40,22 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
  */
 @AndroidEntryPoint
 class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListener {
-    private lateinit var binding: FragmentHikePlanTransportBinding
     private val viewModel: HikePlanTransportViewModel by viewModels()
-    private val args: HikePlanTransportFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHikePlanTransportBinding.inflate(inflater, container, false)
+        val binding = FragmentHikePlanTransportBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
 
-        setupObservers()
+        val args: HikePlanTransportFragmentArgs by navArgs()
 
-        initMap()
+        setupObservers(args, binding)
+
+        initMap(binding)
 
         setupLoad(args)
 
@@ -70,7 +70,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
             onTransportStart(args)
         }
 
-        handleStartAndEndSwitches()
+        handleStartAndEndSwitches(binding)
 
         handleStartAndEndPointChanges()
 
@@ -82,7 +82,10 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         return binding.root
     }
 
-    private fun setupObservers() {
+    private fun setupObservers(
+        args: HikePlanTransportFragmentArgs,
+        binding: FragmentHikePlanTransportBinding
+    ) {
         viewModel.apply {
             route.observe(viewLifecycleOwner) { res ->
                 handleResult(context, res) { route ->
@@ -173,7 +176,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         }
     }
 
-    private fun handleStartAndEndSwitches() {
+    private fun handleStartAndEndSwitches(binding: FragmentHikePlanTransportBinding) {
         binding.apply {
             hikePlanTransportStartSwitch.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.setStartTo(isChecked)
@@ -201,7 +204,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         findNavController().navigate(directions)
     }
 
-    private fun initMap() {
+    private fun initMap(binding: FragmentHikePlanTransportBinding) {
         map = binding.hikePlanTransportMap.apply {
             setTileSource(TileSourceFactory.MAPNIK)
             setStartZoomAndCenter()
