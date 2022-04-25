@@ -51,7 +51,7 @@ class RouteCreateViewModel @Inject constructor(
         routeName: String,
         hikeDescription: String
     ) {
-        val points: List<Point> = _markers.map {
+        val points: List<Point> = myMarkers.map {
             Point.from(it)
         }
 

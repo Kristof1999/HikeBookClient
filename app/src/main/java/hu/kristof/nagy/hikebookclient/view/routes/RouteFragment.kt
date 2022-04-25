@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.appcompat.widget.SwitchCompat
+import hu.kristof.nagy.hikebookclient.model.MyMarker
+import hu.kristof.nagy.hikebookclient.model.MyPolyline
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.util.MapFragment
 import hu.kristof.nagy.hikebookclient.util.addCopyRightOverlay
@@ -32,7 +34,8 @@ abstract class RouteFragment : MapFragment(), AdapterView.OnItemSelectedListener
     ): View? {
         map.overlays.clear()
 
-        for (myMarker in viewModel.markers) {
+        val newMarkers = mutableListOf<MyMarker>()
+        for (myMarker in viewModel.myMarkers) {
             val point = Point.from(myMarker)
             val marker = Marker(map)
             marker.customize(
@@ -44,14 +47,19 @@ abstract class RouteFragment : MapFragment(), AdapterView.OnItemSelectedListener
                 requireContext(), map, switch, viewModel
             )
             map.overlays.add(marker)
+            newMarkers.add(MyMarker(marker, myMarker.type, myMarker.title))
         }
+        viewModel.myMarkers = newMarkers
 
+        val newMyPolylines = mutableListOf<MyPolyline>()
         for (myPolyline in viewModel.myPolylines) {
             val polyline = Polyline().apply {
                 setPoints(myPolyline.points)
             }
             map.overlays.add(polyline)
+            newMyPolylines.add(MyPolyline(polyline, myPolyline.points))
         }
+        viewModel.myPolylines = newMyPolylines
 
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.addCopyRightOverlay()

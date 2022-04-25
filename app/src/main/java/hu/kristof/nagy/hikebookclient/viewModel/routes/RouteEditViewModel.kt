@@ -33,8 +33,8 @@ class RouteEditViewModel @Inject constructor(
         get() = _routeEditRes
 
     fun setup(markers: MutableList<MyMarker>, polylines: MutableList<Polyline>) {
-        _markers.addAll(markers)
-        _myPolylines.addAll(polylines.map {
+        myMarkers.addAll(markers)
+        myPolylines.addAll(polylines.map {
             MyPolyline.from(it)
         })
     }
@@ -73,7 +73,7 @@ class RouteEditViewModel @Inject constructor(
         if (checkAndHandleRouteLoad(_route.value!!)) {
             val oldRoute = _route.value!!.successResult!!
 
-            val points = _markers.map {
+            val points = myMarkers.map {
                 Point.from(it)
             }
 

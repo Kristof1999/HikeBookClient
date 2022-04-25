@@ -15,12 +15,8 @@ import org.osmdroid.views.overlay.Overlay
  * a marker on the map.
  */
 open class RouteViewModel : ViewModel() {
-    protected val _markers = mutableListOf<MyMarker>()
-    protected val _myPolylines = mutableListOf<MyPolyline>()
-    val markers: List<MyMarker>
-        get() = _markers
-    val myPolylines: List<MyPolyline>
-        get() = _myPolylines
+    var myMarkers = mutableListOf<MyMarker>()
+    var myPolylines = mutableListOf<MyPolyline>()
 
     var markerType = MarkerType.NEW
     var markerTitle = ""
@@ -45,7 +41,7 @@ open class RouteViewModel : ViewModel() {
        handler.handle(
            newMarker, markerType, markerTitle,
            p, markerIcon, setMarkerIcon, overlays,
-           _markers, _myPolylines
+           myMarkers, myPolylines
        )
 
         markerTitle = ""
@@ -56,19 +52,21 @@ open class RouteViewModel : ViewModel() {
      * @param marker the dragged marker
      */
     fun onMarkerDragEnd(marker: Marker) {
-        if (_markers.size == 1)
+        if (myMarkers.size == 1)
             return
 
-        if (_markers.first().marker == marker) {
-            refreshNextPolyline(0, _markers, _myPolylines)
-        } else if (_markers.last().marker == marker) {
-            refreshPrevPolyline(_markers.size - 1, _markers, _myPolylines)
+        if (myMarkers.first().marker == marker) {
+            refreshNextPolyline(0, myMarkers, myPolylines)
+        } else if (myMarkers.last().marker == marker) {
+            refreshPrevPolyline(
+                myMarkers.size - 1,
+                myMarkers, myPolylines)
         } else {
-            val idx = _markers.indexOf(
-                _markers.filter { it.marker == marker }[0]
+            val idx = myMarkers.indexOf(
+                myMarkers.filter { it.marker == marker }[0]
             )
-            refreshPrevPolyline(idx, _markers, _myPolylines)
-            refreshNextPolyline(idx, _markers, _myPolylines)
+            refreshPrevPolyline(idx, myMarkers, myPolylines)
+            refreshNextPolyline(idx, myMarkers, myPolylines)
         }
     }
 
@@ -101,19 +99,19 @@ open class RouteViewModel : ViewModel() {
      * @param marker marker to be dragged
      */
     fun onMarkerDragStart(marker: Marker) {
-        if (_markers.size == 1)
+        if (myMarkers.size == 1)
             return
 
-        if (_markers.first().marker == marker) {
-            _myPolylines.first().polyline.isVisible = false
-        } else if (_markers.last().marker == marker) {
-            _myPolylines.last().polyline.isVisible = false
+        if (myMarkers.first().marker == marker) {
+            myPolylines.first().polyline.isVisible = false
+        } else if (myMarkers.last().marker == marker) {
+            myPolylines.last().polyline.isVisible = false
         } else {
-            val idx = _markers.indexOf(
-                _markers.filter { it.marker == marker }[0]
+            val idx = myMarkers.indexOf(
+                myMarkers.filter { it.marker == marker }[0]
             )
-            _myPolylines[idx - 1].polyline.isVisible = false
-            _myPolylines[idx].polyline.isVisible = false
+            myPolylines[idx - 1].polyline.isVisible = false
+            myPolylines[idx].polyline.isVisible = false
         }
     }
 
@@ -129,17 +127,17 @@ open class RouteViewModel : ViewModel() {
         markerIcon: Drawable,
         marker: Marker
     ): Boolean {
-        if (_markers.last().marker == marker) {
-            _markers.removeLast()
-            if (_markers.isNotEmpty()) {
-                if (_markers.last().type == MarkerType.SET) {
-                    _markers.last().marker.icon = markerIcon
-                    _markers[_markers.size - 1] = MyMarker(
-                        _markers.last().marker, MarkerType.NEW, _markers.last().title
+        if (myMarkers.last().marker == marker) {
+            myMarkers.removeLast()
+            if (myMarkers.isNotEmpty()) {
+                if (myMarkers.last().type == MarkerType.SET) {
+                    myMarkers.last().marker.icon = markerIcon
+                    myMarkers[myMarkers.size - 1] = MyMarker(
+                        myMarkers.last().marker, MarkerType.NEW, myMarkers.last().title
                     )
                 }
-                _myPolylines.last().polyline.isVisible = false
-                _myPolylines.removeLast()
+                myPolylines.last().polyline.isVisible = false
+                myPolylines.removeLast()
             }
             return true
         } else {
