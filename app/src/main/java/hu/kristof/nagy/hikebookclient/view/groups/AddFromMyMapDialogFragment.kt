@@ -7,13 +7,11 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.AddFromMyMapDialogBinding
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
@@ -42,9 +40,7 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
-            binding = DataBindingUtil.inflate(
-                inflater, R.layout.add_from_my_map_dialog, null, false
-            )
+            binding = AddFromMyMapDialogBinding.inflate(inflater,null, false)
 
             binding.addFromMyMapDialogSpinner.onItemSelectedListener = this
 

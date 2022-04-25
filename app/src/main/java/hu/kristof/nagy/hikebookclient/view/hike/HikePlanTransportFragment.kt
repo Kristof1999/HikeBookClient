@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -49,11 +48,10 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentHikePlanTransportBinding>(
-            inflater, R.layout.fragment_hike_plan_transport, container, false
-        ).apply {
-            lifecycleOwner = viewLifecycleOwner
-        }
+        binding = FragmentHikePlanTransportBinding.inflate(inflater, container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+            }
 
         setupObservers()
 

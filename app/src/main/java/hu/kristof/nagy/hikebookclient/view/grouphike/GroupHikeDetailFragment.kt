@@ -6,7 +6,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -42,11 +41,10 @@ class GroupHikeDetailFragment : MapFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentGroupHikeDetailBinding>(
-            layoutInflater, R.layout.fragment_group_hike_detail, container, false
-        ).apply {
-            lifecycleOwner = viewLifecycleOwner
-        }
+        binding = FragmentGroupHikeDetailBinding.inflate(layoutInflater, container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+            }
 
         setupObservers()
 

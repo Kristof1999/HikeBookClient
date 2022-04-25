@@ -28,7 +28,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -53,11 +52,10 @@ class StartFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentStartBinding>(
-            inflater, R.layout.fragment_start, container, false
-        ).apply {
-            lifecycleOwner = viewLifecycleOwner
-        }
+        binding = FragmentStartBinding.inflate(inflater, container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+            }
 
         setupObserver()
 

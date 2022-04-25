@@ -9,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -42,11 +41,10 @@ class HikeTransportFragment : MapFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentHikeTransportBinding>(
-            inflater, R.layout.fragment_hike_transport, container, false
-        ).apply {
-            lifecycleOwner = viewLifecycleOwner
-        }
+        binding = FragmentHikeTransportBinding.inflate(inflater, container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+            }
 
         setupObserver()
 

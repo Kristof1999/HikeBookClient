@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SwitchCompat
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -48,11 +47,10 @@ class RouteCreateFragment : RouteFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate<FragmentRouteCreateBinding>(
-            inflater, R.layout.fragment_route_create, container, false
-        ).apply {
-            lifecycleOwner = viewLifecycleOwner
-        }
+        binding = FragmentRouteCreateBinding.inflate(inflater, container, false)
+            .apply {
+                lifecycleOwner = viewLifecycleOwner
+            }
 
         map = binding.routeCreateMap
         super.onCreateView(inflater, container, savedInstanceState)

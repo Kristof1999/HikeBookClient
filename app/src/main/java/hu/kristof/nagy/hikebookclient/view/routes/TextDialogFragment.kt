@@ -7,11 +7,9 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.databinding.TextDialogBinding
 
 /**
@@ -26,9 +24,7 @@ class TextDialogFragment : DialogFragment() {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
             val inflater = requireActivity().layoutInflater
-            val binding = DataBindingUtil.inflate<TextDialogBinding>(
-                inflater, R.layout.text_dialog, null, false
-            )
+            val binding = TextDialogBinding.inflate(inflater, null, false)
 
             adaptView(binding)
 

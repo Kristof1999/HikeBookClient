@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import hu.kristof.nagy.hikebookclient.R
@@ -21,9 +20,7 @@ class HelpFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_help, container, false
-        )
+        binding = FragmentHelpBinding.inflate(inflater, container, false)
         return binding.root
     }
 

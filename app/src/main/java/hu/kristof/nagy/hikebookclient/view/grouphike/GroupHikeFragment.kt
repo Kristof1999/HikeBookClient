@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
@@ -27,9 +26,7 @@ class GroupHikeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_group_hike, container, false
-        )
+        binding = FragmentGroupHikeBinding.inflate(inflater, container, false)
 
         val sectionsPagerAdapter = SectionsPagerAdapter(requireContext(), childFragmentManager)
         val viewPager: ViewPager = binding.groupHikeViewPager
