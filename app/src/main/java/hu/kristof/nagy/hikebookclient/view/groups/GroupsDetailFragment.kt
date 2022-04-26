@@ -17,7 +17,6 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
 import hu.kristof.nagy.hikebookclient.util.Constants
-import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 
@@ -30,6 +29,7 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 class GroupsDetailFragment : Fragment() {
     private lateinit var binding: FragmentGroupsDetailBinding
     private val viewModel: GroupsDetailViewModel by viewModels()
+    private val args: GroupsDetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +38,11 @@ class GroupsDetailFragment : Fragment() {
         binding = FragmentGroupsDetailBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                context = requireContext()
+                this.viewModel = viewModel
+                groupName = args.groupName
+                isConnectedPage = args.isConnectedPage
+                executePendingBindings()
             }
 
         setupObserver()
@@ -48,10 +53,7 @@ class GroupsDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val args: GroupsDetailFragmentArgs by navArgs()
         adaptView(args)
-
-        setupGeneralConnect(viewModel, args)
 
         val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
 
@@ -76,17 +78,6 @@ class GroupsDetailFragment : Fragment() {
                         R.id.action_groupsDetailFragment_to_groupsFragment
                     )
                 }
-            }
-        }
-    }
-
-    private fun setupGeneralConnect(
-        viewModel: GroupsDetailViewModel,
-        args: GroupsDetailFragmentArgs
-    ) {
-        binding.groupsDetailConnectButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                viewModel.generalConnect(args.groupName, args.isConnectedPage)
             }
         }
     }
