@@ -15,12 +15,10 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteEditBinding
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
-import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -53,6 +51,9 @@ class RouteEditFragment : RouteFragment() {
         binding = FragmentRouteEditBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                context = requireContext()
+                this.viewModel = viewModel
+                executePendingBindings()
             }
 
         map = binding.routeEditMap
@@ -67,12 +68,6 @@ class RouteEditFragment : RouteFragment() {
             // and prevent editing to attempt to edit a null route
             // in the case when loading failed due to beign offline
             viewModel.loadRoute(args)
-        }
-
-        binding.routeEditEditButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                onRouteEdit(viewModel)
-            }
         }
 
         setHasOptionsMenu(true)
@@ -110,15 +105,7 @@ class RouteEditFragment : RouteFragment() {
         binding.routeEditHikeDescriptionEditText.setText(hikeDescription)
     }
 
-    private fun onRouteEdit(
-        viewModel: RouteEditViewModel
-    ) = catchAndShowIllegalStateAndArgument(requireContext()) {
-        val newRouteName = binding.routeEditRouteNameEditText.text.toString()
-        val newHikeDescription = binding.routeEditHikeDescriptionEditText.text.toString()
-        viewModel.onRouteEdit(newRouteName, newHikeDescription)
-    }
-
-    private fun onRouteEditResult(res: ServerResponseResult<Boolean>, args: RouteEditFragmentArgs) {
+    private fun onRouteEditResult(res: ResponseResult<Boolean>, args: RouteEditFragmentArgs) {
         handleResult(context, res) {
             when (args.routeType) {
                 RouteType.USER -> findNavController().navigate(

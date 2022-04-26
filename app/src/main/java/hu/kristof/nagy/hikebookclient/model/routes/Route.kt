@@ -27,6 +27,7 @@ import org.osmdroid.views.overlay.Polyline
 /**
  * A Class representing a route: points with a name and a description.
  */
+// use sealed class instead
 open class Route(
     open val routeName: String,
     open val points: List<Point>,

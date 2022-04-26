@@ -49,19 +49,20 @@ class BrowseDetailViewModel @Inject constructor(
      * @throws IllegalStateException if the route has not loaded yet
      */
     fun addToMyMap(routeName: java.lang.String, context: Context) {
-        viewModelScope.launch {
-           handleIllegalStateAndArgument(_addRes) {
-               handleOffline(_addRes, context) {
-                   handleRouteLoad(_route.value!!, _addRes)
-                   val points = _route.value!!.successResult!!.points
-                   val description = _route.value!!.successResult!!.description
-                   userRouteRepository
-                       .createUserRouteForLoggedInUser(routeName as kotlin.String, points, description)
-                       .collect {
-                           _addRes.value = it
-                       }
-               }
-           }
+        handleRouteLoad(_route.value!!, _addRes) {
+            viewModelScope.launch {
+                handleIllegalStateAndArgument(_addRes) {
+                    handleOffline(_addRes, context) {
+                        val points = _route.value!!.successResult!!.points
+                        val description = _route.value!!.successResult!!.description
+                        userRouteRepository
+                            .createUserRouteForLoggedInUser(routeName as String, points, description)
+                            .collect {
+                                _addRes.value = it
+                            }
+                    }
+                }
+            }
         }
     }
 }

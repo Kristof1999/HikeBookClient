@@ -1,6 +1,7 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
 import android.graphics.drawable.Drawable
+import android.text.Editable
 import androidx.lifecycle.ViewModel
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.MyPolyline
@@ -15,11 +16,15 @@ import org.osmdroid.views.overlay.Overlay
  * a marker on the map.
  */
 open class RouteViewModel : ViewModel() {
+    // TODO: make these private, and have a public refresh(Overlays) function
     var myMarkers = mutableListOf<MyMarker>()
     var myPolylines = mutableListOf<MyPolyline>()
 
     var markerType = MarkerType.NEW
     var markerTitle = ""
+
+    protected var routeName = ""
+    protected var hikeDescription = ""
 
     /**
      * Handles single tap, and resets marker's title to empty.
@@ -143,5 +148,13 @@ open class RouteViewModel : ViewModel() {
         } else {
             return false
         }
+    }
+
+    fun afterRouteNameChanged(text: Editable) {
+        routeName = text.toString()
+    }
+
+    fun afterDescriptionChanged(text: Editable) {
+        hikeDescription = text.toString()
     }
 }

@@ -41,11 +41,15 @@ class GroupRouteRepository  @Inject constructor(
         )
     }
 
-    suspend fun editGroupRoute(editedGroupRoute: EditedGroupRoute): ServerResponseResult<Boolean> {
-        return service.editGroupRoute(
+    suspend fun editGroupRoute(
+        editedGroupRoute: EditedGroupRoute
+    ): ResponseResult<Boolean> {
+        return ResponseResult.from(
+            service.editGroupRoute(
                 editedGroupRoute.newGroupRoute.groupName,
                 editedGroupRoute.oldGroupRoute.routeName,
-                editedGroupRoute)
-
+                editedGroupRoute
+            )
+        )
     }
 }

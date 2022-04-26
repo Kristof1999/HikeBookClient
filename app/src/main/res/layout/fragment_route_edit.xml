@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <variable
+            name="context"
+            type="android.content.Context" />
+        <variable
+            name="viewModel"
+            type="hu.kristof.nagy.hikebookclient.viewModel.routes.RouteEditViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,6 +26,7 @@
             android:hint="@string/route_name_hint"
             android:inputType="textPersonName"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:afterTextChanged="@{viewModel::afterRouteNameChanged}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,6 +38,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/edit_route_edit_finalize_button_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:onClick="@{() -> viewModel.onRouteEdit(context)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
@@ -84,6 +91,7 @@
             android:inputType="textPersonName"
             android:minHeight="48dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:afterTextChanged="@{viewModel::afterDescriptionChanged}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/routeEditRouteNameEditText" />

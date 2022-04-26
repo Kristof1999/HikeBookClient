@@ -87,17 +87,18 @@ class GroupHikeDetailViewModel @Inject constructor(
      * @throws IllegalStateException if the route has not loaded yet
      */
     fun addToMyMap(context: Context) {
-        handleRouteLoad(_route.value!!, _addToMyMapRes)
-        viewModelScope.launch {
-            handleIllegalStateAndArgument(_addToMyMapRes) {
-                handleOffline(_addToMyMapRes, context) {
-                    addToMyMapFinished = false
-                    val route = _route.value!!.successResult!!
-                    userRouteRepository
-                        .createUserRouteForLoggedInUser(route.routeName, route.points, route.description)
-                        .collect {
-                            _addToMyMapRes.value = it
-                        }
+        handleRouteLoad(_route.value!!, _addToMyMapRes) {
+            viewModelScope.launch {
+                handleIllegalStateAndArgument(_addToMyMapRes) {
+                    handleOffline(_addToMyMapRes, context) {
+                        addToMyMapFinished = false
+                        val route = _route.value!!.successResult!!
+                        userRouteRepository
+                            .createUserRouteForLoggedInUser(route.routeName, route.points, route.description)
+                            .collect {
+                                _addToMyMapRes.value = it
+                            }
+                    }
                 }
             }
         }

@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -8,7 +9,9 @@ import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.*
 import hu.kristof.nagy.hikebookclient.model.routes.*
-import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
+import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.handleRouteLoad
 import hu.kristof.nagy.hikebookclient.view.routes.RouteEditFragmentArgs
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,8 +31,8 @@ class RouteEditViewModel @Inject constructor(
     val route: LiveData<ServerResponseResult<Route>>
         get() = _route
 
-    private val _routeEditRes = MutableLiveData<ServerResponseResult<Boolean>>()
-    val routeEditRes: LiveData<ServerResponseResult<Boolean>>
+    private val _routeEditRes = MutableLiveData<ResponseResult<Boolean>>()
+    val routeEditRes: LiveData<ResponseResult<Boolean>>
         get() = _routeEditRes
 
     fun setup(markers: MutableList<MyMarker>, polylines: MutableList<Polyline>) {
@@ -67,25 +70,31 @@ class RouteEditViewModel @Inject constructor(
      * @throws IllegalStateException if the route has not loaded yet
      */
     fun onRouteEdit(
-        routeName: String,
-        hikeDescription: String
+        context: Context
     ) {
-        if (checkAndHandleRouteLoad(_route.value!!)) {
-            val oldRoute = _route.value!!.successResult!!
+        handleRouteLoad(_route.value!!, _routeEditRes) {
+            viewModelScope.launch {
+                handleOffline(_routeEditRes, context) {
+                    handleIllegalStateAndArgument(_routeEditRes) {
+                        val oldRoute = _route.value!!.successResult!!
 
-            val points = myMarkers.map {
-                Point.from(it)
-            }
+                        val points = myMarkers.map {
+                            Point.from(it)
+                        }
 
-            when (oldRoute) {
-                is UserRoute -> onUserRouteEdit(oldRoute, routeName, hikeDescription, points)
-                is GroupRoute -> onGroupRouteEdit(oldRoute, routeName, hikeDescription, points)
-                else -> throw IllegalArgumentException("Unkown route type: $oldRoute")
+                        // TODO: refactor after using sealed class for route
+                        when (oldRoute) {
+                            is UserRoute -> onUserRouteEdit(oldRoute, routeName, hikeDescription, points)
+                            is GroupRoute -> onGroupRouteEdit(oldRoute, routeName, hikeDescription, points)
+                            else -> throw IllegalArgumentException("Unkown route type: $oldRoute")
+                        }
+                    }
+                }
             }
         }
     }
 
-    private fun onUserRouteEdit(
+    private suspend fun onUserRouteEdit(
         oldUserRoute: UserRoute,
         routeName: String,
         hikeDescription: String,
@@ -94,12 +103,10 @@ class RouteEditViewModel @Inject constructor(
         val newRoute = UserRoute(oldUserRoute.userName, routeName, points, hikeDescription)
         val editedUserRoute = EditedUserRoute(newRoute, oldUserRoute)
 
-        viewModelScope.launch {
-            _routeEditRes.value = userRouteRepository.editUserRoute(editedUserRoute)
-        }
+        _routeEditRes.value = userRouteRepository.editUserRoute(editedUserRoute)
     }
 
-    private fun onGroupRouteEdit(
+    private suspend fun onGroupRouteEdit(
         oldGroupRoute: GroupRoute,
         routeName: String,
         hikeDescription: String,
@@ -108,8 +115,6 @@ class RouteEditViewModel @Inject constructor(
         val newRoute = GroupRoute(oldGroupRoute.groupName, routeName, points, hikeDescription)
         val editedGroupRoute = EditedGroupRoute(newRoute, oldGroupRoute)
 
-        viewModelScope.launch {
-            _routeEditRes.value = groupRouteRepository.editGroupRoute(editedGroupRoute)
-        }
+        _routeEditRes.value = groupRouteRepository.editGroupRoute(editedGroupRoute)
     }
 }

@@ -23,5 +23,5 @@ interface IUserRouteRepository {
         points: List<Point>,
         hikeDescription: String
     ): Flow<ResponseResult<Boolean>>
-    suspend fun editUserRoute(editedUserRoute: EditedUserRoute): ServerResponseResult<Boolean>
+    suspend fun editUserRoute(editedUserRoute: EditedUserRoute): ResponseResult<Boolean>
 }
