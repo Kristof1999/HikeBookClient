@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 
 /**
@@ -11,7 +12,7 @@ import hu.kristof.nagy.hikebookclient.model.routes.Route
  * @throws IllegalStateException if the route has not been loaded
  * @return true if the route has loaded
  */
-fun <P : Route> checkAndHandleRouteLoad(routeRes: ResponseResult<P>): Boolean {
+fun <P : Route> checkAndHandleRouteLoad(routeRes: ServerResponseResult<P>): Boolean {
     if (!routeRes.isSuccess) {
         throw IllegalStateException("Valami hiba történt.")
     } else {
@@ -42,15 +43,15 @@ fun catchAndShowIllegalStateAndArgument(context: Context?, f: () -> Unit) {
     }
 }
 
-fun <T : Any> handleIllegalStateAndArgument(
+suspend fun <T> handleIllegalStateAndArgument(
     data: MutableLiveData<ResponseResult<T>>,
-    f: () -> Unit
+    f: suspend () -> Unit
 ) {
     try {
         f.invoke()
     } catch (e: IllegalStateException) {
-        data.value = ResponseResult(false, e.message, null)
+        data.value = ResponseResult.Error(e.message!!)
     } catch (e: IllegalArgumentException) {
-        data.value = ResponseResult(false, e.message, null)
+        data.value = ResponseResult.Error(e.message!!)
     }
 }

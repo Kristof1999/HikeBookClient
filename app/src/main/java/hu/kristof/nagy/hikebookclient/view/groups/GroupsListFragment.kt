@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
@@ -50,7 +50,7 @@ class GroupsListFragment : Fragment() {
         }
     }
 
-    private fun onGeneralConnectRes(res: ResponseResult<Boolean>, isConnectedPage: Boolean) {
+    private fun onGeneralConnectRes(res: ServerResponseResult<Boolean>, isConnectedPage: Boolean) {
         if (!viewModel.generalConnectFinished) {
             handleResult(context, res) { generalConnectRes ->
                 showGenericErrorOr(context, generalConnectRes) {

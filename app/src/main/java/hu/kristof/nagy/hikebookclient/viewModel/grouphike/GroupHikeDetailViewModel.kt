@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.DateTime
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
@@ -25,20 +25,20 @@ class GroupHikeDetailViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private val _route = MutableLiveData<ResponseResult<Route>>()
-    val route: LiveData<ResponseResult<Route>>
+    private val _route = MutableLiveData<ServerResponseResult<Route>>()
+    val route: LiveData<ServerResponseResult<Route>>
         get() = _route
 
-    private val _participants = MutableLiveData<ResponseResult<List<String>>>()
-    val participants: LiveData<ResponseResult<List<String>>>
+    private val _participants = MutableLiveData<ServerResponseResult<List<String>>>()
+    val participants: LiveData<ServerResponseResult<List<String>>>
         get() = _participants
 
-    private val _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
-    val generalConnectRes: LiveData<ResponseResult<Boolean>>
+    private val _generalConnectRes = MutableLiveData<ServerResponseResult<Boolean>>()
+    val generalConnectRes: LiveData<ServerResponseResult<Boolean>>
         get() = _generalConnectRes
 
-    private val _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
-    val addToMyMapRes: LiveData<ResponseResult<Boolean>>
+    private val _addToMyMapRes = MutableLiveData<ServerResponseResult<Boolean>>()
+    val addToMyMapRes: LiveData<ServerResponseResult<Boolean>>
         get() = _addToMyMapRes
 
     var addToMyMapFinished = true

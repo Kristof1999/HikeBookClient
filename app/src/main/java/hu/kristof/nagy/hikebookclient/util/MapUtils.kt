@@ -3,7 +3,7 @@ package hu.kristof.nagy.hikebookclient.util
 import android.content.Context
 import android.widget.Toast
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.CopyrightOverlay
@@ -11,7 +11,7 @@ import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polyline
 
 fun MapView.onRoutesLoad(
-    res: ResponseResult<List<Route>>,
+    res: ServerResponseResult<List<Route>>,
     context: Context?
 ) {
     handleResult(context, res) { routes ->

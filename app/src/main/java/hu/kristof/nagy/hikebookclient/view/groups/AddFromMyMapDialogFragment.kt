@@ -14,7 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.AddFromMyMapDialogBinding
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
@@ -85,7 +85,7 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
         viewModel.routes.removeObserver(observer)
     }
 
-    private val observer = { res: ResponseResult<List<UserRoute>> ->
+    private val observer = { res: ServerResponseResult<List<UserRoute>> ->
         handleResult(context, res) { routes ->
             val routeNames = routes.map { it.routeName }
             val objects = mutableListOf("Válassz útvonalat")

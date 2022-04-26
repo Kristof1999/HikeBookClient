@@ -24,12 +24,12 @@ class RouteEditViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository,
     private val groupRouteRepository: GroupRouteRepository
     ) : RouteViewModel() {
-    private val _route = MutableLiveData<ResponseResult<Route>>()
-    val route: LiveData<ResponseResult<Route>>
+    private val _route = MutableLiveData<ServerResponseResult<Route>>()
+    val route: LiveData<ServerResponseResult<Route>>
         get() = _route
 
-    private val _routeEditRes = MutableLiveData<ResponseResult<Boolean>>()
-    val routeEditRes: LiveData<ResponseResult<Boolean>>
+    private val _routeEditRes = MutableLiveData<ServerResponseResult<Boolean>>()
+    val routeEditRes: LiveData<ServerResponseResult<Boolean>>
         get() = _routeEditRes
 
     fun setup(markers: MutableList<MyMarker>, polylines: MutableList<Polyline>) {
@@ -48,14 +48,14 @@ class RouteEditViewModel @Inject constructor(
 
     private fun loadGroupRoute(routeName: String, groupName: String) {
         viewModelScope.launch {
-            _route.value = groupRouteRepository.loadGroupRoute(groupName, routeName) as ResponseResult<Route>
+            _route.value = groupRouteRepository.loadGroupRoute(groupName, routeName) as ServerResponseResult<Route>
         }
     }
 
     private fun loadUserRoute(routeName: String) {
         viewModelScope.launch {
             userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
-                _route.value = it as ResponseResult<Route>
+                _route.value = it as ServerResponseResult<Route>
             }
         }
     }

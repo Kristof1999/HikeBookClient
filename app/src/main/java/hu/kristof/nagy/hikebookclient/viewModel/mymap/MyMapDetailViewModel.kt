@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
@@ -25,18 +25,18 @@ class MyMapDetailViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository,
     private val groupHikeRepository: GroupHikeRepository
 ) : ViewModel() {
-    private val _route = MutableLiveData<ResponseResult<UserRoute>>()
-    val route: LiveData<ResponseResult<UserRoute>>
+    private val _route = MutableLiveData<ServerResponseResult<UserRoute>>()
+    val route: LiveData<ServerResponseResult<UserRoute>>
         get() = _route
 
     var deleteFinished = true
 
-    private val _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
-    val deleteRes: LiveData<ResponseResult<Boolean>>
+    private val _deleteRes = MutableLiveData<ServerResponseResult<Boolean>>()
+    val deleteRes: LiveData<ServerResponseResult<Boolean>>
         get() = _deleteRes
 
-    private val _groupHikeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
-    val groupHikeCreateRes: LiveData<ResponseResult<Boolean>>
+    private val _groupHikeCreateRes = MutableLiveData<ServerResponseResult<Boolean>>()
+    val groupHikeCreateRes: LiveData<ServerResponseResult<Boolean>>
         get() = _groupHikeCreateRes
 
     var groupHikeCreationFinished = true

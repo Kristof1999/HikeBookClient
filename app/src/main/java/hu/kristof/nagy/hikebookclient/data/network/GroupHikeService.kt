@@ -3,7 +3,7 @@ package hu.kristof.nagy.hikebookclient.data.network
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeCreateHelper
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PUT
@@ -14,19 +14,19 @@ interface GroupHikeService {
     suspend fun listGroupHikes(
         @Path("userName") userName: String,
         @Path("isConnectedPage") isConnectedPage: Boolean
-    ): ResponseResult<List<GroupHikeListHelper>>
+    ): ServerResponseResult<List<GroupHikeListHelper>>
 
     @PUT("groupHike/{userName}/{groupHikeName}")
     suspend fun createGroupHike(
         @Path("userName") userName: String,
         @Path("groupHikeName") groupHikeName: String,
         @Body helper: GroupHikeCreateHelper
-    ): ResponseResult<Boolean>
+    ): ServerResponseResult<Boolean>
 
     @GET("groupHike/{groupHikeName}")
     suspend fun listParticipants(
         @Path("groupHikeName") groupHikeName: String
-    ): ResponseResult<List<String>>
+    ): ServerResponseResult<List<String>>
 
     @PUT("groupHike/{groupHikeName}/{userName}/{isConnectedPage}")
     suspend fun generalGroupHikeConnect(
@@ -34,5 +34,5 @@ interface GroupHikeService {
         @Path("userName") userName: String,
         @Path("isConnectedPage") isConnectedPage: Boolean,
         @Body dateTime: DateTime
-    ): ResponseResult<Boolean>
+    ): ServerResponseResult<Boolean>
 }

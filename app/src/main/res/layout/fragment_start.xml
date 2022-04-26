@@ -39,7 +39,7 @@
             android:hint="@string/user_name_hint"
             android:inputType="textPersonName"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:text="@={viewModel.name}"
+            android:afterTextChanged="@{viewModel::afterNameChanged}"
             app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -52,7 +52,7 @@
             android:hint="@string/password_hint"
             android:inputType="textPassword"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:text="@={viewModel.password}"
+            android:afterTextChanged="@{viewModel::afterPasswordChanged}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

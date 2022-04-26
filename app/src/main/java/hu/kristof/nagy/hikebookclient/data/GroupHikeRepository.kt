@@ -6,7 +6,7 @@ import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeCreateHelper
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
@@ -26,7 +26,7 @@ class GroupHikeRepository @Inject constructor(
 ) {
     suspend fun listGroupHikesForLoggedInUser(
         isConnectedPage: Boolean
-    ): Flow<ResponseResult<List<GroupHikeListHelper>>> {
+    ): Flow<ServerResponseResult<List<GroupHikeListHelper>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -38,7 +38,7 @@ class GroupHikeRepository @Inject constructor(
         groupHikeName: String,
         dateTime: Calendar,
         route: Route
-    ): Flow<ResponseResult<Boolean>> {
+    ): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -50,11 +50,11 @@ class GroupHikeRepository @Inject constructor(
         }
     }
 
-    suspend fun loadRoute(groupHikeName: String): ResponseResult<Route> {
+    suspend fun loadRoute(groupHikeName: String): ServerResponseResult<Route> {
         return service.loadGroupHikeRoute(groupHikeName)
     }
 
-    suspend fun listParticipants(groupHikeName: String): ResponseResult<List<String>> {
+    suspend fun listParticipants(groupHikeName: String): ServerResponseResult<List<String>> {
         return service.listParticipants(groupHikeName)
     }
 
@@ -62,7 +62,7 @@ class GroupHikeRepository @Inject constructor(
         groupHikeName: String,
         isConnectedPage: Boolean,
         dateTime: DateTime
-    ): Flow<ResponseResult<Boolean>> {
+    ): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->

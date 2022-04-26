@@ -32,15 +32,15 @@ fun handleOffline(context: Context, f: () -> Unit) {
     }
 }
 
-fun <T : Any> handleOffline(
+suspend fun <T> handleOffline(
     data: MutableLiveData<ResponseResult<T>>,
     context: Context,
-    f: () -> Unit
+    f: suspend () -> Unit
 ) {
     if (isOnline(context)) {
         f.invoke()
     } else {
-        data.value = ResponseResult(false, context.getString(R.string.offline_once_error_msg), null)
+        data.value = ResponseResult.Error(context.getString(R.string.offline_once_error_msg))
     }
 }
 

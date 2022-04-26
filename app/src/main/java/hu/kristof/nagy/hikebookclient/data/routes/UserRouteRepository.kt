@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.Constants
@@ -17,7 +17,7 @@ class UserRouteRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : IUserRouteRepository {
-    override suspend fun loadUserRoutesOfLoggedInUser(): Flow<ResponseResult<List<UserRoute>>> {
+    override suspend fun loadUserRoutesOfLoggedInUser(): Flow<ServerResponseResult<List<UserRoute>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -27,7 +27,7 @@ class UserRouteRepository @Inject constructor(
 
     override suspend fun loadUserRouteOfLoggedInUser(
         routeName: String
-    ): Flow<ResponseResult<UserRoute>> {
+    ): Flow<ServerResponseResult<UserRoute>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -36,7 +36,7 @@ class UserRouteRepository @Inject constructor(
     }
 
     override suspend fun listUserRoutesForLoggedInUser()
-    : Flow<ResponseResult<List<BrowseListItem>>> {
+    : Flow<ServerResponseResult<List<BrowseListItem>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -47,13 +47,13 @@ class UserRouteRepository @Inject constructor(
     suspend fun loadUserRouteOfUser(
         userName: String,
         routeName: String
-    ): ResponseResult<UserRoute> {
+    ): ServerResponseResult<UserRoute> {
         return service.loadUserRoute(userName, routeName)
     }
 
     override suspend fun deleteUserRouteOfLoggedInUser(
         routeName: String
-    ): Flow<ResponseResult<Boolean>> {
+    ): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -65,7 +65,7 @@ class UserRouteRepository @Inject constructor(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
-    ): Flow<ResponseResult<Boolean>> {
+    ): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -74,7 +74,7 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
-    override suspend fun editUserRoute(editedUserRoute: EditedUserRoute): ResponseResult<Boolean> {
+    override suspend fun editUserRoute(editedUserRoute: EditedUserRoute): ServerResponseResult<Boolean> {
         return service.editUserRoute(
                 editedUserRoute.newUserRoute.userName,
                 editedUserRoute.oldUserRoute.routeName,

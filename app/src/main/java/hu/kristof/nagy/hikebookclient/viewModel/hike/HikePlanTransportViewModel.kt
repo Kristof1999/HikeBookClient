@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.view.hike.TransportType
@@ -47,14 +47,14 @@ class HikePlanTransportViewModel @Inject constructor(
     val setEndNext: LiveData<Boolean>
         get() = _setEndNext
 
-    private val _route = MutableLiveData<ResponseResult<Route>>()
-    val route: LiveData<ResponseResult<Route>>
+    private val _route = MutableLiveData<ServerResponseResult<Route>>()
+    val route: LiveData<ServerResponseResult<Route>>
         get() = _route
 
     fun loadRoute(routeName: String) {
         viewModelScope.launch {
             userRouteRepository.loadUserRouteOfLoggedInUser(routeName).collect {
-                _route.value = it as ResponseResult<Route>
+                _route.value = it as ServerResponseResult<Route>
             }
         }
     }

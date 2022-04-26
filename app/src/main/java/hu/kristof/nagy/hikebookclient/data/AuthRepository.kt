@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.User
 import hu.kristof.nagy.hikebookclient.util.Constants
 import javax.inject.Inject
@@ -18,16 +19,16 @@ class AuthRepository @Inject constructor(
     private val dataStore: DataStore<Preferences>
     ) : IAuthRepository {
 
-    override suspend fun register(user: User): ResponseResult<Boolean> {
+    override suspend fun register(user: User): ServerResponseResult<Boolean> {
         val responseResult = service.register(user)
         return if (responseResult.isSuccess) {
             if (responseResult.successResult!!) {
                 dataStore.edit { data ->
                     data[Constants.DATA_STORE_USER_NAME] = user.name
                 }
-                ResponseResult(true, null, true)
+                ServerResponseResult(true, null, true)
             } else {
-                ResponseResult(true, null, false)
+                ServerResponseResult(true, null, false)
             }
         } else {
             responseResult
@@ -35,18 +36,21 @@ class AuthRepository @Inject constructor(
     }
 
     override suspend fun login(user: User): ResponseResult<Boolean> {
-        val responseResult = service.login(user)
-        return if (responseResult.isSuccess) {
-            if(responseResult.successResult!!) {
-                dataStore.edit { data ->
-                    data[Constants.DATA_STORE_USER_NAME] = user.name
-                }
-                ResponseResult(true, null, true)
-            } else {
-                ResponseResult(true, null, false)
-            }
-        } else {
-            responseResult
+        val serverResponseResult = service.login(user)
+        dataStore.edit { data ->
+            data[Constants.DATA_STORE_USER_NAME] = user.name
         }
+        return ResponseResult.from(serverResponseResult)
+
+//        return if (responseResult.isSuccess) {
+//            if(responseResult.successResult!!) {
+//
+//                ServerResponseResult(true, null, true)
+//            } else {
+//                ServerResponseResult(true, null, false)
+//            }
+//        } else {
+//            responseResult
+//        }
     }
 }

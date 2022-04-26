@@ -26,7 +26,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.User
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,8 +38,8 @@ import javax.inject.Inject
 class RegistrationViewModel @Inject constructor(
     private val repository: IAuthRepository
     ) : ViewModel() {
-    private val _registrationRes = MutableLiveData<ResponseResult<Boolean>>()
-    val registrationRes : LiveData<ResponseResult<Boolean>>
+    private val _registrationRes = MutableLiveData<ServerResponseResult<Boolean>>()
+    val registrationRes : LiveData<ServerResponseResult<Boolean>>
         get() = _registrationRes
 
     /**

@@ -3,7 +3,7 @@ package hu.kristof.nagy.hikebookclient.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.di.Service
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,7 +19,7 @@ class GroupsRepository @Inject constructor(
 ) {
     suspend fun listGroupsForLoggedInUser(
         isConnectedPage: Boolean
-    ): Flow<ResponseResult<List<String>>> {
+    ): Flow<ServerResponseResult<List<String>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -27,7 +27,7 @@ class GroupsRepository @Inject constructor(
         }
     }
 
-    suspend fun createGroupForLoggedInUser(groupName: String): Flow<ResponseResult<Boolean>> {
+    suspend fun createGroupForLoggedInUser(groupName: String): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -38,7 +38,7 @@ class GroupsRepository @Inject constructor(
     suspend fun generalConnectForLoggedInUser(
         groupName: String,
         isConnectedPage: Boolean
-    ): Flow<ResponseResult<Boolean>> {
+    ): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->

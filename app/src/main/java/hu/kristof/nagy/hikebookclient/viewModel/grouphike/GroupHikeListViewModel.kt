@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,12 +21,12 @@ import javax.inject.Inject
 class GroupHikeListViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository
 ) : ViewModel() {
-    private val _groupHikes = MutableLiveData<ResponseResult<List<GroupHikeListHelper>>>()
-    val groupHikes: LiveData<ResponseResult<List<GroupHikeListHelper>>>
+    private val _groupHikes = MutableLiveData<ServerResponseResult<List<GroupHikeListHelper>>>()
+    val groupHikes: LiveData<ServerResponseResult<List<GroupHikeListHelper>>>
         get() = _groupHikes
 
-    private val _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
-    val generalConnectRes: LiveData<ResponseResult<Boolean>>
+    private val _generalConnectRes = MutableLiveData<ServerResponseResult<Boolean>>()
+    val generalConnectRes: LiveData<ServerResponseResult<Boolean>>
         get() = _generalConnectRes
 
     var generalConnectFinished = true

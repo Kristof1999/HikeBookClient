@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.di.Service
-import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import kotlinx.coroutines.flow.collect
@@ -24,8 +24,8 @@ class HikeViewModel @Inject constructor(
     private val service: Service,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private val _route = MutableLiveData<ResponseResult<UserRoute>>()
-    val route: LiveData<ResponseResult<UserRoute>>
+    private val _route = MutableLiveData<ServerResponseResult<UserRoute>>()
+    val route: LiveData<ServerResponseResult<UserRoute>>
         get() = _route
 
     fun loadUserRoute(routeName: String) {

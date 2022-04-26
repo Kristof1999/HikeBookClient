@@ -51,8 +51,6 @@ class StartFragment : Fragment() {
         val binding = FragmentStartBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
-                // TODO: try to use 2-way data binding
-                // see codelabs for more detail
                 viewModel = loginViewModel
                 context = requireContext()
                 executePendingBindings()
