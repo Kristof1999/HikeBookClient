@@ -19,6 +19,7 @@
 
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -27,9 +28,9 @@ import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragmentArgs
+import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -48,44 +49,46 @@ class RouteCreateViewModel @Inject constructor(
         get() = _routeCreateRes
 
     fun onRouteCreate(
-        args: RouteCreateFragmentArgs,
-        routeName: String,
-        hikeDescription: String
+        routeType: RouteType,
+        groupName: String?,
+        context: Context
     ) {
         val points: List<Point> = myMarkers.map {
             Point.from(it)
         }
 
-        when (args.routeType) {
-            RouteType.USER -> onUserRouteCreate(routeName, hikeDescription, points)
-            RouteType.GROUP ->
-                onGroupRouteCreate(routeName, hikeDescription, points, args.groupName!!)
+        viewModelScope.launch {
+            handleIllegalStateAndArgument(_routeCreateRes) {
+                handleOffline(_routeCreateRes, context) {
+                    when (routeType) {
+                        RouteType.USER -> onUserRouteCreate(routeName, hikeDescription, points)
+                        RouteType.GROUP ->
+                            onGroupRouteCreate(routeName, hikeDescription, points, groupName!!)
+                    }
+                }
+            }
         }
     }
 
-    private fun onUserRouteCreate(
+    private suspend fun onUserRouteCreate(
         routeName: String,
         hikeDescription: String,
         points: List<Point>
     ) {
-        viewModelScope.launch {
-            userRouteRepository.createUserRouteForLoggedInUser(routeName, points, hikeDescription)
-                .collect { res ->
-                    _routeCreateRes.value = res
-                }
-        }
+        userRouteRepository.createUserRouteForLoggedInUser(routeName, points, hikeDescription)
+            .collect { res ->
+                _routeCreateRes.value = res
+            }
     }
 
-    private fun onGroupRouteCreate(
+    private suspend fun onGroupRouteCreate(
         routeName: String,
         hikeDescription: String,
         points: List<Point>,
         groupName: String
     ) {
-        viewModelScope.launch {
-            _routeCreateRes.value = groupRouteRepository.createGroupRoute(
-                groupName, routeName, points, hikeDescription
-            )
-        }
+        _routeCreateRes.value = groupRouteRepository.createGroupRoute(
+            groupName, routeName, points, hikeDescription
+        )
     }
 }

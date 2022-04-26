@@ -19,8 +19,6 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteCreateBinding
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
-import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.OnSingleTapHandlerTextMarkerTypeDecorator
@@ -50,6 +48,11 @@ class RouteCreateFragment : RouteFragment() {
         binding = FragmentRouteCreateBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                context = requireContext()
+                groupName = args.groupName
+                routeType = args.routeType
+                this.viewModel = viewModel
+                executePendingBindings()
             }
 
         map = binding.routeCreateMap
@@ -58,8 +61,6 @@ class RouteCreateFragment : RouteFragment() {
         setupObservers()
 
         setupSpinner()
-
-        setupRouteCreate(args)
 
         setHasOptionsMenu(true)
         return binding.root
@@ -78,24 +79,6 @@ class RouteCreateFragment : RouteFragment() {
     private fun setupSpinner() {
         binding.routeCreateMarkerSpinner.onItemSelectedListener = this
         setMarkerSpinnerAdapter(requireContext(), binding.routeCreateMarkerSpinner)
-    }
-
-    private fun setupRouteCreate(args: RouteCreateFragmentArgs) {
-        binding.routeCreateCreateButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                onRouteCreate(args, viewModel)
-            }
-        }
-    }
-
-    private fun onRouteCreate(args: RouteCreateFragmentArgs, viewModel: RouteCreateViewModel) {
-        catchAndShowIllegalStateAndArgument(requireContext()) {
-            viewModel.onRouteCreate(
-                args,
-                binding.routeCreateRouteNameEditText.text.toString(),
-                binding.routeCreateHikeDescriptionEditText.text.toString()
-            )
-        }
     }
 
     private fun onRouteCreateResult(

@@ -82,6 +82,7 @@ class RouteEditViewModel @Inject constructor(
                             Point.from(it)
                         }
 
+                        // TODO: test if routeName has the value of the name of the route under editing
                         // TODO: refactor after using sealed class for route
                         when (oldRoute) {
                             is UserRoute -> onUserRouteEdit(oldRoute, routeName, hikeDescription, points)
