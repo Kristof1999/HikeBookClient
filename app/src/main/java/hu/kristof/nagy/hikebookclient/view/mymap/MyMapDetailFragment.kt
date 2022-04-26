@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapDetailBinding
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
@@ -40,13 +40,17 @@ class MyMapDetailFragment : MapFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val viewModel: MyMapDetailViewModel by viewModels()
+        val args: MyMapDetailFragmentArgs by navArgs()
+
         val binding = FragmentMyMapDetailBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                this.viewModel = viewModel
+                routeName = args.routeName
+                context = requireContext()
+                executePendingBindings()
             }
-
-        val viewModel: MyMapDetailViewModel by viewModels()
-        val args: MyMapDetailFragmentArgs by navArgs()
 
         setupObservers(viewModel, args, binding)
 
@@ -109,11 +113,6 @@ class MyMapDetailFragment : MapFragment() {
                 .actionMyMapDetailFragmentToRouteEditFragment(RouteType.USER, null, args.routeName)
             findNavController().navigate(directions)
         }
-        myMapDetailDeleteButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                viewModel.deleteRoute(args.routeName)
-            }
-        }
         myMapDetailPrintButton.setOnClickListener {
             val bitmap = map.drawToBitmap()
             PrintHelper(requireContext()).printBitmap(args.routeName, bitmap)
@@ -161,7 +160,7 @@ class MyMapDetailFragment : MapFragment() {
         }
     }
 
-    private fun onDeleteResult(res: ServerResponseResult<Boolean>) {
+    private fun onDeleteResult(res: ResponseResult<Boolean>) {
         handleResult(context, res) {
             findNavController().navigate(
                 R.id.action_myMapDetailFragment_to_myMapListFragment

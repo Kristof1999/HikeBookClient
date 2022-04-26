@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.viewModel.mymap
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,9 +8,11 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
@@ -31,8 +34,8 @@ class MyMapDetailViewModel @Inject constructor(
 
     var deleteFinished = true
 
-    private val _deleteRes = MutableLiveData<ServerResponseResult<Boolean>>()
-    val deleteRes: LiveData<ServerResponseResult<Boolean>>
+    private val _deleteRes = MutableLiveData<ResponseResult<Boolean>>()
+    val deleteRes: LiveData<ResponseResult<Boolean>>
         get() = _deleteRes
 
     private val _groupHikeCreateRes = MutableLiveData<ServerResponseResult<Boolean>>()
@@ -49,13 +52,15 @@ class MyMapDetailViewModel @Inject constructor(
         }
     }
 
-    fun deleteRoute(routeName: String) {
+    fun deleteRoute(routeName: java.lang.String, context: Context) {
         deleteFinished = false
         viewModelScope.launch {
-            userRepository.deleteUserRouteOfLoggedInUser(routeName)
-                .collect { res ->
-                    _deleteRes.value = res
-                }
+            handleOffline(_deleteRes, context) {
+                userRepository.deleteUserRouteOfLoggedInUser(routeName as kotlin.String)
+                    .collect { res ->
+                        _deleteRes.value = res
+                    }
+            }
         }
     }
 

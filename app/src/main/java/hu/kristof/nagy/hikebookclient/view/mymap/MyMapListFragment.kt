@@ -33,8 +33,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
@@ -105,7 +106,7 @@ class MyMapListFragment : Fragment() {
 
     private fun onDeleteResult(
         myMapDetailViewModel: MyMapDetailViewModel,
-        res: ServerResponseResult<Boolean>
+        res: ResponseResult<Boolean>
     ) {
         if (!myMapDetailViewModel.deleteFinished) {
             handleResult(context, res) { deleteRes ->
@@ -139,7 +140,7 @@ class MyMapListFragment : Fragment() {
                 },
                 deleteListener = { routeName ->
                     handleOffline(requireContext()) {
-                        myMapDetailViewModel.deleteRoute(routeName)
+                        myMapDetailViewModel.deleteRoute(routeName as java.lang.String, requireContext())
                     }
                 },
                 printListener = { routeName ->

@@ -54,11 +54,13 @@ class UserRouteRepository @Inject constructor(
 
     override suspend fun deleteUserRouteOfLoggedInUser(
         routeName: String
-    ): Flow<ServerResponseResult<Boolean>> {
+    ): Flow<ResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            service.deleteUserRoute(userName!!, routeName)
+            ResponseResult.from(
+                service.deleteUserRoute(userName!!, routeName)
+            )
         }
     }
 

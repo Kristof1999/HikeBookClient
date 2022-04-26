@@ -3,7 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <variable
+            name="routeName"
+            type="String" />
+        <variable
+            name="viewModel"
+            type="hu.kristof.nagy.hikebookclient.viewModel.mymap.MyMapDetailViewModel" />
+        <variable
+            name="context"
+            type="android.content.Context" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,6 +38,7 @@
             android:layout_marginBottom="8dp"
             android:text="@string/delete_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:onClick="@{() -> viewModel.deleteRoute(routeName, context)}"
             app:icon="@drawable/delete_image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
