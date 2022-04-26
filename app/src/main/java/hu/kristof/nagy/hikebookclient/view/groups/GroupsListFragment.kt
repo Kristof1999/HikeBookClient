@@ -70,7 +70,6 @@ class GroupsListFragment : Fragment() {
         val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
         val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter
-        binding.lifecycleOwner = viewLifecycleOwner
         viewModel.groups.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { groupNames ->
                 adapter.submitList(groupNames.toMutableList())

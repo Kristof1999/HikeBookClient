@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <variable
+            name="viewModel"
+            type="hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -53,6 +55,7 @@
             android:layout_marginTop="8dp"
             android:minHeight="48dp"
             android:text="Kezdőállomás"
+            android:onCheckedChanged="@{(_, isChecked) -> viewModel.setStartTo(isChecked)}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,6 +67,7 @@
             android:layout_marginEnd="8dp"
             android:minHeight="48dp"
             android:text="Végállomás"
+            android:onCheckedChanged="@{(_, isChecked) -> viewModel.setEndTo(isChecked)}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

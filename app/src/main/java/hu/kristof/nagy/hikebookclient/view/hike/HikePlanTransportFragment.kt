@@ -70,8 +70,6 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
             onTransportStart(args)
         }
 
-        handleStartAndEndSwitches(binding)
-
         handleStartAndEndPointChanges()
 
         addMapEventsOverlay()
@@ -173,17 +171,6 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
             }
         }.let { endMarker ->
             map.overlays.add(endMarker)
-        }
-    }
-
-    private fun handleStartAndEndSwitches(binding: FragmentHikePlanTransportBinding) {
-        binding.apply {
-            hikePlanTransportStartSwitch.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.setStartTo(isChecked)
-            }
-            hikePlanTransportEndSwitch.setOnCheckedChangeListener { _, isChecked ->
-                viewModel.setEndTo(isChecked)
-            }
         }
     }
 
