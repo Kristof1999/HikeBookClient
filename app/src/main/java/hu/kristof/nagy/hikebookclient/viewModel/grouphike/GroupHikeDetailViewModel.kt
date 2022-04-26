@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.viewModel.grouphike
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,7 +12,9 @@ import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
+import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
+import hu.kristof.nagy.hikebookclient.util.handleRouteLoad
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,8 +37,8 @@ class GroupHikeDetailViewModel @Inject constructor(
     val participants: LiveData<ServerResponseResult<List<String>>>
         get() = _participants
 
-    private val _generalConnectRes = MutableLiveData<ServerResponseResult<Boolean>>()
-    val generalConnectRes: LiveData<ServerResponseResult<Boolean>>
+    private val _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
+    val generalConnectRes: LiveData<ResponseResult<Boolean>>
         get() = _generalConnectRes
 
     private val _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
@@ -56,10 +59,21 @@ class GroupHikeDetailViewModel @Inject constructor(
         }
     }
 
-    fun generalConnect(groupHikeName: String, isConnectedPage: Boolean, dateTime: DateTime) {
+    fun generalConnect(
+        groupHikeName: java.lang.String,
+        isConnectedPage: java.lang.Boolean,
+        dateTime: DateTime,
+        context: Context
+    ) {
         viewModelScope.launch {
-            groupHikeRepository.generalConnectForLoggedInUser(groupHikeName, isConnectedPage, dateTime).collect {
-                _generalConnectRes.value = it
+            handleOffline(_generalConnectRes, context) {
+                groupHikeRepository.generalConnectForLoggedInUser(
+                    groupHikeName as kotlin.String,
+                    isConnectedPage as kotlin.Boolean,
+                    dateTime
+                ).collect {
+                    _generalConnectRes.value = it
+                }
             }
         }
     }
@@ -72,16 +86,19 @@ class GroupHikeDetailViewModel @Inject constructor(
      * and notifies the view layer of the result.
      * @throws IllegalStateException if the route has not loaded yet
      */
-    fun addToMyMap() {
-        if (checkAndHandleRouteLoad(_route.value!!)) {
-            viewModelScope.launch {
-                addToMyMapFinished = false
-                val route = _route.value!!.successResult!!
-                userRouteRepository
-                    .createUserRouteForLoggedInUser(route.routeName, route.points, route.description)
-                    .collect {
-                        _addToMyMapRes.value = it
-                    }
+    fun addToMyMap(context: Context) {
+        handleRouteLoad(_route.value!!, _addToMyMapRes)
+        viewModelScope.launch {
+            handleIllegalStateAndArgument(_addToMyMapRes) {
+                handleOffline(_addToMyMapRes, context) {
+                    addToMyMapFinished = false
+                    val route = _route.value!!.successResult!!
+                    userRouteRepository
+                        .createUserRouteForLoggedInUser(route.routeName, route.points, route.description)
+                        .collect {
+                            _addToMyMapRes.value = it
+                        }
+                }
             }
         }
     }

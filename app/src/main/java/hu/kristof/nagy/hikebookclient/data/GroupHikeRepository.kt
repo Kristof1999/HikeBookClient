@@ -3,10 +3,7 @@ package hu.kristof.nagy.hikebookclient.data
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.di.Service
-import hu.kristof.nagy.hikebookclient.model.DateTime
-import hu.kristof.nagy.hikebookclient.model.GroupHikeCreateHelper
-import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.model.*
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
@@ -62,11 +59,13 @@ class GroupHikeRepository @Inject constructor(
         groupHikeName: String,
         isConnectedPage: Boolean,
         dateTime: DateTime
-    ): Flow<ServerResponseResult<Boolean>> {
+    ): Flow<ResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            service.generalGroupHikeConnect(groupHikeName, userName!!, isConnectedPage, dateTime)
+            ResponseResult.from(
+                service.generalGroupHikeConnect(groupHikeName, userName!!, isConnectedPage, dateTime)
+            )
         }
     }
 }

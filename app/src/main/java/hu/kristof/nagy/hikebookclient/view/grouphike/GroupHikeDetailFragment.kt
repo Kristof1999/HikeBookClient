@@ -38,23 +38,25 @@ class GroupHikeDetailFragment : MapFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val viewModel: GroupHikeDetailViewModel by viewModels()
+        val args: GroupHikeDetailFragmentArgs by navArgs()
+
         val binding = FragmentGroupHikeDetailBinding.inflate(layoutInflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                context = requireContext()
+                groupHikeName = args.groupHikeName
+                isConnectedPage = args.isConnectedPage
+                dateTime = args.dateTime
+                this.viewModel = viewModel
+                executePendingBindings()
             }
-
-        val viewModel: GroupHikeDetailViewModel by viewModels()
 
         setupObservers(viewModel)
 
         initMap(binding)
 
-        val args: GroupHikeDetailFragmentArgs by navArgs()
         adaptView(args, binding)
-
-        setupGeneralConnect(viewModel, args, binding)
-
-        setupAddToMyMap(viewModel, binding)
 
         setupLoad(viewModel, args, binding)
 
@@ -143,31 +145,6 @@ class GroupHikeDetailFragment : MapFragment() {
         }.let { polyline ->
             map.overlays.add(polyline)
             map.setMapCenterOnPolylineCenter(polyline)
-        }
-    }
-
-    private fun setupAddToMyMap(
-        viewModel: GroupHikeDetailViewModel,
-        binding: FragmentGroupHikeDetailBinding
-    ) {
-        binding.groupHikeDetailAddToMyMapButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                catchAndShowIllegalStateAndArgument(requireContext()) {
-                    viewModel.addToMyMap()
-                }
-            }
-        }
-    }
-
-    private fun setupGeneralConnect(
-        viewModel: GroupHikeDetailViewModel,
-        args: GroupHikeDetailFragmentArgs,
-        binding: FragmentGroupHikeDetailBinding
-    ) {
-        binding.groupHikeDetailGeneralConnectButton.setOnClickListener {
-            handleOffline(requireContext()) {
-                viewModel.generalConnect(args.groupHikeName, args.isConnectedPage, args.dateTime)
-            }
         }
     }
 

@@ -4,7 +4,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <variable
+            name="context"
+            type="android.content.Context" />
+        <variable
+            name="groupHikeName"
+            type="String" />
+        <variable
+            name="isConnectedPage"
+            type="Boolean" />
+        <variable
+            name="dateTime"
+            type="hu.kristof.nagy.hikebookclient.model.DateTime" />
+        <variable
+            name="viewModel"
+            type="hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeDetailViewModel" />
     </data>
 
     <androidx.appcompat.widget.LinearLayoutCompat
@@ -54,7 +68,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp"
             android:text="Button"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:onClick="@{() -> viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime, context)}" />
 
         <Button
             android:id="@+id/groupHikeDetailAddToMyMapButton"
@@ -63,7 +78,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp"
             android:text="@string/add_to_my_map_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:onClick="@{() -> viewModel.addToMyMap(context)}" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
