@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
@@ -65,12 +66,14 @@ class UserRouteRepository @Inject constructor(
         routeName: String,
         points: List<Point>,
         hikeDescription: String
-    ): Flow<ServerResponseResult<Boolean>> {
+    ): Flow<ResponseResult<Boolean>> {
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
             val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
-            service.createUserRoute(userName, userRoute.routeName, userRoute)
+            ResponseResult.from(
+                service.createUserRoute(userName, userRoute.routeName, userRoute)
+            )
         }
     }
 

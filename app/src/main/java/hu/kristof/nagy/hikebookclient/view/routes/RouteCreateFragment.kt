@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRouteCreateBinding
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
@@ -99,7 +99,7 @@ class RouteCreateFragment : RouteFragment() {
     }
 
     private fun onRouteCreateResult(
-        res: ServerResponseResult<Boolean>,
+        res: ResponseResult<Boolean>,
         args: RouteCreateFragmentArgs
     ) {
         handleResult(context, res) {

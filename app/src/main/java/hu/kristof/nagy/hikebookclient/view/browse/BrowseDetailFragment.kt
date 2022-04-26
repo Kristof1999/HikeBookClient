@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -13,7 +14,6 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
@@ -36,21 +36,23 @@ class BrowseDetailFragment : MapFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val browseDetailViewModel: BrowseDetailViewModel by viewModels()
+        val args: BrowseDetailFragmentArgs by navArgs()
+
         val binding = FragmentBrowseDetailBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                viewModel = browseDetailViewModel
+                context = requireContext()
+                routeName = args.routeName
+                executePendingBindings()
             }
 
-        val viewModel: BrowseDetailViewModel by viewModels()
-        val args: BrowseDetailFragmentArgs by navArgs()
-
-        setupObservers(viewModel, args, binding)
+        setupObservers(browseDetailViewModel, args, binding)
 
         initMap(binding)
 
-        setupLoad(viewModel, args)
-
-        setupAddToMyMap(viewModel, args, binding)
+        setupLoad(browseDetailViewModel, args)
 
         setHasOptionsMenu(true)
         return binding.root
@@ -61,24 +63,19 @@ class BrowseDetailFragment : MapFragment() {
         args: BrowseDetailFragmentArgs,
         binding: FragmentBrowseDetailBinding
     ) {
-        viewModel.addRes.observe(viewLifecycleOwner) {
-            onAddResult(it)
+        viewModel.addRes.observe(viewLifecycleOwner) { res ->
+            handleResult(context, res) {
+                Toast.makeText(context, "A hozzáadás sikeres!", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(
+                    R.id.action_browseDetailFragment_to_browseListFragment
+                )
+            }
         }
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->
                 onPointsLoad(route.points)
                 adaptView(args, route, binding)
             }
-        }
-    }
-
-    private fun setupAddToMyMap(
-        viewModel: BrowseDetailViewModel,
-        args: BrowseDetailFragmentArgs,
-        binding: FragmentBrowseDetailBinding
-    ) {
-        binding.browseDetailAddToMyMapButton.setOnClickListener {
-            onAddToMyMap(viewModel, args)
         }
     }
 
@@ -102,23 +99,6 @@ class BrowseDetailFragment : MapFragment() {
                 R.string.browse_hike_detail_description,
                 args.userName, args.routeName, route.description
             )
-    }
-
-    private fun onAddResult(res: ServerResponseResult<Boolean>) {
-        handleResult(context, res) {
-            findNavController().navigate(
-                R.id.action_browseDetailFragment_to_browseListFragment
-            )
-        }
-    }
-
-    private fun onAddToMyMap(
-        viewModel: BrowseDetailViewModel,
-        args: BrowseDetailFragmentArgs
-    ) = catchAndShowIllegalStateAndArgument(requireContext()) {
-        handleOffline(requireContext()) {
-            viewModel.addToMyMap(args.routeName)
-        }
     }
 
     private fun onPointsLoad(points: List<Point>) = Polyline().apply {

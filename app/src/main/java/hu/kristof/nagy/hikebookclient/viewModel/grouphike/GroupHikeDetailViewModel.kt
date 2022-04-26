@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.DateTime
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
@@ -37,8 +38,8 @@ class GroupHikeDetailViewModel @Inject constructor(
     val generalConnectRes: LiveData<ServerResponseResult<Boolean>>
         get() = _generalConnectRes
 
-    private val _addToMyMapRes = MutableLiveData<ServerResponseResult<Boolean>>()
-    val addToMyMapRes: LiveData<ServerResponseResult<Boolean>>
+    private val _addToMyMapRes = MutableLiveData<ResponseResult<Boolean>>()
+    val addToMyMapRes: LiveData<ResponseResult<Boolean>>
         get() = _addToMyMapRes
 
     var addToMyMapFinished = true

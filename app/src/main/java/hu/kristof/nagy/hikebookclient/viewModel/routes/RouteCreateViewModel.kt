@@ -26,6 +26,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.view.routes.RouteCreateFragmentArgs
@@ -42,8 +43,8 @@ class RouteCreateViewModel @Inject constructor(
     private val groupRouteRepository: GroupRouteRepository
     ) : RouteViewModel() {
 
-    private val _routeCreateRes = MutableLiveData<ServerResponseResult<Boolean>>()
-    val routeCreateRes: LiveData<ServerResponseResult<Boolean>>
+    private val _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
+    val routeCreateRes: LiveData<ResponseResult<Boolean>>
         get() = _routeCreateRes
 
     fun onRouteCreate(

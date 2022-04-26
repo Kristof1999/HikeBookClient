@@ -20,6 +20,19 @@ fun <P : Route> checkAndHandleRouteLoad(routeRes: ServerResponseResult<P>): Bool
     }
 }
 
+fun <P : Route, T> handleRouteLoad(
+    routeRes: ServerResponseResult<P>,
+    data: MutableLiveData<ResponseResult<T>>
+) {
+    if (routeRes.isSuccess) {
+        if (routeRes.successResult == null) {
+            data.value = ResponseResult.Error("Az útvonal még nem töltődött be! Kérem, várjon.")
+        }
+    } else {
+        data.value = ResponseResult.Error("Valami hiba történt.")
+    }
+}
+
 /**
  * Checks if the route has been loaded.
  * @throws IllegalStateException if the route has not been loaded
