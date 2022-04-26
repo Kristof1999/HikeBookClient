@@ -4,7 +4,7 @@ import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import kotlinx.coroutines.flow.Flow
 
@@ -23,5 +23,5 @@ interface IUserRouteRepository {
         points: List<Point>,
         hikeDescription: String
     ): Flow<ResponseResult<Boolean>>
-    suspend fun editUserRoute(editedUserRoute: EditedUserRoute): ResponseResult<Boolean>
+    suspend fun editUserRoute(editedUserRoute: EditedRoute.EditedUserRoute): ResponseResult<Boolean>
 }

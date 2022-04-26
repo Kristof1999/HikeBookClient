@@ -1,7 +1,7 @@
 package hu.kristof.nagy.hikebookclient.data.network.routes
 
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import retrofit2.http.*
 
@@ -34,6 +34,6 @@ interface GroupRouteService {
     suspend fun editGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") oldRouteName: String,
-        @Body editedGroupRoute: EditedGroupRoute
+        @Body editedGroupRoute: EditedRoute.EditedGroupRoute
     ): ServerResponseResult<Boolean>
 }

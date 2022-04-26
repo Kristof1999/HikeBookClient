@@ -2,7 +2,7 @@ package hu.kristof.nagy.hikebookclient.data.network.routes
 
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import retrofit2.http.*
 
@@ -35,7 +35,7 @@ interface UserRouteService {
     suspend fun editUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") oldRouteName: String,
-        @Body editedUserRoute: EditedUserRoute
+        @Body editedUserRoute: EditedRoute.EditedUserRoute
     ): ServerResponseResult<Boolean>
 
     @GET("users/routes/browse/{userName}")

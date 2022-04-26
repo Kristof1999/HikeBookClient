@@ -7,7 +7,7 @@ import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
@@ -79,7 +79,7 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
-    override suspend fun editUserRoute(editedUserRoute: EditedUserRoute): ResponseResult<Boolean> {
+    override suspend fun editUserRoute(editedUserRoute: EditedRoute.EditedUserRoute): ResponseResult<Boolean> {
         return ResponseResult.from(
             service.editUserRoute(
                 editedUserRoute.newUserRoute.userName,

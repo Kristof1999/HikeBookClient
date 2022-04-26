@@ -4,7 +4,7 @@ import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class GroupRouteRepository  @Inject constructor(
     }
 
     suspend fun editGroupRoute(
-        editedGroupRoute: EditedGroupRoute
+        editedGroupRoute: EditedRoute.EditedGroupRoute
     ): ResponseResult<Boolean> {
         return ResponseResult.from(
             service.editGroupRoute(

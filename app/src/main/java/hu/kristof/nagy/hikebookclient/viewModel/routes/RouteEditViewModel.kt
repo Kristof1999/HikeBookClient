@@ -8,8 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.*
-import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
-import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
@@ -105,7 +104,7 @@ class RouteEditViewModel @Inject constructor(
         points: List<Point>
     ) {
         val newRoute = Route.UserRoute(oldUserRoute.userName, routeName, points, hikeDescription)
-        val editedUserRoute = EditedUserRoute(newRoute, oldUserRoute)
+        val editedUserRoute = EditedRoute.EditedUserRoute(newRoute, oldUserRoute)
 
         _routeEditRes.value = userRouteRepository.editUserRoute(editedUserRoute)
     }
@@ -117,7 +116,7 @@ class RouteEditViewModel @Inject constructor(
         points: List<Point>
     ) {
         val newRoute = Route.GroupRoute(oldGroupRoute.groupName, routeName, points, hikeDescription)
-        val editedGroupRoute = EditedGroupRoute(newRoute, oldGroupRoute)
+        val editedGroupRoute = EditedRoute.EditedGroupRoute(newRoute, oldGroupRoute)
 
         _routeEditRes.value = groupRouteRepository.editGroupRoute(editedGroupRoute)
     }
