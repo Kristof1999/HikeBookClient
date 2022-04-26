@@ -34,9 +34,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentRegistrationBinding
-import hu.kristof.nagy.hikebookclient.model.User
-import hu.kristof.nagy.hikebookclient.util.catchAndShowIllegalStateAndArgument
-import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.viewModel.authentication.RegistrationViewModel
 
 /**
@@ -48,16 +45,17 @@ class RegistrationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val registrationViewModel : RegistrationViewModel by viewModels()
+
         val binding = FragmentRegistrationBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
+                context = requireContext()
+                viewModel = registrationViewModel
+                executePendingBindings()
             }
 
-        val registrationViewModel : RegistrationViewModel by viewModels()
-
         setupObserver(registrationViewModel)
-
-        setupRegistration(registrationViewModel, binding)
 
         return binding.root
     }
@@ -66,28 +64,6 @@ class RegistrationFragment : Fragment() {
         registrationViewModel.registrationRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { registrationRes ->
                 onRegistrationRes(registrationRes)
-            }
-        }
-    }
-
-    private fun setupRegistration(
-        registrationViewModel: RegistrationViewModel,
-        binding: FragmentRegistrationBinding
-    ) {
-        binding.registerButton.setOnClickListener {
-            onRegister(binding, registrationViewModel)
-        }
-    }
-
-    private fun onRegister(
-        binding: FragmentRegistrationBinding,
-        registrationViewModel: RegistrationViewModel
-    ) {
-        val name = binding.registerNameEditText.text.toString()
-        val pswd = binding.registerPasswordEditText.text.toString()
-        catchAndShowIllegalStateAndArgument(requireContext()) {
-            handleOffline(requireContext()) {
-                registrationViewModel.onRegister(User(name, pswd))
             }
         }
     }

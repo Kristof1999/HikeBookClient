@@ -20,14 +20,18 @@
 
 package hu.kristof.nagy.hikebookclient.viewModel.authentication
 
+import android.content.Context
+import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.IAuthRepository
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.User
+import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
+import hu.kristof.nagy.hikebookclient.util.handleOffline
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,9 +42,12 @@ import javax.inject.Inject
 class RegistrationViewModel @Inject constructor(
     private val repository: IAuthRepository
     ) : ViewModel() {
-    private val _registrationRes = MutableLiveData<ServerResponseResult<Boolean>>()
-    val registrationRes : LiveData<ServerResponseResult<Boolean>>
+    private val _registrationRes = MutableLiveData<ResponseResult<Boolean>>()
+    val registrationRes : LiveData<ResponseResult<Boolean>>
         get() = _registrationRes
+
+    private var name = ""
+    private var password = ""
 
     /**
      * Calls the data layer to register the user,
@@ -48,11 +55,24 @@ class RegistrationViewModel @Inject constructor(
      * and notifies the view layer of the result.
      * @param user the user to register
      */
-    fun onRegister(user: User) {
-        viewModelScope.launch{
-            _registrationRes.value = repository.register(
-                user.apply { encryptPassword() }
-            )
+    fun onRegister(context: Context) {
+        viewModelScope.launch {
+            handleIllegalStateAndArgument(_registrationRes) {
+                handleOffline(_registrationRes, context) {
+                    val user = User(name, password)
+                    _registrationRes.value = repository.register(
+                        user.apply { encryptPassword() }
+                    )
+                }
+            }
         }
+    }
+
+    fun afterNameChanged(text: Editable) {
+        name = text.toString()
+    }
+
+    fun afterPasswordChanged(text: Editable) {
+        password = text.toString()
     }
 }
