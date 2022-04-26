@@ -10,7 +10,7 @@ import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import kotlinx.coroutines.flow.collect
@@ -28,8 +28,8 @@ class MyMapDetailViewModel @Inject constructor(
     private val userRepository: IUserRouteRepository,
     private val groupHikeRepository: GroupHikeRepository
 ) : ViewModel() {
-    private val _route = MutableLiveData<ServerResponseResult<UserRoute>>()
-    val route: LiveData<ServerResponseResult<UserRoute>>
+    private val _route = MutableLiveData<ServerResponseResult<Route.UserRoute>>()
+    val route: LiveData<ServerResponseResult<Route.UserRoute>>
         get() = _route
 
     var deleteFinished = true

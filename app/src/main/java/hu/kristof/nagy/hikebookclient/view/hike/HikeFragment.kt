@@ -29,7 +29,6 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentHikeBinding
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -144,7 +143,7 @@ class HikeFragment : MapFragment() {
     private fun myGeofence(
         fusedLocationProviderClient: FusedLocationProviderClient,
         myLocationMarker: Marker,
-        route: UserRoute,
+        route: Route.UserRoute,
         args: HikeFragmentArgs,
         viewModel: HikeViewModel,
         binding: FragmentHikeBinding
@@ -197,7 +196,7 @@ class HikeFragment : MapFragment() {
     private fun onFinish(
         fusedLocationProviderClient: FusedLocationProviderClient,
         myLocationMarker: Marker,
-        route: UserRoute,
+        route: Route.UserRoute,
         startTime: Long,
         viewModel: HikeViewModel
     ): Boolean {

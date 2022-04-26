@@ -19,7 +19,7 @@ import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
-import hu.kristof.nagy.hikebookclient.view.routes.TextDialogFragment
+import hu.kristof.nagy.hikebookclient.view.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsViewModel
 
 /**

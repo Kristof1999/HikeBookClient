@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LifecycleOwner
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.util.setSpinnerAdapter
+import hu.kristof.nagy.hikebookclient.view.TextDialogFragment
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 

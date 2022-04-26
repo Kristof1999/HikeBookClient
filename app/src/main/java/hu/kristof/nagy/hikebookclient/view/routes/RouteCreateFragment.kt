@@ -51,7 +51,7 @@ class RouteCreateFragment : RouteFragment() {
                 context = requireContext()
                 groupName = args.groupName
                 routeType = args.routeType
-                this.viewModel = viewModel
+                this.viewModel = this@RouteCreateFragment.viewModel
                 executePendingBindings()
             }
 

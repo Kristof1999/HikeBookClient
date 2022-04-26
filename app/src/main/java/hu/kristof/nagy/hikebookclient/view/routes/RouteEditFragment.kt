@@ -52,7 +52,7 @@ class RouteEditFragment : RouteFragment() {
             .apply {
                 lifecycleOwner = viewLifecycleOwner
                 context = requireContext()
-                this.viewModel = viewModel
+                this.viewModel = this@RouteEditFragment.viewModel
                 executePendingBindings()
             }
 

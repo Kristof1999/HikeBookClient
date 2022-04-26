@@ -2,7 +2,7 @@ package hu.kristof.nagy.hikebookclient.data.network.routes
 
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
-import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import retrofit2.http.*
 
 interface GroupRouteService {
@@ -10,19 +10,19 @@ interface GroupRouteService {
     suspend fun createGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") routeName: String,
-        @Body groupRoute: GroupRoute
+        @Body groupRoute: Route.GroupRoute
     ): ServerResponseResult<Boolean>
 
     @GET("groups/routes/{groupName}")
     suspend fun loadGroupRoutes(
         @Path("groupName") groupName: String
-    ): ServerResponseResult<List<GroupRoute>>
+    ): ServerResponseResult<List<Route.GroupRoute>>
 
     @GET("groups/routes/{groupName}/{routeName}")
     suspend fun loadGroupRoute(
         @Path("groupName") groupName: String,
         @Path("routeName") routeName: String
-    ): ServerResponseResult<GroupRoute>
+    ): ServerResponseResult<Route.GroupRoute>
 
     @DELETE("groups/routes/{groupName}/{routeName}")
     suspend fun deleteGroupRoute(

@@ -1,7 +1,7 @@
 // based on:
 // https://developer.android.com/guide/topics/ui/dialogs
 
-package hu.kristof.nagy.hikebookclient.view.routes
+package hu.kristof.nagy.hikebookclient.view
 
 import android.app.Dialog
 import android.os.Bundle

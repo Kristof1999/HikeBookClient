@@ -14,7 +14,7 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -91,7 +91,7 @@ class BrowseDetailFragment : MapFragment() {
 
     private fun adaptView(
         args: BrowseDetailFragmentArgs,
-        route: UserRoute,
+        route: Route.UserRoute,
         binding: FragmentBrowseDetailBinding
     ) {
         binding.browseDetailHikeDescriptionTv.text =

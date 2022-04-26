@@ -16,7 +16,6 @@ import org.osmdroid.views.overlay.Overlay
  * a marker on the map.
  */
 open class RouteViewModel : ViewModel() {
-    // TODO: make these private, and have a public refresh(Overlays) function
     var myMarkers = mutableListOf<MyMarker>()
     var myPolylines = mutableListOf<MyPolyline>()
 

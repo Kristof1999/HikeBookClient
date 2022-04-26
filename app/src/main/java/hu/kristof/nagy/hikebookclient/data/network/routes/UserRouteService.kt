@@ -3,7 +3,7 @@ package hu.kristof.nagy.hikebookclient.data.network.routes
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
-import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import retrofit2.http.*
 
 interface UserRouteService {
@@ -11,19 +11,19 @@ interface UserRouteService {
     suspend fun createUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String,
-        @Body userRoute: UserRoute
+        @Body userRoute: Route.UserRoute
     ): ServerResponseResult<Boolean>
 
     @GET("users/routes/{userName}")
     suspend fun loadUserRoutes(
         @Path("userName") userName: String
-    ): ServerResponseResult<List<UserRoute>>
+    ): ServerResponseResult<List<Route.UserRoute>>
 
     @GET("users/routes/{userName}/{routeName}")
     suspend fun loadUserRoute(
         @Path("userName") userName: String,
         @Path("routeName") routeName: String
-    ): ServerResponseResult<UserRoute>
+    ): ServerResponseResult<Route.UserRoute>
 
     @DELETE("users/routes/{userName}/{routeName}")
     suspend fun deleteUserRoute(

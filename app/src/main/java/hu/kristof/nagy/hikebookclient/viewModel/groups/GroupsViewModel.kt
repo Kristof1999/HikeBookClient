@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.GroupsRepository
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.GroupRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,7 +34,7 @@ class GroupsViewModel @Inject constructor(
      * @throws IllegalArgumentException if the group name is not ok
      */
     fun createGroup(name: String) {
-        GroupRoute.checkGroupName(name)
+        Route.GroupRoute.checkGroupName(name)
 
         createFinished = false
         viewModelScope.launch {

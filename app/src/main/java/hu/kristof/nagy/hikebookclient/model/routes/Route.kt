@@ -21,18 +21,60 @@
 package hu.kristof.nagy.hikebookclient.model.routes
 
 import hu.kristof.nagy.hikebookclient.model.Point
+import hu.kristof.nagy.hikebookclient.model.User
 import hu.kristof.nagy.hikebookclient.util.Constants
 import org.osmdroid.views.overlay.Polyline
 
 /**
  * A Class representing a route: points with a name and a description.
  */
-// use sealed class instead
-open class Route(
+sealed class Route(
     open val routeName: String,
     open val points: List<Point>,
     open val description: String
     ) {
+
+    /**
+     * A Route representing a route that belongs to an user.
+     */
+    data class UserRoute(
+        val userName: String,
+        override val routeName: String,
+        override val points: List<Point>,
+        override val description: String
+    ) : Route(routeName, points, description) {
+        init {
+            User.checkName(userName)
+            checkRouteName(routeName)
+            checkPointSize(points)
+        }
+    }
+
+    /**
+     * A Route representing a route that belongs to a group.
+     */
+    data class GroupRoute(
+        val groupName: String,
+        override val routeName: String,
+        override val points: List<Point>,
+        override val description: String
+    ) : Route(routeName, points, description) {
+        init {
+            checkGroupName(groupName)
+            checkRouteName(routeName)
+            checkPointSize(points)
+        }
+
+        companion object {
+            fun checkGroupName(groupName: String) {
+                if (groupName.isEmpty())
+                    throw IllegalArgumentException("A név nem lehet üres.")
+                if (groupName.contains("/"))
+                    throw IllegalArgumentException("A név nem tartalmazhat / jelet.")
+            }
+        }
+    }
+
 
     init {
         routeName?.let { checkRouteName(it) }

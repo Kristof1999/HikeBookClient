@@ -8,7 +8,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.*
-import hu.kristof.nagy.hikebookclient.model.routes.*
+import hu.kristof.nagy.hikebookclient.model.routes.EditedGroupRoute
+import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleRouteLoad
@@ -82,12 +84,13 @@ class RouteEditViewModel @Inject constructor(
                             Point.from(it)
                         }
 
-                        // TODO: test if routeName has the value of the name of the route under editing
-                        // TODO: refactor after using sealed class for route
                         when (oldRoute) {
-                            is UserRoute -> onUserRouteEdit(oldRoute, routeName, hikeDescription, points)
-                            is GroupRoute -> onGroupRouteEdit(oldRoute, routeName, hikeDescription, points)
-                            else -> throw IllegalArgumentException("Unkown route type: $oldRoute")
+                            is Route.UserRoute -> onUserRouteEdit(
+                                oldRoute, routeName, hikeDescription, points
+                            )
+                            is Route.GroupRoute -> onGroupRouteEdit(
+                                oldRoute, routeName, hikeDescription, points
+                            )
                         }
                     }
                 }
@@ -96,24 +99,24 @@ class RouteEditViewModel @Inject constructor(
     }
 
     private suspend fun onUserRouteEdit(
-        oldUserRoute: UserRoute,
+        oldUserRoute: Route.UserRoute,
         routeName: String,
         hikeDescription: String,
         points: List<Point>
     ) {
-        val newRoute = UserRoute(oldUserRoute.userName, routeName, points, hikeDescription)
+        val newRoute = Route.UserRoute(oldUserRoute.userName, routeName, points, hikeDescription)
         val editedUserRoute = EditedUserRoute(newRoute, oldUserRoute)
 
         _routeEditRes.value = userRouteRepository.editUserRoute(editedUserRoute)
     }
 
     private suspend fun onGroupRouteEdit(
-        oldGroupRoute: GroupRoute,
+        oldGroupRoute: Route.GroupRoute,
         routeName: String,
         hikeDescription: String,
         points: List<Point>
     ) {
-        val newRoute = GroupRoute(oldGroupRoute.groupName, routeName, points, hikeDescription)
+        val newRoute = Route.GroupRoute(oldGroupRoute.groupName, routeName, points, hikeDescription)
         val editedGroupRoute = EditedGroupRoute(newRoute, oldGroupRoute)
 
         _routeEditRes.value = groupRouteRepository.editGroupRoute(editedGroupRoute)

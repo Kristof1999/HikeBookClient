@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
-import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleRouteLoad
@@ -25,8 +25,8 @@ import javax.inject.Inject
 class BrowseDetailViewModel @Inject constructor(
     private val userRouteRepository: UserRouteRepository
     ) : ViewModel() {
-    private val _route = MutableLiveData<ServerResponseResult<UserRoute>>()
-    val route: LiveData<ServerResponseResult<UserRoute>>
+    private val _route = MutableLiveData<ServerResponseResult<Route.UserRoute>>()
+    val route: LiveData<ServerResponseResult<Route.UserRoute>>
         get() = _route
 
     private val _addRes = MutableLiveData<ResponseResult<Boolean>>()

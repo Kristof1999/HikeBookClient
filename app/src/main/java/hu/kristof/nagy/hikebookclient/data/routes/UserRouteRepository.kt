@@ -8,7 +8,7 @@ import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedUserRoute
-import hu.kristof.nagy.hikebookclient.model.routes.UserRoute
+import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,7 +18,7 @@ class UserRouteRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
     ) : IUserRouteRepository {
-    override suspend fun loadUserRoutesOfLoggedInUser(): Flow<ServerResponseResult<List<UserRoute>>> {
+    override suspend fun loadUserRoutesOfLoggedInUser(): Flow<ServerResponseResult<List<Route.UserRoute>>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -28,7 +28,7 @@ class UserRouteRepository @Inject constructor(
 
     override suspend fun loadUserRouteOfLoggedInUser(
         routeName: String
-    ): Flow<ServerResponseResult<UserRoute>> {
+    ): Flow<ServerResponseResult<Route.UserRoute>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -48,7 +48,7 @@ class UserRouteRepository @Inject constructor(
     suspend fun loadUserRouteOfUser(
         userName: String,
         routeName: String
-    ): ServerResponseResult<UserRoute> {
+    ): ServerResponseResult<Route.UserRoute> {
         return service.loadUserRoute(userName, routeName)
     }
 
@@ -72,7 +72,7 @@ class UserRouteRepository @Inject constructor(
         return dataStore.data.map { preferences ->
             preferences[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
-            val userRoute = UserRoute(userName!!, routeName, points, hikeDescription)
+            val userRoute = Route.UserRoute(userName!!, routeName, points, hikeDescription)
             ResponseResult.from(
                 service.createUserRoute(userName, userRoute.routeName, userRoute)
             )
