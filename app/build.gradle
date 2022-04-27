@@ -67,7 +67,7 @@ android {
     defaultConfig {
         applicationId "hu.kristof.nagy.hikebookclient"
         minSdk 21
-        targetSdk 32
+        targetSdk 30
         versionCode 1
         versionName "1.0"
 
@@ -108,6 +108,7 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
     }
     buildFeatures {
         dataBinding true

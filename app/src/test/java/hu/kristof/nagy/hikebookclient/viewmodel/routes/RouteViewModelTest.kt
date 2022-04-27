@@ -1,9 +1,9 @@
 package hu.kristof.nagy.hikebookclient.viewmodel.routes
 
+import android.content.Context
 import android.content.res.Resources
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import hu.kristof.nagy.hikebookclient.HikeBookApp
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.MyPolyline
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
@@ -34,7 +34,7 @@ class RouteViewModelTest {
     internal fun setUp() {
         viewModel = RouteViewModel()
         overlays = ArrayList()
-        resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
+        resources = ApplicationProvider.getApplicationContext<Context>().resources
     }
 
     /**
