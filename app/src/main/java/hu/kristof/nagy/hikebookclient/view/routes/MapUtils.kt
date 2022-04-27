@@ -2,8 +2,6 @@ package hu.kristof.nagy.hikebookclient.view.routes
 
 import android.content.Context
 import androidx.appcompat.widget.SwitchCompat
-import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.util.GeoPoint
@@ -44,15 +42,7 @@ private fun onSingleTapViewHandler(
         return true
 
     val newMarker = Marker(map)
-    val markerIcon =
-        if (viewModel.markerType == MarkerType.TEXT &&
-            viewModel.markerTitle.isEmpty()) {
-            getMarkerIcon(MarkerType.NEW, context.resources)
-        } else {
-            getMarkerIcon(viewModel.markerType, context.resources)
-        }
-    val setMarkerIcon = getMarkerIcon(MarkerType.SET, context.resources)
-    viewModel.onSingleTap(newMarker, p, markerIcon, setMarkerIcon, map.overlays)
+    viewModel.onSingleTap(newMarker, p, context.resources, map.overlays)
     newMarker.setListeners(context, map, deleteSwitch, viewModel)
     map.invalidate()
     return true

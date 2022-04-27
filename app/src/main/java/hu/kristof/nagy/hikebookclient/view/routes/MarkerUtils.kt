@@ -5,8 +5,6 @@ import android.graphics.drawable.Drawable
 import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -70,8 +68,7 @@ private fun onDeleteViewHandler(
     mapView: MapView,
     viewModel: RouteViewModel
 ) {
-    val markerIcon = getMarkerIcon(MarkerType.NEW, context.resources)
-    if (viewModel.onDelete(markerIcon, marker)) {
+    if (viewModel.onDelete(context.resources, marker)) {
         marker.remove(mapView)
         mapView.invalidate()
     } else {

@@ -1,10 +1,11 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
-import android.graphics.drawable.Drawable
+import android.content.res.Resources
 import android.text.Editable
 import androidx.lifecycle.ViewModel
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.MyPolyline
+import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
@@ -31,8 +32,7 @@ open class RouteViewModel : ViewModel() {
     fun onSingleTap(
         newMarker: Marker,
         p: GeoPoint?,
-        markerIcon: Drawable,
-        setMarkerIcon: Drawable,
+        resources: Resources,
         overlays: MutableList<Overlay>
     ) {
        val handler = when (markerType) {
@@ -44,7 +44,7 @@ open class RouteViewModel : ViewModel() {
 
        handler.handle(
            newMarker, markerType, markerTitle,
-           p, markerIcon, setMarkerIcon, overlays,
+           p, resources, overlays,
            myMarkers, myPolylines
        )
 
@@ -128,14 +128,14 @@ open class RouteViewModel : ViewModel() {
      * @return true if marker was the last marker in markers
      */
     fun onDelete(
-        markerIcon: Drawable,
+        resources: Resources,
         marker: Marker
     ): Boolean {
         if (myMarkers.last().marker == marker) {
             myMarkers.removeLast()
             if (myMarkers.isNotEmpty()) {
                 if (myMarkers.last().type == MarkerType.SET) {
-                    myMarkers.last().marker.icon = markerIcon
+                    myMarkers.last().marker.icon = getMarkerIcon(MarkerType.NEW, resources)
                     myMarkers[myMarkers.size - 1] = MyMarker(
                         myMarkers.last().marker, MarkerType.NEW, myMarkers.last().title
                     )

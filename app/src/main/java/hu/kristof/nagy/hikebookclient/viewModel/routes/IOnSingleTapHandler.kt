@@ -1,6 +1,6 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
-import android.graphics.drawable.Drawable
+import android.content.res.Resources
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.MyPolyline
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
@@ -14,8 +14,7 @@ interface IOnSingleTapHandler {
         newMarkerType: MarkerType,
         newMarkerTitle: String,
         p: GeoPoint?,
-        markerIcon: Drawable,
-        setMarkerIcon: Drawable,
+        resources: Resources,
         overlays: MutableList<Overlay>,
         markers: MutableList<MyMarker>,
         myPolylines: MutableList<MyPolyline>

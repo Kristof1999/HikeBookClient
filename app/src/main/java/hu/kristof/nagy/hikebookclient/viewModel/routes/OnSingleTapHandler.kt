@@ -1,8 +1,9 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
-import android.graphics.drawable.Drawable
+import android.content.res.Resources
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.MyPolyline
+import hu.kristof.nagy.hikebookclient.util.getMarkerIcon
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.view.routes.customize
 import org.osmdroid.util.GeoPoint
@@ -24,13 +25,13 @@ class OnSingleTapHandler : IOnSingleTapHandler {
         newMarkerType: MarkerType,
         newMarkerTitle: String,
         p: GeoPoint?,
-        markerIcon: Drawable,
-        setMarkerIcon: Drawable,
+        resources: Resources,
         overlays: MutableList<Overlay>,
         markers: MutableList<MyMarker>,
         myPolylines: MutableList<MyPolyline>
     ) {
         // add new marker
+        val markerIcon = getMarkerIcon(newMarkerType, resources)
         newMarker.customize(newMarkerTitle, markerIcon, p!!)
         MyMarker(newMarker, newMarkerType, newMarkerTitle).let { myMarker ->
             markers.add(myMarker)
@@ -42,7 +43,7 @@ class OnSingleTapHandler : IOnSingleTapHandler {
             val prevMarker = markers[markers.size - 2].marker
             val prevMarkerType = markers[markers.size - 2].type
             if (prevMarkerType == MarkerType.NEW) {
-                prevMarker.icon = setMarkerIcon
+                prevMarker.icon = getMarkerIcon(MarkerType.SET, resources)
                 markers[markers.size - 2] = MyMarker(prevMarker, MarkerType.SET, "")
             }
 

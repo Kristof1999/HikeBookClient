@@ -1,6 +1,6 @@
 package hu.kristof.nagy.hikebookclient.viewModel.routes
 
-import android.graphics.drawable.Drawable
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hu.kristof.nagy.hikebookclient.model.MyMarker
@@ -18,8 +18,7 @@ class OnSingleTapHandlerTextMarkerTypeDecorator(
         newMarkerType: MarkerType,
         newMarkerTitle: String,
         p: GeoPoint?,
-        markerIcon: Drawable,
-        setMarkerIcon: Drawable,
+        resources: Resources,
         overlays: MutableList<Overlay>,
         markers: MutableList<MyMarker>,
         myPolylines: MutableList<MyPolyline>
@@ -32,7 +31,7 @@ class OnSingleTapHandlerTextMarkerTypeDecorator(
 
         super.handle(
             newMarker, markerType, newMarkerTitle,
-            p, markerIcon, setMarkerIcon,
+            p, resources,
             overlays, markers, myPolylines
         )
 

@@ -90,6 +90,8 @@ class RouteEditViewModel @Inject constructor(
                             is Route.GroupRoute -> onGroupRouteEdit(
                                 oldRoute, routeName, hikeDescription, points
                             )
+                            is Route.GroupHikeRoute ->
+                                throw IllegalArgumentException("Illegal route: $oldRoute")
                         }
                     }
                 }
