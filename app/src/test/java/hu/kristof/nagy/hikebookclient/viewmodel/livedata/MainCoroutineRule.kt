@@ -7,13 +7,13 @@ import kotlinx.coroutines.test.*
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
-// copied from:
+// based on:
 // https://developer.android.com/codelabs/advanced-android-kotlin-training-testing-survey#3
 
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(val dispatcher: TestDispatcher = StandardTestDispatcher()):
+class MainCoroutineRule(val dispatcher: TestDispatcher = UnconfinedTestDispatcher()):
     TestWatcher(),
-    TestScope() {
+    CoroutineScope by TestScope(dispatcher) {
     override fun starting(description: Description?) {
         super.starting(description)
         Dispatchers.setMain(dispatcher)

@@ -23,8 +23,12 @@ class LiveDataTest {
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+
     private val groupHikeName = "groupHike"
-    private val groupHikeRoute = Route.GroupHikeRoute(groupHikeName, "routeName", listOf(
+    private val groupHikeRoute = Route.GroupHikeRoute(
+        groupHikeName, "routeName", listOf(
         Point(0.0, 0.0, MarkerType.NEW, ""),
         Point(0.0, 0.0, MarkerType.NEW, "")
     ), "")
