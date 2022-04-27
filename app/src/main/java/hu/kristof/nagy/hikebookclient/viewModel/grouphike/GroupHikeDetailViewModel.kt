@@ -29,8 +29,8 @@ class GroupHikeDetailViewModel @Inject constructor(
     private val groupHikeRepository: GroupHikeRepository,
     private val userRouteRepository: UserRouteRepository
 ) : ViewModel() {
-    private val _route = MutableLiveData<ServerResponseResult<Route>>()
-    val route: LiveData<ServerResponseResult<Route>>
+    private val _route = MutableLiveData<ServerResponseResult<Route.GroupHikeRoute>>()
+    val route: LiveData<ServerResponseResult<Route.GroupHikeRoute>>
         get() = _route
 
     private val _participants = MutableLiveData<ServerResponseResult<List<String>>>()

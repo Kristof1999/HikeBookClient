@@ -74,16 +74,18 @@ class MyMapDetailViewModel @Inject constructor(
      * @throws IllegalArgumentException if the name is not ok
      */
     fun createGroupHike(dateTime: Calendar, groupHikeName: String) {
-        if (groupHikeName.isEmpty())
-            throw IllegalArgumentException("A csoportos túra neve nem lehet üres.")
-        if (groupHikeName.contains("/"))
-            throw IllegalArgumentException("A csoportos túra név nem tartalmazhat / jelet.")
+        Route.GroupHikeRoute.checkGroupHikeName(groupHikeName)
 
         if (checkAndHandleRouteLoad(_route.value!!)) {
             viewModelScope.launch {
                 val route = _route.value!!.successResult!!
+                val groupHikeRoute = Route.GroupHikeRoute(
+                    groupHikeName, route.routeName, route.points, route.description
+                )
                 groupHikeCreationFinished = false
-                groupHikeRepository.createGroupHikeForLoggedInUser(groupHikeName, dateTime, route).collect {
+                groupHikeRepository
+                    .createGroupHikeForLoggedInUser(groupHikeName, dateTime, groupHikeRoute)
+                    .collect {
                     _groupHikeCreateRes.value = it
                 }
             }

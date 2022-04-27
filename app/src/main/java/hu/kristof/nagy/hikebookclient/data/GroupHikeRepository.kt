@@ -34,7 +34,7 @@ class GroupHikeRepository @Inject constructor(
     suspend fun createGroupHikeForLoggedInUser(
         groupHikeName: String,
         dateTime: Calendar,
-        route: Route
+        route: Route.GroupHikeRoute
     ): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
@@ -47,7 +47,7 @@ class GroupHikeRepository @Inject constructor(
         }
     }
 
-    suspend fun loadRoute(groupHikeName: String): ServerResponseResult<Route> {
+    suspend fun loadRoute(groupHikeName: String): ServerResponseResult<Route.GroupHikeRoute> {
         return service.loadGroupHikeRoute(groupHikeName)
     }
 

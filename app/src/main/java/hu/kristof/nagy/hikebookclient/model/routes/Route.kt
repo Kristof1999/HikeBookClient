@@ -75,6 +75,28 @@ sealed class Route(
         }
     }
 
+    data class GroupHikeRoute(
+        val groupHikeName: String,
+        override val routeName: String,
+        override val points: List<Point>,
+        override val description: String
+    ) : Route(routeName, points, description) {
+        init {
+            checkGroupHikeName(groupHikeName)
+            checkRouteName(routeName)
+            checkPointSize(points)
+        }
+
+        companion object {
+            fun checkGroupHikeName(groupHikeName: String) {
+                if (groupHikeName.isEmpty())
+                    throw IllegalArgumentException("A csoportos túra neve nem lehet üres.")
+                if (groupHikeName.contains("/"))
+                    throw IllegalArgumentException("A csoportos túra név nem tartalmazhat / jelet.")
+            }
+        }
+    }
+
 
     init {
         routeName?.let { checkRouteName(it) }

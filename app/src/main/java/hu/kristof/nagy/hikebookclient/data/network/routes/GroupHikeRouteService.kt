@@ -9,5 +9,5 @@ interface GroupHikeRouteService {
     @GET("groupHike/routes/{groupHikeName}")
     suspend fun loadGroupHikeRoute(
         @Path("groupHikeName") groupHikeName: String
-    ): ServerResponseResult<Route>
+    ): ServerResponseResult<Route.GroupHikeRoute>
 }
