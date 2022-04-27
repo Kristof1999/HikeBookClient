@@ -21,18 +21,22 @@ fun <P : Route> checkAndHandleRouteLoad(routeRes: ServerResponseResult<P>): Bool
 }
 
 fun <P : Route, T> handleRouteLoad(
-    routeRes: ServerResponseResult<P>,
+    routeRes: ServerResponseResult<P>?,
     data: MutableLiveData<ResponseResult<T>>,
     f : () -> Unit
 ) {
-    if (routeRes.isSuccess) {
-        if (routeRes.successResult == null) {
-            data.value = ResponseResult.Error("Az útvonal még nem töltődött be! Kérem, várjon.")
-        } else {
-            f.invoke()
-        }
+    if (routeRes == null) {
+        data.value = ResponseResult.Error("Kérem, várjon.")
     } else {
-        data.value = ResponseResult.Error("Valami hiba történt.")
+        if (routeRes.isSuccess) {
+            if (routeRes.successResult == null) {
+                data.value = ResponseResult.Error("Az útvonal még nem töltődött be! Kérem, várjon.")
+            } else {
+                f.invoke()
+            }
+        } else {
+            data.value = ResponseResult.Error("Valami hiba történt.")
+        }
     }
 }
 

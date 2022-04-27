@@ -78,6 +78,7 @@ class GroupHikeDetailViewModel @Inject constructor(
         }
     }
 
+    // TODO: update javadoc
     /**
      * Checks if the route has loaded.
      * If it has not, then it throws the appropriate exceptions.
@@ -87,7 +88,7 @@ class GroupHikeDetailViewModel @Inject constructor(
      * @throws IllegalStateException if the route has not loaded yet
      */
     fun addToMyMap(context: Context) {
-        handleRouteLoad(_route.value!!, _addToMyMapRes) {
+        handleRouteLoad(_route.value, _addToMyMapRes) {
             viewModelScope.launch {
                 handleIllegalStateAndArgument(_addToMyMapRes) {
                     handleOffline(_addToMyMapRes, context) {
