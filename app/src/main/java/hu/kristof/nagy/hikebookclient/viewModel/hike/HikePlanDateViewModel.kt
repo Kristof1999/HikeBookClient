@@ -51,7 +51,7 @@ class HikePlanDateViewModel @Inject constructor(
      * @throws IllegalStateException if the route has not loaded yet
      */
     fun forecast(date: String, hour: Int) {
-        if (checkAndHandleRouteLoad(_route.value!!)) {
+        if (checkAndHandleRouteLoad(_route.value)) {
             val points = _route.value!!.successResult!!.points
 
             viewModelScope.launch {

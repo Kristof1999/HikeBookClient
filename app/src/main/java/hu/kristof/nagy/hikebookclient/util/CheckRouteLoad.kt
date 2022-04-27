@@ -12,11 +12,15 @@ import hu.kristof.nagy.hikebookclient.model.routes.Route
  * @throws IllegalStateException if the route has not been loaded
  * @return true if the route has loaded
  */
-fun <P : Route> checkAndHandleRouteLoad(routeRes: ServerResponseResult<P>): Boolean {
-    if (!routeRes.isSuccess) {
-        throw IllegalStateException("Valami hiba történt.")
-    } else {
-        return checkAndHandleRouteLoad(routeRes.successResult)
+fun <P : Route> checkAndHandleRouteLoad(routeRes: ServerResponseResult<P>?): Boolean {
+    if (routeRes == null) {
+        throw IllegalStateException("Kérem, várjon.")
+    } else{
+        if (!routeRes.isSuccess) {
+            throw IllegalStateException("Valami hiba történt.")
+        } else {
+            return checkAndHandleRouteLoad(routeRes.successResult)
+        }
     }
 }
 

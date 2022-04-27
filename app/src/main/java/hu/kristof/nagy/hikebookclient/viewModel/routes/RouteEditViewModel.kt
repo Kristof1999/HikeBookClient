@@ -73,7 +73,7 @@ class RouteEditViewModel @Inject constructor(
     fun onRouteEdit(
         context: Context
     ) {
-        handleRouteLoad(_route.value!!, _routeEditRes) {
+        handleRouteLoad(_route.value, _routeEditRes) {
             viewModelScope.launch {
                 handleOffline(_routeEditRes, context) {
                     handleIllegalStateAndArgument(_routeEditRes) {

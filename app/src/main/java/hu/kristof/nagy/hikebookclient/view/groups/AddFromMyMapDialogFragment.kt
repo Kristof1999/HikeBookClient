@@ -47,7 +47,7 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
 
             builder.setView(binding.root)
                 .setPositiveButton("OK") { _, _ ->
-                    if (checkAndHandleRouteLoad(_route.value!!)) {
+                    if (checkAndHandleRouteLoad(_route.value)) {
                         if (chosenPos == 0) {
                             Toast.makeText(
                                 requireContext(), "Kérem, hogy válasszon útvonalat!", Toast.LENGTH_LONG

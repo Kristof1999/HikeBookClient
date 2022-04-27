@@ -76,7 +76,7 @@ class MyMapDetailViewModel @Inject constructor(
     fun createGroupHike(dateTime: Calendar, groupHikeName: String) {
         Route.GroupHikeRoute.checkGroupHikeName(groupHikeName)
 
-        if (checkAndHandleRouteLoad(_route.value!!)) {
+        if (checkAndHandleRouteLoad(_route.value)) {
             viewModelScope.launch {
                 val route = _route.value!!.successResult!!
                 val groupHikeRoute = Route.GroupHikeRoute(

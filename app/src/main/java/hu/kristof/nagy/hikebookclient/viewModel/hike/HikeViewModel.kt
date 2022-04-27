@@ -37,7 +37,7 @@ class HikeViewModel @Inject constructor(
     }
 
     fun computeAndUpdateAvgSpeed(startTime: Long, finishTime: Long) {
-        if (checkAndHandleRouteLoad(_route.value!!)) {
+        if (checkAndHandleRouteLoad(_route.value)) {
             val route = _route.value!!.successResult!!
             val avgSpeed = route.computeAvgSpeed(startTime, finishTime)
 

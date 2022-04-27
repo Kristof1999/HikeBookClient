@@ -49,7 +49,7 @@ class BrowseDetailViewModel @Inject constructor(
      * @throws IllegalStateException if the route has not loaded yet
      */
     fun addToMyMap(routeName: java.lang.String, context: Context) {
-        handleRouteLoad(_route.value!!, _addRes) {
+        handleRouteLoad(_route.value, _addRes) {
             viewModelScope.launch {
                 handleIllegalStateAndArgument(_addRes) {
                     handleOffline(_addRes, context) {
