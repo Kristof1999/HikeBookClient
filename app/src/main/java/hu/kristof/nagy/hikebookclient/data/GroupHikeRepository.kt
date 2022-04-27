@@ -20,8 +20,8 @@ import javax.inject.Inject
 class GroupHikeRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
-) {
-    suspend fun listGroupHikesForLoggedInUser(
+) : IGroupHikeRepository {
+    override suspend fun listGroupHikesForLoggedInUser(
         isConnectedPage: Boolean
     ): Flow<ServerResponseResult<List<GroupHikeListHelper>>> {
         return dataStore.data.map {
@@ -31,7 +31,7 @@ class GroupHikeRepository @Inject constructor(
         }
     }
 
-    suspend fun createGroupHikeForLoggedInUser(
+    override suspend fun createGroupHikeForLoggedInUser(
         groupHikeName: String,
         dateTime: Calendar,
         route: Route.GroupHikeRoute
@@ -47,15 +47,15 @@ class GroupHikeRepository @Inject constructor(
         }
     }
 
-    suspend fun loadRoute(groupHikeName: String): ServerResponseResult<Route.GroupHikeRoute> {
+    override suspend fun loadRoute(groupHikeName: String): ServerResponseResult<Route.GroupHikeRoute> {
         return service.loadGroupHikeRoute(groupHikeName)
     }
 
-    suspend fun listParticipants(groupHikeName: String): ServerResponseResult<List<String>> {
+    override suspend fun listParticipants(groupHikeName: String): ServerResponseResult<List<String>> {
         return service.listParticipants(groupHikeName)
     }
 
-    suspend fun generalConnectForLoggedInUser(
+    override suspend fun generalConnectForLoggedInUser(
         groupHikeName: String,
         isConnectedPage: Boolean,
         dateTime: DateTime
