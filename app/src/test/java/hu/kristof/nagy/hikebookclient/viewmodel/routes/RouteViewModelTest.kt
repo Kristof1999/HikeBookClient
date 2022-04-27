@@ -1,6 +1,9 @@
 package hu.kristof.nagy.hikebookclient.viewmodel.routes
 
-import android.graphics.drawable.Drawable
+import android.content.res.Resources
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import hu.kristof.nagy.hikebookclient.HikeBookApp
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.MyPolyline
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
@@ -12,9 +15,6 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.osmdroid.util.GeoPoint
@@ -22,24 +22,19 @@ import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Overlay
 import org.osmdroid.views.overlay.Polyline
 
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(AndroidJUnit4::class)
 class RouteViewModelTest {
-    @Mock
-    private lateinit var markerIcon: Drawable
-
-    @Mock
-    private lateinit var setMarkerIcon: Drawable
-
     private lateinit var overlays: MutableList<Overlay>
 
     private lateinit var viewModel: RouteViewModel
+
+    private lateinit var resources: Resources
 
     @Before
     internal fun setUp() {
         viewModel = RouteViewModel()
         overlays = ArrayList()
-        markerIcon = Mockito.mock(Drawable::class.java)
-        setMarkerIcon = Mockito.mock(Drawable::class.java)
+        resources = ApplicationProvider.getApplicationContext<HikeBookApp>().resources
     }
 
     /**
@@ -55,7 +50,7 @@ class RouteViewModelTest {
         viewModel.onSingleTap(
             newMarker,
             GeoPoint(0.0, 0.0),
-            markerIcon, setMarkerIcon,
+            resources,
             overlays
         )
 
@@ -84,13 +79,13 @@ class RouteViewModelTest {
         viewModel.onSingleTap(
             marker,
             markerPoint,
-            markerIcon, setMarkerIcon,
+            resources,
             overlays
         )
         viewModel.onSingleTap(
             newMarker,
             newMarkerPoint,
-            markerIcon, setMarkerIcon,
+            resources,
             overlays
         )
 
@@ -119,18 +114,18 @@ class RouteViewModelTest {
         viewModel.markerType = marker1Type
         viewModel.onSingleTap(
             marker1,
-            p, markerIcon, setMarkerIcon,
+            p, resources,
             overlays
         )
         viewModel.markerType = MarkerType.NEW
         viewModel.onSingleTap(
             marker2,
-            p, markerIcon, setMarkerIcon,
+            p, resources,
             overlays
         )
         viewModel.onSingleTap(
             marker3,
-            p, markerIcon, setMarkerIcon,
+            p, resources,
             overlays
         )
 
@@ -144,7 +139,7 @@ class RouteViewModelTest {
         val marker = mock<Marker>()
         viewModel.myMarkers.add(MyMarker(marker, MarkerType.NEW, markerTitle))
 
-        viewModel.onDelete(markerIcon, marker)
+        viewModel.onDelete(resources, marker)
 
         assertEquals(0, viewModel.myMarkers.size)
     }
@@ -159,7 +154,7 @@ class RouteViewModelTest {
         polyline.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         viewModel.myPolylines.add(MyPolyline.from(polyline))
 
-        viewModel.onDelete(markerIcon, marker2)
+        viewModel.onDelete(resources, marker2)
 
         assertEquals(0, viewModel.myPolylines.size)
     }
@@ -182,11 +177,11 @@ class RouteViewModelTest {
         polyline2.setPoints(listOf(GeoPoint(0.0, 0.0), GeoPoint(1.0, 1.0)))
         viewModel.myPolylines.add(MyPolyline.from(polyline2))
 
-        viewModel.onDelete(markerIcon, marker3)
+        viewModel.onDelete(resources, marker3)
 
         assertEquals(MarkerType.NEW, viewModel.myMarkers[1].type)
 
-        viewModel.onDelete(markerIcon, marker2)
+        viewModel.onDelete(resources, marker2)
 
         assertEquals(MarkerType.CASTLE, viewModel.myMarkers[0].type)
     }
