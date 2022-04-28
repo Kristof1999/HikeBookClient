@@ -110,11 +110,11 @@ class GroupsDetailFragment : Fragment() {
 
     private fun adaptView(args: GroupsDetailFragmentArgs) {
         binding.groupsDetailGroupNameTv.text = args.groupName
-        binding.groupsDetailConnectButton.apply {
-            if (args.isConnectedPage) {
-                text = "Elhagyás"
+        binding.groupsDetailGeneralConnectButton.apply {
+            text = if (args.isConnectedPage) {
+                "Elhagyás"
             } else {
-                text = "Csatlakozás"
+                "Csatlakozás"
             }
         }
     }

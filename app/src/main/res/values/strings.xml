@@ -24,7 +24,7 @@
     <string name="edit_text">Szerkesztés</string>
     <string name="print_text">Nyomtatás</string>
     <string name="group_hike_create_text">Csoportos Túra Létrehozás</string>
-    <string name="swtich_to_my_map_list_button_text">Átváltás Lista Nézetre</string>
+    <string name="switch_to_my_map_list_button_text">Átváltás Lista Nézetre</string>
     <string name="switch_to_my_map_button_text">Átváltás Térkép Nézetre</string>
     <string name="my_map_title">Saját Térkép: Térkép Nézet</string>
     <string name="my_map_list_title">Saját Térkép: Lista Nézet</string>
@@ -90,6 +90,9 @@
         "ne kapcsold ki az alkalmazást, amíg újra internetelérhetőség közelben nem leszel."
     </string>
     <string name="offline_hike_button_text">Offlinera Váltás</string>
+    <string name="hike_backwards_transport_plan_button_text">Hazaút Tervezése</string>
+    <string name="hike_plan_transport_start_switch_text">Kezdőállomás</string>
+    <string name="hike_plan_transport_end_switch_text">Végállomás</string>
     <string-array name="transport_types">
         <item>Bicikli</item>
         <item>Autó</item>

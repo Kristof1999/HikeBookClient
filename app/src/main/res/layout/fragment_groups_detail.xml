@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/groupsDetailConnectButton"
+            android:id="@+id/groupsDetailGeneralConnectButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -55,7 +55,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/groupsDetailConnectButton"
+            app:layout_constraintBottom_toTopOf="@+id/groupsDetailGeneralConnectButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/groupsDetailGroupNameTv"
@@ -71,7 +71,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupsDetailConnectButton"
+            app:layout_constraintTop_toBottomOf="@+id/groupsDetailGeneralConnectButton"
             app:menu="@menu/groups_bottom_nav_menu" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
