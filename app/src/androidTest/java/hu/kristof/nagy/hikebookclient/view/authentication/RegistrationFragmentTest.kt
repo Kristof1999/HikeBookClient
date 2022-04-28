@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.view.routes.authentication
+package hu.kristof.nagy.hikebookclient.view.authentication
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.typeText
@@ -10,7 +10,6 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
-import hu.kristof.nagy.hikebookclient.view.authentication.RegistrationFragment
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -33,6 +32,7 @@ class RegistrationFragmentTest {
         onView(withId(R.id.registerPasswordEditText)).check(matches(withHint(R.string.password_hint)))
         onView(withId(R.id.registerButton)).check(matches(isDisplayed()))
         onView(withId(R.id.registerButton)).check(matches(withText(R.string.registration_btn_text)))
+        onView(withId(R.id.registerButton)).check(matches(isClickable()))
     }
 
     @Test
