@@ -13,31 +13,32 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 
 @HiltAndroidTest
-@MediumTest
 @RunWith(AndroidJUnit4::class)
-class RouteCreateFragmentTest {
+@MediumTest
+class RouteEditFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
     fun checkDisplay() {
-        launchFragmentInHiltContainer<RouteCreateFragment>()
+        launchFragmentInHiltContainer<RouteEditFragment>()
 
-        onView(withId(R.id.routeCreateRouteNameEditText))
+
+        onView(withId(R.id.routeEditRouteNameEditText))
             .check(matches(isDisplayed()))
-            .check(matches(withHint(R.string.route_name_hint)))
-        onView(withId(R.id.routeCreateHikeDescriptionEditText))
+            .check(matches(withHint((R.string.route_name_hint))))
+        onView(withId(R.id.routeEditHikeDescriptionEditText))
             .check(matches(isDisplayed()))
             .check(matches(withHint(R.string.hike_description_hint)))
-        onView(withId(R.id.routeCreateCreateButton))
+        onView(withId(R.id.routeEditEditButton))
             .check(matches(isDisplayed()))
             .check(matches(isClickable()))
             .check(matches(withText(R.string.route_create_button_text)))
-        onView(withId(R.id.routeCreateDeleteSwitch))
+        onView(withId(R.id.routeEditDeleteSwitch))
             .check(matches(isDisplayed()))
             .check(matches(withText(R.string.delete_text)))
-        onView(withId(R.id.routeCreateMarkerSpinner))
+        onView(withId(R.id.routeEditSpinner))
             .check(matches(isDisplayed()))
-        onView(withId(R.id.routeCreateMap))
+        onView(withId(R.id.routeEditMap))
             .check(matches(isDisplayed()))
     }
 }
