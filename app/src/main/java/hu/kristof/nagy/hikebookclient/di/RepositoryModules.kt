@@ -15,11 +15,15 @@ abstract class RepositoryModules {
     abstract fun bindIAuthRepository(impl: AuthRepository): IAuthRepository
 
     @Binds
-    abstract fun bindIRouteRepository(impl: UserRouteRepository): IUserRouteRepository
-
-    @Binds
     abstract fun bindIWeatherRepository(impl: WeatherRepository): IWeatherRepository
 
     @Binds
     abstract fun bindIGroupHikeRepository(impl: GroupHikeRepository): IGroupHikeRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class UserRouteRepositoryModule {
+    @Binds
+    abstract fun bindIRouteRepository(impl: UserRouteRepository): IUserRouteRepository
 }
