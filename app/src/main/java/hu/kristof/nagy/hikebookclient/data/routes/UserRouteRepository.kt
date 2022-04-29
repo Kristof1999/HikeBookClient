@@ -10,6 +10,7 @@ import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.EditedRoute
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.Constants
+import hu.kristof.nagy.hikebookclient.util.wrapEspressoIdlingResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -49,7 +50,9 @@ class UserRouteRepository @Inject constructor(
         userName: String,
         routeName: String
     ): ServerResponseResult<Route.UserRoute> {
-        return service.loadUserRoute(userName, routeName)
+        return wrapEspressoIdlingResource {
+            service.loadUserRoute(userName, routeName)
+        }
     }
 
     override suspend fun deleteUserRouteOfLoggedInUser(
