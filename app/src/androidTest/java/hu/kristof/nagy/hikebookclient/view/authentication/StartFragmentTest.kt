@@ -1,6 +1,9 @@
 package hu.kristof.nagy.hikebookclient.view.authentication
 
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -13,6 +16,8 @@ import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 @MediumTest
 @HiltAndroidTest
@@ -54,7 +59,27 @@ class StartFragmentTest {
         onView(withId(R.id.passwordEditText)).check(matches(withText(password)))
     }
 
-    fun testNavigation() {
-        // TODO: implement
+    @Test
+    fun testNavToRegister() {
+        val navController = mock(NavController::class.java)
+        launchFragmentInHiltContainer<StartFragment> {
+            Navigation.setViewNavController(this.view!!, navController)
+        }
+
+        onView(withId(R.id.startRegistrationButton)).perform(click())
+
+        verify(navController).navigate(R.id.action_startFragment_to_registrationFragment)
+    }
+
+    @Test
+    fun testNavToAbout() {
+        val navController = mock(NavController::class.java)
+        launchFragmentInHiltContainer<StartFragment> {
+            Navigation.setViewNavController(this.view!!, navController)
+        }
+
+        onView(withId(R.id.aboutPageButton)).perform(click())
+
+        verify(navController).navigate(R.id.action_startFragment_to_aboutFragment)
     }
 }
