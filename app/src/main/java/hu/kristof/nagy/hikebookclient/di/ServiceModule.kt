@@ -71,7 +71,11 @@ object ServiceModule {
             .build()
             .create(Service::class.java)
     }
+}
 
+@Module
+@InstallIn(SingletonComponent::class)
+object WeatherServiceModule {
     @Singleton
     @Provides
     fun provideWeatherService(): WeatherService {
