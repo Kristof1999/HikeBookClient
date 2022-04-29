@@ -3,6 +3,7 @@ package hu.kristof.nagy.hikebookclient.view.browse
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -18,7 +19,11 @@ import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
+import hu.kristof.nagy.hikebookclient.util.EspressoIdlingResource
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,6 +43,20 @@ class BrowseDetailFragmentTest {
     @BindValue
     lateinit var userRouteRepository: IUserRouteRepository
 
+    private val dataBindingIdlingResource = DataBindingIdlingResource()
+
+    @Before
+    fun registerIdlingResource() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
+    }
+
+    @After
+    fun unregisterIdlingResource() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
+    }
+
     @Test
     fun checkDisplay() {
         val userName = "asd"
@@ -53,7 +72,7 @@ class BrowseDetailFragmentTest {
             } doReturn ServerResponseResult(true, null, userRoute)
         }
         val bundle = BrowseDetailFragmentArgs(userName, routeName).toBundle()
-        launchFragmentInHiltContainer<BrowseDetailFragment>(bundle)
+        launchFragmentInHiltContainer<BrowseDetailFragment>(bundle, dataBindingIdlingResource)
         val context = ApplicationProvider.getApplicationContext<Context>()
         val descriptionTvText = context.getString(
             R.string.browse_hike_detail_description,
