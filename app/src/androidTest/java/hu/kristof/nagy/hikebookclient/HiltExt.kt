@@ -22,6 +22,7 @@ import android.os.Bundle
 import androidx.annotation.StyleRes
 import androidx.core.util.Preconditions
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 
@@ -49,8 +50,8 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
         activity.supportFragmentManager
             .beginTransaction()
             .add(android.R.id.content, fragment, "")
-            .commitAllowingStateLoss() // changed from commitNow from the original version
+            .commitAllowingStateLoss() // changed from commitNow
 
         fragment.action()
-    }
+    }.moveToState(Lifecycle.State.RESUMED) // added call to moveToState(...)
 }
