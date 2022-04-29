@@ -45,7 +45,7 @@ class UserRouteRepository @Inject constructor(
         }
     }
 
-    suspend fun loadUserRouteOfUser(
+    override suspend fun loadUserRouteOfUser(
         userName: String,
         routeName: String
     ): ServerResponseResult<Route.UserRoute> {

@@ -17,6 +17,10 @@ interface IUserRouteRepository {
     suspend fun loadUserRoutesOfLoggedInUser(): Flow<ServerResponseResult<List<Route.UserRoute>>>
     suspend fun loadUserRouteOfLoggedInUser(routeName: String): Flow<ServerResponseResult<Route.UserRoute>>
     suspend fun listUserRoutesForLoggedInUser(): Flow<ServerResponseResult<List<BrowseListItem>>>
+    suspend fun loadUserRouteOfUser(
+        userName: String,
+        routeName: String
+    ): ServerResponseResult<Route.UserRoute>
     suspend fun deleteUserRouteOfLoggedInUser(routeName: String): Flow<ResponseResult<Boolean>>
     suspend fun createUserRouteForLoggedInUser(
         routeName: String,
