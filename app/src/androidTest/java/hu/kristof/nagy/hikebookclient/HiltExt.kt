@@ -25,9 +25,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
+import hu.kristof.nagy.hikebookclient.util.monitorActivity
 
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
+    dataBindingIdlingResource: DataBindingIdlingResource? = null, // added this
     @StyleRes themeResId: Int = R.style.Theme_HikeBookClient,
     crossinline action: Fragment.() -> Unit = {}
 ) {
@@ -41,7 +44,7 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
         themeResId
     )
 
-    ActivityScenario.launch<HiltTestActivity>(startActivityIntent).onActivity { activity ->
+    val scenario = ActivityScenario.launch<HiltTestActivity>(startActivityIntent).onActivity { activity ->
         val fragment: Fragment = activity.supportFragmentManager.fragmentFactory.instantiate(
             Preconditions.checkNotNull(T::class.java.classLoader),
             T::class.java.name
@@ -54,4 +57,6 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
 
         fragment.action()
     }.moveToState(Lifecycle.State.RESUMED) // added call to moveToState(...)
+    dataBindingIdlingResource?.monitorActivity(scenario)
+    // consider giving back scenario to the caller to close the ActivityScenario
 }
