@@ -23,6 +23,7 @@ import androidx.annotation.StyleRes
 import androidx.core.util.Preconditions
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
@@ -55,7 +56,13 @@ inline fun <reified T : Fragment> launchFragmentInHiltContainer(
             .add(android.R.id.content, fragment, "")
             .commitAllowingStateLoss() // changed from commitNow
 
-        fragment.action()
+        // added observer
+        fragment.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            // consider passing in the lifecycleEvent as a (default = onResume) parameter too
+            if (event == Lifecycle.Event.ON_RESUME) {
+                fragment.action()
+            }
+        })
     }.moveToState(Lifecycle.State.RESUMED) // added call to moveToState(...)
     dataBindingIdlingResource?.monitorActivity(scenario)
     // consider giving back scenario to the caller to close the ActivityScenario
