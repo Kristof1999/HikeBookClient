@@ -1,6 +1,5 @@
 package hu.kristof.nagy.hikebookclient.view.mymap
 
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
@@ -29,7 +28,7 @@ class MyMapFragmentTest {
 
     @Test
     fun checkDisplay() {
-        launchFragmentInContainer<MyMapFragment>()
+        launchFragmentInHiltContainer<MyMapFragment>()
 
         onView(withId(R.id.switchToMyMapListButton))
             .check(matches(isDisplayed()))
