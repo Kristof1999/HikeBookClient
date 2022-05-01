@@ -111,7 +111,7 @@ class GroupHikeListFragment : Fragment() {
     }
 
     companion object {
-        private const val IS_CONNECTED_PAGE_BUNDLE_KEY =  "isConnectedPage"
+        const val IS_CONNECTED_PAGE_BUNDLE_KEY = "isConnectedPage"
 
         fun newInstance(isConnectedPage: Boolean): GroupHikeListFragment {
             return GroupHikeListFragment().apply {
