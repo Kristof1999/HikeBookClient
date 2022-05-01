@@ -48,9 +48,9 @@ class BrowseListFragment : Fragment() {
         binding: FragmentBrowseListBinding
     ) {
         val adapter = BrowseListAdapter(BrowseClickListener { userName, routeName ->
-            val action = BrowseListFragmentDirections
+            val directions = BrowseListFragmentDirections
                 .actionBrowseListFragmentToBrowseDetailFragment(userName, routeName)
-            findNavController().navigate(action)
+            findNavController().navigate(directions)
         })
         binding.browseRecyclerView.adapter = adapter
         viewModel.routes.observe(viewLifecycleOwner) { res ->
