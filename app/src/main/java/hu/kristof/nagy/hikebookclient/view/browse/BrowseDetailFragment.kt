@@ -47,7 +47,7 @@ class BrowseDetailFragment : MapFragment() {
                 executePendingBindings()
             }
 
-        setupObservers(browseDetailViewModel, args, binding)
+        setupObservers(browseDetailViewModel)
 
         initMap(binding)
 
@@ -58,9 +58,7 @@ class BrowseDetailFragment : MapFragment() {
     }
 
     private fun setupObservers(
-        viewModel: BrowseDetailViewModel,
-        args: BrowseDetailFragmentArgs,
-        binding: FragmentBrowseDetailBinding
+        viewModel: BrowseDetailViewModel
     ) {
         viewModel.addRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) {
