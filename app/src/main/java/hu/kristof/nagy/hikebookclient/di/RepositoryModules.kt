@@ -16,9 +16,6 @@ abstract class RepositoryModules {
 
     @Binds
     abstract fun bindIWeatherRepository(impl: WeatherRepository): IWeatherRepository
-
-    @Binds
-    abstract fun bindIGroupHikeRepository(impl: GroupHikeRepository): IGroupHikeRepository
 }
 
 @Module
@@ -26,4 +23,11 @@ abstract class RepositoryModules {
 abstract class UserRouteRepositoryModule {
     @Binds
     abstract fun bindIRouteRepository(impl: UserRouteRepository): IUserRouteRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class GroupHikeRepositoryModule {
+    @Binds
+    abstract fun bindIGroupHikeRepository(impl: GroupHikeRepository): IGroupHikeRepository
 }
