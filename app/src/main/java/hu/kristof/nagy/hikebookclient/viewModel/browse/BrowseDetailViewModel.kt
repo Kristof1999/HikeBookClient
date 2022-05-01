@@ -39,6 +39,7 @@ class BrowseDetailViewModel @Inject constructor(
     val hikeDescriptionText: LiveData<String>
         get() = _hikeDescriptionText
 
+    // TODO: comment
     fun loadDetails(
         userName: String,
         routeName: String,
