@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.GroupHikeRepository
+import hu.kristof.nagy.hikebookclient.data.IGroupHikeRepository
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
@@ -20,7 +20,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class GroupHikeListViewModel @Inject constructor(
-    private val groupHikeRepository: GroupHikeRepository
+    private val groupHikeRepository: IGroupHikeRepository
 ) : ViewModel() {
     private val _groupHikes = MutableLiveData<ServerResponseResult<List<GroupHikeListHelper>>>()
     val groupHikes: LiveData<ServerResponseResult<List<GroupHikeListHelper>>>
