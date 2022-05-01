@@ -15,20 +15,28 @@ import javax.inject.Inject
  */
 class GroupRouteRepository  @Inject constructor(
     private val service: Service
-) {
-    suspend fun loadGroupRoutes(groupName: String): ServerResponseResult<List<Route.GroupRoute>> {
+) : IGroupRouteRepository {
+    override suspend fun loadGroupRoutes(
+        groupName: String
+    ): ServerResponseResult<List<Route.GroupRoute>> {
         return service.loadGroupRoutes(groupName)
     }
 
-    suspend fun loadGroupRoute(groupName: String, routeName: String): ServerResponseResult<Route.GroupRoute> {
+    override suspend fun loadGroupRoute(
+        groupName: String,
+        routeName: String
+    ): ServerResponseResult<Route.GroupRoute> {
         return service.loadGroupRoute(groupName, routeName)
     }
 
-    suspend fun deleteGroupRoute(groupName: String, routeName: String): ServerResponseResult<Boolean> {
+    override suspend fun deleteGroupRoute(
+        groupName: String,
+        routeName: String
+    ): ServerResponseResult<Boolean> {
         return service.deleteGroupRoute(groupName, routeName)
     }
 
-    suspend fun createGroupRoute(
+    override suspend fun createGroupRoute(
         groupName: String,
         routeName: String,
         points: List<Point>,
@@ -41,7 +49,7 @@ class GroupRouteRepository  @Inject constructor(
         )
     }
 
-    suspend fun editGroupRoute(
+    override suspend fun editGroupRoute(
         editedGroupRoute: EditedRoute.EditedGroupRoute
     ): ResponseResult<Boolean> {
         return ResponseResult.from(

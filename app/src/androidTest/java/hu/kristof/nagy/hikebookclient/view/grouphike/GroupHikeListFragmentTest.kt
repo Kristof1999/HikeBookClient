@@ -4,7 +4,6 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
@@ -23,9 +22,8 @@ import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import kotlinx.coroutines.flow.flowOf
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,15 +47,8 @@ class GroupHikeListFragmentTest {
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
 
-    @Before
-    fun registerIdlingResource() {
-        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
-    }
-
-    @After
-    fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
-    }
+    @get:Rule
+    var dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(dataBindingIdlingResource)
 
     @Test
     fun checkList() {

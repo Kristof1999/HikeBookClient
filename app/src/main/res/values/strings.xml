@@ -120,6 +120,8 @@
     <string name="group_hike_tab_description_text">Tabs for navigating between connected and unconnected group hike lists</string>
     <string name="group_hike_create_dialog_text">Add meg a csoprotos túra nevét:</string>
     <string name="group_hike_create_dialog_hint_text">Csoportos túra név</string>
+    <string name="leave_text">Elhagyás</string>
+    <string name="join_text">Csatlakozás</string>
 
     <!-- Help -->
     <string name="help_title">Súgó</string>

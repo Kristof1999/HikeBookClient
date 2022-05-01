@@ -53,8 +53,6 @@ class GroupsDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adaptView(args)
-
         val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
 
         // set start destination's arguments
@@ -106,16 +104,5 @@ class GroupsDetailFragment : Fragment() {
             }
         }
         return true
-    }
-
-    private fun adaptView(args: GroupsDetailFragmentArgs) {
-        binding.groupsDetailGroupNameTv.text = args.groupName
-        binding.groupsDetailGeneralConnectButton.apply {
-            text = if (args.isConnectedPage) {
-                "Elhagyás"
-            } else {
-                "Csatlakozás"
-            }
-        }
     }
 }

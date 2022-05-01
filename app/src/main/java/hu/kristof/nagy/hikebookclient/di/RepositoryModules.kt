@@ -5,6 +5,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hu.kristof.nagy.hikebookclient.data.*
+import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
+import hu.kristof.nagy.hikebookclient.data.routes.IGroupRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
 
@@ -23,6 +25,13 @@ abstract class RepositoryModules {
 abstract class UserRouteRepositoryModule {
     @Binds
     abstract fun bindIRouteRepository(impl: UserRouteRepository): IUserRouteRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class GroupRouteRepositoryModule {
+    @Binds
+    abstract fun bindIGroupRepository(impl: GroupRouteRepository): IGroupRouteRepository
 }
 
 @Module

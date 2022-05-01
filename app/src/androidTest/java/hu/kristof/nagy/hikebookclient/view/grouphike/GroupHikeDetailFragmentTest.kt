@@ -1,7 +1,6 @@
 package hu.kristof.nagy.hikebookclient.view.grouphike
 
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,9 +18,8 @@ import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -43,15 +41,8 @@ class GroupHikeDetailFragmentTest {
     @BindValue
     lateinit var groupHikeRepository: IGroupHikeRepository
 
-    @Before
-    fun registerIdlingResource() {
-        IdlingRegistry.getInstance().register(dataBindingIdlingResource)
-    }
-
-    @After
-    fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
-    }
+    @get:Rule
+    var dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(dataBindingIdlingResource)
 
     @Test
     fun checkDisplay() {
