@@ -1,11 +1,15 @@
 package hu.kristof.nagy.hikebookclient.view.groups
 
+import android.view.View
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.UiController
+import androidx.test.espresso.ViewAction
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
@@ -25,6 +29,7 @@ import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
+import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -104,7 +109,25 @@ class GroupsDetailListFragmentTest {
             Navigation.setViewNavController(this.view!!, navController)
         }
 
-        onView(withChild(withChild(withId(R.id.groupsDetailListItemEditImageButton)))).perform(click())
+        val clickOnEditButton = object : ViewAction {
+            override fun getConstraints(): Matcher<View> {
+               return isDisplayed()
+            }
+
+            override fun getDescription(): String {
+                return "performing click on editImageButton"
+            }
+
+            override fun perform(uiController: UiController?, view: View?) {
+                val editButton = view!!.findViewById<AppCompatImageButton>(
+                    R.id.groupsDetailListItemEditImageButton
+                )
+                editButton.performClick()
+            }
+        }
+        onView(withId(R.id.groupsDetailListRecyclerView)).perform(
+            RecyclerViewActions.actionOnItemAtPosition<GroupsDetailListAdapter.ViewHolder>(0, clickOnEditButton)
+        )
 
         val directions = GroupsDetailFragmentDirections
             .actionGroupsDetailFragmentToRouteEditFragment(RouteType.GROUP, groupName, routeName)
