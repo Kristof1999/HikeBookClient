@@ -1,11 +1,13 @@
 package hu.kristof.nagy.hikebookclient.viewModel.browse
 
 import android.content.Context
+import android.content.res.Resources
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
@@ -33,9 +35,25 @@ class BrowseDetailViewModel @Inject constructor(
     val addRes: LiveData<ResponseResult<Boolean>>
         get() = _addRes
 
-    fun loadDetails(userName: String, routeName: String) {
+    private val _hikeDescriptionText = MutableLiveData<String>()
+    val hikeDescriptionText: LiveData<String>
+        get() = _hikeDescriptionText
+
+    fun loadDetails(
+        userName: String,
+        routeName: String,
+        resources: Resources
+    ) {
         viewModelScope.launch {
             _route.value = userRouteRepository.loadUserRouteOfUser(userName, routeName)
+            _route.value?.let { response ->
+                response.successResult?.let { route ->
+                    _hikeDescriptionText.value = resources.getString(
+                        R.string.browse_hike_detail_description,
+                        userName, routeName, route.description
+                    )
+                }
+            }
         }
     }
 

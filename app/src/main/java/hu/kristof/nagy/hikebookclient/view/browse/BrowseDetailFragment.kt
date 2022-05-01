@@ -14,7 +14,6 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentBrowseDetailBinding
 import hu.kristof.nagy.hikebookclient.model.Point
-import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -74,7 +73,6 @@ class BrowseDetailFragment : MapFragment() {
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->
                 onPointsLoad(route.points)
-                adaptView(args, route, binding)
             }
         }
     }
@@ -84,21 +82,9 @@ class BrowseDetailFragment : MapFragment() {
         args: BrowseDetailFragmentArgs
     ) {
         handleOfflineLoad(requireContext()) {
-            viewModel.loadDetails(args.userName, args.routeName)
+            viewModel.loadDetails(args.userName, args.routeName, requireContext().resources)
             // TODO: add listener for when the device is online, we load the details
         }
-    }
-
-    private fun adaptView(
-        args: BrowseDetailFragmentArgs,
-        route: Route.UserRoute,
-        binding: FragmentBrowseDetailBinding
-    ) {
-        binding.browseDetailHikeDescriptionTv.text =
-            getString(
-                R.string.browse_hike_detail_description,
-                args.userName, args.routeName, route.description
-            )
     }
 
     private fun onPointsLoad(points: List<Point>) = Polyline().apply {
