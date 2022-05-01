@@ -91,6 +91,15 @@ class GroupHikeDetailFragment : MapFragment() {
         args: GroupHikeDetailFragmentArgs,
         binding: FragmentGroupHikeDetailBinding
     ) {
+        setupRoute(viewModel, binding, args)
+        setupList(viewModel, args, binding)
+    }
+
+    private fun setupRoute(
+        viewModel: GroupHikeDetailViewModel,
+        binding: FragmentGroupHikeDetailBinding,
+        args: GroupHikeDetailFragmentArgs
+    ) {
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { route ->
                 showRoutePolylineOnMap(route)
@@ -104,7 +113,6 @@ class GroupHikeDetailFragment : MapFragment() {
                 map.invalidate()
             }
         }
-        setupList(viewModel, args, binding)
         handleOfflineLoad(requireContext()) {
             viewModel.loadRoute(args.groupHikeName)
         }
@@ -161,7 +169,9 @@ class GroupHikeDetailFragment : MapFragment() {
             }
         }
         binding.groupHikeDetailRecyclerView.adapter = adapter
-        viewModel.listParticipants(args.groupHikeName)
+        handleOfflineLoad(requireContext()) {
+            viewModel.listParticipants(args.groupHikeName)
+        }
     }
 
     private fun initMap(binding: FragmentGroupHikeDetailBinding) {
