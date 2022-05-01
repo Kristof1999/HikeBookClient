@@ -20,7 +20,6 @@ import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
-import hu.kristof.nagy.hikebookclient.util.EspressoIdlingResource
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import org.junit.After
 import org.junit.Before
@@ -47,13 +46,11 @@ class BrowseDetailFragmentTest {
 
     @Before
     fun registerIdlingResource() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().register(dataBindingIdlingResource)
     }
 
     @After
     fun unregisterIdlingResource() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
 
