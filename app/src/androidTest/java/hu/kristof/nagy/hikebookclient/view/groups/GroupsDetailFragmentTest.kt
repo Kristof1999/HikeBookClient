@@ -9,7 +9,10 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @HiltAndroidTest
@@ -19,21 +22,30 @@ class GroupsDetailFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    fun checkDisplay() {
-        launchFragmentInHiltContainer<GroupsDetailFragment>()
+    private val dataBindingIdlingResource = DataBindingIdlingResource()
 
-        onView(withId(R.id.groupsDetailGroupNameTv)).check(matches(isDisplayed()))
-        onView(withId(R.id.groupsDetailGeneralConnectButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.groupsDetailGeneralConnectButton)).check(matches(isClickable()))
+    @get:Rule
+    var dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(dataBindingIdlingResource)
+
+    @Test
+    fun checkDisplay() {
+        val groupName = "group"
+        val isConnectedPage = false
+        val bundle = GroupsDetailFragmentArgs(groupName, isConnectedPage).toBundle()
+        launchFragmentInHiltContainer<GroupsDetailFragment>(bundle, dataBindingIdlingResource)
+
+        onView(withId(R.id.groupsDetailGroupNameTv))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(groupName)))
+        onView(withId(R.id.groupsDetailGeneralConnectButton))
+            .check(matches(isDisplayed()))
+            .check(matches(isClickable()))
+            .check(matches(withText(R.string.join_text)))
         onView(withId(R.id.groupsDetailNavHostFragment)).check(matches(isDisplayed()))
         onView(withId(R.id.groupsDetailBottomNav)).check(matches(isDisplayed()))
     }
 
-    fun checkGroupNameTv() {
-
-    }
-
-    fun checkGeneralConnectButton() {
-
+    fun verifyBottomNav() {
+        // TODO -> codelab
     }
 }
