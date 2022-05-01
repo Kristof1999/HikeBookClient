@@ -57,6 +57,10 @@ class BrowseDetailFragmentTest {
         IdlingRegistry.getInstance().unregister(dataBindingIdlingResource)
     }
 
+    // note for running this test:
+    // run it when the target device is online,
+    // because see BrowseDetailFragment setupLoad:
+    // handleOfflineLoad won't load if the device is offline
     @Test
     fun checkDisplay() {
         val userName = "asd"
