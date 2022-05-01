@@ -76,7 +76,9 @@ class BrowseListFragmentTest {
 
         onView(withId(R.id.browseRecyclerView))
             .check(matches(isDisplayed()))
+            .check(matches(hasDescendant(withChild(withId(R.id.browseListItemUserName)))))
             .check(matches(hasDescendant(withChild(withText(userName)))))
+            .check(matches(hasDescendant(withChild(withId(R.id.browseListItemRouteName)))))
             .check(matches(hasDescendant(withChild(withText(routeName)))))
     }
 
