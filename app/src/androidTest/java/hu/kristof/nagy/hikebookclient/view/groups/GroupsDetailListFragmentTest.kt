@@ -1,15 +1,11 @@
 package hu.kristof.nagy.hikebookclient.view.groups
 
-import android.view.View
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.UiController
-import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
@@ -29,7 +25,7 @@ import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
-import org.hamcrest.Matcher
+import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -84,8 +80,28 @@ class GroupsDetailListFragmentTest {
             .check(matches(hasDescendant(withChild(withId(R.id.groupsDetailListItemEditImageButton)))))
     }
 
+    @Test
     fun checkHiddenViews() {
+        val groupName = "group"
+        val routeName = "route"
+        val groupRoute = Route.GroupRoute(groupName, routeName, listOf(
+            Point(0.0, 0.0, MarkerType.SET, ""),
+            Point(0.0, 0.0, MarkerType.NEW, "")
+        ), "")
+        groupRouteRepository = mock {
+            onBlocking {
+                loadGroupRoutes(groupName)
+            } doReturn ServerResponseResult(true, null, listOf(groupRoute))
+        }
+        val bundle = GroupsDetailListFragmentArgs(groupName, false).toBundle()
+        launchFragmentInHiltContainer<GroupsDetailListFragment>(bundle, dataBindingIdlingResource) {
+            val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
+            mapViewModel.loadRoutesOfGroup(groupName)
+        }
 
+        onView(withId(R.id.groupsDetailListItemAddToMyMapButton)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.groupsDetailListItemDeleteImageButton)).check(matches(not(isDisplayed())))
+        onView(withId(R.id.groupsDetailListItemEditImageButton)).check(matches(not(isDisplayed())))
     }
 
     @Test
@@ -106,28 +122,10 @@ class GroupsDetailListFragmentTest {
         launchFragmentInHiltContainer<GroupsDetailListFragment>(bundle, dataBindingIdlingResource) {
             val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
             mapViewModel.loadRoutesOfGroup(groupName)
-            Navigation.setViewNavController(this.view!!, navController)
+            Navigation.setViewNavController(requireActivity().findViewById(R.id.navHostFragment), navController)
         }
 
-        val clickOnEditButton = object : ViewAction {
-            override fun getConstraints(): Matcher<View> {
-               return isDisplayed()
-            }
-
-            override fun getDescription(): String {
-                return "performing click on editImageButton"
-            }
-
-            override fun perform(uiController: UiController?, view: View?) {
-                val editButton = view!!.findViewById<AppCompatImageButton>(
-                    R.id.groupsDetailListItemEditImageButton
-                )
-                editButton.performClick()
-            }
-        }
-        onView(withId(R.id.groupsDetailListRecyclerView)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<GroupsDetailListAdapter.ViewHolder>(0, clickOnEditButton)
-        )
+        onView(withId(R.id.groupsDetailListItemEditImageButton)).perform(click())
 
         val directions = GroupsDetailFragmentDirections
             .actionGroupsDetailFragmentToRouteEditFragment(RouteType.GROUP, groupName, routeName)
