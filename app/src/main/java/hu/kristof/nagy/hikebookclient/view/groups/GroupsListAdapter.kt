@@ -2,7 +2,6 @@ package hu.kristof.nagy.hikebookclient.view.groups
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -26,17 +25,10 @@ class GroupsListAdapter(
         private val isConnectedPage: Boolean,
         private val clickListener: GroupsClickListener
     ) : RecyclerView.ViewHolder(binding.root) {
-        private val button: Button = binding.groupsListItemButton
-
         fun bind(groupName: String) {
             binding.groupName = groupName
             binding.isConnectedPage = isConnectedPage
             binding.clickListener = clickListener
-            if (isConnectedPage) {
-                button.text = "Elhagyás"
-            } else {
-                button.text = "Csatlakozás"
-            }
             binding.executePendingBindings()
         }
 

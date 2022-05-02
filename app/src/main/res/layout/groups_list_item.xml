@@ -38,7 +38,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Button"
+            android:text="@{isConnectedPage ? @string/leave_text : @string/join_text}"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:onClick="@{() -> clickListener.onConnect(groupName, isConnectedPage)}"
             app:layout_constraintBottom_toBottomOf="parent"
