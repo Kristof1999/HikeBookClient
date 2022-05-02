@@ -76,6 +76,7 @@ class GroupsDetailListFragmentTest {
             .check(matches(hasDescendant(withChild(withId(R.id.groupsDetailListItemRouteNameTv)))))
             .check(matches(hasDescendant(withChild(withText(routeName)))))
             .check(matches(hasDescendant(withChild(withId(R.id.groupsDetailListItemAddToMyMapButton)))))
+            .check(matches(hasDescendant(withChild(withText(R.string.add_to_my_map_text)))))
             .check(matches(hasDescendant(withChild(withId(R.id.groupsDetailListItemDeleteImageButton)))))
             .check(matches(hasDescendant(withChild(withId(R.id.groupsDetailListItemEditImageButton)))))
     }
