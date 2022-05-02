@@ -22,7 +22,7 @@ class GroupsDetailMembersAdapter
     class ViewHolder(
         binding: GroupsDetailMembersListItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        private val memberNameTv = binding.groupsMemberNameTv
+        private val memberNameTv = binding.groupsDetailMemberNameTv
 
         fun bind(memberName: String) {
             memberNameTv.text = memberName
