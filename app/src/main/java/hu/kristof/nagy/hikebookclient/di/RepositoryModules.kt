@@ -31,7 +31,14 @@ abstract class UserRouteRepositoryModule {
 @InstallIn(SingletonComponent::class)
 abstract class GroupRouteRepositoryModule {
     @Binds
-    abstract fun bindIGroupRepository(impl: GroupRouteRepository): IGroupRouteRepository
+    abstract fun bindIGroupRouteRepository(impl: GroupRouteRepository): IGroupRouteRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class GroupsRepositoryModule {
+    @Binds
+    abstract fun bindIGroupsRepository(impl: GroupsRepository): IGroupsRepository
 }
 
 @Module

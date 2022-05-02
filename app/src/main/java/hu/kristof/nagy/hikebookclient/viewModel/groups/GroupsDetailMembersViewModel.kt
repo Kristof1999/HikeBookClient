@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.di.Service
+import hu.kristof.nagy.hikebookclient.data.IGroupsRepository
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,7 +15,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class GroupsDetailMembersViewModel @Inject constructor(
-    private val service: Service
+    private val repository: IGroupsRepository
     ) : ViewModel() {
     private val _members = MutableLiveData<ServerResponseResult<List<String>>>()
     val members: LiveData<ServerResponseResult<List<String>>>
@@ -23,7 +23,7 @@ class GroupsDetailMembersViewModel @Inject constructor(
 
     fun listMembers(groupName: String) {
         viewModelScope.launch {
-            _members.value = service.listMembers(groupName)
+            _members.value = repository.listMembers(groupName)
         }
     }
 }

@@ -17,8 +17,8 @@ import javax.inject.Inject
 class GroupsRepository @Inject constructor(
     private val service: Service,
     private val dataStore: DataStore<Preferences>
-) {
-    suspend fun listGroupsForLoggedInUser(
+) : IGroupsRepository {
+    override suspend fun listGroupsForLoggedInUser(
         isConnectedPage: Boolean
     ): Flow<ServerResponseResult<List<String>>> {
         return dataStore.data.map {
@@ -28,7 +28,7 @@ class GroupsRepository @Inject constructor(
         }
     }
 
-    suspend fun createGroupForLoggedInUser(groupName: String): Flow<ServerResponseResult<Boolean>> {
+    override suspend fun createGroupForLoggedInUser(groupName: String): Flow<ServerResponseResult<Boolean>> {
         return dataStore.data.map {
             it[Constants.DATA_STORE_USER_NAME]
         }.map { userName ->
@@ -36,7 +36,7 @@ class GroupsRepository @Inject constructor(
         }
     }
 
-    suspend fun generalConnectForLoggedInUser(
+    override suspend fun generalConnectForLoggedInUser(
         groupName: String,
         isConnectedPage: Boolean
     ): Flow<ResponseResult<Boolean>> {
@@ -47,5 +47,9 @@ class GroupsRepository @Inject constructor(
                 service.generalGroupConnect(groupName, userName!!, isConnectedPage)
             )
         }
+    }
+
+    override suspend fun listMembers(groupName: String): ServerResponseResult<List<String>> {
+        return service.listMembers(groupName)
     }
 }
