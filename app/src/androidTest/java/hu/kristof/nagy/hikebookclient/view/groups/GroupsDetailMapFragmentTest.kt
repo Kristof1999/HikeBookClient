@@ -16,6 +16,8 @@ import hu.kristof.nagy.hikebookclient.di.GroupRouteRepositoryModule
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.Constants
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
+import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test
@@ -31,6 +33,11 @@ import org.mockito.kotlin.mock
 class GroupsDetailMapFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
+
+    private val dataBindingIdlingResource = DataBindingIdlingResource()
+
+    @get:Rule
+    var dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(dataBindingIdlingResource)
 
     @Mock
     @BindValue
@@ -49,7 +56,7 @@ class GroupsDetailMapFragmentTest {
                 loadGroupRoutes(groupName)
             } doReturn ServerResponseResult(true, null, listOf())
         }
-        launchFragmentInHiltContainer<GroupsDetailMapFragment>(bundle)
+        launchFragmentInHiltContainer<GroupsDetailMapFragment>(bundle, dataBindingIdlingResource)
 
         onView(withId(R.id.groupsMapMap)).check(matches(isDisplayed()))
         onView(withId(R.id.groupsMapCreateRouteFab))
@@ -75,7 +82,7 @@ class GroupsDetailMapFragmentTest {
                 loadGroupRoutes(groupName)
             } doReturn ServerResponseResult(true, null, listOf())
         }
-        launchFragmentInHiltContainer<GroupsDetailMapFragment>(bundle)
+        launchFragmentInHiltContainer<GroupsDetailMapFragment>(bundle, dataBindingIdlingResource)
 
         onView(withId(R.id.groupsMapCreateRouteFab)).check(matches(not(isDisplayed())))
         onView(withId(R.id.groupsMapAddFromMyMapButton)).check(matches(not(isDisplayed())))
