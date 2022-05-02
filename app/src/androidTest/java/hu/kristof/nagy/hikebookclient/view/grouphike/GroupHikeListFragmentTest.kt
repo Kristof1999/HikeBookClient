@@ -21,6 +21,7 @@ import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import kotlinx.coroutines.flow.flowOf
@@ -65,7 +66,7 @@ class GroupHikeListFragmentTest {
                 ))
             )
         }
-        val bundle = bundleOf(GroupHikeListFragment.IS_CONNECTED_PAGE_BUNDLE_KEY to false)
+        val bundle = bundleOf(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to false)
         launchFragmentInHiltContainer<GroupHikeListFragment>(bundle, dataBindingIdlingResource)
 
         onView(withId(R.id.groupHikeListRecyclerView))
@@ -93,7 +94,7 @@ class GroupHikeListFragmentTest {
                 ))
             )
         }
-        val bundle = bundleOf(GroupHikeListFragment.IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage)
+        val bundle = bundleOf(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage)
         val navController = Mockito.mock(NavController::class.java)
         launchFragmentInHiltContainer<GroupHikeListFragment>(bundle, dataBindingIdlingResource) {
             Navigation.setViewNavController(this.view!!, navController)

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupHikeListBinding
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
@@ -39,7 +40,7 @@ class GroupHikeListFragment : Fragment() {
 
         setupObserver(viewModel)
 
-        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
         setupLoad(isConnectedPage, viewModel, binding)
 
@@ -51,7 +52,7 @@ class GroupHikeListFragment : Fragment() {
             handleResult(context, res) { generalConnectRes ->
                 if (!viewModel.generalConnectFinished) {
                     showGenericErrorOr(context, generalConnectRes) {
-                        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+                        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
                         if (isConnectedPage) {
                             Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT)
                                 .show()
@@ -111,11 +112,9 @@ class GroupHikeListFragment : Fragment() {
     }
 
     companion object {
-        const val IS_CONNECTED_PAGE_BUNDLE_KEY = "isConnectedPage"
-
         fun newInstance(isConnectedPage: Boolean): GroupHikeListFragment {
             return GroupHikeListFragment().apply {
-                arguments = bundleOf(IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage)
+                arguments = bundleOf(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage)
             }
         }
     }

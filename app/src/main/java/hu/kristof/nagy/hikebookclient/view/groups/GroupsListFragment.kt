@@ -13,6 +13,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsListBinding
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
@@ -44,7 +45,7 @@ class GroupsListFragment : Fragment() {
     }
 
     private fun setupObserver() {
-        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             onGeneralConnectRes(res, isConnectedPage)
         }
@@ -67,7 +68,7 @@ class GroupsListFragment : Fragment() {
     }
 
     private fun setupList(binding: FragmentGroupsListBinding) {
-        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
         val adapter = initAdapter(isConnectedPage)
         binding.groupsRecyclerView.adapter = adapter
         viewModel.groups.observe(viewLifecycleOwner) { res ->
@@ -94,18 +95,16 @@ class GroupsListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val isConnectedPage = arguments?.getBoolean(IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
         handleOfflineLoad(requireContext()) {
             viewModel.listGroups(isConnectedPage)
         }
     }
 
     companion object {
-        private const val IS_CONNECTED_PAGE_BUNDLE_KEY =  "isConnectedPage"
-
         fun newInstance(isConnectedPage: Boolean): GroupsListFragment {
             return GroupsListFragment().apply {
-                arguments = bundleOf(IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage)
+                arguments = bundleOf(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage)
             }
         }
     }
