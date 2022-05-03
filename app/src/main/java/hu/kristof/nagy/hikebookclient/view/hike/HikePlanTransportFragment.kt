@@ -40,7 +40,7 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow
  */
 @AndroidEntryPoint
 class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListener {
-    private val viewModel: HikePlanTransportViewModel by viewModels()
+    private val hikePlanTransportViewModel: HikePlanTransportViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,11 +86,11 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         with (binding) {
             hikePlanTransportStartSwitch.setOnClickListener {
                 val checked = hikePlanTransportStartSwitch.isChecked
-                viewModel.setStartTo(checked)
+                hikePlanTransportViewModel.setStartTo(checked)
             }
             hikePlanTransportEndSwitch.setOnClickListener {
                 val checked = hikePlanTransportEndSwitch.isChecked
-                viewModel.setEndTo(checked)
+                hikePlanTransportViewModel.setEndTo(checked)
             }
         }
     }
@@ -99,7 +99,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         args: HikePlanTransportFragmentArgs,
         binding: FragmentHikePlanTransportBinding
     ) {
-        viewModel.apply {
+        hikePlanTransportViewModel.apply {
             route.observe(viewLifecycleOwner) { res ->
                 handleResult(context, res) { route ->
                     adaptView(args, route)
@@ -116,7 +116,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
     private fun setupLoad(args: HikePlanTransportFragmentArgs) {
         handleOfflineLoad(requireContext()) {
-            viewModel.loadRoute(args.routeName)
+            hikePlanTransportViewModel.loadRoute(args.routeName)
         }
     }
 
@@ -150,7 +150,7 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
             override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
                 InfoWindow.closeAllInfoWindowsOn(map)
-                viewModel.onSingleTap(p!!)
+                hikePlanTransportViewModel.onSingleTap(p!!)
                 return true
             }
 
@@ -163,12 +163,12 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
     private fun handleStartAndEndPointChanges() {
         Marker(map).apply {
-            position = viewModel.startPoint
+            position = hikePlanTransportViewModel.startPoint
             setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
             icon = getMarkerIcon(MarkerType.SET, resources)
 
-            viewModel.startPointChanged.observe(viewLifecycleOwner) {
-                position = viewModel.startPoint
+            hikePlanTransportViewModel.startPointChanged.observe(viewLifecycleOwner) {
+                position = hikePlanTransportViewModel.startPoint
                 map.invalidate()
             }
         }.let { startMarker ->
@@ -176,12 +176,12 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
         }
 
         Marker(map).apply {
-            position = viewModel.endPoint
+            position = hikePlanTransportViewModel.endPoint
             setAnchor(Marker.ANCHOR_BOTTOM, Marker.ANCHOR_CENTER)
             icon = getMarkerIcon(MarkerType.NEW, resources)
 
-            viewModel.endPointChanged.observe(viewLifecycleOwner) {
-                position = viewModel.endPoint
+            hikePlanTransportViewModel.endPointChanged.observe(viewLifecycleOwner) {
+                position = hikePlanTransportViewModel.endPoint
                 map.invalidate()
             }
         }.let { endMarker ->
@@ -191,14 +191,14 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
     private fun onTransportStart(args: HikePlanTransportFragmentArgs) {
         val startPoint = Point(
-            viewModel.startPoint.latitude, viewModel.startPoint.longitude,
+            hikePlanTransportViewModel.startPoint.latitude, hikePlanTransportViewModel.startPoint.longitude,
             MarkerType.SET, ""
         )
         val endPoint = Point(
-            viewModel.endPoint.latitude, viewModel.endPoint.longitude,
+            hikePlanTransportViewModel.endPoint.latitude, hikePlanTransportViewModel.endPoint.longitude,
             MarkerType.NEW, ""
         )
-        val transportType = viewModel.transportType
+        val transportType = hikePlanTransportViewModel.transportType
         val directions = HikePlanTransportFragmentDirections
             .actionHikePlanFragmentToHikeTransportFragment(
                 startPoint, endPoint, transportType, args.isForward, args.routeName
@@ -217,10 +217,10 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         when(pos) {
             TransportType.BICYCLE.ordinal -> {
-                viewModel.transportType = TransportType.BICYCLE
+                hikePlanTransportViewModel.transportType = TransportType.BICYCLE
             }
             TransportType.CAR.ordinal -> {
-                viewModel.transportType = TransportType.CAR
+                hikePlanTransportViewModel.transportType = TransportType.CAR
             }
         }
     }
