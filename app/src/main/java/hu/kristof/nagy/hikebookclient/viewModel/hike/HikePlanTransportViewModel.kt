@@ -61,14 +61,14 @@ class HikePlanTransportViewModel @Inject constructor(
 
     fun setStartTo(value: java.lang.Boolean) {
         _setStartNext.value = value as kotlin.Boolean
-        if (shoudSetBoth()) {
+        if (shouldSetBoth()) {
             _setEndNext.value = false
         }
     }
 
     fun setEndTo(value: java.lang.Boolean) {
         _setEndNext.value = value as kotlin.Boolean
-        if (shoudSetBoth()) {
+        if (shouldSetBoth()) {
             _setStartNext.value = false
         }
     }
@@ -85,7 +85,7 @@ class HikePlanTransportViewModel @Inject constructor(
         }
     }
 
-    private fun shoudSetBoth(): Boolean = _setEndNext.value!! && _setStartNext.value!!
+    private fun shouldSetBoth(): Boolean = _setEndNext.value!! && _setStartNext.value!!
 
     private fun notifyViewWith(liveData: MutableLiveData<Boolean>) {
         liveData.value = !liveData.value!!
