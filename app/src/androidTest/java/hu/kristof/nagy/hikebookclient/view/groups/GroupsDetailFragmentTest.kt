@@ -53,5 +53,6 @@ class GroupsDetailFragmentTest {
 
     fun verifyBottomNav() {
         // TODO -> codelab
+        // ViewPagerActions
     }
 }
