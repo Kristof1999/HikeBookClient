@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.view.groups
 
+import androidx.core.os.bundleOf
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -21,8 +22,11 @@ import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
+import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailListFragment
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 import org.hamcrest.CoreMatchers.not
@@ -65,7 +69,10 @@ class GroupsDetailListFragmentTest {
                 loadGroupRoutes(groupName)
             } doReturn ServerResponseResult(true, null, listOf(groupRoute))
         }
-        val bundle = GroupsDetailListFragmentArgs(groupName, true).toBundle()
+        val bundle = bundleOf(
+            Constants.GROUP_NAME_BUNDLE_KEY to groupName,
+            Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to true
+        )
         launchFragmentInHiltContainer<GroupsDetailListFragment>(bundle, dataBindingIdlingResource) {
             val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
             mapViewModel.loadRoutesOfGroup(groupName)
@@ -94,7 +101,10 @@ class GroupsDetailListFragmentTest {
                 loadGroupRoutes(groupName)
             } doReturn ServerResponseResult(true, null, listOf(groupRoute))
         }
-        val bundle = GroupsDetailListFragmentArgs(groupName, false).toBundle()
+        val bundle = bundleOf(
+            Constants.GROUP_NAME_BUNDLE_KEY to groupName,
+            Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to false
+        )
         launchFragmentInHiltContainer<GroupsDetailListFragment>(bundle, dataBindingIdlingResource) {
             val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
             mapViewModel.loadRoutesOfGroup(groupName)
@@ -119,7 +129,10 @@ class GroupsDetailListFragmentTest {
             } doReturn ServerResponseResult(true, null, listOf(groupRoute))
         }
         val navController = Mockito.mock(NavController::class.java)
-        val bundle = GroupsDetailListFragmentArgs(groupName, true).toBundle()
+        val bundle = bundleOf(
+            Constants.GROUP_NAME_BUNDLE_KEY to groupName,
+            Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to true
+        )
         launchFragmentInHiltContainer<GroupsDetailListFragment>(bundle, dataBindingIdlingResource) {
             val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
             mapViewModel.loadRoutesOfGroup(groupName)

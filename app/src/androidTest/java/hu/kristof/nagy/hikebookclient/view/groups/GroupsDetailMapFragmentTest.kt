@@ -22,6 +22,8 @@ import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
+import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailFragmentDirections
+import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailMapFragment
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule
 import org.junit.Test

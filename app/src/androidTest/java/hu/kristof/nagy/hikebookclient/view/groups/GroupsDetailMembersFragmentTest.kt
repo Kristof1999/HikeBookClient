@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.view.groups
 
+import androidx.core.os.bundleOf
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
@@ -14,8 +15,10 @@ import hu.kristof.nagy.hikebookclient.data.IGroupsRepository
 import hu.kristof.nagy.hikebookclient.di.GroupsRepositoryModule
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
+import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailMembersFragment
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -52,7 +55,9 @@ class GroupsDetailMembersFragmentTest {
                 user1, user2
             ))
         }
-        val bundle = GroupsDetailMembersFragmentArgs(groupName).toBundle()
+        val bundle = bundleOf(
+            Constants.GROUP_NAME_BUNDLE_KEY to groupName
+        )
         launchFragmentInHiltContainer<GroupsDetailMembersFragment>(bundle, dataBindingIdlingResource)
 
         onView(withId(R.id.groupsDetailMembersRecyclerView))
