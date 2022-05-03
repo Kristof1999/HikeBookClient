@@ -47,24 +47,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/groupsDetailGroupNameTv" />
 
-        <androidx.viewpager.widget.ViewPager
+        <hu.kristof.nagy.hikebookclient.util.NonSwipableViewPager
             android:id="@+id/groupsDetailViewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:contentDescription="@string/groups_detail_view_pager_content_description"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/groupsDetailBottomNav"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/groupsDetailGeneralConnectButton">
 
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/groupsDetailBottomNav"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:labelVisibilityMode="labeled"
-                app:menu="@menu/groups_bottom_nav_menu" />
-        </androidx.viewpager.widget.ViewPager>
+        </hu.kristof.nagy.hikebookclient.util.NonSwipableViewPager>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/groupsDetailBottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/groups_bottom_nav_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
