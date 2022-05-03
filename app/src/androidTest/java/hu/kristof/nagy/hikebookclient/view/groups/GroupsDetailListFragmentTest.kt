@@ -136,7 +136,7 @@ class GroupsDetailListFragmentTest {
         launchFragmentInHiltContainer<GroupsDetailListFragment>(bundle, dataBindingIdlingResource) {
             val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
             mapViewModel.loadRoutesOfGroup(groupName)
-            Navigation.setViewNavController(requireActivity().findViewById(R.id.navHostFragment), navController)
+            Navigation.setViewNavController(this.view!!, navController)
         }
 
         onView(withId(R.id.groupsDetailListItemEditImageButton)).perform(click())

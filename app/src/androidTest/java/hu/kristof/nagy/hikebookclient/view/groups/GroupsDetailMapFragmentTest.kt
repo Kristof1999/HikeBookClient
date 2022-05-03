@@ -111,7 +111,7 @@ class GroupsDetailMapFragmentTest {
         }
         val navController = Mockito.mock(NavController::class.java)
         launchFragmentInHiltContainer<GroupsDetailMapFragment>(bundle, dataBindingIdlingResource) {
-            Navigation.setViewNavController(requireActivity().findViewById(R.id.navHostFragment), navController)
+            Navigation.setViewNavController(this.view!!, navController)
         }
 
         onView(withId(R.id.groupsMapCreateRouteFab)).perform(click())
