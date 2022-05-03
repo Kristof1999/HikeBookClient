@@ -113,6 +113,7 @@
     <string name="groups_create_dialog_text">Add meg a csoport nevét:</string>
     <string name="groups_create_dialog_hint_text">Név</string>
     <string name="add_from_my_map_spinner_description">Pick route from your map to add to group map</string>
+    <string name="groups_detail_view_pager_content_description">Pages displaying the details of the chosen group</string>
 
     <!-- GroupHike -->
     <string name="group_hike_title">Csoportos Túra</string>
