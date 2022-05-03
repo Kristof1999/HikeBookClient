@@ -6,16 +6,17 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailListBinding
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
@@ -43,11 +44,12 @@ class GroupsDetailListFragment : Fragment() {
 
         val mapViewModel: GroupsDetailMapViewModel by activityViewModels()
         val listViewModel: GroupsDetailListViewModel by viewModels()
-        val args: GroupsDetailListFragmentArgs by navArgs()
+        val groupName = requireArguments().getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
+        val isConnectedPage = requireArguments().getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
 
-        setupObservers(mapViewModel, listViewModel, args)
+        setupObservers(mapViewModel, listViewModel, groupName)
 
-        val adapter = initAdapter(mapViewModel, listViewModel, args)
+        val adapter = initAdapter(mapViewModel, listViewModel, groupName, isConnectedPage)
         binding.groupsDetailListRecyclerView.adapter = adapter
         mapViewModel.routes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { routes ->
@@ -62,7 +64,7 @@ class GroupsDetailListFragment : Fragment() {
     private fun setupObservers(
         mapViewModel: GroupsDetailMapViewModel,
         listViewModel: GroupsDetailListViewModel,
-        args: GroupsDetailListFragmentArgs
+        groupName: String
     ) {
         with(listViewModel) {
             deleteRes.observe(viewLifecycleOwner) { res ->
@@ -71,7 +73,7 @@ class GroupsDetailListFragment : Fragment() {
                         showGenericErrorOr(context, deleteRes) {
                             Toast.makeText(context, "A törlés sikeres!", Toast.LENGTH_SHORT).show()
                             handleOfflineLoad(requireContext()) {
-                                mapViewModel.loadRoutesOfGroup(args.groupName) // refresh
+                                mapViewModel.loadRoutesOfGroup(groupName) // refresh
                             }
                         }
                     }
@@ -92,16 +94,17 @@ class GroupsDetailListFragment : Fragment() {
     private fun initAdapter(
         mapViewModel: GroupsDetailMapViewModel,
         listViewModel: GroupsDetailListViewModel,
-        args: GroupsDetailListFragmentArgs
+        groupName: String,
+        isConnectedPage: Boolean
     ) = GroupsDetailListAdapter(GroupsDetailListClickListener(
         editListener = { routeName ->
             val directions = GroupsDetailFragmentDirections
-                .actionGroupsDetailFragmentToRouteEditFragment(RouteType.GROUP, args.groupName, routeName)
+                .actionGroupsDetailFragmentToRouteEditFragment(RouteType.GROUP, groupName, routeName)
             findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
         },
         deleteListener = { routeName ->
             handleOffline(requireContext()) {
-                listViewModel.onDelete(args.groupName, routeName)
+                listViewModel.onDelete(groupName, routeName)
             }
         },
         addToMyMapListener = { routeName ->
@@ -110,7 +113,7 @@ class GroupsDetailListFragment : Fragment() {
                 listViewModel.onAddToMyMap(route)
             }
         }
-    ), args.isConnectedPage)
+    ), isConnectedPage)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return if (item.itemId == R.id.helpMenuItem) {
@@ -120,6 +123,17 @@ class GroupsDetailListFragment : Fragment() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    companion object {
+        fun newInstance(groupName: String, isConnectedPage: Boolean): GroupsDetailListFragment {
+            return GroupsDetailListFragment().apply {
+                arguments = bundleOf(
+                    Constants.GROUP_NAME_BUNDLE_KEY to groupName,
+                    Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage
+                )
+            }
         }
     }
 }
