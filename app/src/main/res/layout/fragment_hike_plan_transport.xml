@@ -54,7 +54,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:minHeight="48dp"
-            android:onCheckedChanged="@{(_, isChecked) -> viewModel.setStartTo(isChecked)}"
             android:text="@string/hike_plan_transport_start_switch_text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -66,7 +65,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:minHeight="48dp"
-            android:onCheckedChanged="@{(_, isChecked) -> viewModel.setEndTo(isChecked)}"
             android:text="@string/hike_plan_transport_end_switch_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
