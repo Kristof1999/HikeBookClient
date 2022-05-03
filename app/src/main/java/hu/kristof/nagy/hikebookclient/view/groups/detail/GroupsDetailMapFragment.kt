@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation.findNavController
@@ -13,8 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMapBinding
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
@@ -131,6 +132,17 @@ class GroupsDetailMapFragment : MapFragment() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    companion object {
+        fun newInstance(groupName: String, isConnectedPage: Boolean): GroupsDetailMapFragment {
+            return GroupsDetailMapFragment().apply {
+                arguments = bundleOf(
+                    Constants.GROUP_NAME_BUNDLE_KEY to groupName,
+                    Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to isConnectedPage
+                )
+            }
         }
     }
 }
