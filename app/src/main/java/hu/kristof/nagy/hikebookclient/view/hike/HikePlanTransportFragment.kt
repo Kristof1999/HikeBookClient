@@ -55,6 +55,8 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
         setupObservers(args, binding)
 
+        setupSwitchClickListeners(binding)
+
         initMap(binding)
 
         setupLoad(args)
@@ -78,6 +80,19 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
 
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    private fun setupSwitchClickListeners(binding: FragmentHikePlanTransportBinding) {
+        with (binding) {
+            hikePlanTransportStartSwitch.setOnClickListener {
+                val checked = hikePlanTransportStartSwitch.isChecked
+                viewModel.setStartTo(checked)
+            }
+            hikePlanTransportEndSwitch.setOnClickListener {
+                val checked = hikePlanTransportEndSwitch.isChecked
+                viewModel.setEndTo(checked)
+            }
+        }
     }
 
     private fun setupObservers(
