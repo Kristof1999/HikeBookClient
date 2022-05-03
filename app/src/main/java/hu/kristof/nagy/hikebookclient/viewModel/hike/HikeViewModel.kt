@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HikeViewModel @Inject constructor(
     private val service: Service,
-    private val userRouteRepository: UserRouteRepository
+    private val userRouteRepository: IUserRouteRepository
 ) : ViewModel() {
     private val _route = MutableLiveData<ServerResponseResult<Route.UserRoute>>()
     val route: LiveData<ServerResponseResult<Route.UserRoute>>
