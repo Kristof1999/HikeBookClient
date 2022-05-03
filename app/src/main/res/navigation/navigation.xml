@@ -214,7 +214,7 @@
     </fragment>
     <fragment
         android:id="@+id/groupsDetailFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailFragment"
         android:label="@string/groups_detail_title" >
         <argument
             android:name="groupName"
@@ -236,7 +236,7 @@
     </fragment>
     <fragment
         android:id="@+id/groupsDetailMapFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMapFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailMapFragment"
         android:label="@string/groups_detail_title" >
         <action
             android:id="@+id/action_groupsDetailMapFragment_to_routeCreateFragment"

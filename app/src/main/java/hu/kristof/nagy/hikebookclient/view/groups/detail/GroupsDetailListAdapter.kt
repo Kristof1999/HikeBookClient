@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.view.groups
+package hu.kristof.nagy.hikebookclient.view.groups.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

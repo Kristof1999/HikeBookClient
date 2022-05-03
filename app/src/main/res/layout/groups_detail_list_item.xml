@@ -9,7 +9,7 @@
             type="String" />
         <variable
             name="clickListener"
-            type="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailListClickListener" />
+            type="hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailListClickListener" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

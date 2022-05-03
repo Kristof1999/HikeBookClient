@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/groupsDetailMapFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMapFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailMapFragment"
         android:label="GroupsMapFragment" >
     </fragment>
     <fragment
         android:id="@+id/groupsDetailListFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailListFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailListFragment"
         android:label="fragment_groups_detail_list"
         tools:layout="@layout/fragment_groups_detail_list" >
         <argument
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/groupsDetailMembersFragment"
-        android:name="hu.kristof.nagy.hikebookclient.view.groups.GroupsDetailMembersFragment"
+        android:name="hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailMembersFragment"
         android:label="fragment_groups_detail_members"
         tools:layout="@layout/fragment_groups_detail_members" >
         <argument
