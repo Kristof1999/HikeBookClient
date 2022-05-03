@@ -5,14 +5,15 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailMembersBinding
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
@@ -34,11 +35,11 @@ class GroupsDetailMembersFragment : Fragment() {
             }
 
         val viewModel: GroupsDetailMembersViewModel by viewModels()
-        val args: GroupsDetailMembersFragmentArgs by navArgs()
 
         setupList(viewModel, binding)
         handleOfflineLoad(requireContext()) {
-            viewModel.listMembers(args.groupName)
+            val groupName = requireArguments().getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
+            viewModel.listMembers(groupName)
         }
 
         setHasOptionsMenu(true)
@@ -66,6 +67,14 @@ class GroupsDetailMembersFragment : Fragment() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    companion object {
+        fun newInstance(groupName: String): GroupsDetailMembersFragment {
+            return GroupsDetailMembersFragment().apply {
+                arguments = bundleOf(Constants.GROUP_NAME_BUNDLE_KEY to groupName)
+            }
         }
     }
 }
