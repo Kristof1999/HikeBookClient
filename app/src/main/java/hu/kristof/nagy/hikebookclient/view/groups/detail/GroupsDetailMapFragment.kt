@@ -9,7 +9,7 @@ import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
@@ -105,7 +105,7 @@ class GroupsDetailMapFragment : MapFragment() {
         val routeType = RouteType.GROUP
         val directions = GroupsDetailFragmentDirections
             .actionGroupsDetailFragmentToRouteCreateFragment(routeType, groupName)
-        findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+        findNavController().navigate(directions)
     }
 
     private fun adaptView(binding: FragmentGroupsDetailMapBinding) {
@@ -128,7 +128,7 @@ class GroupsDetailMapFragment : MapFragment() {
         return if (item.itemId == R.id.helpMenuItem) {
             val requestType = HelpRequestType.GROUPS_DETAIL_MAP
             val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
-            findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+            findNavController().navigate(directions)
             true
         } else {
             super.onOptionsItemSelected(item)

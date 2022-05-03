@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
@@ -63,7 +63,7 @@ class GroupsDetailMembersFragment : Fragment() {
         return if (item.itemId == R.id.helpMenuItem) {
             val requestType = HelpRequestType.GROUPS_DETAIL_MEMBERS
             val directions = HelpFragmentDirections.actionGlobalHelpFragment(requestType)
-            Navigation.findNavController(requireActivity(), R.id.navHostFragment).navigate(directions)
+            findNavController().navigate(directions)
             true
         } else {
             super.onOptionsItemSelected(item)
