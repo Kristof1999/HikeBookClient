@@ -5,18 +5,15 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager.widget.ViewPager
 import dagger.hilt.android.AndroidEntryPoint
-import hu.kristof.nagy.hikebookclient.GroupsNavigationDirections
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentGroupsDetailBinding
-import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
 
@@ -27,15 +24,14 @@ import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailViewModel
  */
 @AndroidEntryPoint
 class GroupsDetailFragment : Fragment() {
-    private lateinit var binding: FragmentGroupsDetailBinding
-    private val viewModel: GroupsDetailViewModel by viewModels()
-    private val args: GroupsDetailFragmentArgs by navArgs()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentGroupsDetailBinding.inflate(inflater, container, false)
+        val viewModel: GroupsDetailViewModel by viewModels()
+        val args: GroupsDetailFragmentArgs by navArgs()
+
+        val binding = FragmentGroupsDetailBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = viewLifecycleOwner
                 context = requireContext()
@@ -45,30 +41,25 @@ class GroupsDetailFragment : Fragment() {
                 executePendingBindings()
             }
 
-        setupObserver()
+        setupObserver(viewModel)
+
+        val adapter = SectionsPagerAdapter(
+            requireContext(),
+            childFragmentManager,
+            args.groupName,
+            args.isConnectedPage
+        )
+        val viewPager = binding.groupsDetailViewPager
+        viewPager.adapter = adapter
+        val bottomNav = binding.groupsDetailBottomNav
+        bottomNav.setOnItemSelectedListener { menuItem ->
+            setupBottomNav(menuItem, viewPager)
+        }
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val navController = findNavController(requireActivity(), R.id.groupsDetailNavHostFragment)
-
-        // set start destination's arguments
-        val bundle = bundleOf(
-            Constants.GROUP_NAME_BUNDLE_KEY to args.groupName,
-            Constants.IS_CONNECTED_PAGE_BUNDLE_KEY to args.isConnectedPage
-        )
-        navController.setGraph(R.navigation.groups_navigation, bundle)
-
-        val bottomNav = binding.groupsDetailBottomNav
-        bottomNav.setOnItemSelectedListener { menuItem ->
-            return@setOnItemSelectedListener setupBottomNav(menuItem, navController, bundle, args)
-        }
-    }
-
-    private fun setupObserver() {
+    private fun setupObserver(viewModel: GroupsDetailViewModel) {
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { generalConnectRes ->
                 showGenericErrorOr(context, generalConnectRes) {
@@ -82,25 +73,17 @@ class GroupsDetailFragment : Fragment() {
 
     private fun setupBottomNav(
         menuItem: MenuItem,
-        navController: NavController,
-        bundle: Bundle,
-        args: GroupsDetailFragmentArgs
+        viewPager: ViewPager
     ): Boolean {
         when (menuItem.itemId) {
             R.id.groupsDetailMapMenuItem -> {
-                navController.navigate(
-                    R.id.action_global_groupsDetailMapFragment, bundle
-                )
+                viewPager.currentItem = 0
             }
             R.id.groupsDetailListMenuItem -> {
-                val directions = GroupsNavigationDirections
-                    .actionGlobalGroupsDetailListFragment(args.groupName, args.isConnectedPage)
-                navController.navigate(directions)
+                viewPager.currentItem = 1
             }
             R.id.groupsDetailMembersMenuItem -> {
-                val directions = GroupsNavigationDirections
-                    .actionGlobalGroupsDetailMembersFragment(args.groupName)
-                navController.navigate(directions)
+                viewPager.currentItem = 2
             }
         }
         return true
