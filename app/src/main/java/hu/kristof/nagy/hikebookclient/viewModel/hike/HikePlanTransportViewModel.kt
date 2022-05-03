@@ -59,15 +59,15 @@ class HikePlanTransportViewModel @Inject constructor(
         }
     }
 
-    fun setStartTo(value: java.lang.Boolean) {
-        _setStartNext.value = value as kotlin.Boolean
+    fun setStartTo(value: Boolean) {
+        _setStartNext.value = value
         if (shouldSetBoth()) {
             _setEndNext.value = false
         }
     }
 
-    fun setEndTo(value: java.lang.Boolean) {
-        _setEndNext.value = value as kotlin.Boolean
+    fun setEndTo(value: Boolean) {
+        _setEndNext.value = value
         if (shouldSetBoth()) {
             _setStartNext.value = false
         }
