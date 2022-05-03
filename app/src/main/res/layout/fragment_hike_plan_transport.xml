@@ -55,9 +55,9 @@
             android:layout_marginTop="8dp"
             android:minHeight="48dp"
             android:onCheckedChanged="@{(_, isChecked) -> viewModel.setStartTo(isChecked)}"
+            android:text="@string/hike_plan_transport_start_switch_text"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/hike_plan_transport_start_switch_text" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/hikePlanTransportEndSwitch"
