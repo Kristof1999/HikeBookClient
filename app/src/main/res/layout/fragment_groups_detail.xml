@@ -40,38 +40,31 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@{isConnectedPage ? @string/leave_text : @string/join_text }"
             android:onClick="@{() -> viewModel.generalConnect(groupName, isConnectedPage, context)}"
-            app:layout_constraintBottom_toTopOf="@+id/groupsDetailBottomNav"
+            android:text="@{isConnectedPage ? @string/leave_text : @string/join_text }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupsDetailNavHostFragment" />
+            app:layout_constraintTop_toBottomOf="@id/groupsDetailGroupNameTv" />
 
-        <fragment
-            android:id="@+id/groupsDetailNavHostFragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/groupsDetailViewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/groupsDetailGeneralConnectButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupsDetailGroupNameTv"
-            app:defaultNavHost="true" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/groupsDetailBottomNav"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:labelVisibilityMode="labeled"
+            android:contentDescription="@string/groups_detail_view_pager_content_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/groupsDetailGeneralConnectButton"
-            app:menu="@menu/groups_bottom_nav_menu" />
+            app:layout_constraintTop_toBottomOf="@id/groupsDetailGeneralConnectButton">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/groupsDetailBottomNav"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/groups_bottom_nav_menu" />
+        </androidx.viewpager.widget.ViewPager>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
