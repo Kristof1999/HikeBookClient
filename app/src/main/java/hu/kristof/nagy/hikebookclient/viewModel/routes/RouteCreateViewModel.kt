@@ -24,8 +24,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
-import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.routes.IGroupRouteRepository
+import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
@@ -40,8 +40,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RouteCreateViewModel @Inject constructor(
-    private val userRouteRepository: UserRouteRepository,
-    private val groupRouteRepository: GroupRouteRepository
+    private val userRouteRepository: IUserRouteRepository,
+    private val groupRouteRepository: IGroupRouteRepository
     ) : RouteViewModel() {
 
     private val _routeCreateRes = MutableLiveData<ResponseResult<Boolean>>()
