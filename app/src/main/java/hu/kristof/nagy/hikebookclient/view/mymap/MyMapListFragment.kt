@@ -35,7 +35,6 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.FragmentMyMapListBinding
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.RouteType
-import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.util.showGenericErrorOr
@@ -82,25 +81,6 @@ class MyMapListFragment : Fragment() {
     private fun setupObservers(myMapDetailViewModel: MyMapDetailViewModel) {
         myMapDetailViewModel.deleteRes.observe(viewLifecycleOwner) {
             onDeleteResult(myMapDetailViewModel, it)
-        }
-        myMapDetailViewModel.groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
-            onGroupHikeCreateResult(myMapDetailViewModel, res)
-        }
-    }
-
-    private fun onGroupHikeCreateResult(
-        myMapDetailViewModel: MyMapDetailViewModel,
-        res: ServerResponseResult<Boolean>
-    ) {
-        if (!myMapDetailViewModel.groupHikeCreationFinished) {
-            handleResult(context, res) { groupHikeCreateRes ->
-                showGenericErrorOr(
-                    context,
-                    groupHikeCreateRes,
-                    "A csoportos túra létrehozása sikeres!"
-                )
-            }
-            myMapDetailViewModel.groupHikeCreationFinished = true
         }
     }
 
