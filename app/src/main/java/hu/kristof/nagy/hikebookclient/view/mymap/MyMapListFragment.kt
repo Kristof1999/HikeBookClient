@@ -114,9 +114,9 @@ class MyMapListFragment : Fragment() {
         val adapter = MyMapListAdapter(
             MyMapClickListener(
                 editListener = { routeName ->
-                    val action = MyMapListFragmentDirections
+                    val directions = MyMapListFragmentDirections
                         .actionMyMapListFragmentToRouteEditFragment(RouteType.USER, null, routeName)
-                    findNavController().navigate(action)
+                    findNavController().navigate(directions)
                 },
                 deleteListener = { routeName ->
                     handleOffline(requireContext()) {
