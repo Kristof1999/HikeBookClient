@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.data.routes
+package hu.kristof.nagy.hikebookclient.data.repository.routes
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

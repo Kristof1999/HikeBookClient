@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.data
+package hu.kristof.nagy.hikebookclient.data.repository
 
 import hu.kristof.nagy.hikebookclient.model.DateTime
 import hu.kristof.nagy.hikebookclient.model.GroupHikeListHelper

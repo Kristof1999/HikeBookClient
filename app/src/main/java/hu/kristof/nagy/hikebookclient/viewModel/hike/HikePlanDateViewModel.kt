@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.IWeatherRepository
-import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.IWeatherRepository
+import hu.kristof.nagy.hikebookclient.data.repository.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.model.weather.WeatherResponse

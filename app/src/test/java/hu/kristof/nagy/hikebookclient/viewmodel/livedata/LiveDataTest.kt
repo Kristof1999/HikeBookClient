@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import hu.kristof.nagy.hikebookclient.data.IGroupHikeRepository
-import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.IGroupHikeRepository
+import hu.kristof.nagy.hikebookclient.data.repository.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.GroupsRepository
+import hu.kristof.nagy.hikebookclient.data.repository.GroupsRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import kotlinx.coroutines.flow.collect

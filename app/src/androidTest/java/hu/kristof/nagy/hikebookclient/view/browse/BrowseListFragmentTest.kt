@@ -14,7 +14,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.routes.IUserRouteRepository
 import hu.kristof.nagy.hikebookclient.di.UserRouteRepositoryModule
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import hu.kristof.nagy.hikebookclient.model.BrowseListItem

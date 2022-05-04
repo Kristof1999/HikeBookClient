@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.routes.IGroupRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.routes.IGroupRouteRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route

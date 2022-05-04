@@ -27,7 +27,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.IAuthRepository
+import hu.kristof.nagy.hikebookclient.data.repository.IAuthRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.model.User
 import hu.kristof.nagy.hikebookclient.util.handleIllegalStateAndArgument

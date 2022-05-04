@@ -15,7 +15,7 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.data.IGroupHikeRepository
+import hu.kristof.nagy.hikebookclient.data.repository.IGroupHikeRepository
 import hu.kristof.nagy.hikebookclient.di.GroupHikeRepositoryModule
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import hu.kristof.nagy.hikebookclient.model.DateTime

@@ -4,11 +4,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import hu.kristof.nagy.hikebookclient.data.*
-import hu.kristof.nagy.hikebookclient.data.routes.GroupRouteRepository
-import hu.kristof.nagy.hikebookclient.data.routes.IGroupRouteRepository
-import hu.kristof.nagy.hikebookclient.data.routes.IUserRouteRepository
-import hu.kristof.nagy.hikebookclient.data.routes.UserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.*
+import hu.kristof.nagy.hikebookclient.data.repository.routes.GroupRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.routes.IGroupRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.routes.IUserRouteRepository
+import hu.kristof.nagy.hikebookclient.data.repository.routes.UserRouteRepository
 
 @Module
 @InstallIn(SingletonComponent::class)

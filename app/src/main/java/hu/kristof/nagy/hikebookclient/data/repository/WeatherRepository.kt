@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.data
+package hu.kristof.nagy.hikebookclient.data.repository
 
 import hu.kristof.nagy.hikebookclient.BuildConfig
 import hu.kristof.nagy.hikebookclient.data.network.WeatherService

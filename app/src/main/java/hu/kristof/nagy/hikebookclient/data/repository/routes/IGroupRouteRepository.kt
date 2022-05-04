@@ -1,4 +1,4 @@
-package hu.kristof.nagy.hikebookclient.data.routes
+package hu.kristof.nagy.hikebookclient.data.repository.routes
 
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
