@@ -162,8 +162,6 @@ class HikeFragment : MapFragment() {
             ) {
                 Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG)
                     .show()
-                // TODO: try to get better data
-                // problem: circle is big -> time can be out dated -> avgSpeed is not realistic
                 startTime = Calendar.getInstance().timeInMillis
             } else {
                 Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG)

@@ -68,7 +68,6 @@ class RouteEditViewModel @Inject constructor(
      * Checks if the route has loaded yet.
      * If the route has loaded, then it calls the data layer
      * to save the changes, and notifies the view layer of the result.
-     * @throws IllegalStateException if the route has not loaded yet
      */
     fun onRouteEdit(
         context: Context

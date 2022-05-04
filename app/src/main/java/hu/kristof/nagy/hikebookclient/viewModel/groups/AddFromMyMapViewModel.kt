@@ -25,7 +25,6 @@ class AddFromMyMapViewModel @Inject constructor(
         get() = _routes
 
     fun loadRoutesForLoggedInUser() {
-        // TODO: only load names of routes
         viewModelScope.launch {
             userRepository.loadUserRoutesOfLoggedInUser()
                 .collect{ routes ->

@@ -66,11 +66,6 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
     }
 
     private fun setupLoad() {
-        // TODO: when testing this, place big emphasis on lifecycle
-        //       related concerns as this observer is different from usual,
-        //       namely, it uses the parent fragment's viewLifecycleOwner
-        //       instead of its own
-        //       OR try to make it work with its own viewLifecycleOwner
         binding.lifecycleOwner = parentFragment?.viewLifecycleOwner
         viewModel.routes.observe(requireParentFragment().viewLifecycleOwner, observer)
         handleOfflineLoad(requireContext()) {

@@ -39,7 +39,9 @@ class BrowseDetailViewModel @Inject constructor(
     val hikeDescriptionText: LiveData<String>
         get() = _hikeDescriptionText
 
-    // TODO: comment
+    /**
+     * Loads the specified user route, and sets the description for the view.
+     */
     fun loadDetails(
         userName: String,
         routeName: String,
@@ -58,14 +60,12 @@ class BrowseDetailViewModel @Inject constructor(
         }
     }
 
-    // TODO: update -> remove throws
     /**
      * Before calling the data layer to
      * create the chosen route for the logged in user,
      * it checks whether the chosen route has been loaded.
      * If the route has been loaded, then it calls the data layer,
      * and notifies the view layer of the result.
-     * @throws IllegalStateException if the route has not loaded yet
      */
     fun addToMyMap(routeName: java.lang.String, context: Context) {
         handleRouteLoad(_route.value, _addRes) {

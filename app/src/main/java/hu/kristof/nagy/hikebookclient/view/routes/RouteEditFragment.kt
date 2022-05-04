@@ -64,9 +64,6 @@ class RouteEditFragment : RouteFragment() {
         setupSpinner()
 
         handleOfflineLoad(requireContext()) {
-            // TODO: add listener for when online to load the route
-            // and prevent editing to attempt to edit a null route
-            // in the case when loading failed due to beign offline
             viewModel.loadRoute(args)
         }
 

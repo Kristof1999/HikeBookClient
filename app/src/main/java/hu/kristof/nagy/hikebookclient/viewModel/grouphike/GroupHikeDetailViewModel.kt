@@ -78,14 +78,12 @@ class GroupHikeDetailViewModel @Inject constructor(
         }
     }
 
-    // TODO: update javadoc
     /**
      * Checks if the route has loaded.
      * If it has not, then it throws the appropriate exceptions.
      * If it has, then it calls the data layer to create
      * the loaded route for the logged in user,
      * and notifies the view layer of the result.
-     * @throws IllegalStateException if the route has not loaded yet
      */
     fun addToMyMap(context: Context) {
         handleRouteLoad(_route.value, _addToMyMapRes) {

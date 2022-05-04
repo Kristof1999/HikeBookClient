@@ -81,7 +81,6 @@ class BrowseDetailFragment : MapFragment() {
     ) {
         handleOfflineLoad(requireContext()) {
             viewModel.loadDetails(args.userName, args.routeName, requireContext().resources)
-            // TODO: add listener for when the device is online, we load the details
         }
     }
 

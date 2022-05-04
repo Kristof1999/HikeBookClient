@@ -50,7 +50,6 @@ class LoginViewModel @Inject constructor(
     private var name = ""
     private var password = ""
 
-    // TODO: update javadoc
     /**
      * Calls the data layer to log in the user,
      * after encrypting the user's password,

@@ -12,10 +12,6 @@ import androidx.lifecycle.MutableLiveData
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 
-// TODO: avoid spamming the user:
-// request a lifecycleOwner too and only show the error message
-// once per screen and lifetime
-
 /**
  * If the device is online, it executes the given lambda,
  * otherwise it shows an error message.
