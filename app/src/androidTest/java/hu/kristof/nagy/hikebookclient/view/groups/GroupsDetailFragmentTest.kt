@@ -50,9 +50,4 @@ class GroupsDetailFragmentTest {
         onView(withId(R.id.groupsDetailViewPager)).check(matches(isDisplayed()))
         onView(withId(R.id.groupsDetailBottomNav)).check(matches(isDisplayed()))
     }
-
-    fun verifyBottomNav() {
-        // TODO -> codelab
-        // ViewPagerActions
-    }
 }
