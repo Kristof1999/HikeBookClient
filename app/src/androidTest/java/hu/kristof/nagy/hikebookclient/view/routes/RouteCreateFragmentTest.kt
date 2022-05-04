@@ -9,7 +9,9 @@ import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
+import hu.kristof.nagy.hikebookclient.model.RouteType
 import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @HiltAndroidTest
@@ -19,8 +21,11 @@ class RouteCreateFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
+    @Test
     fun checkDisplay() {
-        launchFragmentInHiltContainer<RouteCreateFragment>()
+        val routeType = RouteType.USER
+        val bundle = RouteCreateFragmentArgs(routeType, null).toBundle()
+        launchFragmentInHiltContainer<RouteCreateFragment>(bundle)
 
         onView(withId(R.id.routeCreateRouteNameEditText))
             .check(matches(isDisplayed()))
