@@ -1,5 +1,7 @@
 package hu.kristof.nagy.hikebookclient.view.hike
 
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -17,6 +19,7 @@ import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
 import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
+import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
@@ -24,8 +27,10 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 @UninstallModules(UserRouteRepositoryModule::class)
 @HiltAndroidTest
@@ -99,7 +104,28 @@ class HikePlanTransportFragmentTest {
         onView(withId(R.id.hikePlanTransportEndSwitch)).check(matches(isNotChecked()))
     }
 
-    fun checkSpinner() {
+    @Test
+    fun verifyNav() {
+        val navController = Mockito.mock(NavController::class.java)
+        val isForward = true
+        val bundle = HikePlanTransportFragmentArgs(isForward, routeName).toBundle()
+        launchFragmentInHiltContainer<HikePlanTransportFragment>(
+            bundle,
+            dataBindingIdlingResource
+        ) {
+            Navigation.setViewNavController(view!!, navController)
+        }
 
+        onView(withId(R.id.hikePlanTransportStartButton)).perform(click())
+
+        val p = Constants.START_POINT
+        val startPoint = Point(p.latitude, p.longitude, MarkerType.SET, "")
+        val endPoint = Point(p.latitude, p.longitude, MarkerType.NEW, "")
+        val transportType = TransportType.BICYCLE
+        val directions = HikePlanTransportFragmentDirections
+            .actionHikePlanFragmentToHikeTransportFragment(
+                startPoint, endPoint, transportType, isForward, routeName
+            )
+        verify(navController).navigate(directions)
     }
 }
