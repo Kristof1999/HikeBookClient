@@ -51,7 +51,8 @@ class RegistrationViewModel @Inject constructor(
     private var passwordAgain = ""
 
     /**
-     * Calls the data layer to register the user,
+     * Checks if the passwords typed match.
+     * If they do, then it calls the data layer to register the user,
      * after encrypting the user's password,
      * and notifies the view layer of the result.
      * @param user the user to register
