@@ -24,7 +24,7 @@ abstract class RepositoryModules {
 @InstallIn(SingletonComponent::class)
 abstract class UserRouteRepositoryModule {
     @Binds
-    abstract fun bindIRouteRepository(impl: UserRouteRepository): IUserRouteRepository
+    abstract fun bindIUserRouteRepository(impl: UserRouteRepository): IUserRouteRepository
 }
 
 @Module
