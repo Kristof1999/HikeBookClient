@@ -1,5 +1,6 @@
 package hu.kristof.nagy.hikebookclient.view.authentication
 
+import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.typeText
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -26,13 +27,19 @@ class RegistrationFragmentTest {
     fun checkDisplay() {
         launchFragmentInHiltContainer<RegistrationFragment>()
 
-        onView(withId(R.id.registerNameEditText)).check(matches(isDisplayed()))
-        onView(withId(R.id.registerNameEditText)).check(matches(withHint(R.string.user_name_hint)))
-        onView(withId(R.id.registerPasswordEditText)).check(matches(isDisplayed()))
-        onView(withId(R.id.registerPasswordEditText)).check(matches(withHint(R.string.password_hint)))
-        onView(withId(R.id.registerButton)).check(matches(isDisplayed()))
-        onView(withId(R.id.registerButton)).check(matches(withText(R.string.registration_btn_text)))
-        onView(withId(R.id.registerButton)).check(matches(isClickable()))
+        onView(withId(R.id.registerNameEditText))
+            .check(matches(isDisplayed()))
+            .check(matches(withHint(R.string.user_name_hint)))
+        onView(withId(R.id.registerPasswordEditText))
+            .check(matches(isDisplayed()))
+            .check(matches(withHint(R.string.password_hint)))
+        onView(withId(R.id.registerPasswordAgainEditText))
+            .check(matches(isDisplayed()))
+            .check(matches(withHint(R.string.password_again_hint)))
+        onView(withId(R.id.registerButton))
+            .check(matches(isDisplayed()))
+            .check(matches(withText(R.string.registration_btn_text)))
+            .check(matches(isClickable()))
     }
 
     @Test
@@ -42,9 +49,14 @@ class RegistrationFragmentTest {
         val password = "password"
 
         onView(withId(R.id.registerNameEditText)).perform(typeText(userName))
+        closeSoftKeyboard()
         onView(withId(R.id.registerPasswordEditText)).perform(typeText(password))
+        closeSoftKeyboard()
+        onView(withId(R.id.registerPasswordAgainEditText)).perform(typeText(password))
+        closeSoftKeyboard()
 
         onView(withId(R.id.registerNameEditText)).check(matches(withText(userName)))
         onView(withId(R.id.registerPasswordEditText)).check(matches(withText(password)))
+        onView(withId(R.id.registerPasswordAgainEditText)).check(matches(withText(password)))
     }
 }
