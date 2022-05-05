@@ -10,7 +10,7 @@ import javax.inject.Inject
  * A Repository that helps to make weather forecasts.
  */
 class WeatherRepository @Inject constructor(
-    val service: WeatherService
+    private val service: WeatherService
 ) : IWeatherRepository {
     /**
      * Sets some constants for the call to the service.
