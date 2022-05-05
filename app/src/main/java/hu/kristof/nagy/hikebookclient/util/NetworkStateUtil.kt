@@ -28,6 +28,10 @@ fun handleOffline(context: Context, f: () -> Unit) {
     }
 }
 
+/**
+ * If the device is online, it executes the given lambda,
+ * otherwise it sets an error for the provided MutableLiveData object.
+ */
 suspend fun <T> handleOffline(
     data: MutableLiveData<ResponseResult<T>>,
     context: Context,

@@ -24,6 +24,13 @@ fun <P : Route> checkAndHandleRouteLoad(routeRes: ServerResponseResult<P>?): Boo
     }
 }
 
+/**
+ * Checks if the route has been loaded.
+ * If it hasn't, then it sets an error
+ * for the provided MutableLiveData object.
+ * If it has loaded, then it executes
+ * the given lambda.
+ */
 fun <P : Route, T> handleRouteLoad(
     routeRes: ServerResponseResult<P>?,
     data: MutableLiveData<ResponseResult<T>>,
@@ -67,6 +74,11 @@ fun catchAndShowIllegalStateAndArgument(context: Context?, f: () -> Unit) {
     }
 }
 
+/**
+ * Catches IllegalStateException and IllegalArgumentException
+ * thrown by the given lambda, and sets an error for the provided
+ * MutableLiveData object.
+ */
 suspend fun <T> handleIllegalStateAndArgument(
     data: MutableLiveData<ResponseResult<T>>,
     f: suspend () -> Unit

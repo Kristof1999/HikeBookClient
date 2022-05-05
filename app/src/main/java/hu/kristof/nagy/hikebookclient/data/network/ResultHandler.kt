@@ -16,6 +16,10 @@ fun <T: Any> handleResult(context: Context?, res: ServerResponseResult<T>, f: (T
         Toast.makeText(context, res.failMessage!!, Toast.LENGTH_LONG).show()
 }
 
+/**
+ * Handles the given result: if it's successful, then it executes the given lambda f.
+ * If it's not successful, then it shows the error message.
+ */
 fun <T: Any> handleResult(context: Context?, res: ResponseResult<T>, f: (T) -> Unit) {
     when(res) {
         is ResponseResult.Success<T> -> f.invoke(res.data)
