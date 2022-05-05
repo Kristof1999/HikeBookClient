@@ -48,6 +48,7 @@ class RegistrationViewModel @Inject constructor(
 
     private var name = ""
     private var password = ""
+    private var passwordAgain = ""
 
     /**
      * Calls the data layer to register the user,
@@ -56,6 +57,11 @@ class RegistrationViewModel @Inject constructor(
      * @param user the user to register
      */
     fun onRegister(context: Context) {
+        if (password != passwordAgain) {
+            _registrationRes.value = ResponseResult.Error("A jelszók nem egyeznek!")
+            return
+        }
+
         viewModelScope.launch {
             handleIllegalStateAndArgument(_registrationRes) {
                 handleOffline(_registrationRes, context) {
@@ -74,5 +80,9 @@ class RegistrationViewModel @Inject constructor(
 
     fun afterPasswordChanged(text: Editable) {
         password = text.toString()
+    }
+
+    fun afterPasswordAgainChanged(text: Editable) {
+        passwordAgain = text.toString()
     }
 }
