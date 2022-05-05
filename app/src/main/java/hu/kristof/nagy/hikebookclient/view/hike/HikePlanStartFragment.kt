@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -86,7 +87,11 @@ class HikePlanStartFragment : Fragment() {
             date = dateRes
             hour?.let {
                 catchAndShowIllegalStateAndArgument(context) {
-                    viewModel.forecast(dateRes, it)
+                    try {
+                        viewModel.forecast(dateRes, it)
+                    } catch (e: IndexOutOfBoundsException) {
+                        Toast.makeText(context, "Válassz más időpontot!", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -101,7 +106,11 @@ class HikePlanStartFragment : Fragment() {
             hour = hourRes.get(Calendar.HOUR_OF_DAY)
             date?.let {
                 catchAndShowIllegalStateAndArgument(context) {
-                    viewModel.forecast(it, hourRes.get(Calendar.HOUR_OF_DAY))
+                    try {
+                        viewModel.forecast(it, hourRes.get(Calendar.HOUR_OF_DAY))
+                    } catch (e: IndexOutOfBoundsException) {
+                        Toast.makeText(context, "Válassz más időpontot!", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
