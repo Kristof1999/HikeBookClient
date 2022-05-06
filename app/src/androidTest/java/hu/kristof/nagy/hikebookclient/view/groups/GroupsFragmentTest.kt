@@ -14,12 +14,15 @@ import hu.kristof.nagy.hikebookclient.R
 import hu.kristof.nagy.hikebookclient.data.repository.IGroupsRepository
 import hu.kristof.nagy.hikebookclient.di.GroupsRepositoryModule
 import hu.kristof.nagy.hikebookclient.launchFragmentInHiltContainer
+import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 
 @UninstallModules(GroupsRepositoryModule::class)
 @HiltAndroidTest
@@ -35,10 +38,15 @@ class GroupsFragmentTest {
     var dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(dataBindingIdlingResource)
 
     @BindValue
-    val groupsRepository: IGroupsRepository = Mockito.mock(IGroupsRepository::class.java)
+    lateinit var groupsRepository: IGroupsRepository
 
     @Test
     fun checkDisplay() {
+        groupsRepository = mock {
+            onBlocking {
+                listGroupsForLoggedInUser(false)
+            } doReturn flowOf(ServerResponseResult(true, null, listOf()))
+        }
         launchFragmentInHiltContainer<GroupsFragment>(
             dataBindingIdlingResource = dataBindingIdlingResource
         )
@@ -53,6 +61,11 @@ class GroupsFragmentTest {
 
     @Test
     fun checkNotConnectedPageDisplayed() {
+        groupsRepository = mock {
+            onBlocking {
+                listGroupsForLoggedInUser(false)
+            } doReturn flowOf(ServerResponseResult(true, null, listOf()))
+        }
         launchFragmentInHiltContainer<GroupsFragment>(
             dataBindingIdlingResource = dataBindingIdlingResource
         )
@@ -67,6 +80,15 @@ class GroupsFragmentTest {
 
     @Test
     fun checkConnectedPageDisplayed() {
+        groupsRepository = mock {
+            onBlocking {
+                listGroupsForLoggedInUser(true)
+            } doReturn flowOf(ServerResponseResult(true, null, listOf()))
+
+            onBlocking {
+                listGroupsForLoggedInUser(false)
+            } doReturn flowOf(ServerResponseResult(true, null, listOf()))
+        }
         launchFragmentInHiltContainer<GroupsFragment>(
             dataBindingIdlingResource = dataBindingIdlingResource
         )
