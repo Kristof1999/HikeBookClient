@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -42,7 +41,6 @@ class GroupHikeListFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @Mock
     @BindValue
     lateinit var groupHikeRepository: IGroupHikeRepository
 

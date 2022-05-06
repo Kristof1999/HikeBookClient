@@ -22,7 +22,6 @@ import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailMembersFrag
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
@@ -39,7 +38,6 @@ class GroupsDetailMembersFragmentTest {
     @get:Rule
     var dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(dataBindingIdlingResource)
 
-    @Mock
     @BindValue
     lateinit var groupsRepository: IGroupsRepository
 

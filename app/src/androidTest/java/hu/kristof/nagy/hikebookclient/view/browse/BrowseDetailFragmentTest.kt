@@ -24,7 +24,6 @@ import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 
@@ -36,7 +35,6 @@ class BrowseDetailFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @Mock
     @BindValue
     lateinit var userRouteRepository: IUserRouteRepository
 

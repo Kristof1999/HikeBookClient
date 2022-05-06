@@ -45,7 +45,6 @@ class GroupsListFragmentTest {
     @get:Rule
     var dataBindingIdlingResourceRule = DataBindingIdlingResourceRule(dataBindingIdlingResource)
 
-    @Mock
     @BindValue
     lateinit var groupsRepository: IGroupsRepository
 

@@ -47,7 +47,6 @@ class GroupsDetailListFragmentTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    @Mock
     @BindValue
     lateinit var groupRouteRepository: IGroupRouteRepository
 

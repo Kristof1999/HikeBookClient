@@ -37,7 +37,6 @@ class GroupHikeDetailFragmentTest {
 
     private val dataBindingIdlingResource = DataBindingIdlingResource()
 
-    @Mock
     @BindValue
     lateinit var groupHikeRepository: IGroupHikeRepository
 
