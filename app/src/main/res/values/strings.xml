@@ -66,7 +66,7 @@
     <string name="name_exists_error_msg">Ez a név már foglalt.</string>
     <string name="login_fail_msg">Vagy a név, vagy a jelszó hibás.</string>
     <string name="offline_once_error_msg">Ehhez a funkcióhoz internetkapcsolat szükséges.</string>
-    <string name="offline_load_error_msg">A legfrisebb adatok betöltéséhez internetkapcsolat szükséges.</string>
+    <string name="offline_load_error_msg">A legfrissebb adatok betöltéséhez internetkapcsolat szükséges.</string>
 
     <!-- Hike -->
     <string name="hike_plan_date_title">Dátum és Idő Tervezés</string>
