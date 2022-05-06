@@ -25,14 +25,12 @@ fun Marker.setListeners(
     viewModel: RouteViewModel
 ) {
     setOnMarkerClickListener(Marker.OnMarkerClickListener { marker, mapView ->
+        // TODO: manually test info windows
+        marker.closeInfoWindow()
         if (deleteSwitch.isChecked) {
             onDeleteViewHandler(context, marker, mapView, viewModel)
         } else {
-            if (marker.isInfoWindowShown) {
-                marker.closeInfoWindow()
-            } else {
-                marker.showInfoWindow()
-            }
+            marker.showInfoWindow()
         }
         return@OnMarkerClickListener true
     })
