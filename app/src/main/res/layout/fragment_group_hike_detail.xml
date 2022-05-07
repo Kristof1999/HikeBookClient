@@ -59,7 +59,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            tools:listitem="@layout/group_hike_detail_participants_list_item" />
 
         <Button
             android:id="@+id/groupHikeDetailGeneralConnectButton"
