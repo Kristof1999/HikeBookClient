@@ -128,16 +128,16 @@
     <!-- Help -->
     <string name="help_title">Súgó</string>
     <string name="about">
-        "HikeBook: Közösségi háló túrázóknak\n\n"
+        "HikeBook: Közösségi háló túrázóknak\n\n\n"
 
         "Ez a mobilalkalmazás természetjáróknak készült."
         "Főbb funkciói közé tartoznak az útvonalakkal való interaktivitás "
-        "és a közösségi lehetőségek.\n"
+        "és a közösségi lehetőségek.\n\n"
 
         "Létrehozhatunk, törölhetünk, szerkeszthetünk, és ki is nyomtathatunk útvonalakat."
         "Továbbá böngészhetünk mások útvonalai közt."
         "Valamint túránkat is eltervezhetjük az app segítségével, "
-        "és a teljesítést is nyomon követhetjük.\n"
+        "és a teljesítést is nyomon követhetjük.\n\n"
 
         "Csatlakozhatunk csoportokhoz, amikor is láthatjuk, hogy "
         "a csoportnak milyen útvonalai vannak."
@@ -147,12 +147,12 @@
     <string name="help_my_map">
         "Ezen a lapon a saját térképedet láthatod."
         "Itt fognak megjelenni az álatalad készített útvonalak, "
-        "és azok is, amelyeket böngészés során adtál a térképedhez.\n"
+        "és azok is, amelyeket böngészés során adtál a térképedhez.\n\n"
 
         "Egy-egy útvonalra kattintva, egy kis felugró ablakon olvashatod az útvonal nevét."
         "Útvonalat a képernyő jobb alsó sarkában található + jelű gomb megnyomásával kezdhetsz készíteni."
         "Ha az útvonalakat lista formájában szeretnéd megtekinteni, akkor "
-        "ezt az 'Átváltás Lista Nézetre' című, fent található gombra bökéssel teheted meg.\n"
+        "ezt az 'Átváltás Lista Nézetre' című, fent található gombra bökéssel teheted meg.\n\n"
 
         "Jobb felső sarokban, ha a 3 pöttyre böksz, akkor a menüt láthatod."
         "Ennek segítségével más képernyőkre navigálhatsz."
@@ -160,7 +160,7 @@
 
     <string name="help_my_map_list">
         "Ezen a lapon a saját útvonalaidat láthatod lista formájában. "
-        "Egy listaelem az útvonal nevéből, valamint néhány gombból áll.\n"
+        "Egy listaelem az útvonal nevéből, valamint néhány gombból áll.\n\n"
 
         "Ha egy adott nevű útvonalra böksz, akkor egy térképen is megtekintheted azt. "
         "Ha az útvonal nevétől jobb első gombra böksz, akkor az adott útvonalat szerkesztheted. "
@@ -168,7 +168,7 @@
         "ahol a képernyő alján levő nyomtatás gombbal kinyomtathatod az adott útvonalat. "
         "A sorban legutolsó gombbal az útvonalat törölheted a saját térképedről, valamint a listádból. "
         "A csoportos túra létrehozása gombbal a részletes nézetben elkezdhetsz "
-        "egy csoportos túrát létrehozni.\n"
+        "egy csoportos túrát létrehozni.\n\n"
 
         "Ha az útvonalakat térképen szeretnéd megtekinteni, akkor "
         "nyomd meg az 'Átváltás Térkép Nézetre' gombot."
@@ -189,7 +189,7 @@
         "létrehozhatod az útvonalat. Ettől a gombtól jobbra levő kapcsolóval "
         "állíthatod be, hogy pontokat törölni, vagy felvenni szeretnél."
         "A létrehozás gombtól balra kiválaszthatod, hogy milyen típusú "
-        "pontot szeretnél felvenni.\n"
+        "pontot szeretnél felvenni.\n\n"
 
         "Pontok felvételét a térképre való bökéssel teheted meg."
         "Ha a térképre felvett pontok közül valamelyikre ráböksz, akkor "
@@ -197,16 +197,16 @@
         "a térképen valahova böksz, vagy ha az adott pontra böknél."
         "A felvett pontokat mozgathatod is azáltal, hogy az egyiket hosszan nyomva tartod."
         "Ez után mozgathatod, és ha elengeded, akkor a pont ott marad, "
-        "és a szomszédaival összekötő vonalak is újracsatlakoznak.\n"
+        "és a szomszédaival összekötő vonalak is újracsatlakoznak.\n\n"
 
         "Megkötés, hogy legalább két pontot fel kell venni, mielőtt "
         "létrehozhatnád az útvonalat. Továbbá, hogy ne legyen még egy olyan "
-        "útvonal a térképeden, amely teljesen ugyanezekkel a pontokkal rendelkezne.\n"
+        "útvonal a térképeden, amely teljesen ugyanezekkel a pontokkal rendelkezne.\n\n"
 
         "Az útvonal név nem lehet üres, valamint nem tartalmazhat / jelet."
         "Ezen kívül további megkötés, hogy olyan nevet kell válassz, "
         "ami jelenleg a térképeden/listádban nem található, azaz "
-        "számodra egyedi kell, hogy legyen.\n"
+        "számodra egyedi kell, hogy legyen.\n\n"
 
         "Ha a törlés mód be van kapcsolva, akkor a térképre való bökéssel "
         "pontfelvétel helyett pontokat törölhetsz, csak az adott pontra kell böknöd."
@@ -214,7 +214,7 @@
         "Ha egy pontot törölsz, akkor a szomszédjával összekötő vonal is törlődik."
         "Megkötés, hogy csak a legutolsónak felvett pontot törölheted."
         "Ha új típusú pontot veszel fel, akkor kékesen fog megjelenni, ezzel jelezvén, hogy ez a legutolsó."
-        "Amikor egy pont piros színűvé válik, akkor ezzel mutatja, hogy ez már nem a legutolsó pont.\n"
+        "Amikor egy pont piros színűvé válik, akkor ezzel mutatja, hogy ez már nem a legutolsó pont.\n\n"
 
         "Ha szöveg típusú pontot akarsz felvenni, akkor egy felugró ablakban "
         "meg kell adnod, hogy ott milyen szöveg jelenjen meg."
@@ -228,7 +228,7 @@
         "elmentheted a változtatásokat. A mentés gombtól jobbra levő kapcsolóval "
         "állíthatod be, hogy törölni akarsz-e pontokat."
         "A mentés című gombtól balra levő választóval kiválaszthatod a"
-        "következőleg felvevendő gomb típusát."
+        "következőleg felvevendő gomb típusát.\n\n"
 
         "Pontok felvételét a térképre való bökéssel teheted meg."
         "Ha a térképre felvett pontok közül valamelyikre ráböksz, akkor "
@@ -236,16 +236,16 @@
         "a térképen valahova böksz, vagy ha az adott pontra böknél."
         "A felvett pontokat mozgathatod is azáltal, hogy az egyiket hosszan nyomva tartod."
         "Ez után mozgathatod, és ha elengeded, akkor a pont ott marad, "
-        "és a szomszédaival összekötő vonalak is újracsatlakoznak.\n"
+        "és a szomszédaival összekötő vonalak is újracsatlakoznak.\n\n"
 
         "Megkötés, hogy legalább két pontot fel kell venni, mielőtt "
         "elmentenéd az útvonalat. Továbbá, hogy ne legyen még egy olyan "
-        "útvonal a térképeden, amely teljesen ugyanezekkel a pontokkal rendelkezne.\n"
+        "útvonal a térképeden, amely teljesen ugyanezekkel a pontokkal rendelkezne.\n\n"
 
         "Az útvonal név nem lehet üres, valamint nem tartalmazhat / jelet."
         "Ezen kívül további megkötés, hogy olyan nevet kell válassz, "
         "ami jelenleg a térképeden/listádban nem található, azaz "
-        "számodra egyedi kell, hogy legyen.\n"
+        "számodra egyedi kell, hogy legyen.\n\n"
 
         "Ha a törlés mód be van kapcsolva, akkor a térképre való bökéssel "
         "pontfelvétel helyett pontokat törölhetsz, csak az adott pontra kell böknöd."
@@ -253,7 +253,7 @@
         "Ha egy pontot törölsz, akkor a szomszédjával összekötő vonal is törlődik."
         "Megkötés, hogy csak a legutolsónak felvett pontot törölheted."
         "Ha új típusú pontot veszel fel, akkor kékesen fog megjelenni, ezzel jelezvén, hogy ez a legutolsó."
-        "Amikor egy pont piros színűvé válik, akkor ezzel mutatja, hogy ez már nem a legutolsó pont.\n"
+        "Amikor egy pont piros színűvé válik, akkor ezzel mutatja, hogy ez már nem a legutolsó pont.\n\n"
 
         "Ha szöveg típusú pontot akarsz felvenni, akkor egy felugró ablakban "
         "meg kell adnod, hogy ott milyen szöveg jelenjen meg."
@@ -277,7 +277,7 @@
         "Legfelül látható a csoportos túra neve."
         "Ez alatt az útvonalhoz kapcsolódó megjegyzések, túraleírás olvasható."
         "Ez alatt egy térképen a csoportos túra útvonala látható."
-        "Ez alatt a résztvevők felhasználó nevei olvashatóak.\n"
+        "Ez alatt a résztvevők felhasználó nevei olvashatóak.\n\n"
 
         "A lap alján levő gomb egyikével csatlakozhatunk egy csoportos túrához, "
         "de akár el is hagyhatjuk. A 'Hozzáadás a saját térképhez' című gombbal "
@@ -304,7 +304,7 @@
     <string name="help_groups_detail_map">
         "Ezen a lapon a csoport útvonalait láthatod egy térképen. "
         "Legfelül olvasható a csoport neve. Legalul egy gombbal csatlakozhatunk "
-        "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n"
+        "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n\n"
 
         "A plusz jelű gombra bökvén létrehozhatunk útvonalakat a csoportnak. "
         "A térkép alatt levő 'Saját térképről felvétel' című gombbal "
@@ -315,7 +315,7 @@
     <string name="help_groups_detail_list">
         "Ezen a lapon a csoport útvonalait láthatod egy listában. "
         "Legfelül olvasható a csoport neve. Legalul egy gombbal csatlakozhatunk "
-        "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n"
+        "az adott csoporthoz, vagy éppen elhagyhatjuk azt.\n\n"
 
         "Egy lista elem az útvonal nevéből, valamint néhány gombból áll. "
         "A ceruza képpel rendelkező gombbal elkezdheted az adott útvonal szerkesztését. "
@@ -331,12 +331,12 @@
     </string>
 
     <string name="help_hike_plan_start">
-        "Ezen a lapon a túra időpontját válaszhatjuk ki és kaphatunk időjárás előrejelzést. \n"
+        "Ezen a lapon a túra időpontját válaszhatjuk ki és kaphatunk időjárás előrejelzést. \n\n"
 
         "Ha mind a dátumot, mind az időt beállítottuk, akkor a képernyő közepén "
         "fog megjelenni a túra kezdeténél, középnél, és a végénél egy-egy időjárás előrejelzés "
         "3 órás időközökkel. Azonban, ha az utolsó elérhető napot választjuk ki, "
-        "akkor meglehet, hogy nem lesz 3 órás időköz. \n"
+        "akkor meglehet, hogy nem lesz 3 órás időköz. \n\n"
 
         "A lap alján található gombokkal elkezdhetjük az utazást tervezni, vagy "
         "egyből a túrázásra ugorhatunk."
@@ -344,18 +344,18 @@
 
     <string name="help_hike_plan_transport">
         "Ezen a lapon a túrához vezető utat, vagy "
-        "éppen a visszautat tervezhetjük meg. \n"
+        "éppen a visszautat tervezhetjük meg. \n\n"
 
         "A képernyő tetején található kapcsolókkal beállíthatjuk, "
         "hogy következőleg mely pontot szeretnénk mozdítani. "
         "A kezdő- és végállomások módosításához az adott kapcsolót kell "
         "felkapcsolni, és a térképen egy adott helyre bökni. "
         "A kezdőállomástól a végállomásig fogunk kapni útvonal ajánlást "
-        "a következő lapon, ha az oldal ajlán levő gombra bökünk.\n"
+        "a következő lapon, ha az oldal ajlán levő gombra bökünk.\n\n"
 
         "A képernyő közepén található térképen egy egyedi kinézetű "
         "pont fogja mutatni a túra kezdetét/végét, attól függően, hogy "
-        "melyik irányt tervezzük éppen. \n"
+        "melyik irányt tervezzük éppen. \n\n"
 
         "A térkép alatt levő választóból választhatjuk ki, "
         "hogy milyen közlekedési eszközzel szeretnénk menni. "
@@ -365,37 +365,37 @@
 
     <string name="help_hike_transport">
         "Ezen a lapon láthatjuk az előbbi oldalon elhelyezett "
-        "kezdő- és végállomások közötti útvonal ajánlást. \n"
+        "kezdő- és végállomások közötti útvonal ajánlást. \n\n"
 
         "Pontok jelzik, hogy egy adott helyen merre kell menni. "
-        "Az ilyen pontra rábökve, olvashatjuk, hogy merre menjünk tovább. \n"
+        "Az ilyen pontra rábökve, olvashatjuk, hogy merre menjünk tovább. \n\n"
 
         "A lap alján levő gombbal elkezdhetjük a túrát, vagy "
         "éppen befejezhetjük a vezetést, és visszatérhetünk a saját térkép oldalra."
     </string>
 
     <string name="help_hike">
-        "Ezen a lapon a túra teljesítéséhez kaphatunk segítséget.\n"
+        "Ezen a lapon a túra teljesítéséhez kaphatunk segítséget.\n\n"
 
         "Ha offline szeretnénk túrázni, akkor a lap tetején lévő gomb "
-        "tájékoztatni fog az ehhez szükséges előkészületekről. \n"
+        "tájékoztatni fog az ehhez szükséges előkészületekről. \n\n"
 
         "A 'Túra kezdése' és befejezése című gombokkal mérhetjük a teljesítésünket. "
         "Ha a térképen látható körökön belül vagyunk, és a megfelelő "
         "gombra bökünk, akkor egy felugró üzenet fog tájékoztatni, hogy"
-        "a pontérintés sikeres volt, vagy esetleg még nem vagyunk elég közel az adott ponthoz.\n"
+        "a pontérintés sikeres volt, vagy esetleg még nem vagyunk elég közel az adott ponthoz.\n\n"
 
         "A 'Hazaút tervezése' című gombra bökve, elkezdhetjük a visszaút tervezését, "
         "feltéve, hogy elég közel vagyunk a célhoz. Ha nem vagyunk közel a célhoz, de "
         "akkor is be szeretnénk fejezni a túrát, akkor ehhez hosszan nyomjuk meg a gombot. "
         "Szintén, ha a 'Túra befejezése' című gombot hosszan nyomjuk meg, akkor "
         "a saját térkép képernyőre kerülünk vissza, anélkül, hogy a teljesítményünk "
-        "elmentésre került volna. \n"
+        "elmentésre került volna. \n\n"
 
         "A képernyő közepén látható térképen a túra útvonala látható. "
         "Az egyes pontokra bökve, elolvashatjuk az adott ponthoz "
         "társított írást, feltéve, hogy írtak hozzá. Ha nincs semmi rendelve, "
-        "akkor egy üres buborék fog megjelenni a pont felett. \n"
+        "akkor egy üres buborék fog megjelenni a pont felett. \n\n"
 
         "A képernyő jobb alsó sarkában levő kör alakú, képpel ellátott gombbal "
         "a saját pozíciónkat tudjuk behatárolni a térképen. Ehhez GPS kapcsolat "
