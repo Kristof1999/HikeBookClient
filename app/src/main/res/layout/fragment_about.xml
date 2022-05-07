@@ -9,6 +9,7 @@
         android:id="@+id/aboutTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/about" />
+        android:text="@string/about"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 </FrameLayout>
