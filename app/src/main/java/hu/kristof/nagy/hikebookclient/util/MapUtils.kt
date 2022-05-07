@@ -49,13 +49,13 @@ fun MapView.setMapCenterOnPolylineCenter(polyline: Polyline) {
 }
 
 fun MapView.setZoomForPolyline(polyline: Polyline) {
-    val distance = polyline.distance
+    val diagonal = polyline.bounds.diagonalLengthInMeters
     val zoomLevel: Double = when {
-        distance < 500 -> 18.0
-        distance < 1000 -> 16.5
-        distance < 5000 -> 15.0
-        distance < 10000 -> 13.0
-        distance < 20000 -> 10.0
+        diagonal < 500 -> 18.0
+        diagonal < 1000 -> 16.5
+        diagonal < 5000 -> 15.0
+        diagonal < 10000 -> 13.0
+        diagonal < 20000 -> 10.0
         else -> 9.0
     }
     val mapController = controller
