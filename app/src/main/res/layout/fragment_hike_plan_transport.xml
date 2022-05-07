@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/transport_types_spinner_description"
+            android:entries="@array/transport_types"
             android:minHeight="48dp"
             android:spinnerMode="dialog"
             app:layout_constraintBottom_toTopOf="@+id/hikePlanTransportStartButton"
