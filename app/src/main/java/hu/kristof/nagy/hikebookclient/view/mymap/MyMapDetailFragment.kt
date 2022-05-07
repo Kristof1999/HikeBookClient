@@ -65,13 +65,20 @@ class MyMapDetailFragment : MapFragment() {
     }
 
     private fun setupObservers(viewModel: MyMapDetailViewModel) {
-        viewModel.route.observe(viewLifecycleOwner) { res ->
-            handleResult(context, res) { userRoute ->
-                adaptView(userRoute)
+        with(viewModel) {
+            route.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { userRoute ->
+                    adaptView(userRoute)
+                }
             }
-        }
-        viewModel.deleteRes.observe(viewLifecycleOwner) {
-            onDeleteResult(it)
+            deleteRes.observe(viewLifecycleOwner) {
+                onDeleteResult(it)
+            }
+            groupHikeCreateRes.observe(viewLifecycleOwner) { res ->
+                handleResult(context, res) { createRes ->
+                    showGenericErrorOr(context, createRes, "A létrehozás sikeres!")
+                }
+            }
         }
     }
 
