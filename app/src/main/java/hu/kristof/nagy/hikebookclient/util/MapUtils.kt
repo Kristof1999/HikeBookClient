@@ -10,6 +10,10 @@ import org.osmdroid.views.overlay.CopyrightOverlay
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Polyline
 
+/**
+ * Handles result, and shows the loaded routes on the map.
+ * Also sets a click listener for each loaded route to show it's name.
+ */
 fun MapView.onRoutesLoad(
     res: ServerResponseResult<List<Route>>,
     context: Context?
