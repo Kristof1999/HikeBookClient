@@ -52,7 +52,7 @@ class MyMapDetailFragment : MapFragment() {
                 executePendingBindings()
             }
 
-        setupObservers(viewModel, args, binding)
+        setupObservers(viewModel)
 
         initMap(binding)
 
@@ -64,14 +64,10 @@ class MyMapDetailFragment : MapFragment() {
         return binding.root
     }
 
-    private fun setupObservers(
-        viewModel: MyMapDetailViewModel,
-        args: MyMapDetailFragmentArgs,
-        binding: FragmentMyMapDetailBinding
-    ) {
+    private fun setupObservers(viewModel: MyMapDetailViewModel) {
         viewModel.route.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { userRoute ->
-                adaptView(args, userRoute, binding)
+                adaptView(userRoute)
             }
         }
         viewModel.deleteRes.observe(viewLifecycleOwner) {
@@ -88,12 +84,7 @@ class MyMapDetailFragment : MapFragment() {
         }
     }
 
-    private fun adaptView(
-        args: MyMapDetailFragmentArgs,
-        route: Route,
-        binding: FragmentMyMapDetailBinding
-    ) {
-        binding.myMapDetailRouteNameTv.text = args.routeName
+    private fun adaptView(route: Route) {
         val polyline = route.toPolyline()
         map.apply {
             setMapCenterOnPolylineCenter(polyline)
