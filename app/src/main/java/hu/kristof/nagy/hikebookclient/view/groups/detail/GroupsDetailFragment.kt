@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
@@ -41,7 +42,7 @@ class GroupsDetailFragment : Fragment() {
                 executePendingBindings()
             }
 
-        setupObserver(viewModel)
+        setupObserver(viewModel, args.isConnectedPage)
 
         val adapter = SectionsPagerAdapter(
             requireContext(),
@@ -59,10 +60,18 @@ class GroupsDetailFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupObserver(viewModel: GroupsDetailViewModel) {
+    private fun setupObserver(
+        viewModel: GroupsDetailViewModel,
+        isConnectedPage: Boolean
+    ) {
         viewModel.generalConnectRes.observe(viewLifecycleOwner) { res ->
             handleResult(context, res) { generalConnectRes ->
                 showGenericErrorOr(context, generalConnectRes) {
+                    if (isConnectedPage) {
+                        Toast.makeText(requireContext(), "A lecsatlakozás sikeres!", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
+                    }
                     findNavController(requireActivity(), R.id.navHostFragment).navigate(
                         R.id.action_groupsDetailFragment_to_groupsFragment
                     )
