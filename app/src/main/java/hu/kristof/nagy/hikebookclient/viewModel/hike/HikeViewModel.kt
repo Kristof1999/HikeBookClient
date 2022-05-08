@@ -67,7 +67,6 @@ class HikeViewModel @Inject constructor(
         val centralAngle = acos(sin(x1) * sin(x2) + cos(x1) * cos(x2) * cos(dy))
         val r = 6371.009 * 1000 // mean earth radius in meters
         val distance = r * centralAngle
-        Log.i("distance", distance.toString())
         return distance <= radius*radius
     }
 }
