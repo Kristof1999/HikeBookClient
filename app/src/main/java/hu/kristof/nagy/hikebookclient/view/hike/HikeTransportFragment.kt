@@ -25,8 +25,12 @@ import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeTransportViewModel
 import org.osmdroid.bonuspack.routing.OSRMRoadManager
 import org.osmdroid.bonuspack.routing.Road
 import org.osmdroid.bonuspack.routing.RoadManager
+import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.util.GeoPoint
+import org.osmdroid.views.overlay.MapEventsOverlay
 import org.osmdroid.views.overlay.Marker
+import org.osmdroid.views.overlay.infowindow.InfoWindow
 
 /**
  * A MapFragment to display the planned route on a map.
@@ -115,6 +119,21 @@ class HikeTransportFragment : MapFragment() {
             setStartZoomAndCenter()
             addCopyRightOverlay()
         }
+        addMapEventsOverlay()
+    }
+
+    private fun addMapEventsOverlay() {
+        val mapEventsOverlay = MapEventsOverlay(object : MapEventsReceiver {
+            override fun singleTapConfirmedHelper(p: GeoPoint?): Boolean {
+                InfoWindow.closeAllInfoWindowsOn(map)
+                return true
+            }
+
+            override fun longPressHelper(p: GeoPoint?): Boolean {
+                return true
+            }
+        })
+        map.overlays.add(0, mapEventsOverlay)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
