@@ -38,8 +38,11 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.FolderOverlay
 import org.osmdroid.views.overlay.Marker
 import org.osmdroid.views.overlay.Polygon
-import org.osmdroid.views.overlay.Polyline
 import java.util.*
+import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * A MapFragment to help the user with hiking.
@@ -236,10 +239,16 @@ class HikeFragment : MapFragment() {
     }
 
     private fun isPointInCircle(point: GeoPoint, center: GeoPoint, radius: Int): Boolean {
-        val polyline = Polyline()
-        polyline.setPoints(listOf(center, point))
-        val distance = polyline.distance
-
+        // based on: https://en.wikipedia.org/wiki/Great-circle_distance
+        val x1 = point.latitude
+        val x2 = center.latitude
+        val y1 = point.longitude
+        val y2 = center.longitude
+        val dy = abs(y1 - y2)
+        val centralAngle = acos(sin(x1)*sin(x2) + cos(x1)*cos(x2)*cos(dy))
+        val r = 6371.009 * 1000 // mean earth radius in meters
+        val distance = r * centralAngle
+        Log.i("distance", distance.toString())
         return distance <= radius*radius
     }
 
