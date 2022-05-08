@@ -27,7 +27,7 @@ import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
 import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.groups.detail.GroupsDetailListFragment
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
+import hu.kristof.nagy.hikebookclient.view.routes.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.groups.GroupsDetailMapViewModel
 import org.hamcrest.CoreMatchers.not
 import org.junit.Rule

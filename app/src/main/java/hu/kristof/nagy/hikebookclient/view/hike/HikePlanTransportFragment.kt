@@ -19,7 +19,7 @@ import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.*
 import hu.kristof.nagy.hikebookclient.view.help.HelpFragmentDirections
 import hu.kristof.nagy.hikebookclient.view.help.HelpRequestType
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
+import hu.kristof.nagy.hikebookclient.view.routes.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikePlanTransportViewModel
 import org.osmdroid.events.MapEventsReceiver
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory

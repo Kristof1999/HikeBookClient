@@ -4,7 +4,7 @@ import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import androidx.core.content.res.ResourcesCompat
 import hu.kristof.nagy.hikebookclient.R
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
+import hu.kristof.nagy.hikebookclient.view.routes.MarkerType
 
 fun getMarkerIcon(type: MarkerType, resources: Resources): Drawable = when(type) {
     MarkerType.NEW -> ResourcesCompat.getDrawable(resources, R.drawable.marker_image, null)!!

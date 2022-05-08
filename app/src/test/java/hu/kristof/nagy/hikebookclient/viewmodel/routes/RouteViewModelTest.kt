@@ -6,7 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import hu.kristof.nagy.hikebookclient.model.MyMarker
 import hu.kristof.nagy.hikebookclient.model.MyPolyline
-import hu.kristof.nagy.hikebookclient.view.mymap.MarkerType
+import hu.kristof.nagy.hikebookclient.view.routes.MarkerType
 import hu.kristof.nagy.hikebookclient.viewModel.routes.RouteViewModel
 import junit.framework.Assert.assertEquals
 import org.hamcrest.CoreMatchers.equalTo

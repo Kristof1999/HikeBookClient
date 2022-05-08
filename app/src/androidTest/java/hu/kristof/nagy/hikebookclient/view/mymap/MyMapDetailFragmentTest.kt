@@ -23,6 +23,7 @@ import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResource
 import hu.kristof.nagy.hikebookclient.util.DataBindingIdlingResourceRule
+import hu.kristof.nagy.hikebookclient.view.routes.MarkerType
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
