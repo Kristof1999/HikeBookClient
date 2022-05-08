@@ -80,7 +80,7 @@ class HikeFragment : MapFragment() {
                     fusedLocationProviderClient, myLocationMarker,
                     userRoute, args, viewModel, binding
                 )
-                mapCustomization(userRoute)
+                customizeMap(userRoute)
             }
         }
         handleOfflineLoad(requireContext()) {
@@ -234,7 +234,7 @@ class HikeFragment : MapFragment() {
         }
     }
 
-    private fun mapCustomization(route: Route) {
+    private fun customizeMap(route: Route) {
         val polyline = route.toPolyline()
         map.overlays.add(polyline)
 
