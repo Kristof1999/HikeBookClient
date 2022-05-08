@@ -17,7 +17,6 @@ import hu.kristof.nagy.hikebookclient.model.Point
 import hu.kristof.nagy.hikebookclient.model.RouteType
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.view.routes.MarkerType
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
