@@ -13,20 +13,14 @@ import hu.kristof.nagy.hikebookclient.databinding.FragmentHelpBinding
  * A Fragment which displays help information for a given page.
  */
 class HelpFragment : Fragment() {
-    private lateinit var binding: FragmentHelpBinding
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHelpBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentHelpBinding.inflate(inflater, container, false)
         val args: HelpFragmentArgs by navArgs()
+
         binding.helpTextView.text = when (args.helpRequestType) {
             HelpRequestType.MY_MAP -> getString(R.string.help_my_map)
             HelpRequestType.MY_MAP_LIST -> getString(R.string.help_my_map_list)
@@ -46,5 +40,7 @@ class HelpFragment : Fragment() {
             HelpRequestType.HIKE_TRANSPORT -> getString(R.string.help_hike_transport)
             HelpRequestType.HIKE -> getString(R.string.help_hike)
         }
+
+        return binding.root
     }
 }
