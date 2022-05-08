@@ -94,6 +94,7 @@
     <string name="hike_backwards_transport_plan_button_text">Hazaút Tervezése</string>
     <string name="hike_plan_transport_start_switch_text">Kezdőállomás</string>
     <string name="hike_plan_transport_end_switch_text">Végállomás</string>
+    <string name="start_time_text">Kezdés ideje: %1$d:%2$d</string>
     <string-array name="transport_types">
         <item>Bicikli</item>
         <item>Autó</item>
