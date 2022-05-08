@@ -150,32 +150,37 @@ class HikeFragment : MapFragment() {
     ) {
         var startTime = 0L
         binding.hikeStartButton.setOnClickListener {
-            onMyLocation(fusedLocationProviderClient, myLocationMarker)
-            val currentPosition = myLocationMarker.position
-            val startPosition = route.points.first().toGeoPoint()
-
-            if (isPointInCircle(
-                    currentPosition,
-                    startPosition,
-                    Constants.GEOFENCE_RADIUS_IN_METERS
-                )
-            ) {
-                Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG)
-                    .show()
-                val c = Calendar.getInstance()
-                startTime = c.timeInMillis
-                val hour = c.get(Calendar.HOUR_OF_DAY)
-                val minute = c.get(Calendar.MINUTE)
-                binding.hikeStartTimeTv.text = getString(R.string.start_time_text, hour, minute)
-            } else {
-                Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG)
-                    .show()
+            onMyLocation(fusedLocationProviderClient, myLocationMarker) { myLocation ->
+                val startPosition = route.points.first().toGeoPoint()
+                if (isPointInCircle(
+                        myLocation,
+                        startPosition,
+                        Constants.GEOFENCE_RADIUS_IN_METERS
+                    )
+                ) {
+                    Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG)
+                        .show()
+                    val c = Calendar.getInstance()
+                    startTime = c.timeInMillis
+                    val hour = c.get(Calendar.HOUR_OF_DAY)
+                    val minute = c.get(Calendar.MINUTE)
+                    binding.hikeStartTimeTv.text = getString(R.string.start_time_text, hour, minute)
+                } else {
+                    Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG)
+                        .show()
+                }
             }
         }
 
         binding.hikeFinishButton.setOnClickListener {
             handleOffline(requireContext()) {
-                if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
+                onFinish(
+                    fusedLocationProviderClient,
+                    myLocationMarker,
+                    route,
+                    startTime,
+                    viewModel
+                ) {
                     findNavController().navigate(
                         R.id.action_hikeFragment_to_myMapFragment
                     )
@@ -185,7 +190,13 @@ class HikeFragment : MapFragment() {
 
         binding.hikeBackwardsPlanTransportButton.setOnClickListener {
             handleOffline(requireContext()) {
-                if (onFinish(fusedLocationProviderClient, myLocationMarker, route, startTime, viewModel)) {
+                onFinish(
+                    fusedLocationProviderClient,
+                    myLocationMarker,
+                    route,
+                    startTime,
+                    viewModel
+                ) {
                     val isForward = false
                     val directions = HikeFragmentDirections
                         .actionHikeFragmentToHikePlanTransportFragment(isForward, args.routeName)
@@ -200,28 +211,27 @@ class HikeFragment : MapFragment() {
         myLocationMarker: Marker,
         route: Route.UserRoute,
         startTime: Long,
-        viewModel: HikeViewModel
-    ): Boolean {
-        onMyLocation(fusedLocationProviderClient, myLocationMarker)
-        val currentPosition = myLocationMarker.position
-        val endPosition = route.points.last().toGeoPoint()
-
-        return if (isPointInCircle(
-                currentPosition,
-                endPosition,
-                Constants.GEOFENCE_RADIUS_IN_METERS
-            )
-        ) {
-            Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
-            if (startTime != 0L) {
-                val finishTime = Calendar.getInstance().timeInMillis
-                viewModel.computeAndUpdateAvgSpeed(startTime, finishTime)
+        viewModel: HikeViewModel,
+        f: () -> Unit
+    ) {
+        onMyLocation(fusedLocationProviderClient, myLocationMarker) { myLocation ->
+            val endPosition = route.points.last().toGeoPoint()
+            if (isPointInCircle(
+                    myLocation,
+                    endPosition,
+                    Constants.GEOFENCE_RADIUS_IN_METERS
+                )
+            ) {
+                Toast.makeText(requireContext(), "Cél érintése sikeres!", Toast.LENGTH_LONG).show()
+                if (startTime != 0L) {
+                    val finishTime = Calendar.getInstance().timeInMillis
+                    viewModel.computeAndUpdateAvgSpeed(startTime, finishTime)
+                }
+                f.invoke()
+            } else {
+                Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)
+                    .show()
             }
-            true
-        } else {
-            Toast.makeText(requireContext(), "Nem vagy a cél közelében.", Toast.LENGTH_LONG)
-                .show()
-            false
         }
     }
 
@@ -284,7 +294,8 @@ class HikeFragment : MapFragment() {
     @SuppressLint("MissingPermission")
     private fun onMyLocation(
         fusedLocationProviderClient: FusedLocationProviderClient,
-        myLocationMarker: Marker
+        myLocationMarker: Marker,
+        f: (myLocation: GeoPoint) -> Unit = {_ -> }
     ) {
         when {
             isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION) ||
@@ -300,9 +311,10 @@ class HikeFragment : MapFragment() {
                             return@addOnSuccessListener
                         }
                         val controller = map.controller
-                        val p = GeoPoint(location.latitude, location.longitude)
-                        controller.setCenter(p)
-                        myLocationMarker.position = p
+                        val myLocation = GeoPoint(location.latitude, location.longitude)
+                        controller.setCenter(myLocation)
+                        myLocationMarker.position = myLocation
+                        f.invoke(myLocation)
                     }
                     addOnFailureListener {
                         Toast.makeText(
