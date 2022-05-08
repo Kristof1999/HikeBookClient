@@ -162,7 +162,11 @@ class HikeFragment : MapFragment() {
             ) {
                 Toast.makeText(requireContext(), "Start érintése sikeres!", Toast.LENGTH_LONG)
                     .show()
-                startTime = Calendar.getInstance().timeInMillis
+                val c = Calendar.getInstance()
+                startTime = c.timeInMillis
+                val hour = c.get(Calendar.HOUR_OF_DAY)
+                val minute = c.get(Calendar.MINUTE)
+                binding.hikeStartTimeTv.text = getString(R.string.start_time_text, hour, minute)
             } else {
                 Toast.makeText(requireContext(), "Nem vagy a start közelében.", Toast.LENGTH_LONG)
                     .show()
