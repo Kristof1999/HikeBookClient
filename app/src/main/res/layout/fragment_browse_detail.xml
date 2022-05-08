@@ -49,8 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp"
+            android:onClick="@{() -> viewModel.addToMyMap(routeName, context)}"
             android:text="@string/add_to_my_map_text"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:onClick="@{() -> viewModel.addToMyMap(routeName, context)}" />
+            app:icon="@drawable/add_to_my_map_image" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
