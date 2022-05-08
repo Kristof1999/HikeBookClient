@@ -5,6 +5,7 @@ import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.util.Constants
 import hu.kristof.nagy.hikebookclient.viewModel.hike.HikeViewModel
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.osmdroid.util.GeoPoint
@@ -31,5 +32,23 @@ class HikeViewModelTest {
         val res = viewModel.isPointInCircle(veryFarPoint, center, radius)
 
         assertFalse(res)
+    }
+
+    @Test
+    fun `is point in circle, 200m`() {
+        val farPoint = GeoPoint(47.2954 - 0.002, 19.227)
+
+        val res = viewModel.isPointInCircle(farPoint, center, radius)
+
+        assertFalse(res)
+    }
+
+    @Test
+    fun `is point in circle, 50m`() {
+        val closePoint = GeoPoint(47.2954 - 0.0005, 19.227)
+
+        val res = viewModel.isPointInCircle(closePoint, center, radius)
+
+        assertTrue(res)
     }
 }
