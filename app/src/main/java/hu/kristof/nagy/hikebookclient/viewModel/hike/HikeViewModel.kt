@@ -15,10 +15,9 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.osmdroid.util.GeoPoint
 import javax.inject.Inject
-import kotlin.math.abs
-import kotlin.math.acos
-import kotlin.math.cos
+import kotlin.math.asin
 import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
  * Helps to load the route chosen for hiking,
@@ -63,10 +62,17 @@ class HikeViewModel @Inject constructor(
         val x2 = center.latitude
         val y1 = point.longitude
         val y2 = center.longitude
-        val dy = abs(y1 - y2)
-        val centralAngle = acos(sin(x1) * sin(x2) + cos(x1) * cos(x2) * cos(dy))
+        val centralAngle = 2 * asin(
+            sqrt(
+                hav(x2 - x1) + (1 - hav(x1 - x2) - hav(x1 + x2)) * hav(y2 - y1)
+            )
+        )
         val r = 6371.009 * 1000 // mean earth radius in meters
         val distance = r * centralAngle
         return distance <= radius*radius
+    }
+
+    private fun hav(x: Double): Double {
+        return sin(x/2) * sin(x/2)
     }
 }
