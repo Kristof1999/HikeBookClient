@@ -62,9 +62,11 @@ class HikeViewModel @Inject constructor(
         val x2 = center.latitude
         val y1 = point.longitude
         val y2 = center.longitude
+        val dx = x2 - x1
+        val dy = y2 - y1
         val centralAngle = 2 * asin(
             sqrt(
-                hav(x2 - x1) + (1 - hav(x1 - x2) - hav(x1 + x2)) * hav(y2 - y1)
+                hav(dx) + (1 - hav(dx) - hav(x1 + x2)) * hav(dy)
             )
         )
         val r = 6371.009 * 1000 // mean earth radius in meters
