@@ -104,13 +104,13 @@ class GroupsDetailListFragment : Fragment() {
         },
         deleteListener = { routeName ->
             handleOffline(requireContext()) {
-                listViewModel.onDelete(groupName, routeName)
+                listViewModel.delete(groupName, routeName)
             }
         },
         addToMyMapListener = { routeName ->
             handleOffline(requireContext()) {
                 val route = mapViewModel.getRoute(routeName)
-                listViewModel.onAddToMyMap(route)
+                listViewModel.addToMyMap(route)
             }
         }
     ), isConnectedPage)

@@ -35,7 +35,7 @@ class GroupsDetailListViewModel @Inject constructor(
 
     var deleteFinished = true
 
-    fun onAddToMyMap(route: Route) {
+    fun addToMyMap(route: Route) {
         addToMyMapFinished = false
         viewModelScope.launch {
             userRouteRepository.createUserRouteForLoggedInUser(
@@ -46,7 +46,7 @@ class GroupsDetailListViewModel @Inject constructor(
         }
     }
 
-    fun onDelete(groupName: String, routeName: String) {
+    fun delete(groupName: String, routeName: String) {
         deleteFinished = false
         viewModelScope.launch {
             _deleteRes.value = groupRouteRepository.deleteGroupRoute(groupName, routeName)
