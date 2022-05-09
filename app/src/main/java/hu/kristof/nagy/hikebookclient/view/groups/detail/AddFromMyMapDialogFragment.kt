@@ -16,7 +16,6 @@ import hu.kristof.nagy.hikebookclient.data.network.handleResult
 import hu.kristof.nagy.hikebookclient.databinding.AddFromMyMapDialogBinding
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
-import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
 import hu.kristof.nagy.hikebookclient.util.handleOfflineLoad
 import hu.kristof.nagy.hikebookclient.viewModel.groups.AddFromMyMapViewModel
 
@@ -47,15 +46,13 @@ class AddFromMyMapDialogFragment : DialogFragment(), AdapterView.OnItemSelectedL
 
             builder.setView(binding.root)
                 .setPositiveButton("OK") { _, _ ->
-                    if (checkAndHandleRouteLoad(_route.value)) {
-                        if (chosenPos == 0) {
-                            Toast.makeText(
-                                requireContext(), "Kérem, hogy válasszon útvonalat!", Toast.LENGTH_LONG
-                            ).show()
-                        } else {
-                            // we subtract 1 because we have added a filler string to the start of objects
-                            _route.value = viewModel.routes.value!!.successResult!![chosenPos - 1]
-                        }
+                    if (chosenPos == 0) {
+                        Toast.makeText(
+                            requireContext(), "Kérem, hogy válasszon útvonalat!", Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        // we subtract 1 because we have added a filler string to the start of objects
+                        _route.value = viewModel.routes.value!!.successResult!![chosenPos - 1]
                     }
                 }
                 .setNegativeButton("Mégse") { _, _ ->
