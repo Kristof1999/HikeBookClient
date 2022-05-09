@@ -27,6 +27,8 @@ import hu.kristof.nagy.hikebookclient.viewModel.grouphike.GroupHikeListViewModel
  */
 @AndroidEntryPoint
 class GroupHikeListFragment : Fragment() {
+    private val viewModel: GroupHikeListViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,8 +37,6 @@ class GroupHikeListFragment : Fragment() {
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
-
-        val viewModel: GroupHikeListViewModel by viewModels()
 
         setupObserver(viewModel)
 
@@ -108,6 +108,14 @@ class GroupHikeListFragment : Fragment() {
             handleResult(context, res) { groupHikes ->
                 adapter.submitList(groupHikes.toMutableList())
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+        handleOfflineLoad(requireContext()) {
+            viewModel.listGroupHikes(isConnectedPage)
         }
     }
 
