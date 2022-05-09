@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.kristof.nagy.hikebookclient.data.repository.IHikeRepository
 import hu.kristof.nagy.hikebookclient.data.repository.routes.IUserRouteRepository
-import hu.kristof.nagy.hikebookclient.di.Service
 import hu.kristof.nagy.hikebookclient.model.ServerResponseResult
 import hu.kristof.nagy.hikebookclient.model.routes.Route
 import hu.kristof.nagy.hikebookclient.util.checkAndHandleRouteLoad
@@ -25,7 +25,7 @@ import kotlin.math.sqrt
  */
 @HiltViewModel
 class HikeViewModel @Inject constructor(
-    private val service: Service,
+    private val hikeRepository: IHikeRepository,
     private val userRouteRepository: IUserRouteRepository
 ) : ViewModel() {
     private val _route = MutableLiveData<ServerResponseResult<Route.UserRoute>>()
@@ -51,7 +51,7 @@ class HikeViewModel @Inject constructor(
             }
 
             viewModelScope.launch {
-                service.updateAvgSpeed(route.userName, avgSpeed)
+                hikeRepository.updateAvgSpeed(route.userName, avgSpeed)
             }
         }
     }
