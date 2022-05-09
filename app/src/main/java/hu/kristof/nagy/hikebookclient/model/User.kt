@@ -2,8 +2,8 @@ package hu.kristof.nagy.hikebookclient.model
 
 import java.security.MessageDigest
 
-data class User(private val name: String, private var password: String) {
-    private val avgSpeed: Double = 3.0
+data class User(val name: String, var password: String) {
+    val avgSpeed: Double = 3.0
 
     init {
         checkName(name)
