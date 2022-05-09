@@ -92,7 +92,7 @@ class GroupsDetailMapFragment : MapFragment() {
     ) {
         val dialog = AddFromMyMapDialogFragment()
         dialog.route.observe(viewLifecycleOwner) { route ->
-            viewModel.onAddFromMyMap(route, groupName)
+            viewModel.addFromMyMap(route, groupName)
         }
         binding.groupsMapAddFromMyMapButton.setOnClickListener {
             handleOffline(requireContext()) {

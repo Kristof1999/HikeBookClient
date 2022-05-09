@@ -44,7 +44,7 @@ class GroupsDetailMapViewModel @Inject constructor(
      * Forwards the call to the data layer, and
      * and notifies the view layer of the result
      */
-    fun onAddFromMyMap(route: Route, groupName: String) {
+    fun addFromMyMap(route: Route, groupName: String) {
         addFromMyMapFinished = false
         viewModelScope.launch {
             _addFromMyMapRes.value = groupRouteRepository.createGroupRoute(
