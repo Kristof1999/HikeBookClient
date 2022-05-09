@@ -51,4 +51,13 @@ class HikeViewModelTest {
 
         assertTrue(res)
     }
+
+    @Test
+    fun `is point in circle, 5m`() {
+        val closePoint = GeoPoint(47.2954 - 0.00005, 19.227)
+
+        val res = viewModel.isPointInCircle(closePoint, center, radius)
+
+        assertTrue(res)
+    }
 }
