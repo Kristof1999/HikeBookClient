@@ -61,6 +61,9 @@ class GroupsListFragment : Fragment() {
                     } else {
                         Toast.makeText(requireContext(), "A csatlakozás sikeres!", Toast.LENGTH_LONG).show()
                     }
+                    handleOfflineLoad(requireContext()) {
+                        viewModel.listGroups(isConnectedPage)
+                    }
                 }
                 viewModel.generalConnectFinished = true
             }
