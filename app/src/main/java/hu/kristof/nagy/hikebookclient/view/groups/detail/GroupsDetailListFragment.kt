@@ -104,7 +104,7 @@ class GroupsDetailListFragment : Fragment() {
         },
         deleteListener = { routeName ->
             handleOffline(requireContext()) {
-                listViewModel.delete(groupName, routeName)
+                listViewModel.deleteGroupRoute(groupName, routeName)
             }
         },
         addToMyMapListener = { routeName ->

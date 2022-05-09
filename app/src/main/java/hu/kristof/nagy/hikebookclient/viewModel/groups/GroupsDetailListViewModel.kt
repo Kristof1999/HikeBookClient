@@ -46,7 +46,7 @@ class GroupsDetailListViewModel @Inject constructor(
         }
     }
 
-    fun delete(groupName: String, routeName: String) {
+    fun deleteGroupRoute(groupName: String, routeName: String) {
         deleteFinished = false
         viewModelScope.launch {
             _deleteRes.value = groupRouteRepository.deleteGroupRoute(groupName, routeName)
