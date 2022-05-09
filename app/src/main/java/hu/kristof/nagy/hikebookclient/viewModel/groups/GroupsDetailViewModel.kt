@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hu.kristof.nagy.hikebookclient.data.repository.GroupsRepository
+import hu.kristof.nagy.hikebookclient.data.repository.IGroupsRepository
 import hu.kristof.nagy.hikebookclient.model.ResponseResult
 import hu.kristof.nagy.hikebookclient.util.handleOffline
 import kotlinx.coroutines.flow.collect
@@ -19,7 +19,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class GroupsDetailViewModel @Inject constructor(
-    private val repository: GroupsRepository
+    private val repository: IGroupsRepository
 )  : ViewModel() {
     private val _generalConnectRes = MutableLiveData<ResponseResult<Boolean>>()
     val generalConnectRes: LiveData<ResponseResult<Boolean>>
