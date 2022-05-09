@@ -53,7 +53,7 @@ class BrowseListFragment : Fragment() {
             findNavController().navigate(directions)
         })
         binding.browseRecyclerView.adapter = adapter
-        viewModel.routes.observe(viewLifecycleOwner) { res ->
+        viewModel.items.observe(viewLifecycleOwner) { res ->
             handleResult(requireContext(), res) { list ->
                 adapter.submitList(list.toMutableList())
             }

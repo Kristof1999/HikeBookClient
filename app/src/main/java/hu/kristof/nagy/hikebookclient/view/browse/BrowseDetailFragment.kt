@@ -80,7 +80,7 @@ class BrowseDetailFragment : MapFragment() {
         args: BrowseDetailFragmentArgs
     ) {
         handleOfflineLoad(requireContext()) {
-            viewModel.loadDetails(args.userName, args.routeName, requireContext().resources)
+            viewModel.loadRoute(args.userName, args.routeName, requireContext().resources)
         }
     }
 

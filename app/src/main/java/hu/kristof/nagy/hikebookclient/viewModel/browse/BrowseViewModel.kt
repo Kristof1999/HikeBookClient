@@ -19,14 +19,14 @@ import javax.inject.Inject
 class BrowseViewModel @Inject constructor(
     private val userRouteRepository: IUserRouteRepository
     ) : ViewModel() {
-    private val _routes = MutableLiveData<ServerResponseResult<List<BrowseListItem>>>()
-    val routes: LiveData<ServerResponseResult<List<BrowseListItem>>>
-        get() = _routes
+    private val _items = MutableLiveData<ServerResponseResult<List<BrowseListItem>>>()
+    val items: LiveData<ServerResponseResult<List<BrowseListItem>>>
+        get() = _items
 
     fun listRoutes() {
         viewModelScope.launch {
             userRouteRepository.listUserRoutesForLoggedInUser().collect {
-                _routes.value = it
+                _items.value = it
             }
         }
     }

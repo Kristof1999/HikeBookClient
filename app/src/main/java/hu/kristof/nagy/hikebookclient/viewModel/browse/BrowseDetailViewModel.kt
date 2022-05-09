@@ -42,7 +42,7 @@ class BrowseDetailViewModel @Inject constructor(
     /**
      * Loads the specified user route, and sets the description for the view.
      */
-    fun loadDetails(
+    fun loadRoute(
         userName: String,
         routeName: String,
         resources: Resources
