@@ -31,6 +31,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory
  */
 @AndroidEntryPoint
 class GroupsDetailMapFragment : MapFragment() {
+    private val viewModel: GroupsDetailMapViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,8 +41,6 @@ class GroupsDetailMapFragment : MapFragment() {
             .apply {
                 lifecycleOwner = viewLifecycleOwner
             }
-
-        val viewModel: GroupsDetailMapViewModel by activityViewModels()
 
         setupObservers(viewModel)
 
@@ -132,6 +132,14 @@ class GroupsDetailMapFragment : MapFragment() {
             true
         } else {
             super.onOptionsItemSelected(item)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val groupName = arguments?.getString(Constants.GROUP_NAME_BUNDLE_KEY)!!
+        handleOfflineLoad(requireContext()) {
+            viewModel.loadRoutesOfGroup(groupName)
         }
     }
 
