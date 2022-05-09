@@ -77,6 +77,14 @@ class GroupHikeDetailFragment : MapFragment() {
             generalConnectRes.observe(viewLifecycleOwner) { res ->
                 handleResult(context, res) { generalConnectRes ->
                     showGenericErrorOr(context, generalConnectRes) {
+                        val isConnectedPage = arguments?.getBoolean(Constants.IS_CONNECTED_PAGE_BUNDLE_KEY)!!
+                        if (isConnectedPage) {
+                            Toast.makeText(context, "A lecsatlakozás sikeres!", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            Toast.makeText(context, "A csatlakozás sikeres!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                         findNavController().navigate(
                             R.id.action_groupHikeDetailFragment_to_groupHikeFragment
                         )
