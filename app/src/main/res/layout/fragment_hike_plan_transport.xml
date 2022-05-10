@@ -20,7 +20,8 @@
             app:layout_constraintBottom_toTopOf="@+id/hikePlanTransportTransportMeanSpinner"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hikePlanTransportStartSwitch" />
+            app:layout_constraintTop_toBottomOf="@+id/hikePlanTransportStartSwitch"
+            tools:background="@drawable/map_image" />
 
         <Spinner
             android:id="@+id/hikePlanTransportTransportMeanSpinner"

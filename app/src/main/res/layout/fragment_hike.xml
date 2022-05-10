@@ -29,9 +29,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hikeBackwardsPlanTransportButton">
-
-        </org.osmdroid.views.MapView>
+            app:layout_constraintTop_toBottomOf="@+id/hikeBackwardsPlanTransportButton"
+            tools:background="@drawable/map_image" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/hikeMyLocationFab"

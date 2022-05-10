@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/groupsDetailMapMenuItem"
-        android:icon="@drawable/map_image"
+        android:icon="@drawable/map_menu_image"
         android:title="@string/groups_map_menu_text" />
     <item
         android:id="@+id/groupsDetailListMenuItem"

@@ -73,9 +73,8 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/myMapDetailRouteNameTv"
-            app:layout_constraintVertical_bias="1.0">
-
-        </org.osmdroid.views.MapView>
+            app:layout_constraintVertical_bias="1.0"
+            tools:background="@drawable/map_image" />
 
         <Button
             android:id="@+id/myMapDetailPrintButton"
