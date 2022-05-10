@@ -47,3 +47,10 @@ abstract class GroupHikeRepositoryModule {
     @Binds
     abstract fun bindIGroupHikeRepository(impl: GroupHikeRepository): IGroupHikeRepository
 }
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class HikeRepositoryModule {
+    @Binds
+    abstract fun bindIHikeRepository(impl: HikeRepository): IHikeRepository
+}
