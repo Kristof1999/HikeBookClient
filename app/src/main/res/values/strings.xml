@@ -131,17 +131,19 @@
     <string name="about">
         "HikeBook: Közösségi háló túrázóknak\n\n\n"
 
-        "Ez a mobilalkalmazás természetjáróknak készült."
+        "Ez a mobilalkalmazás természetjáróknak készült. "
         "Főbb funkciói közé tartoznak az útvonalakkal való interaktivitás "
         "és a közösségi lehetőségek.\n\n"
 
-        "Létrehozhatunk, törölhetünk, szerkeszthetünk, és ki is nyomtathatunk útvonalakat."
-        "Továbbá böngészhetünk mások útvonalai közt."
-        "Valamint túránkat is eltervezhetjük az app segítségével, "
+        "Létrehozhatunk, törölhetünk, szerkeszthetünk, és ki is nyomtathatunk útvonalakat. "
+        "Böngészhetünk mások útvonalai közt, és a saját térképünkre felvehetünk útvonalakat. "
+        "Túránkat is eltervezhetjük az app segítségével, "
         "és a teljesítést is nyomon követhetjük.\n\n"
 
         "Csatlakozhatunk csoportokhoz, amikor is láthatjuk, hogy "
-        "a csoportnak milyen útvonalai vannak."
+        "a csoportnak milyen útvonalai, és tagjai vannak. "
+		"Csoporttagként létrehozhatunk, szerkeszthetünk, illetve törölhetünk csoport útvonalakat, "
+		"és saját térképünkről is felvehetünk, illetve hozzáadhatunk csoport útvonalakat."
         "Csoportos túrákat is készíthetünk, és természetesen csatlakozhatunk is."
     </string>
 
