@@ -193,14 +193,11 @@ class GroupHikeDetailFragment : MapFragment() {
     private fun adaptView(
         args: GroupHikeDetailFragmentArgs,
         binding: FragmentGroupHikeDetailBinding
-    ) = with(binding) {
-        groupHikeDetailNameTv.text = args.groupHikeName
-        groupHikeDetailGeneralConnectButton.apply {
-            text = if (args.isConnectedPage) {
-                "Elhagyás"
-            } else {
-                "Csatlakozás"
-            }
+    ) = with(binding.groupHikeDetailGeneralConnectButton) {
+        text = if (args.isConnectedPage) {
+            "Elhagyás"
+        } else {
+            "Csatlakozás"
         }
     }
 
