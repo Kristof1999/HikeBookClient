@@ -19,7 +19,8 @@
             app:layout_constraintBottom_toTopOf="@+id/hikeTransportFinishButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:background="@drawable/map_image" />
 
         <Button
             android:id="@+id/hikeTransportFinishButton"

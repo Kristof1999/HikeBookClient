@@ -34,7 +34,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:text="@{groupHikeName}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Csoport túra név" />
 
         <TextView
             android:id="@+id/groupHikeDetailDescriptionTv"
@@ -42,7 +43,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="Útvonal megjegyzés" />
 
         <org.osmdroid.views.MapView
             android:id="@+id/groupHikeDetailMap"
@@ -71,7 +73,8 @@
             android:layout_marginBottom="8dp"
             android:text="Button"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:onClick="@{() -> viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime, context)}" />
+            android:onClick="@{() -> viewModel.generalConnect(groupHikeName, isConnectedPage, dateTime, context)}"
+            tools:text="Elhagyás/Csatlakozás" />
 
         <Button
             android:id="@+id/groupHikeDetailAddToMyMapButton"

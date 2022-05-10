@@ -32,7 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.hikeDescriptionText}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="Útvonal Megjegyzés" />
         </ScrollView>
 
         <org.osmdroid.views.MapView
