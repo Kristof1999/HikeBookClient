@@ -45,7 +45,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val navController = findNavController(R.id.navHostFragment)
-        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.myMapMenuItem -> navController.navigate(R.id.action_global_myMapFragment)
+            R.id.groupHikeMenuItem -> navController.navigate(R.id.action_global_groupHikeFragment)
+            R.id.groupsMenuItem -> navController.navigate(R.id.action_global_groupsFragment)
+            R.id.browseMenuItem -> navController.navigate(R.id.action_global_browseListFragment)
+            else -> item.onNavDestinationSelected(navController) ||
+                    super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     // source: https://developer.android.com/guide/navigation/navigation-ui

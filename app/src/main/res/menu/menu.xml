@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/myMapFragment"
+        android:id="@+id/myMapMenuItem"
         android:title="@string/my_map_menu" />
     <item
-        android:id="@+id/groupHikeFragment"
+        android:id="@+id/groupHikeMenuItem"
         android:title="@string/group_hike_menu" />
     <item
-        android:id="@+id/groupsFragment"
+        android:id="@+id/groupsMenuItem"
         android:title="@string/groups_menu" />
     <item
-        android:id="@+id/browseListFragment"
+        android:id="@+id/browseMenuItem"
         android:title="@string/browse_menu" />
     <item
         android:id="@+id/helpMenuItem"

@@ -267,4 +267,16 @@
             android:name="dateTime"
             app:argType="hu.kristof.nagy.hikebookclient.model.DateTime" />
     </fragment>
+    <action
+        android:id="@+id/action_global_myMapFragment"
+        app:destination="@id/myMapFragment" />
+    <action
+        android:id="@+id/action_global_groupHikeFragment"
+        app:destination="@id/groupHikeFragment" />
+    <action
+        android:id="@+id/action_global_groupsFragment"
+        app:destination="@id/groupsFragment" />
+    <action
+        android:id="@+id/action_global_browseListFragment"
+        app:destination="@id/browseListFragment" />
 </navigation>
