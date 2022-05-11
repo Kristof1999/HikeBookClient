@@ -121,29 +121,29 @@ class HikePlanTransportFragment : MapFragment(), AdapterView.OnItemSelectedListe
     }
 
     private fun adaptView(args: HikePlanTransportFragmentArgs, route: Route) {
+        val myLocationIcon = AppCompatResources.getDrawable(
+            requireContext(), org.osmdroid.library.R.drawable.marker_default
+        )
         if (args.isForward) {
             Marker(map).apply {
-                val startPoint = route.points.first()
-                position = startPoint.toGeoPoint()
-                title = startPoint.title
-                icon = AppCompatResources.getDrawable(
-                    requireContext(), org.osmdroid.library.R.drawable.marker_default
-                )
+                val hikeStartPoint = route.points.first()
+                position = hikeStartPoint.toGeoPoint()
+                title = hikeStartPoint.title
+                icon = myLocationIcon
             }.let { hikeStartMarker ->
                 map.overlays.add(hikeStartMarker)
             }
         } else {
             Marker(map).apply {
-                val startPoint = route.points.last()
-                position = startPoint.toGeoPoint()
-                title = startPoint.title
-                icon = AppCompatResources.getDrawable(
-                    requireContext(), org.osmdroid.library.R.drawable.marker_default
-                )
+                val hikeEndPoint = route.points.last()
+                position = hikeEndPoint.toGeoPoint()
+                title = hikeEndPoint.title
+                icon = myLocationIcon
             }.let { hikeEndMarker ->
                 map.overlays.add(hikeEndMarker)
             }
         }
+        map.invalidate()
     }
 
     private fun addMapEventsOverlay() {
