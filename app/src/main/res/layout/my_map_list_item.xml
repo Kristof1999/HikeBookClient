@@ -16,98 +16,114 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> clickListener.onDetailNav(routeName)}">
 
-        <TextView
-            android:id="@+id/myMapListItemRouteName"
-            android:layout_width="wrap_content"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@{routeName}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            app:layout_constraintEnd_toStartOf="@+id/myMapListItemEditImageButton"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/myMapListItemDeleteImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@color/design_default_color_secondary"
-            android:contentDescription="@string/delete_image_description"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:onClick="@{() -> clickListener.onDelete(routeName)}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/myMapListItemPrintImageButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/delete_image" />
-
-        <ImageButton
-            android:id="@+id/myMapListItemEditImageButton"
-            style="@style/Widget.AppCompat.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/design_default_color_secondary"
-            android:contentDescription="@string/edit_image_description"
-            android:cropToPadding="false"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:onClick="@{() -> clickListener.onEdit(routeName)}"
-            app:layout_constraintBottom_toTopOf="@+id/myMapListItemGroupHikeCreateButton"
-            app:layout_constraintEnd_toStartOf="@+id/myMapListItemPrintImageButton"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/myMapListItemRouteName"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/edit_image" />
-
-        <ImageButton
-            android:id="@+id/myMapListItemPrintImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@color/design_default_color_secondary"
-            android:contentDescription="@string/printer_image_description"
-            android:minWidth="48dp"
-            android:minHeight="48dp"
-            android:onClick="@{() -> clickListener.onPrint(routeName)}"
-            app:layout_constraintEnd_toStartOf="@+id/myMapListItemDeleteImageButton"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/myMapListItemEditImageButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/print_image" />
-
-        <Button
-            android:id="@+id/myMapListItemHikePlanButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/hike_plan_button_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:onClick="@{() -> clickListener.onHikePlan(routeName)}"
-            app:icon="@drawable/hike_image"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/myMapListItemGroupHikeCreateButton" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/myMapListItemGroupHikeCreateButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="@string/group_hike_create_text"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:onClick="@{() -> clickListener.onGroupHikeCreate(routeName)}"
-            app:layout_constraintBottom_toTopOf="@+id/myMapListItemHikePlanButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/myMapListItemEditImageButton" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/myMapListItemRouteName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@{routeName}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    app:layout_constraintEnd_toStartOf="@+id/myMapListItemEditImageButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/myMapListItemDeleteImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/design_default_color_secondary"
+                    android:contentDescription="@string/delete_image_description"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:onClick="@{() -> clickListener.onDelete(routeName)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/myMapListItemPrintImageButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/delete_image" />
+
+                <ImageButton
+                    android:id="@+id/myMapListItemEditImageButton"
+                    style="@style/Widget.AppCompat.ImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/design_default_color_secondary"
+                    android:contentDescription="@string/edit_image_description"
+                    android:cropToPadding="false"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:onClick="@{() -> clickListener.onEdit(routeName)}"
+                    app:layout_constraintEnd_toStartOf="@+id/myMapListItemPrintImageButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/myMapListItemRouteName"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/edit_image" />
+
+                <ImageButton
+                    android:id="@+id/myMapListItemPrintImageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@color/design_default_color_secondary"
+                    android:contentDescription="@string/printer_image_description"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
+                    android:onClick="@{() -> clickListener.onPrint(routeName)}"
+                    app:layout_constraintEnd_toStartOf="@+id/myMapListItemDeleteImageButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/myMapListItemEditImageButton"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/print_image" />
+
+                <Button
+                    android:id="@+id/myMapListItemHikePlanButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> clickListener.onHikePlan(routeName)}"
+                    android:text="@string/hike_plan_button_text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:icon="@drawable/hike_image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/myMapListItemGroupHikeCreateButton" />
+
+                <Button
+                    android:id="@+id/myMapListItemGroupHikeCreateButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:onClick="@{() -> clickListener.onGroupHikeCreate(routeName)}"
+                    android:text="@string/group_hike_create_text"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/myMapListItemEditImageButton" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
