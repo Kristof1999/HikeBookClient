@@ -37,6 +37,12 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="Csoport túra név" />
 
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
         <TextView
             android:id="@+id/groupHikeDetailDescriptionTv"
             android:layout_width="wrap_content"
@@ -46,6 +52,12 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             tools:text="Útvonal megjegyzés" />
 
+        <View
+            android:id="@+id/divider4"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
+
         <org.osmdroid.views.MapView
             android:id="@+id/groupHikeDetailMap"
             android:layout_width="match_parent"
@@ -53,7 +65,15 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:layout_weight="3"
-            tools:background="@drawable/map_image" />
+            tools:background="@drawable/map_image" >
+
+        </org.osmdroid.views.MapView>
+
+        <View
+            android:id="@+id/divider5"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/groupHikeDetailRecyclerView"
@@ -63,7 +83,15 @@
             android:layout_marginBottom="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_weight="1"
-            tools:listitem="@layout/group_hike_detail_participants_list_item" />
+            tools:listitem="@layout/group_hike_detail_participants_list_item" >
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <View
+            android:id="@+id/divider6"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider" />
 
         <Button
             android:id="@+id/groupHikeDetailGeneralConnectButton"
