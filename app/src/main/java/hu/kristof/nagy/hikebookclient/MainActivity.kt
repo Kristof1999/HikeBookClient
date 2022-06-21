@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             R.id.groupHikeMenuItem -> navController.navigate(R.id.action_global_groupHikeFragment)
             R.id.groupsMenuItem -> navController.navigate(R.id.action_global_groupsFragment)
             R.id.browseMenuItem -> navController.navigate(R.id.action_global_browseListFragment)
-            else -> item.onNavDestinationSelected(navController) ||
+            else -> return item.onNavDestinationSelected(navController) ||
                     super.onOptionsItemSelected(item)
         }
         return true
